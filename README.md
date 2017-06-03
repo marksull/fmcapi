@@ -22,4 +22,3 @@ factored out to another project.)
 # ToDos
 * Move/Change the various "create" FMC class methods into the api_objects module.
 * Make this Python package an installable package/distribution.
-
