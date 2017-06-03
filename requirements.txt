@@ -1,4 +1,3 @@
 requests
 datetime
-re
 ipaddress
