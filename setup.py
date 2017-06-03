@@ -33,8 +33,8 @@ setup(
         'Topic :: Security :: FMC',
     ],
     keywords='fmcapi fmc ftd security cisco ngfw api',
-    packages=find_packages(exclude=['docs', 'tests*'],
-                           install_requires=['requests', 'logging', 'datetime', 'json', 'time', 're', 'ipaddress'],
-                           package_data={},
-                           data_files=None,)
+    packages=find_packages(exclude=['docs', 'tests*']),
+    install_requires=['requests', 'logging', 'datetime', 'json', 'time', 're', 'ipaddress'],
+    package_data={},
+    data_files=None,
 )
