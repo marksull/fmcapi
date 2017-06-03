@@ -18,7 +18,7 @@ of the token.
   * ACP Rules
 * Expire "Dev" entries.  This is special for the Pinhole Self-Serve Tool lab.  (Should be
 factored out to another project.)
+* This is now an installable Python package via pip!  Currently v0.1.2.
 
 # ToDos
 * Move/Change the various "create" FMC class methods into the api_objects module.
-* Make this Python package an installable package/distribution.
