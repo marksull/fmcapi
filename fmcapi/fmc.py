@@ -11,6 +11,8 @@ import datetime
 import json
 import requests
 import time
+
+import sys
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from .helper_functions import *
 from .api_objects import *
@@ -172,59 +174,6 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         response = self.send_to_api(method='post', url=url, json_data=json_data)
         return response['deviceList']
 
-    def cleanup_expired_dev_entries(self, **kwargs):
-        """
-        This method should really be moved to the submit_data.py file as it's purpose is specific to the
-        Pinhole Self-Service Tool's logic.
-        That said, this method checks for any "expired" host, port, and acp rule objects based on a timestamp
-        value in their name.
-        :param kwargs:
-        :return:
-        """
-        logging.debug("In the FMC cleanup_expired_dev_entries() class method.")
-
-        url_search = "/policy/accesspolicies" + "?name=" + kwargs['acp_name']
-        response = self.send_to_api(method='get', url=url_search)
-        acp_id = None
-        if response.get('items', '') is '':
-            logging.error("Access Control Policy not found. Exiting.")
-            exit(1)
-        else:
-            acp_id = response['items'][0]['id']
-        # Now that we have the ACP ID.  Get all its rules and parse them to look at their names.
-        url_search = "/policy/accesspolicies/" + acp_id + "/accessrules"
-        response = self.send_to_api(method='get', url=url_search)
-        if response.get('items', '') is '':
-            logging.warning("No rules found for Access Control Policy: {}.".format(kwargs['acp_name']))
-        else:
-            for item in response['items']:
-                if 'Dev-' in item['name']:
-                    namesplit = item['name'].split('-')
-                    if int(namesplit[2]) < kwargs['threshold_time']:
-                        logging.info("Deleting {} rule from {}.".format(item['name'], kwargs['acp_name']))
-                        url = url_search + "/" + item['id']
-                        self.send_to_api(method='delete', url=url)
-        # Now Delete any expired Host objects.
-        url_search = "/object/hosts"
-        response = self.send_to_api(method='get', url=url_search)
-        for item in response['items']:
-            if 'Dev-' in item['name']:
-                namesplit = item['name'].split('-')
-                if int(namesplit[2]) < kwargs['threshold_time']:
-                    logging.info("Deleting {} host object.".format(item['name']))
-                    url = url_search + "/" + item['id']
-                    self.send_to_api(method='delete', url=url)
-        # Finally Delete any expired Port objects.
-        url_search = "/object/protocolportobjects"
-        response = self.send_to_api(method='get', url=url_search)
-        for item in response['items']:
-            if 'Dev-' in item['name']:
-                namesplit = item['name'].split('-')
-                if int(namesplit[2]) < kwargs['threshold_time']:
-                    logging.info("Deleting {} port object.".format(item['name']))
-                    url = url_search + "/" + item['id']
-                    self.send_to_api(method='delete', url=url)
-
     def create_host_objects(self, hosts):
         """
         Create a Host Object.
@@ -288,7 +237,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             acp_id = None
             if response.get('items', '') is '':
                 logging.error("\tAccess Control Policy not found. Exiting.")
-                exit(1)
+                sys.exit(1)
             else:
                 acp_id = response['items'][0]['id']
             # NOTE: This json_data is written specific to match what I'm setting from the acpRuleList.
