@@ -147,6 +147,16 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                 uuids.append(item['device']['id'])
         return uuids
 
+    def host_object(self, **kwargs):
+        """
+        I believe what I want to do is give people the ability to build an object
+        :param kwargs:
+        :return:
+        """
+        pass
+
+    # These are the "old" ways to CRUD FMC Objects.
+
     def deploy_changes(self):
         """
         Iterate through the list of devices needing deployed and submit a request to the FMC to deploy changes to them.

@@ -8,7 +8,7 @@ with all that can be done with the FMC's API.  That said, what is here works!
 of the token.
 * Register devices with FMC.
 * Deploy changes to FMC managed devices.
-* GET/POST/PUT/DELETE of: 
+* GET/POST/PUT/DELETE of:
   * Host Objects
   * Port Objects
   * Security Zones

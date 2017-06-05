@@ -7,12 +7,14 @@ import datetime
 import requests
 from .helper_functions import *
 
+logging.debug("In the {} module.".format(__name__))
 
 class Token(object):
     """
     The token is the validation object used with the FMC.
 
     """
+    logging.debug("In the Token class.")
 
     MAX_REFRESHES = 3
     TOKEN_LIFETIME = 60 * 30
