@@ -54,7 +54,7 @@ def is_ip(ip):
     try:
         ipaddress.ip_address(ip)
     except ValueError as err:
-        print(err)
+        logging.error(err)
         return False
     return True
 
@@ -69,12 +69,12 @@ def is_ip_network(ip):
     try:
         ipaddress.ip_network(ip)
     except ValueError as err:
-        print(err)
+        logging.error(err)
         return False
     return True
 
 
-def validate_ip_bitmask_range(value, value_type):
+def validate_ip_bitmask_range(value='', value_type=''):
     """
     We need to check the provided IP address (or range of addresses) and make sure the IPs are valid.
     :param value: IP, IP/Bitmask, or IP Range
@@ -89,7 +89,7 @@ def validate_ip_bitmask_range(value, value_type):
     elif value_type == 'host' or value_type == 'network':
         if is_ip_network(value):
             return_dict['valid'] = True
-    return return_dict
+    return return_dict['valid']
 
 
 def mocked_requests_get(**kwargs):

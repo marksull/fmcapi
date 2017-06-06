@@ -83,7 +83,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             logging.info("Auto deploy changes set to False.  "
                          "Use the Deploy button in FMC to push changes to FTDs.\n\n")
 
-    def send_to_api(self, method='', url='', json_data={}):
+    def send_to_api(self, method='', url='', json_data=None):
         """
         Using the "method" type, send a request to the "url" with the "json_data" as the payload.
         :param method:
@@ -93,10 +93,12 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         """
         logging.debug("In the FMC send_to_api() class method.")
 
+        headers = {'Content-Type': 'application/json', 'X-auth-access-token': self.mytoken.get_token()}
+        url = self.base_url + url
+        status_code = 429
+        response = None
+        json_response = None
         try:
-            headers = {'Content-Type': 'application/json', 'X-auth-access-token': self.mytoken.get_token()}
-            url = self.base_url + url
-            status_code = 429
             while status_code == 429:
                 if method == 'get':
                     response = requests.get(url, headers=headers, verify=self.VERIFY_CERT)
@@ -147,16 +149,6 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                 uuids.append(item['device']['id'])
         return uuids
 
-    def host_object(self, **kwargs):
-        """
-        I believe what I want to do is give people the ability to build an object
-        :param kwargs:
-        :return:
-        """
-        pass
-
-    # These are the "old" ways to CRUD FMC Objects.
-
     def deploy_changes(self):
         """
         Iterate through the list of devices needing deployed and submit a request to the FMC to deploy changes to them.
@@ -184,28 +176,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         response = self.send_to_api(method='post', url=url, json_data=json_data)
         return response['deviceList']
 
-    def create_host_objects(self, hosts):
-        """
-        Create a Host Object.
-        :param hosts:
-        :return:
-        """
-        logging.debug("In the FMC create_host_objects() class method.")
-
-        logging.info("Creating Host Object.")
-        url = "/object/hosts"
-        for host in hosts:
-            json_data = {
-                'name': host['name'],
-                'value': host['value'],
-                'type': 'Host',
-            }
-            response = self.send_to_api(method='post', url=url, json_data=json_data)
-            if response.get('id', '') is not '':
-                host['id'] = response['id']
-                logging.info("\tCreated host object: {}.".format(host['name']))
-            else:
-                logging.error("Creation of host object: {} failed to return an 'id' value.".format(host['name']))
+    # These are the "old" ways to CRUD FMC Objects.
 
     def create_protocol_port_objects(self, protocolports):
         """
@@ -627,3 +598,30 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                     else:
                         logging.info("\tSomething wrong happened when modifying "
                                      "interface {} on device {}.".format(device['name'], attribute['deviceName']))
+
+'''
+   def create_host_objects(self, hosts):
+        """
+        Create a Host Object.
+        :param hosts:
+        :return:
+        """
+        logging.debug("In the FMC create_host_objects() class method.")
+
+        logging.info("Creating Host Object.")
+        url = "/object/hosts"
+        for host in hosts:
+            json_data = {
+                'name': host['name'],
+                'value': host['value'],
+                'type': 'Host',
+            }
+            response = self.send_to_api(method='post', url=url, json_data=json_data)
+            if response.get('id', '') is not '':
+                host['id'] = response['id']
+                logging.info("\tCreated host object: {}.".format(host['name']))
+            else:
+                logging.error("Creation of host object: {} failed to return an 'id' value.".format(host['name']))
+
+ 
+'''

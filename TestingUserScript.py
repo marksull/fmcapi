@@ -11,4 +11,6 @@ password = 'Admin123'
 autodeploy = False
 
 with FMC(host=host, username=username, password=password, autodeploy=autodeploy) as fmc1:
-    logging.info("fmc1 instantiated.")
+    host1 = HostObject(fmc=fmc1, name='daxm', value='1.2.3.4')
+    host1.post()
+    print(host1.id)

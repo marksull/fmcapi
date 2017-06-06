@@ -10,7 +10,7 @@ logging_format = '%(asctime)s - %(levelname)s:%(filename)s:%(lineno)s - %(messag
 logging_dateformat = '%Y/%m/%d-%H:%M:%S'
 # Logging level options are logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR, logging.CRITICAL
 logging_level = logging.INFO
-# logging_level = logging.DEBUG
+#logging_level = logging.DEBUG
 logging_filename = 'output.log'
 logging.basicConfig(format=logging_format, datefmt=logging_dateformat, filename=logging_filename, level=logging_level)
 
