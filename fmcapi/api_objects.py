@@ -90,7 +90,7 @@ class FMCObject(object):
     """
 
     REQUIRED_FOR_POST = ['name']
-    REQUIRED_FOR_PUT = REQUIRED_FOR_POST.append('id')
+    REQUIRED_FOR_PUT = ['id']
     REQUIRED_FOR_DELETE = ['id']
     URL = None
 
@@ -125,8 +125,15 @@ class FMCObject(object):
                 return False
         return True
 
+    def valid_for_put(self):
+        logging.debug("In valid_for_put() for fmc_object class.")
+        for item in self.REQUIRED_FOR_PUT:
+            if item not in self.__dict__:
+                return False
+        return True
+
     def valid_for_delete(self):
-        logging.debug("In valid_for_deletet() for fmc_object class.")
+        logging.debug("In valid_for_delete() for fmc_object class.")
         for item in self.REQUIRED_FOR_DELETE:
             if item not in self.__dict__:
                 return False
@@ -150,7 +157,15 @@ class FMCObject(object):
         pass
 
     def put(self):
-        pass
+        logging.debug("In put() for fmc_object class.")
+        if self.valid_for_put():
+            url = '{}/{}'.format(self.URL, self.id)
+            response = self.fmc.send_to_api(method='put', url=url, json_data=self.format_data())
+            self.parse_kwargs(**response)
+            return True
+        else:
+            logging.warning("put() method failed due to failure to pass valid_for_put() test.")
+            return False
 
     def delete(self):
         if self.valid_for_delete():
@@ -193,6 +208,8 @@ class HostObject(FMCObject):
     def format_data(self):
         logging.debug("In format_data() for host_object class.")
         json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
         if 'name' in self.__dict__:
             json_data['name'] = self.name
         if 'value' in self.__dict__:
