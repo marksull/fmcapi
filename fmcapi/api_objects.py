@@ -107,8 +107,6 @@ class FMCObject(object):
             self.description = 'Created by fmcapi.'
         if 'metadata' in kwargs:
             self.metadata = kwargs['metadata']
-        if 'value' in kwargs:
-            self.value = kwargs['value']
         if 'overridable' in kwargs:
             self.overridable = kwargs['overridable']
         else:
@@ -127,15 +125,26 @@ class FMCObject(object):
                 return False
         return True
 
+    def valid_for_delete(self):
+        logging.debug("In valid_for_deletet() for fmc_object class.")
+        for item in self.REQUIRED_FOR_DELETE:
+            if item not in self.__dict__:
+                return False
+        return True
+
     def post(self):
         logging.debug("In post() for fmc_object class.")
-        if self.valid_for_post():
-            response = self.fmc.send_to_api(method='post', url=self.URL, json_data=self.format_data())
-            self.parse_kwargs(**response)
-            return True
+        if 'id' in self.__dict__:
+            logging.info("ID value exists for this object.  Redirecting to put() method.")
+            self.put()
         else:
-            logging.warning("post() method failed due to failure to pass valid_for_post() test.")
-            return False
+            if self.valid_for_post():
+                response = self.fmc.send_to_api(method='post', url=self.URL, json_data=self.format_data())
+                self.parse_kwargs(**response)
+                return True
+            else:
+                logging.warning("post() method failed due to failure to pass valid_for_post() test.")
+                return False
 
     def get(self):
         pass
@@ -144,7 +153,14 @@ class FMCObject(object):
         pass
 
     def delete(self):
-        pass
+        if self.valid_for_delete():
+            url = '{}/{}'.format(self.URL, self.id)
+            response = self.fmc.send_to_api(method='delete', url=url, json_data=self.format_data())
+            self.parse_kwargs(**response)
+            return True
+        else:
+            logging.warning("delete() method failed due to failure to pass valid_for_delete() test.")
+            return False
 
 
 @export
@@ -184,3 +200,9 @@ class HostObject(FMCObject):
         if 'description' in self.__dict__:
             json_data['description'] = self.description
         return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_() for host_object class.")
+        if 'value' in kwargs:
+            self.value = kwargs['value']
