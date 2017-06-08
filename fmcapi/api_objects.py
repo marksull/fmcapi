@@ -383,3 +383,42 @@ class URLObject(FMCObject):
         logging.debug("In parse_() for URLObject class.")
         if 'url' in kwargs:
             self.url = kwargs['url']
+
+
+@export
+class PortObject(FMCObject):
+    """
+    The URL Object in the FMC.
+    """
+
+    URL = '/object/protocolportobjects'
+    REQUIRED_FOR_POST = ['name', 'port', 'protocol']
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for PortObject class.")
+        self.fmc = fmc
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for PortObject class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'description' in self.__dict__:
+            json_data['description'] = self.description
+        if 'port' in self.__dict__:
+            json_data['port'] = self.port
+        if 'protocol' in self.__dict__:
+            json_data['protocol'] = self.protocol
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_() for PortObject class.")
+        if 'port' in kwargs:
+            self.port = kwargs['port']
+        if 'protocol' in kwargs:
+            self.protocol = kwargs['protocol']

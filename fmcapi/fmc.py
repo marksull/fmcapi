@@ -178,30 +178,6 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
 
     # These are the "old" ways to CRUD FMC Objects.
 
-    def create_protocol_port_objects(self, protocolports):
-        """
-        Create Port Objects.
-        :param protocolports:
-        :return:
-        """
-        logging.debug("In the FMC create_protocol_port_objects() class method.")
-
-        logging.info("Creating Protocol Port Object.")
-        url = "/object/protocolportobjects"
-        for port in protocolports:
-            json_data = {
-                'name': port['name'],
-                'port': port['port'],
-                'protocol': port['protocol'],
-                'type': 'ProtocolPortObject',
-            }
-            response = self.send_to_api(method='post', url=url, json_data=json_data)
-            if response.get('id', '') is not '':
-                port['id'] = response['id']
-                logging.info("\tCreated port object: {}.".format(port['name']))
-            else:
-                logging.error("Creation of port object: {} failed to return an 'id' value.".format(port['name']))
-
     def create_acp_rules(self, rules):
         """
         Create ACP Rule Objects.
@@ -445,30 +421,6 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             else:
                 logging.error("Creation of Security Zone: {} failed to return an 'id' value.".format(zone['name']))
 
-    def create_urls(self, objects):
-        """
-        Create URL Objects.
-        :param objects:
-        :return:
-        """
-        logging.debug("In the FMC create_urls() class method.")
-
-        logging.info("Creating URL Objects.")
-        url = "/object/urls"
-        for obj in objects:
-            json_data = {
-                'name': obj['name'],
-                'url': obj['value'],
-                'description': obj['desc'],
-                'type': 'Url',
-            }
-            response = self.send_to_api(method='post', url=url, json_data=json_data)
-            if response.get('id', '') is not '':
-                obj['id'] = response['id']
-                logging.info("\tCreated URL Object {}.".format(obj['name']))
-            else:
-                logging.error("Creation of URL Object: {} failed to return an 'id' value.".format(obj['name']))
-
     def create_acps(self, policies):
         """
         Create Access Control Policy Objects.
@@ -576,6 +528,54 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                                      "interface {} on device {}.".format(device['name'], attribute['deviceName']))
 
 '''
+    def create_protocol_port_objects(self, protocolports):
+        """
+        Create Port Objects.
+        :param protocolports:
+        :return:
+        """
+        logging.debug("In the FMC create_protocol_port_objects() class method.")
+
+        logging.info("Creating Protocol Port Object.")
+        url = "/object/protocolportobjects"
+        for port in protocolports:
+            json_data = {
+                'name': port['name'],
+                'port': port['port'],
+                'protocol': port['protocol'],
+                'type': 'ProtocolPortObject',
+            }
+            response = self.send_to_api(method='post', url=url, json_data=json_data)
+            if response.get('id', '') is not '':
+                port['id'] = response['id']
+                logging.info("\tCreated port object: {}.".format(port['name']))
+            else:
+                logging.error("Creation of port object: {} failed to return an 'id' value.".format(port['name']))
+
+    def create_urls(self, objects):
+        """
+        Create URL Objects.
+        :param objects:
+        :return:
+        """
+        logging.debug("In the FMC create_urls() class method.")
+
+        logging.info("Creating URL Objects.")
+        url = "/object/urls"
+        for obj in objects:
+            json_data = {
+                'name': obj['name'],
+                'url': obj['value'],
+                'description': obj['desc'],
+                'type': 'Url',
+            }
+            response = self.send_to_api(method='post', url=url, json_data=json_data)
+            if response.get('id', '') is not '':
+                obj['id'] = response['id']
+                logging.info("\tCreated URL Object {}.".format(obj['name']))
+            else:
+                logging.error("Creation of URL Object: {} failed to return an 'id' value.".format(obj['name']))
+
     def create_network_objects(self, objects):
         """
         Create Network Objects.
