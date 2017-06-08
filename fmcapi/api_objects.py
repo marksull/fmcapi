@@ -92,6 +92,7 @@ class FMCObject(object):
     REQUIRED_FOR_POST = ['name']
     REQUIRED_FOR_PUT = ['id']
     REQUIRED_FOR_DELETE = ['id']
+    FILTER_BY_NAME = False
     URL = None
 
     def __init__(self, fmc, **kwargs):
@@ -115,6 +116,8 @@ class FMCObject(object):
             self.type = kwargs['type']
         if 'links' in kwargs:
             self.links = kwargs['links']
+        if 'paging' in kwargs:
+            self.paging = kwargs['paging']
         if 'id' in kwargs:
             self.id = kwargs['id']
 
@@ -154,7 +157,35 @@ class FMCObject(object):
                 return False
 
     def get(self):
-        pass
+        """
+        If no self.name or self.id exists then return a full listing of all objects of this type.
+        Otherwise set "expanded=true" results for this specific object.
+        :return:
+        """
+        if 'id' in self.__dict__:
+            url = '{}/{}'.format(self.URL, self.id)
+            response = self.fmc.send_to_api(method='get', url=url)
+            self.parse_kwargs(**response)
+        elif 'name' in self.__dict__:
+            if self.FILTER_BY_NAME:
+                url = '{}?name={}&expanded=true'.format(self.URL, self.name)
+            else:
+                url = '{}?expanded=true'.format(self.URL)
+            response = self.fmc.send_to_api(method='get', url=url)
+            for item in response['items']:
+                if item['name'] == self.name:
+                    self.id = item['id']
+                    self.parse_kwargs(**item)
+                    break
+            if 'id' not in self.__dict__:
+                logging.warning("\tGET query for {} is not found.\n\t\t"
+                                "Response:{}".format(item['name'], response))
+        else:
+            logging.info("GET query for object with no name or id set.  Returning full list of these object types "
+                         "instead.")
+            url = '{}?expanded=true'.format(self.URL)
+            response = self.fmc.send_to_api(method='get', url=url)
+            return response
 
     def put(self):
         logging.debug("In put() for fmc_object class.")
