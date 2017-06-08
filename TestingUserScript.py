@@ -26,3 +26,12 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     host3.get()
     host3.delete()
     print(host3.__dict__)
+
+    url1 = URLObject(fmc=fmc1, name='daxm.net', url='daxm.net')
+    url1.post()
+    url1.url='www.daxm.net'
+    url1.put()
+    print(url1.__dict__)
+    url1.delete()
+    print(url1.__dict__)
+

@@ -445,30 +445,6 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             else:
                 logging.error("Creation of Security Zone: {} failed to return an 'id' value.".format(zone['name']))
 
-    def create_network_objects(self, objects):
-        """
-        Create Network Objects.
-        :param objects:
-        :return:
-        """
-        logging.debug("In the FMC create_network_objects() class method.")
-
-        logging.info("Creating Network Objects.")
-        url = "/object/networks"
-        for obj in objects:
-            json_data = {
-                'name': obj['name'],
-                'value': obj['value'],
-                'description': obj['desc'],
-                'type': 'Network',
-            }
-            response = self.send_to_api(method='post', url=url, json_data=json_data)
-            if response.get('id', '') is not '':
-                obj['id'] = response['id']
-                logging.info("\tCreated Network Object {}.".format(obj['name']))
-            else:
-                logging.error("Creation of Network Object: {} failed to return an 'id' value.".format(obj['name']))
-
     def create_urls(self, objects):
         """
         Create URL Objects.
@@ -600,6 +576,30 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                                      "interface {} on device {}.".format(device['name'], attribute['deviceName']))
 
 '''
+    def create_network_objects(self, objects):
+        """
+        Create Network Objects.
+        :param objects:
+        :return:
+        """
+        logging.debug("In the FMC create_network_objects() class method.")
+
+        logging.info("Creating Network Objects.")
+        url = "/object/networks"
+        for obj in objects:
+            json_data = {
+                'name': obj['name'],
+                'value': obj['value'],
+                'description': obj['desc'],
+                'type': 'Network',
+            }
+            response = self.send_to_api(method='post', url=url, json_data=json_data)
+            if response.get('id', '') is not '':
+                obj['id'] = response['id']
+                logging.info("\tCreated Network Object {}.".format(obj['name']))
+            else:
+                logging.error("Creation of Network Object: {} failed to return an 'id' value.".format(obj['name']))
+
    def create_host_objects(self, hosts):
         """
         Create a Host Object.
