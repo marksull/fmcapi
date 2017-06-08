@@ -37,7 +37,7 @@ def __authorship__():
 ***********************************************************************************************************************
 This python module was created by Dax Mickelson along with LOTs of help from Ryan Malloy and Neil Patel.
 Feel free to send me comments/suggestions/improvements.  Either by email: dmickels@cisco.com or more importantly
-via a Pull request from the github repository: https://github.com/daxm/Selfserve_FMC_usecase01.
+via a Pull request from the github repository: https://github.com/daxm/fmcapi.
 ***********************************************************************************************************************
         """
         logging.debug(__authorship__.__doc__)
