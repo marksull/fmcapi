@@ -439,7 +439,7 @@ class DeviceObject(FMCObject):
     """
 
     URL = '/devices/devicerecords'
-    REQUIRED_FOR_POST = ['name', 'acpPolicy', 'hostName', 'regKey']
+    REQUIRED_FOR_POST = ['name', 'accessPolicy', 'hostName', 'regKey']
     LICENSES = ['BASE', 'PROTECT', 'MALWARE', 'URLFilter', 'CONTROL', 'VPN']
 
     def __init__(self, fmc, **kwargs):
@@ -480,40 +480,34 @@ class DeviceObject(FMCObject):
         if 'accessPolicy' in kwargs:
             self.accessPolicy = kwargs['accessPolicy']
         if 'acp_name' in kwargs:
-            acp = self.ACPPolicy()
-            acp.get(name=kwargs['acp_name'])
-            if 'id' in acp.__dict__:
-                self.accessPolicy = {'id': acp.id, 'type': acp.type}
-            else:
-                logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
-                                'DeviceObject.'.format(kwargs['acp_name']))
+            self.acp(name=kwargs['acp_name'])
 
-    def license_add(self, license='BASE'):
+    def license_add(self, name='BASE'):
         logging.debug("In license_add() for DeviceObject class.")
-        if license in self.LICENSES:
+        if name in self.LICENSES:
             if 'license_caps' in self.__dict__:
-                self.license_caps.append(license)
+                self.license_caps.append(name)
                 self.license_caps = list(set(self.license_caps))
             else:
-                self.license_caps = [ license ]
+                self.license_caps = [name]
 
         else:
-            logging.warning('{} not found in {}.  Cannot add license to DeviceObject.'.format(license, self.LICENSES))
+            logging.warning('{} not found in {}.  Cannot add license to DeviceObject.'.format(name, self.LICENSES))
 
-    def license_remove(self, license=''):
+    def license_remove(self, name=''):
         logging.debug("In license_remove() for DeviceObject class.")
-        if license in self.LICENSES:
+        if name in self.LICENSES:
             if 'license_caps' in self.__dict__:
                 try:
-                    self.license_caps.remove(license)
+                    self.license_caps.remove(name)
                 except ValueError:
-                    logging.warning('{} is not assigned to this device thus cannot be removed.'.format(license))
+                    logging.warning('{} is not assigned to this device thus cannot be removed.'.format(name))
             else:
-                logging.warning('{} is not assigned to this device thus cannot be removed.'.format(license))
+                logging.warning('{} is not assigned to this device thus cannot be removed.'.format(name))
 
         else:
             logging.warning('{} not found in {}.  Cannot remove license from '
-                            'DeviceObject.'.format(license, self.LICENSES))
+                            'DeviceObject.'.format(name, self.LICENSES))
 
     def acp(self, name=''):
         logging.debug("In acp() for DeviceObject class.")
@@ -523,7 +517,7 @@ class DeviceObject(FMCObject):
             self.accessPolicy = {'id': acp.id, 'type': acp.type}
         else:
             logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
-                            'DeviceObject.'.format(kwargs['acp_name']))
+                            'DeviceObject.'.format(name))
 
 
 @export
@@ -534,6 +528,8 @@ class ACPRule(FMCObject):
 
     URL = '/policy/accesspolicies'
     REQUIRED_FOR_POST = ['name', 'acp_id']
+    VALID_FOR_ACTION = ['ALLOW', 'TRUST', 'BLOCK', 'MONITOR', 'BLOCK_RESET', 'BLOCK_INTERACTIVE',
+                        'BLOCK_RESET_INTERACTIVE']
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
@@ -547,70 +543,142 @@ class ACPRule(FMCObject):
             json_data['id'] = self.id
         if 'name' in self.__dict__:
             json_data['name'] = self.name
-        if 'hostName' in self.__dict__:
-            json_data['hostName'] = self.hostName
-        if 'natID' in self.__dict__:
-            json_data['natID'] = self.natID
-        if 'regKey' in self.__dict__:
-            json_data['regKey'] = self.regKey
-        if 'license_caps' in self.__dict__:
-            json_data['license_caps'] = self.license_caps
-        if 'accessPolicy' in self.__dict__:
-            json_data['accessPolicy'] = self.accessPolicy
+        if 'action' in self.__dict__:
+            json_data['action'] = self.action
+        if 'enabled' in self.__dict__:
+            json_data['enabled'] = self.enabled
+        if 'sendEventsToFMC' in self.__dict__:
+            json_data['sendEventsToFMC'] = self.sendEventsToFMC
+        if 'logFiles' in self.__dict__:
+            json_data['logFiles'] = self.logFiles
+        if 'logBegin' in self.__dict__:
+            json_data['logBegin'] = self.logBegin
+        if 'logEnd' in self.__dict__:
+            json_data['logEnd'] = self.logEnd
+        if 'variableSet' in self.__dict__:
+            json_data['variableSet'] = self.variableSet
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'originalSourceNetworks' in self.__dict__:
+            json_data['originalSourceNetworks'] = self.originalSourceNetworks
+        if 'vlanTags' in self.__dict__:
+            json_data['vlanTags'] = self.vlanTags
+        if 'sourceNetworks' in self.__dict__:
+            json_data['sourceNetworks'] = self.sourceNetworks
+        if 'destinationNetworks' in self.__dict__:
+            json_data['destinationNetworks'] = self.destinationNetworks
+        if 'sourcePorts' in self.__dict__:
+            json_data['sourcePorts'] = self.sourcePorts
+        if 'destinationPorts' in self.__dict__:
+            json_data['destinationPorts'] = self.destinationPorts
+        if 'ipsPolicy' in self.__dict__:
+            json_data['ipsPolicy'] = self.ipsPolicy
+        if 'urls' in self.__dict__:
+            json_data['urls'] = self.urls
+        if 'sourceZones' in self.__dict__:
+            json_data['sourceZones'] = self.sourceZones
+        if 'destinationZones' in self.__dict__:
+            json_data['destinationZones'] = self.destinationZones
+        if 'applications' in self.__dict__:
+            json_data['applications'] = self.applications
         return json_data
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for ACPRule class.")
-        if 'hostName' in kwargs:
-            self.hostName = kwargs['hostName']
-        if 'natID' in kwargs:
-            self.natID = kwargs['natID']
-        if 'regKey' in kwargs:
-            self.regKey = kwargs['regKey']
-        if 'license_caps' in kwargs:
-            self.license_caps = kwargs['license_caps']
-        if 'accessPolicy' in kwargs:
-            self.accessPolicy = kwargs['accessPolicy']
+        if 'action' in kwargs:
+            if kwargs['action'] in self.VALID_FOR_ACTION:
+                self.action = kwargs['action']
+            else:
+                logging.warning('Action {} is not a valid action.'.format(kwargs['action']))
+        else:
+            self.action = 'BLOCK'
         if 'acp_name' in kwargs:
-            acp = self.ACPPolicy()
-            acp.get(name=kwargs['acp_name'])
-            if 'id' in acp.__dict__:
-                self.accessPolicy = {'id': acp.id, 'type': acp.type}
-            else:
-                logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
-                                'DeviceObject.'.format(kwargs['acp_name']))
-
-    def license_add(self, license='BASE'):
-        if license in self.LICENSES:
-            if 'license_caps' in self.__dict__:
-                self.license_caps.append(license)
-                self.license_caps = list(set(self.license_caps))
-            else:
-                self.license_caps = [ license ]
-
+            self.acp(name=kwargs['acp_name'])
+        if 'enabled' in kwargs:
+            self.enabled = kwargs['enabled']
         else:
-            logging.warning('{} not found in {}.  Cannot add license to DeviceObject.'.format(license, self.LICENSES))
-
-    def license_remove(self, license=''):
-        if license in self.LICENSES:
-            if 'license_caps' in self.__dict__:
-                try:
-                    self.license_caps.remove(license)
-                except ValueError:
-                    logging.warning('{} is not assigned to this device thus cannot be removed.'.format(license))
-            else:
-                logging.warning('{} is not assigned to this device thus cannot be removed.'.format(license))
-
+            self.enabled = True
+        if 'sendEventsToFMC' in kwargs:
+            self.sendEventsToFMC = kwargs['sendEventsToFMC']
         else:
-            logging.warning('{} not found in {}.  Cannot remove license from '
-                            'DeviceObject.'.format(license, self.LICENSES))
+            self.sendEventsToFMC = True
+        if 'logFiles' in kwargs:
+            self.logFiles = kwargs['logFiles']
+        else:
+            self.logFiles = False
+        if 'logBegin' in kwargs:
+            self.logBegin = kwargs['logBegin']
+        else:
+            self.logBegin = False
+        if 'logEnd' in kwargs:
+            self.logEnd = kwargs['logEnd']
+        else:
+            self.logEnd = False
+        if 'originalSourceNetworks' in kwargs:
+            self.originalSourceNetworks = kwargs['originalSourceNetworks']
+        if 'vlanTags' in kwargs:
+            self.vlanTags = kwargs['vlanTags']
+        if 'sourceNetworks' in kwargs:
+            self.sourceNetworks = kwargs['sourceNetworks']
+        if 'destinationNetworks' in kwargs:
+            self.destinationNetworks = kwargs['destinationNetworks']
+        if 'variableSet' in kwargs:
+            self.variableSet = kwargs['variableSet']
+        if 'sourcePorts' in kwargs:
+            self.sourcePorts = kwargs['sourcePorts']
+        if 'destinationPorts' in kwargs:
+            self.destinationPorts = kwargs['destinationPorts']
+        if 'ipsPolicy' in kwargs:
+            self.ipsPolicy = kwargs['ipsPolicy']
+        if 'urls' in kwargs:
+            self.urls = kwargs['urls']
+        if 'sourceZones' in kwargs:
+            self.sourceZones = kwargs['sourceZones']
+        if 'destinationZones' in kwargs:
+            self.destinationZones = kwargs['destinationZones']
+        if 'applications' in kwargs:
+            self.applications = kwargs['applications']
 
     def acp(self, name=''):
         acp = ACPPolicy(fmc=self.fmc)
         acp.get(name=name)
         if 'id' in acp.__dict__:
-            self.accessPolicy = {'id': acp.id, 'type': acp.type}
+            self.acp_id = acp.id
+            self.url = '{}/{}/accessrules'.format(self.URL, self.acp_id)
         else:
             logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
-                            'DeviceObject.'.format(kwargs['acp_name']))
+                            'ACPRule.'.format(name))
+
+    def source_zone_add(self, name):
+        sz = SecurityZoneObject(fmc=self.fmc)
+        sz.get(name=name)
+        if 'id' in sz.__dict__:
+            if 'sourceZones' in self.__dict__:
+                new_zone = {'name': sz.name, 'id': sz.id}
+                duplicate = False
+                for object in self.sourceZones['objects']:
+                    if object['name'] == new_zone['name']:
+                        duplicate = True
+                        break
+                if not duplicate:
+                    self.sourceZones['objects'].append(new_zone)
+            else:
+                self.sourceZones = {'objects': [{'name': sz.name, 'id': sz.id}]}
+        else:
+            logging.warning('Security Zone, {}, not found.  Cannot add to ACPRule.'.format(name))
+
+    def source_zone_remove(self, name):
+        sz = SecurityZoneObject(fmc=self.fmc)
+        sz.get(name=name)
+        if 'id' in sz.__dict__:
+            if 'sourceZones' in self.__dict__:
+                objects = []
+                for object in self.sourceZones['objects']:
+                    if object['name'] != name:
+                        objects.append(object)
+                self.sourceZones['objects'] = objects
+            else:
+                logging.info("sourceZones doesn't exist for this ACPRule.  Nothing to remove.")
+        else:
+            logging.warning('Security Zone, {}, not found.  Cannot remove from ACPRule.'.format(name))

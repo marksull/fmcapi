@@ -12,6 +12,12 @@ autodeploy = False
 
 with FMC(host=host, username=username, password=password, autodeploy=autodeploy) as fmc1:
     acp_rule1 = ACPRule(fmc=fmc1)
+    acp_rule1.source_zone_add(name='IN')
+    acp_rule1.source_zone_add(name='IN')
+    acp_rule1.source_zone_add(name='OUT')
+    print(acp_rule1.__dict__)
+    acp_rule1.source_zone_remove(name='OUT')
+    print(acp_rule1.__dict__)
 
 '''
     device1 = DeviceObject(fmc=fmc1)
