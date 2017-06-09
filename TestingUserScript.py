@@ -18,6 +18,11 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     print(acp_rule1.__dict__)
     acp_rule1.source_zone_remove(name='OUT')
     print(acp_rule1.__dict__)
+    acp_rule1.intrusion_policy(name='Connectivity Over Security')
+    acp_rule1.variable_set()
+    print(acp_rule1.__dict__)
+    acp_rule1.intrusion_policy()
+    print(acp_rule1.__dict__)
 
 '''
     device1 = DeviceObject(fmc=fmc1)

@@ -143,6 +143,9 @@ class FMCObject(object):
             return False
 
 
+# ################# API-Explorer Object Category Things ################# #
+
+
 @export
 class HostObject(FMCObject):
     """
@@ -316,6 +319,47 @@ class URLObject(FMCObject):
 
 
 @export
+class VariableSet(FMCObject):
+    """
+    The VariableSet Object in the FMC.
+    """
+
+    URL = '/object/variablesets'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for VariableSet class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for VariableSet class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'description' in self.__dict__:
+            json_data['description'] = self.description
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for VariableSet class.")
+
+    def post(self):
+        logging.info('POST method for API for VariableSets not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for VariableSets not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for VariableSets not supported.')
+        pass
+
+
+@export
 class PortObject(FMCObject):
     """
     The Port Object in the FMC.
@@ -394,42 +438,7 @@ class SecurityZoneObject(FMCObject):
             self.interfaces = kwargs['interfaces']
 
 
-@export
-class ACPPolicy(FMCObject):
-    """
-    The Access Control Policy Object in the FMC.
-    """
-
-    URL = '/policy/accesspolicies'
-    REQUIRED_FOR_POST = ['name']
-    DEFAULT_ACTION_OPTIONS = ['BLOCK', 'NETWORK_DISCOVERY', 'IPS']  # Not implemented yet.
-    FILTER_BY_NAME = True
-
-    def __init__(self, fmc, **kwargs):
-        super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for ACPPolicy class.")
-        self.parse_kwargs(**kwargs)
-
-    def format_data(self):
-        logging.debug("In format_data() for ACPPolicy class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'description' in self.__dict__:
-            json_data['description'] = self.description
-        if 'defaultAction' in self.__dict__:
-            json_data = self.defaultAction
-        return json_data
-
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for ACPPolicy class.")
-        if 'defaultAction' in kwargs:
-            self.defaultAction = kwargs['defaultAction']
-        else:
-            self.defaultAction = {'action': 'BLOCK'}
+# ################# API-Explorer Devices Category Things ################# #
 
 
 @export
@@ -520,13 +529,96 @@ class DeviceObject(FMCObject):
                             'DeviceObject.'.format(name))
 
 
+# ################# API-Explorer Policy Category Things ################# #
+
+
+@export
+class IntrusionPolicy(FMCObject):
+    """
+    The Intrusion Policy Object in the FMC.
+    """
+
+    URL = '/policy/intrusionpolicies'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for IntrusionPolicy class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for IntrusionPolicy class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for IntrusionPolicy class.")
+        if 'name' in kwargs:
+            self.name = kwargs['name']
+
+    def post(self):
+        logging.info('POST method for API for IntrusionPolicy not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for IntrusionPolicy not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for IntrusionPolicy not supported.')
+        pass
+
+
+@export
+class ACPPolicy(FMCObject):
+    """
+    The Access Control Policy Object in the FMC.
+    """
+
+    URL = '/policy/accesspolicies'
+    REQUIRED_FOR_POST = ['name']
+    DEFAULT_ACTION_OPTIONS = ['BLOCK', 'NETWORK_DISCOVERY', 'IPS']  # Not implemented yet.
+    FILTER_BY_NAME = True
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for ACPPolicy class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for ACPPolicy class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'description' in self.__dict__:
+            json_data['description'] = self.description
+        if 'defaultAction' in self.__dict__:
+            json_data = self.defaultAction
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for ACPPolicy class.")
+        if 'defaultAction' in kwargs:
+            self.defaultAction = kwargs['defaultAction']
+        else:
+            self.defaultAction = {'action': 'BLOCK'}
+
+
 @export
 class ACPRule(FMCObject):
     """
     The ACP Rule Object in the FMC.
     """
 
-    URL = '/policy/accesspolicies'
+    PREFIX_URL = '/policy/accesspolicies'
+    URL = None
     REQUIRED_FOR_POST = ['name', 'acp_id']
     VALID_FOR_ACTION = ['ALLOW', 'TRUST', 'BLOCK', 'MONITOR', 'BLOCK_RESET', 'BLOCK_INTERACTIVE',
                         'BLOCK_RESET_INTERACTIVE']
@@ -617,40 +709,50 @@ class ACPRule(FMCObject):
             self.logEnd = False
         if 'originalSourceNetworks' in kwargs:
             self.originalSourceNetworks = kwargs['originalSourceNetworks']
-        if 'vlanTags' in kwargs:
-            self.vlanTags = kwargs['vlanTags']
-        if 'sourceNetworks' in kwargs:
-            self.sourceNetworks = kwargs['sourceNetworks']
-        if 'destinationNetworks' in kwargs:
-            self.destinationNetworks = kwargs['destinationNetworks']
-        if 'variableSet' in kwargs:
-            self.variableSet = kwargs['variableSet']
-        if 'sourcePorts' in kwargs:
-            self.sourcePorts = kwargs['sourcePorts']
-        if 'destinationPorts' in kwargs:
-            self.destinationPorts = kwargs['destinationPorts']
-        if 'ipsPolicy' in kwargs:
-            self.ipsPolicy = kwargs['ipsPolicy']
-        if 'urls' in kwargs:
-            self.urls = kwargs['urls']
         if 'sourceZones' in kwargs:
             self.sourceZones = kwargs['sourceZones']
         if 'destinationZones' in kwargs:
             self.destinationZones = kwargs['destinationZones']
+        if 'variableSet' in kwargs:
+            self.variableSet = kwargs['variableSet']
+        else:
+            self.variable_set()
+        if 'ipsPolicy' in kwargs:
+            self.ipsPolicy = kwargs['ipsPolicy']
+
+        if 'vlanTags' in kwargs:
+            self.vlanTags = kwargs['vlanTags']
+        if 'sourcePorts' in kwargs:
+            self.sourcePorts = kwargs['sourcePorts']
+        if 'destinationPorts' in kwargs:
+            self.destinationPorts = kwargs['destinationPorts']
+        if 'urls' in kwargs:
+            self.urls = kwargs['urls']
+        if 'sourceNetworks' in kwargs:
+            self.sourceNetworks = kwargs['sourceNetworks']
+        if 'destinationNetworks' in kwargs:
+            self.destinationNetworks = kwargs['destinationNetworks']
         if 'applications' in kwargs:
             self.applications = kwargs['applications']
 
-    def acp(self, name=''):
+    def acp(self, name):
+        logging.debug("In acp() for ACPRule class.")
         acp = ACPPolicy(fmc=self.fmc)
         acp.get(name=name)
         if 'id' in acp.__dict__:
             self.acp_id = acp.id
-            self.url = '{}/{}/accessrules'.format(self.URL, self.acp_id)
+            self.URL = '{}/{}/accessrules'.format(self.PREFIX_URL, self.acp_id)
         else:
             logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
                             'ACPRule.'.format(name))
 
+    def variable_set(self, name='Default-Set'):
+        vs = VariableSet(fmc=self.fmc)
+        vs.get(name=name)
+        self.variableSet = {'name': vs.name, 'id': vs.id}
+
     def source_zone_add(self, name):
+        logging.debug("In source_zone_add() for ACPRule class.")
         sz = SecurityZoneObject(fmc=self.fmc)
         sz.get(name=name)
         if 'id' in sz.__dict__:
@@ -669,6 +771,7 @@ class ACPRule(FMCObject):
             logging.warning('Security Zone, {}, not found.  Cannot add to ACPRule.'.format(name))
 
     def source_zone_remove(self, name):
+        logging.debug("In source_zone_remove() for ACPRule class.")
         sz = SecurityZoneObject(fmc=self.fmc)
         sz.get(name=name)
         if 'id' in sz.__dict__:
@@ -682,3 +785,47 @@ class ACPRule(FMCObject):
                 logging.info("sourceZones doesn't exist for this ACPRule.  Nothing to remove.")
         else:
             logging.warning('Security Zone, {}, not found.  Cannot remove from ACPRule.'.format(name))
+
+    def destination_zone_add(self, name):
+        logging.debug("In destination_zone_add() for ACPRule class.")
+        sz = SecurityZoneObject(fmc=self.fmc)
+        sz.get(name=name)
+        if 'id' in sz.__dict__:
+            if 'destinationZones' in self.__dict__:
+                new_zone = {'name': sz.name, 'id': sz.id}
+                duplicate = False
+                for object in self.destinationZones['objects']:
+                    if object['name'] == new_zone['name']:
+                        duplicate = True
+                        break
+                if not duplicate:
+                    self.destinationZones['objects'].append(new_zone)
+            else:
+                self.destinationZones = {'objects': [{'name': sz.name, 'id': sz.id}]}
+        else:
+            logging.warning('Security Zone, {}, not found.  Cannot add to ACPRule.'.format(name))
+
+    def destination_zone_remove(self, name):
+        logging.debug("In destination_zone_remove() for ACPRule class.")
+        sz = SecurityZoneObject(fmc=self.fmc)
+        sz.get(name=name)
+        if 'id' in sz.__dict__:
+            if 'destinationZones' in self.__dict__:
+                objects = []
+                for object in self.destinationZones['objects']:
+                    if object['name'] != name:
+                        objects.append(object)
+                self.destinationZones['objects'] = objects
+            else:
+                logging.info("destinationZones doesn't exist for this ACPRule.  Nothing to remove.")
+        else:
+            logging.warning('Security Zone, {}, not found.  Cannot remove from ACPRule.'.format(name))
+
+    def intrusion_policy(self, name=''):
+        logging.debug("In intrusion_policy_set() for ACPRule class.")
+        if name == '':
+            del self.ipsPolicy
+        else:
+            ips = IntrusionPolicy(fmc=self.fmc, name=name)
+            ips.get()
+            self.ipsPolicy = {'name': ips.name, 'id': ips.id}
