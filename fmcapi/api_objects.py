@@ -184,7 +184,7 @@ class HostObject(FMCObject):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_() for HostObject class.")
+        logging.debug("In parse_kwargs() for HostObject class.")
         if 'value' in kwargs:
             self.value = kwargs['value']
 
@@ -230,7 +230,7 @@ class NetworkObject(FMCObject):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_() for NetworkObject class.")
+        logging.debug("In parse_kwargs() for NetworkObject class.")
         if 'value' in kwargs:
             self.value = kwargs['value']
 
@@ -276,7 +276,7 @@ class RangeObject(FMCObject):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_() for RangeObject class.")
+        logging.debug("In parse_kwargs() for RangeObject class.")
         if 'value' in kwargs:
             self.value = kwargs['value']
 
@@ -310,7 +310,7 @@ class URLObject(FMCObject):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_() for URLObject class.")
+        logging.debug("In parse_kwargs() for URLObject class.")
         if 'url' in kwargs:
             self.url = kwargs['url']
 
@@ -346,7 +346,7 @@ class PortObject(FMCObject):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_() for PortObject class.")
+        logging.debug("In parse_kwargs() for PortObject class.")
         if 'port' in kwargs:
             self.port = kwargs['port']
         if 'protocol' in kwargs:
@@ -385,7 +385,7 @@ class SecurityZoneObject(FMCObject):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_() for SecurityZoneObject class.")
+        logging.debug("In parse_kwargs() for SecurityZoneObject class.")
         if 'interfaceMode' in kwargs:
             self.interfaceMode = kwargs['interfaceMode']
         else:
@@ -425,7 +425,7 @@ class ACPPolicy(FMCObject):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_() for ACPPolicy class.")
+        logging.debug("In parse_kwargs() for ACPPolicy class.")
         if 'defaultAction' in kwargs:
             self.defaultAction = kwargs['defaultAction']
         else:
@@ -439,7 +439,7 @@ class DeviceObject(FMCObject):
     """
 
     URL = '/devices/devicerecords'
-    REQUIRED_FOR_POST = ['name', 'acp_name', 'hostName', 'regKey']
+    REQUIRED_FOR_POST = ['name', 'acpPolicy', 'hostName', 'regKey']
     LICENSES = ['BASE', 'PROTECT', 'MALWARE', 'URLFilter', 'CONTROL', 'VPN']
 
     def __init__(self, fmc, **kwargs):
@@ -468,7 +468,100 @@ class DeviceObject(FMCObject):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_() for DeviceObject class.")
+        logging.debug("In parse_kwargs() for DeviceObject class.")
+        if 'hostName' in kwargs:
+            self.hostName = kwargs['hostName']
+        if 'natID' in kwargs:
+            self.natID = kwargs['natID']
+        if 'regKey' in kwargs:
+            self.regKey = kwargs['regKey']
+        if 'license_caps' in kwargs:
+            self.license_caps = kwargs['license_caps']
+        if 'accessPolicy' in kwargs:
+            self.accessPolicy = kwargs['accessPolicy']
+        if 'acp_name' in kwargs:
+            acp = self.ACPPolicy()
+            acp.get(name=kwargs['acp_name'])
+            if 'id' in acp.__dict__:
+                self.accessPolicy = {'id': acp.id, 'type': acp.type}
+            else:
+                logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
+                                'DeviceObject.'.format(kwargs['acp_name']))
+
+    def license_add(self, license='BASE'):
+        logging.debug("In license_add() for DeviceObject class.")
+        if license in self.LICENSES:
+            if 'license_caps' in self.__dict__:
+                self.license_caps.append(license)
+                self.license_caps = list(set(self.license_caps))
+            else:
+                self.license_caps = [ license ]
+
+        else:
+            logging.warning('{} not found in {}.  Cannot add license to DeviceObject.'.format(license, self.LICENSES))
+
+    def license_remove(self, license=''):
+        logging.debug("In license_remove() for DeviceObject class.")
+        if license in self.LICENSES:
+            if 'license_caps' in self.__dict__:
+                try:
+                    self.license_caps.remove(license)
+                except ValueError:
+                    logging.warning('{} is not assigned to this device thus cannot be removed.'.format(license))
+            else:
+                logging.warning('{} is not assigned to this device thus cannot be removed.'.format(license))
+
+        else:
+            logging.warning('{} not found in {}.  Cannot remove license from '
+                            'DeviceObject.'.format(license, self.LICENSES))
+
+    def acp(self, name=''):
+        logging.debug("In acp() for DeviceObject class.")
+        acp = ACPPolicy(fmc=self.fmc)
+        acp.get(name=name)
+        if 'id' in acp.__dict__:
+            self.accessPolicy = {'id': acp.id, 'type': acp.type}
+        else:
+            logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
+                            'DeviceObject.'.format(kwargs['acp_name']))
+
+
+@export
+class ACPRule(FMCObject):
+    """
+    The ACP Rule Object in the FMC.
+    """
+
+    URL = '/policy/accesspolicies'
+    REQUIRED_FOR_POST = ['name', 'acp_id']
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for ACPRule class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for ACPRule class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'hostName' in self.__dict__:
+            json_data['hostName'] = self.hostName
+        if 'natID' in self.__dict__:
+            json_data['natID'] = self.natID
+        if 'regKey' in self.__dict__:
+            json_data['regKey'] = self.regKey
+        if 'license_caps' in self.__dict__:
+            json_data['license_caps'] = self.license_caps
+        if 'accessPolicy' in self.__dict__:
+            json_data['accessPolicy'] = self.accessPolicy
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for ACPRule class.")
         if 'hostName' in kwargs:
             self.hostName = kwargs['hostName']
         if 'natID' in kwargs:
@@ -521,4 +614,3 @@ class DeviceObject(FMCObject):
         else:
             logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
                             'DeviceObject.'.format(kwargs['acp_name']))
-
