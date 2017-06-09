@@ -11,6 +11,22 @@ password = 'Admin123'
 autodeploy = False
 
 with FMC(host=host, username=username, password=password, autodeploy=autodeploy) as fmc1:
+    device1 = DeviceObject(fmc=fmc1)
+    device1.license_add()
+    device1.license_add(license='VPN')
+    print(device1.__dict__)
+    device1.license_add(license='VPN')
+    print(device1.__dict__)
+    device1.license_add(license='MALWARE')
+    print(device1.__dict__)
+    device1.license_remove(license='MALWARE')
+    print(device1.__dict__)
+    device1.acp('Example_Corp')
+    print(device1.__dict__)
+
+
+
+'''
     acp1 = ACPPolicy(fmc=fmc1)
     acp1.get(name='Example_Corp')
     print(acp1.__dict__)
@@ -21,8 +37,6 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     sz1.delete()
     print(sz1.__dict__)
 
-
-'''
     port1 = PortObject(fmc=fmc1, name='_porter', port='8888', protocol='tcp')
     port1.post()
     port1.port='9999'

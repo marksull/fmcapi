@@ -318,7 +318,7 @@ class URLObject(FMCObject):
 @export
 class PortObject(FMCObject):
     """
-    The URL Object in the FMC.
+    The Port Object in the FMC.
     """
 
     URL = '/object/protocolportobjects'
@@ -356,7 +356,7 @@ class PortObject(FMCObject):
 @export
 class SecurityZoneObject(FMCObject):
     """
-    The URL Object in the FMC.
+    The Security Zone Object in the FMC.
     """
 
     URL = '/object/securityzones'
@@ -430,3 +430,94 @@ class ACPPolicy(FMCObject):
             self.defaultAction = kwargs['defaultAction']
         else:
             self.defaultAction = {'action': 'BLOCK'}
+
+
+@export
+class DeviceObject(FMCObject):
+    """
+    The Device Object in the FMC.
+    """
+
+    URL = '/devices/devicerecords'
+    REQUIRED_FOR_POST = ['name', 'acp_name', 'hostName', 'regKey']
+    LICENSES = ['BASE', 'PROTECT', 'MALWARE', 'URLFilter', 'CONTROL', 'VPN']
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for DeviceObject class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for DeviceObject class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'hostName' in self.__dict__:
+            json_data['hostName'] = self.hostName
+        if 'natID' in self.__dict__:
+            json_data['natID'] = self.natID
+        if 'regKey' in self.__dict__:
+            json_data['regKey'] = self.regKey
+        if 'license_caps' in self.__dict__:
+            json_data['license_caps'] = self.license_caps
+        if 'accessPolicy' in self.__dict__:
+            json_data['accessPolicy'] = self.accessPolicy
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_() for DeviceObject class.")
+        if 'hostName' in kwargs:
+            self.hostName = kwargs['hostName']
+        if 'natID' in kwargs:
+            self.natID = kwargs['natID']
+        if 'regKey' in kwargs:
+            self.regKey = kwargs['regKey']
+        if 'license_caps' in kwargs:
+            self.license_caps = kwargs['license_caps']
+        if 'accessPolicy' in kwargs:
+            self.accessPolicy = kwargs['accessPolicy']
+        if 'acp_name' in kwargs:
+            acp = self.ACPPolicy()
+            acp.get(name=kwargs['acp_name'])
+            if 'id' in acp.__dict__:
+                self.accessPolicy = {'id': acp.id, 'type': acp.type}
+            else:
+                logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
+                                'DeviceObject.'.format(kwargs['acp_name']))
+
+    def license_add(self, license='BASE'):
+        if license in self.LICENSES:
+            if 'license_caps' in self.__dict__:
+                self.license_caps.append(license)
+                self.license_caps = list(set(self.license_caps))
+            else:
+                self.license_caps = [ license ]
+
+        else:
+            logging.warning('{} not found in {}.  Cannot add license to DeviceObject.'.format(license, self.LICENSES))
+
+    def license_remove(self, license=''):
+        if license in self.LICENSES:
+            if 'license_caps' in self.__dict__:
+                try:
+                    self.license_caps.remove(license)
+                except ValueError:
+                    logging.warning('{} is not assigned to this device thus cannot be removed.'.format(license))
+            else:
+                logging.warning('{} is not assigned to this device thus cannot be removed.'.format(license))
+
+        else:
+            logging.warning('{} not found in {}.  Cannot remove license from '
+                            'DeviceObject.'.format(license, self.LICENSES))
+
+    def acp(self, name=''):
+        acp = ACPPolicy(fmc=self.fmc)
+        acp.get(name=name)
+        if 'id' in acp.__dict__:
+            self.accessPolicy = {'id': acp.id, 'type': acp.type}
+        else:
+            logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
+                            'DeviceObject.'.format(kwargs['acp_name']))
