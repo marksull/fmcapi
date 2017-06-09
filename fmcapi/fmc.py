@@ -362,6 +362,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             else:
                 logging.error("Creation of ACP rule: {} failed to return an 'id' value.".format(rule['name']))
 
+'''
     def register_devices(self, devices):
         """
         Register a device with the FMC.
@@ -396,8 +397,6 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             if response.get('metadata', '') is not '':
                 logging.info("\t%s registration can take some time (5 minutes or more)." % device['name'])
                 logging.info("\t\tIssue the command 'show managers' on", device['name'], "to view progress.")
-
-'''
 
     def create_security_zones(self, zones):
         """

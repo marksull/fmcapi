@@ -11,6 +11,9 @@ password = 'Admin123'
 autodeploy = False
 
 with FMC(host=host, username=username, password=password, autodeploy=autodeploy) as fmc1:
+    acp_rule1 = ACPRule(fmc=fmc1)
+
+'''
     device1 = DeviceObject(fmc=fmc1)
     device1.license_add()
     device1.license_add(license='VPN')
@@ -24,9 +27,6 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     device1.acp('Example_Corp')
     print(device1.__dict__)
 
-
-
-'''
     acp1 = ACPPolicy(fmc=fmc1)
     acp1.get(name='Example_Corp')
     print(acp1.__dict__)
