@@ -397,6 +397,8 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                 logging.info("\t%s registration can take some time (5 minutes or more)." % device['name'])
                 logging.info("\t\tIssue the command 'show managers' on", device['name'], "to view progress.")
 
+'''
+
     def create_security_zones(self, zones):
         """
         Create Security Zones.
@@ -420,44 +422,6 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                 logging.info("\tCreated Security Zone {}.".format(zone['name']))
             else:
                 logging.error("Creation of Security Zone: {} failed to return an 'id' value.".format(zone['name']))
-
-    def create_acps(self, policies):
-        """
-        Create Access Control Policy Objects.
-        :param policies:
-        :return:
-        """
-        logging.debug("In the FMC create_acps() class method.")
-
-        logging.info("Creating Access Control Policies.")
-        url = "/policy/accesspolicies"
-        for policy in policies:
-            json_data = {
-                'type': "AccessPolicy",
-                'name': policy['name'],
-                'description': policy['desc'],
-            }
-            if False and policy.get('parent', '') is not '':
-                # Modifying Metatdata is not supported so we cannot create "child" ACPs yet.  :-(
-                url_search = url + "?name=" + policy['parent']
-                response = self.send_to_api(method='get', url=url_search)
-                json_data['metadata'] = {
-                    'inherit': True,
-                    'parentPolicy': {
-                        'type': 'AccessPolicy',
-                        'name': policy['parent'],
-                        'id': response['items'][0]['id']
-                    }
-                }
-            else:
-                json_data['defaultAction'] = {'action': policy['defaultAction']}
-            response = self.send_to_api(method='post', url=url, json_data=json_data)
-            if response.get('id', '') is not '':
-                policy['id'] = response['id']
-                logging.info("\tCreated Access Control Policy {}.".format(policy['name']))
-            else:
-                logging.error("Creation of Access Control Policy: {} failed to return an "
-                              "'id' value.".format(policy['name']))
 
     def modify_device_physical_interfaces(self, device_attributes):
         """
@@ -527,7 +491,44 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                         logging.info("\tSomething wrong happened when modifying "
                                      "interface {} on device {}.".format(device['name'], attribute['deviceName']))
 
-'''
+    def create_acps(self, policies):
+        """
+        Create Access Control Policy Objects.
+        :param policies:
+        :return:
+        """
+        logging.debug("In the FMC create_acps() class method.")
+
+        logging.info("Creating Access Control Policies.")
+        url = "/policy/accesspolicies"
+        for policy in policies:
+            json_data = {
+                'type': "AccessPolicy",
+                'name': policy['name'],
+                'description': policy['desc'],
+            }
+            if False and policy.get('parent', '') is not '':
+                # Modifying Metatdata is not supported so we cannot create "child" ACPs yet.  :-(
+                url_search = url + "?name=" + policy['parent']
+                response = self.send_to_api(method='get', url=url_search)
+                json_data['metadata'] = {
+                    'inherit': True,
+                    'parentPolicy': {
+                        'type': 'AccessPolicy',
+                        'name': policy['parent'],
+                        'id': response['items'][0]['id']
+                    }
+                }
+            else:
+                json_data['defaultAction'] = {'action': policy['defaultAction']}
+            response = self.send_to_api(method='post', url=url, json_data=json_data)
+            if response.get('id', '') is not '':
+                policy['id'] = response['id']
+                logging.info("\tCreated Access Control Policy {}.".format(policy['name']))
+            else:
+                logging.error("Creation of Access Control Policy: {} failed to return an "
+                              "'id' value.".format(policy['name']))
+
     def create_protocol_port_objects(self, protocolports):
         """
         Create Port Objects.
@@ -625,3 +626,76 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
 
  
 '''
+
+
+class Token(object):
+    """
+    The token is the validation object used with the FMC.
+
+    """
+    logging.debug("In the Token class.")
+
+    MAX_REFRESHES = 3
+    TOKEN_LIFETIME = 60 * 30
+    API_PLATFORM_VERSION = 'api/fmc_platform/v1'
+
+    def __init__(self, host='192.168.45.45', username='admin', password='Admin123', verify_cert=False):
+        """
+        Initialize variables used in the Token class.
+        :param host:
+        :param username:
+        :param password:
+        :param verify_cert:
+        """
+        logging.debug("In the Token __init__() class method.")
+
+        self.__host = host
+        self.__username = username
+        self.__password = password
+        self.verify_cert = verify_cert
+        self.token_expiry = None
+        self.token_refreshes = 0
+        self.access_token = None
+        self.uuid = None
+        self.refresh_token = None
+        self.generate_tokens()
+
+    def generate_tokens(self):
+        """
+        Create new and refresh expired tokens.
+        :return:
+        """
+        logging.debug("In the Token generate_tokens() class method.")
+
+        if self.token_refreshes <= self.MAX_REFRESHES and self.access_token is not None:
+            headers = {'Content-Type': 'application/json', 'X-auth-access-token': self.access_token,
+                       'X-auth-refresh-token': self.refresh_token}
+            url = 'https://{}/{}/auth/refreshtoken'.format(self.__host, self.API_PLATFORM_VERSION)
+            logging.info("Refreshing tokens, {} out of {} refreshes, from {}.".format(self.token_refreshes,
+                                                                                      self.MAX_REFRESHES, url))
+            response = requests.post(url, headers=headers, verify=self.verify_cert)
+            self.token_refreshes += 1
+        else:
+            headers = {'Content-Type': 'application/json'}
+            url = 'https://{}/{}/auth/generatetoken'.format(self.__host, self.API_PLATFORM_VERSION)
+            logging.info("Requesting new tokens from {}.".format(url))
+            response = requests.post(url, headers=headers,
+                                     auth=requests.auth.HTTPBasicAuth(self.__username, self.__password),
+                                     verify=self.verify_cert)
+            self.token_refreshes = 0
+        self.access_token = response.headers.get('X-auth-access-token')
+        self.refresh_token = response.headers.get('X-authrefresh-token')
+        self.token_expiry = datetime.datetime.now() + datetime.timedelta(seconds=self.TOKEN_LIFETIME)
+        self.uuid = response.headers.get('DOMAIN_UUID')
+
+    def get_token(self):
+        """
+        Check validity of current token.  If needed make a new or resfresh.  Then return access_token.
+        :return:
+        """
+        logging.debug("In the Token get_token() class method.")
+
+        if datetime.datetime.now() > self.token_expiry:
+            logging.info("Token Expired.")
+            self.generate_tokens()
+        return self.access_token

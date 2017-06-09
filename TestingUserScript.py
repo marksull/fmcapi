@@ -11,6 +11,18 @@ password = 'Admin123'
 autodeploy = False
 
 with FMC(host=host, username=username, password=password, autodeploy=autodeploy) as fmc1:
+    acp1 = ACPPolicy(fmc=fmc1)
+    acp1.get(name='Example_Corp')
+    print(acp1.__dict__)
+
+    sz1 = SecurityZoneObject(fmc=fmc1)
+    sz1.post(name='Demo')
+    sz1.get()
+    sz1.delete()
+    print(sz1.__dict__)
+
+
+'''
     port1 = PortObject(fmc=fmc1, name='_porter', port='8888', protocol='tcp')
     port1.post()
     port1.port='9999'
@@ -19,7 +31,6 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     port1.delete()
     print(port1.__dict__)
 
-'''
     host2 = HostObject(fmc=fmc1)
     stuff =host2.get()
     print(stuff)

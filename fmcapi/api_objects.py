@@ -11,79 +11,6 @@ from . import export
 logging.debug("In the {} module.".format(__name__))
 
 
-class Token(object):
-    """
-    The token is the validation object used with the FMC.
-
-    """
-    logging.debug("In the Token class.")
-
-    MAX_REFRESHES = 3
-    TOKEN_LIFETIME = 60 * 30
-    API_PLATFORM_VERSION = 'api/fmc_platform/v1'
-
-    def __init__(self, host='192.168.45.45', username='admin', password='Admin123', verify_cert=False):
-        """
-        Initialize variables used in the Token class.
-        :param host:
-        :param username:
-        :param password:
-        :param verify_cert:
-        """
-        logging.debug("In the Token __init__() class method.")
-
-        self.__host = host
-        self.__username = username
-        self.__password = password
-        self.verify_cert = verify_cert
-        self.token_expiry = None
-        self.token_refreshes = 0
-        self.access_token = None
-        self.uuid = None
-        self.refresh_token = None
-        self.generate_tokens()
-
-    def generate_tokens(self):
-        """
-        Create new and refresh expired tokens.
-        :return:
-        """
-        logging.debug("In the Token generate_tokens() class method.")
-
-        if self.token_refreshes <= self.MAX_REFRESHES and self.access_token is not None:
-            headers = {'Content-Type': 'application/json', 'X-auth-access-token': self.access_token,
-                       'X-auth-refresh-token': self.refresh_token}
-            url = 'https://{}/{}/auth/refreshtoken'.format(self.__host, self.API_PLATFORM_VERSION)
-            logging.info("Refreshing tokens, {} out of {} refreshes, from {}.".format(self.token_refreshes,
-                                                                                      self.MAX_REFRESHES, url))
-            response = requests.post(url, headers=headers, verify=self.verify_cert)
-            self.token_refreshes += 1
-        else:
-            headers = {'Content-Type': 'application/json'}
-            url = 'https://{}/{}/auth/generatetoken'.format(self.__host, self.API_PLATFORM_VERSION)
-            logging.info("Requesting new tokens from {}.".format(url))
-            response = requests.post(url, headers=headers,
-                                     auth=requests.auth.HTTPBasicAuth(self.__username, self.__password),
-                                     verify=self.verify_cert)
-            self.token_refreshes = 0
-        self.access_token = response.headers.get('X-auth-access-token')
-        self.refresh_token = response.headers.get('X-authrefresh-token')
-        self.token_expiry = datetime.datetime.now() + datetime.timedelta(seconds=self.TOKEN_LIFETIME)
-        self.uuid = response.headers.get('DOMAIN_UUID')
-
-    def get_token(self):
-        """
-        Check validity of current token.  If needed make a new or resfresh.  Then return access_token.
-        :return:
-        """
-        logging.debug("In the Token get_token() class method.")
-
-        if datetime.datetime.now() > self.token_expiry:
-            logging.info("Token Expired.")
-            self.generate_tokens()
-        return self.access_token
-
-
 class FMCObject(object):
     """
     This class is the base framework for all the objects in the FMC.
@@ -100,6 +27,7 @@ class FMCObject(object):
         self.fmc = fmc
 
     def parse_kwargs(self, **kwargs):
+        logging.debug("In parse_kwargs() for fmc_object class.")
         if 'name' in kwargs:
             self.name = syntax_correcter(kwargs['name'])
         if 'description' in kwargs:
@@ -142,8 +70,9 @@ class FMCObject(object):
                 return False
         return True
 
-    def post(self):
+    def post(self, **kwargs):
         logging.debug("In post() for fmc_object class.")
+        self.parse_kwargs(**kwargs)
         if 'id' in self.__dict__:
             logging.info("ID value exists for this object.  Redirecting to put() method.")
             self.put()
@@ -156,12 +85,14 @@ class FMCObject(object):
                 logging.warning("post() method failed due to failure to pass valid_for_post() test.")
                 return False
 
-    def get(self):
+    def get(self, **kwargs):
         """
         If no self.name or self.id exists then return a full listing of all objects of this type.
         Otherwise set "expanded=true" results for this specific object.
         :return:
         """
+        logging.debug("In get() for fmc_object class.")
+        self.parse_kwargs(**kwargs)
         if 'id' in self.__dict__:
             url = '{}/{}'.format(self.URL, self.id)
             response = self.fmc.send_to_api(method='get', url=url)
@@ -187,8 +118,9 @@ class FMCObject(object):
             response = self.fmc.send_to_api(method='get', url=url)
             return response
 
-    def put(self):
+    def put(self, **kwargs):
         logging.debug("In put() for fmc_object class.")
+        self.parse_kwargs(**kwargs)
         if self.valid_for_put():
             url = '{}/{}'.format(self.URL, self.id)
             response = self.fmc.send_to_api(method='put', url=url, json_data=self.format_data())
@@ -198,7 +130,9 @@ class FMCObject(object):
             logging.warning("put() method failed due to failure to pass valid_for_put() test.")
             return False
 
-    def delete(self):
+    def delete(self, **kwargs):
+        logging.debug("In delete() for fmc_object class.")
+        self.parse_kwargs(**kwargs)
         if self.valid_for_delete():
             url = '{}/{}'.format(self.URL, self.id)
             response = self.fmc.send_to_api(method='delete', url=url, json_data=self.format_data())
@@ -221,7 +155,6 @@ class HostObject(FMCObject):
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for HostObject class.")
-        self.fmc = fmc
         self.parse_kwargs(**kwargs)
         if 'value' in kwargs:
             value_type = get_networkaddress_type(kwargs['value'])
@@ -268,7 +201,6 @@ class NetworkObject(FMCObject):
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for NetworkObject class.")
-        self.fmc = fmc
         self.parse_kwargs(**kwargs)
         if 'value' in kwargs:
             value_type = get_networkaddress_type(kwargs['value'])
@@ -315,7 +247,6 @@ class RangeObject(FMCObject):
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for RangeObject class.")
-        self.fmc = fmc
         self.parse_kwargs(**kwargs)
         if 'value' in kwargs:
             value_type = get_networkaddress_type(kwargs['value'])
@@ -362,7 +293,6 @@ class URLObject(FMCObject):
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for URLObject class.")
-        self.fmc = fmc
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
@@ -397,7 +327,6 @@ class PortObject(FMCObject):
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for PortObject class.")
-        self.fmc = fmc
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
@@ -422,3 +351,82 @@ class PortObject(FMCObject):
             self.port = kwargs['port']
         if 'protocol' in kwargs:
             self.protocol = kwargs['protocol']
+
+
+@export
+class SecurityZoneObject(FMCObject):
+    """
+    The URL Object in the FMC.
+    """
+
+    URL = '/object/securityzones'
+    REQUIRED_FOR_POST = ['name', 'interfaceMode']
+    FILTER_BY_NAME = True
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for SecurityZoneObject class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for SecurityZoneObject class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'description' in self.__dict__:
+            json_data['description'] = self.description
+        if 'interfaceMode' in self.__dict__:
+            json_data['interfaceMode'] = self.interfaceMode
+        if 'interfaces' in self.__dict__:
+            json_data['interfaces'] = self.interfaces
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_() for SecurityZoneObject class.")
+        if 'interfaceMode' in kwargs:
+            self.interfaceMode = kwargs['interfaceMode']
+        else:
+            self.interfaceMode = 'ROUTED'
+        if 'interfaces' in kwargs:
+            self.interfaces = kwargs['interfaces']
+
+
+@export
+class ACPPolicy(FMCObject):
+    """
+    The Access Control Policy Object in the FMC.
+    """
+
+    URL = '/policy/accesspolicies'
+    REQUIRED_FOR_POST = ['name']
+    DEFAULT_ACTION_OPTIONS = ['BLOCK', 'NETWORK_DISCOVERY', 'IPS']  # Not implemented yet.
+    FILTER_BY_NAME = True
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for ACPPolicy class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for ACPPolicy class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'description' in self.__dict__:
+            json_data['description'] = self.description
+        if 'defaultAction' in self.__dict__:
+            json_data = self.defaultAction
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_() for ACPPolicy class.")
+        if 'defaultAction' in kwargs:
+            self.defaultAction = kwargs['defaultAction']
+        else:
+            self.defaultAction = {'action': 'BLOCK'}
