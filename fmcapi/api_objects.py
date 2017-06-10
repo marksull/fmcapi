@@ -779,17 +779,17 @@ class ACPRule(APIClassTemplate):
             self.ipsPolicy = kwargs['ipsPolicy']
         if 'vlanTags' in kwargs:
             self.vlanTags = kwargs['vlanTags']
-
         if 'sourcePorts' in kwargs:
             self.sourcePorts = kwargs['sourcePorts']
         if 'destinationPorts' in kwargs:
             self.destinationPorts = kwargs['destinationPorts']
-        if 'urls' in kwargs:
-            self.urls = kwargs['urls']
+
         if 'sourceNetworks' in kwargs:
             self.sourceNetworks = kwargs['sourceNetworks']
         if 'destinationNetworks' in kwargs:
             self.destinationNetworks = kwargs['destinationNetworks']
+        if 'urls' in kwargs:
+            self.urls = kwargs['urls']
         if 'applications' in kwargs:
             self.applications = kwargs['applications']
 
@@ -950,3 +950,85 @@ class ACPRule(APIClassTemplate):
             if 'vlanTags' in self.__dict__:
                 del self.vlanTags
                 logging.info('All VLAN Tags removed from this ACPRule object.')
+
+    def source_port(self, action, name):
+        logging.debug("In source_port() for ACPRule class.")
+        if action == 'add':
+            pport = ProtocolPort(fmc=self.fmc)
+            pport.get(name=name)
+            if 'id' in pport.__dict__:
+                if 'sourcePorts' in self.__dict__:
+                    new_port = {'name': pport.name, 'id': pport.id}
+                    duplicate = False
+                    for object in self.sourcePorts['objects']:
+                        if object['name'] == new_port['name']:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.sourcePorts['objects'].append(new_port)
+                        logging.info('Adding "{}" to sourcePorts for this ACPRule.'.format(name))
+                else:
+                    self.sourcePorts = {'objects': [{'name': pport.name, 'id': pport.id}]}
+                    logging.info('Adding "{}" to sourcePorts for this ACPRule.'.format(name))
+            else:
+                logging.warning('Protocol Port, "{}", not found.  Cannot add to ACPRule.'.format(name))
+        elif action == 'remove':
+            pport = ProtocolPort(fmc=self.fmc)
+            pport.get(name=name)
+            if 'id' in pport.__dict__:
+                if 'sourcePorts' in self.__dict__:
+                    objects = []
+                    for object in self.sourcePorts['objects']:
+                        if object['name'] != name:
+                            objects.append(object)
+                    self.sourcePorts['objects'] = objects
+                    logging.info('Removed "{}" from sourcePorts for this ACPRule.'.format(name))
+                else:
+                    logging.info("sourcePorts doesn't exist for this ACPRule.  Nothing to remove.")
+            else:
+                logging.warning('Protocol Port, "{}", not found.  Cannot remove from ACPRule.'.format(name))
+        elif action == 'clear':
+            if 'sourcePorts' in self.__dict__:
+                del self.sourcePorts
+                logging.info('All Source Ports removed from this ACPRule object.')
+
+    def destination_port(self, action, name):
+        logging.debug("In destination_port() for ACPRule class.")
+        if action == 'add':
+            pport = ProtocolPort(fmc=self.fmc)
+            pport.get(name=name)
+            if 'id' in pport.__dict__:
+                if 'destinationPorts' in self.__dict__:
+                    new_port = {'name': pport.name, 'id': pport.id}
+                    duplicate = False
+                    for object in self.destinationPorts['objects']:
+                        if object['name'] == new_port['name']:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.destinationPorts['objects'].append(new_port)
+                        logging.info('Adding "{}" to destinationPorts for this ACPRule.'.format(name))
+                else:
+                    self.destinationPorts = {'objects': [{'name': pport.name, 'id': pport.id}]}
+                    logging.info('Adding "{}" to destinationPorts for this ACPRule.'.format(name))
+            else:
+                logging.warning('Protocol Port, "{}", not found.  Cannot add to ACPRule.'.format(name))
+        elif action == 'remove':
+            pport = ProtocolPort(fmc=self.fmc)
+            pport.get(name=name)
+            if 'id' in pport.__dict__:
+                if 'destinationPorts' in self.__dict__:
+                    objects = []
+                    for object in self.destinationPorts['objects']:
+                        if object['name'] != name:
+                            objects.append(object)
+                    self.destinationPorts['objects'] = objects
+                    logging.info('Removed "{}" from destinationPorts for this ACPRule.'.format(name))
+                else:
+                    logging.info("destinationPorts doesn't exist for this ACPRule.  Nothing to remove.")
+            else:
+                logging.warning('Protocol Port, {}, not found.  Cannot remove from ACPRule.'.format(name))
+        elif action == 'clear':
+            if 'destinationPorts' in self.__dict__:
+                del self.destinationPorts
+                logging.info('All Destination Ports removed from this ACPRule object.')

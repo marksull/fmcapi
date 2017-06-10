@@ -12,6 +12,17 @@ autodeploy = False
 
 with FMC(host=host, username=username, password=password, autodeploy=autodeploy) as fmc1:
     acp_rule1 = ACPRule(fmc=fmc1)
+
+'''
+    acp_rule1.source_port(action='add', name='AOL')
+    acp_rule1.destination_port(action='add', name='AOL')
+    acp_rule1.source_port(action='add', name='AOL')
+    acp_rule1.destination_port(action='add', name='AOL')
+    print(acp_rule1.__dict__)
+    acp_rule1.destination_port(action='remove', name='AOL')
+    acp_rule1.source_port(action='clear', name='')
+    print(acp_rule1.__dict__)
+
     acp_rule1.vlan_tags(action='add', name='asdf')
     acp_rule1.vlan_tags(action='add', name='asdf')
     acp_rule1.vlan_tags(action='add', name='vlan1')
@@ -21,7 +32,6 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     acp_rule1.vlan_tags(action='clear', name='vlan1')
     print(acp_rule1.__dict__)
 
-'''
     vlan1 = VlanTag(fmc=fmc1, name='qwerty')
     vlan1.vlans(start_vlan=1, end_vlan=4094)
     vlan1.vlans(start_vlan=234, end_vlan=123)
