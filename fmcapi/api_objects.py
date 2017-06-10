@@ -107,6 +107,7 @@ class APIClassTemplate(object):
             else:
                 url = '{}?expanded=true'.format(self.URL)
             response = self.fmc.send_to_api(method='get', url=url)
+            print('My Response --> {}'.format(response))
             for item in response['items']:
                 if item['name'] == self.name:
                     self.id = item['id']
@@ -373,7 +374,6 @@ class VlanTag(APIClassTemplate):
         if start_vlan > 0 and start_vlan < 4095 and end_vlan > 0 and end_vlan < 4095:
             return True
         return False
-
 
 
 @export
@@ -795,10 +795,10 @@ class ACPRule(APIClassTemplate):
 
     def acp(self, name):
         logging.debug("In acp() for ACPRule class.")
-        acp = AccessControlPolicy(fmc=self.fmc)
-        acp.get(name=name)
-        if 'id' in acp.__dict__:
-            self.acp_id = acp.id
+        acp1 = AccessControlPolicy(fmc=self.fmc)
+        acp1.get(name=name)
+        if 'id' in acp1.__dict__:
+            self.acp_id = acp1.id
             self.URL = '{}/{}/accessrules'.format(self.PREFIX_URL, self.acp_id)
         else:
             logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '

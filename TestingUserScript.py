@@ -12,6 +12,10 @@ autodeploy = False
 
 with FMC(host=host, username=username, password=password, autodeploy=autodeploy) as fmc1:
     acp_rule1 = ACPRule(fmc=fmc1)
+    acp_rule1.name = 'my_test_rule'
+    acp_rule1.acp(name='Example_Corp')
+    #print(acp_rule1.__dict__)
+    #acp_rule1.post()
 
 '''
     acp_rule1.source_port(action='add', name='AOL')
