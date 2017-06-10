@@ -819,7 +819,6 @@ class ACPRule(APIClassTemplate):
             self.sourceNetworks = kwargs['sourceNetworks']
         if 'destinationNetworks' in kwargs:
             self.destinationNetworks = kwargs['destinationNetworks']
-
         if 'urls' in kwargs:
             self.urls = kwargs['urls']
         if 'applications' in kwargs:
