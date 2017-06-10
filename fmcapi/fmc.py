@@ -22,7 +22,7 @@ from . import export
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 # Print the DOCSTRING for this module.
-logging.debug( __doc__)
+logging.debug(__doc__)
 
 """"
 The 'requests' package is very chatty on the INFO logging level.  Change its logging threshold sent to logger to 
@@ -38,7 +38,7 @@ class FMC(object):
 The FMC class has a series of methods, lines that start with "def", that are used to interact with the Cisco FMC
 via its API.  Each method has its own DOCSTRING (like this triple quoted text here) describing its functionality.
     """
-    logging.debug("In the FMC class.")
+    logging.debug("In the FMC() class.")
 
     API_CONFIG_VERSION = 'api/fmc_config/v1'
     VERIFY_CERT = False

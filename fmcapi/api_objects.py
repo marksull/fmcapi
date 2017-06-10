@@ -11,7 +11,7 @@ from . import export
 logging.debug("In the {} module.".format(__name__))
 
 
-class FMCObject(object):
+class APIClassTemplate(object):
     """
     This class is the base framework for all the objects in the FMC.
     """
@@ -24,11 +24,11 @@ class FMCObject(object):
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-]"""
 
     def __init__(self, fmc, **kwargs):
-        logging.debug("In __init__() for fmc_object class.")
+        logging.debug("In __init__() for APIClassTemplate class.")
         self.fmc = fmc
 
     def parse_kwargs(self, **kwargs):
-        logging.debug("In parse_kwargs() for fmc_object class.")
+        logging.debug("In parse_kwargs() for APIClassTemplate class.")
         if 'name' in kwargs:
             self.name = syntax_correcter(kwargs['name'], permitted_syntax=self.VALID_CHARACTERS_FOR_NAME)
             if self.name != kwargs['name']:
@@ -54,28 +54,28 @@ class FMCObject(object):
             self.id = kwargs['id']
 
     def valid_for_post(self):
-        logging.debug("In valid_for_post() for fmc_object class.")
+        logging.debug("In valid_for_post() for APIClassTemplate class.")
         for item in self.REQUIRED_FOR_POST:
             if item not in self.__dict__:
                 return False
         return True
 
     def valid_for_put(self):
-        logging.debug("In valid_for_put() for fmc_object class.")
+        logging.debug("In valid_for_put() for APIClassTemplate class.")
         for item in self.REQUIRED_FOR_PUT:
             if item not in self.__dict__:
                 return False
         return True
 
     def valid_for_delete(self):
-        logging.debug("In valid_for_delete() for fmc_object class.")
+        logging.debug("In valid_for_delete() for APIClassTemplate class.")
         for item in self.REQUIRED_FOR_DELETE:
             if item not in self.__dict__:
                 return False
         return True
 
     def post(self, **kwargs):
-        logging.debug("In post() for fmc_object class.")
+        logging.debug("In post() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
         if 'id' in self.__dict__:
             logging.info("ID value exists for this object.  Redirecting to put() method.")
@@ -95,7 +95,7 @@ class FMCObject(object):
         Otherwise set "expanded=true" results for this specific object.
         :return:
         """
-        logging.debug("In get() for fmc_object class.")
+        logging.debug("In get() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
         if 'id' in self.__dict__:
             url = '{}/{}'.format(self.URL, self.id)
@@ -123,7 +123,7 @@ class FMCObject(object):
             return response
 
     def put(self, **kwargs):
-        logging.debug("In put() for fmc_object class.")
+        logging.debug("In put() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
         if self.valid_for_put():
             url = '{}/{}'.format(self.URL, self.id)
@@ -135,7 +135,7 @@ class FMCObject(object):
             return False
 
     def delete(self, **kwargs):
-        logging.debug("In delete() for fmc_object class.")
+        logging.debug("In delete() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
         if self.valid_for_delete():
             url = '{}/{}'.format(self.URL, self.id)
@@ -151,7 +151,7 @@ class FMCObject(object):
 
 
 @export
-class HostObject(FMCObject):
+class IPHost(APIClassTemplate):
     """
     The Host Object in the FMC.
     """
@@ -161,23 +161,23 @@ class HostObject(FMCObject):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for HostObject class.")
+        logging.debug("In __init__() for IPHost class.")
         self.parse_kwargs(**kwargs)
         if 'value' in kwargs:
             value_type = get_networkaddress_type(kwargs['value'])
             if value_type == 'range':
                 logging.warning("value, {}, is of type {}.  Limited functionality for this object due to it being "
-                                "created via the HostObject function.".format(kwargs['value'], value_type))
+                                "created via the IPHost function.".format(kwargs['value'], value_type))
             if value_type == 'network':
                 logging.warning("value, {}, is of type {}.  Limited functionality for this object due to it being "
-                                "created via the HostObject function.".format(kwargs['value'], value_type))
+                                "created via the IPHost function.".format(kwargs['value'], value_type))
             if validate_ip_bitmask_range(value=kwargs['value'], value_type=value_type):
                 self.value = kwargs['value']
             else:
                 logging.error("Provided value, {}, has an error with the IP address(es).".format(kwargs['value']))
 
     def format_data(self):
-        logging.debug("In format_data() for HostObject class.")
+        logging.debug("In format_data() for IPHost class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -191,13 +191,13 @@ class HostObject(FMCObject):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for HostObject class.")
+        logging.debug("In parse_kwargs() for IPHost class.")
         if 'value' in kwargs:
             self.value = kwargs['value']
 
 
 @export
-class NetworkObject(FMCObject):
+class IPNetwork(APIClassTemplate):
     """
     The Networkt Object in the FMC.
     """
@@ -207,23 +207,23 @@ class NetworkObject(FMCObject):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for NetworkObject class.")
+        logging.debug("In __init__() for IPNetwork class.")
         self.parse_kwargs(**kwargs)
         if 'value' in kwargs:
             value_type = get_networkaddress_type(kwargs['value'])
             if value_type == 'range':
                 logging.warning("value, {}, is of type {}.  Limited functionality for this object due to it being "
-                                "created via the NetworkObject function.".format(kwargs['value'], value_type))
+                                "created via the IPNetwork function.".format(kwargs['value'], value_type))
             if value_type == 'host':
                 logging.warning("value, {}, is of type {}.  Limited functionality for this object due to it being "
-                                "created via the NetworkObject function.".format(kwargs['value'], value_type))
+                                "created via the IPNetwork function.".format(kwargs['value'], value_type))
             if validate_ip_bitmask_range(value=kwargs['value'], value_type=value_type):
                 self.value = kwargs['value']
             else:
                 logging.error("Provided value, {}, has an error with the IP address(es).".format(kwargs['value']))
 
     def format_data(self):
-        logging.debug("In format_data() for NetworkObject class.")
+        logging.debug("In format_data() for IPNetwork class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -237,13 +237,13 @@ class NetworkObject(FMCObject):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for NetworkObject class.")
+        logging.debug("In parse_kwargs() for IPNetwork class.")
         if 'value' in kwargs:
             self.value = kwargs['value']
 
 
 @export
-class RangeObject(FMCObject):
+class IPRange(APIClassTemplate):
     """
     The Range Object in the FMC.
     """
@@ -253,23 +253,23 @@ class RangeObject(FMCObject):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for RangeObject class.")
+        logging.debug("In __init__() for IPRange class.")
         self.parse_kwargs(**kwargs)
         if 'value' in kwargs:
             value_type = get_networkaddress_type(kwargs['value'])
             if value_type == 'host':
                 logging.warning("value, {}, is of type {}.  Limited functionality for this object due to it being "
-                                "created via the RangeObject function.".format(kwargs['value'], value_type))
+                                "created via the IPRange function.".format(kwargs['value'], value_type))
             if value_type == 'network':
                 logging.warning("value, {}, is of type {}.  Limited functionality for this object due to it being "
-                                "created via the RangeObject function.".format(kwargs['value'], value_type))
+                                "created via the IPRange function.".format(kwargs['value'], value_type))
             if validate_ip_bitmask_range(value=kwargs['value'], value_type=value_type):
                 self.value = kwargs['value']
             else:
                 logging.error("Provided value, {}, has an error with the IP address(es).".format(kwargs['value']))
 
     def format_data(self):
-        logging.debug("In format_data() for RangeObject class.")
+        logging.debug("In format_data() for IPRange class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -283,13 +283,13 @@ class RangeObject(FMCObject):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for RangeObject class.")
+        logging.debug("In parse_kwargs() for IPRange class.")
         if 'value' in kwargs:
             self.value = kwargs['value']
 
 
 @export
-class URLObject(FMCObject):
+class URL(APIClassTemplate):
     """
     The URL Object in the FMC.
     """
@@ -299,11 +299,11 @@ class URLObject(FMCObject):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for URLObject class.")
+        logging.debug("In __init__() for URL class.")
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
-        logging.debug("In format_data() for URLObject class.")
+        logging.debug("In format_data() for URL class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -317,13 +317,67 @@ class URLObject(FMCObject):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for URLObject class.")
+        logging.debug("In parse_kwargs() for URL class.")
         if 'url' in kwargs:
             self.url = kwargs['url']
 
 
 @export
-class VariableSet(FMCObject):
+class VlanTag(APIClassTemplate):
+    """
+    The URL Object in the FMC.
+    """
+
+    URL = '/object/vlantags'
+    REQUIRED_FOR_POST = ['name', 'data']
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for VlanTag class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for VlanTag class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'data' in self.__dict__:
+            json_data['data'] = self.data
+        if 'description' in self.__dict__:
+            json_data['description'] = self.description
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for VlanTag class.")
+        if 'data' in kwargs:
+            self.data = kwargs['data']
+
+    def vlans(self, start_vlan, end_vlan=''):
+        logging.debug("In vlans() for VlanTag class.")
+        if self.validate_vlans(start_vlan=start_vlan, end_vlan=end_vlan):
+            if end_vlan == '':
+                end_vlan = start_vlan
+            if end_vlan < start_vlan:
+                tmp = end_vlan
+                end_vlan = start_vlan
+                start_vlan = tmp
+            self.data = { 'startTag': start_vlan, 'endTag': end_vlan}
+        else:
+            logging.info('VLANs: {}-{} given are not valid.'.format(start_vlan, end_vlan) )
+
+    def validate_vlans(self, start_vlan, end_vlan):
+        logging.debug("In validate_vlans() for VlanTag class.")
+        if start_vlan > 0 and start_vlan < 4095 and end_vlan > 0 and end_vlan < 4095:
+            return True
+        return False
+
+
+
+@export
+class VariableSet(APIClassTemplate):
     """
     The VariableSet Object in the FMC.
     """
@@ -364,7 +418,7 @@ class VariableSet(FMCObject):
 
 
 @export
-class PortObject(FMCObject):
+class ProtocolPort(APIClassTemplate):
     """
     The Port Object in the FMC.
     """
@@ -374,11 +428,11 @@ class PortObject(FMCObject):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for PortObject class.")
+        logging.debug("In __init__() for ProtocolPort class.")
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
-        logging.debug("In format_data() for PortObject class.")
+        logging.debug("In format_data() for ProtocolPort class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -394,7 +448,7 @@ class PortObject(FMCObject):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for PortObject class.")
+        logging.debug("In parse_kwargs() for ProtocolPort class.")
         if 'port' in kwargs:
             self.port = kwargs['port']
         if 'protocol' in kwargs:
@@ -402,7 +456,7 @@ class PortObject(FMCObject):
 
 
 @export
-class SecurityZoneObject(FMCObject):
+class SecurityZone(APIClassTemplate):
     """
     The Security Zone Object in the FMC.
     """
@@ -413,11 +467,11 @@ class SecurityZoneObject(FMCObject):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for SecurityZoneObject class.")
+        logging.debug("In __init__() for SecurityZone class.")
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
-        logging.debug("In format_data() for SecurityZoneObject class.")
+        logging.debug("In format_data() for SecurityZone class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -433,7 +487,7 @@ class SecurityZoneObject(FMCObject):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for SecurityZoneObject class.")
+        logging.debug("In parse_kwargs() for SecurityZone class.")
         if 'interfaceMode' in kwargs:
             self.interfaceMode = kwargs['interfaceMode']
         else:
@@ -446,7 +500,7 @@ class SecurityZoneObject(FMCObject):
 
 
 @export
-class DeviceObject(FMCObject):
+class Device(APIClassTemplate):
     """
     The Device Object in the FMC.
     """
@@ -457,11 +511,11 @@ class DeviceObject(FMCObject):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for DeviceObject class.")
+        logging.debug("In __init__() for Device class.")
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
-        logging.debug("In format_data() for DeviceObject class.")
+        logging.debug("In format_data() for Device class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -481,7 +535,7 @@ class DeviceObject(FMCObject):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for DeviceObject class.")
+        logging.debug("In parse_kwargs() for Device class.")
         if 'hostName' in kwargs:
             self.hostName = kwargs['hostName']
         if 'natID' in kwargs:
@@ -496,7 +550,7 @@ class DeviceObject(FMCObject):
             self.acp(name=kwargs['acp_name'])
 
     def license_add(self, name='BASE'):
-        logging.debug("In license_add() for DeviceObject class.")
+        logging.debug("In license_add() for Device class.")
         if name in self.LICENSES:
             if 'license_caps' in self.__dict__:
                 self.license_caps.append(name)
@@ -505,10 +559,10 @@ class DeviceObject(FMCObject):
                 self.license_caps = [name]
 
         else:
-            logging.warning('{} not found in {}.  Cannot add license to DeviceObject.'.format(name, self.LICENSES))
+            logging.warning('{} not found in {}.  Cannot add license to Device.'.format(name, self.LICENSES))
 
     def license_remove(self, name=''):
-        logging.debug("In license_remove() for DeviceObject class.")
+        logging.debug("In license_remove() for Device class.")
         if name in self.LICENSES:
             if 'license_caps' in self.__dict__:
                 try:
@@ -520,24 +574,24 @@ class DeviceObject(FMCObject):
 
         else:
             logging.warning('{} not found in {}.  Cannot remove license from '
-                            'DeviceObject.'.format(name, self.LICENSES))
+                            'Device.'.format(name, self.LICENSES))
 
     def acp(self, name=''):
-        logging.debug("In acp() for DeviceObject class.")
-        acp = ACPPolicy(fmc=self.fmc)
+        logging.debug("In acp() for Device class.")
+        acp = AccessControlPolicy(fmc=self.fmc)
         acp.get(name=name)
         if 'id' in acp.__dict__:
             self.accessPolicy = {'id': acp.id, 'type': acp.type}
         else:
             logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
-                            'DeviceObject.'.format(name))
+                            'Device.'.format(name))
 
 
 # ################# API-Explorer Policy Category Things ################# #
 
 
 @export
-class IntrusionPolicy(FMCObject):
+class IntrusionPolicy(APIClassTemplate):
     """
     The Intrusion Policy Object in the FMC.
     """
@@ -578,7 +632,7 @@ class IntrusionPolicy(FMCObject):
 
 
 @export
-class ACPPolicy(FMCObject):
+class AccessControlPolicy(APIClassTemplate):
     """
     The Access Control Policy Object in the FMC.
     """
@@ -590,11 +644,11 @@ class ACPPolicy(FMCObject):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for ACPPolicy class.")
+        logging.debug("In __init__() for AccessControlPolicy class.")
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
-        logging.debug("In format_data() for ACPPolicy class.")
+        logging.debug("In format_data() for AccessControlPolicy class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -608,7 +662,7 @@ class ACPPolicy(FMCObject):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for ACPPolicy class.")
+        logging.debug("In parse_kwargs() for AccessControlPolicy class.")
         if 'defaultAction' in kwargs:
             self.defaultAction = kwargs['defaultAction']
         else:
@@ -616,7 +670,7 @@ class ACPPolicy(FMCObject):
 
 
 @export
-class ACPRule(FMCObject):
+class ACPRule(APIClassTemplate):
     """
     The ACP Rule Object in the FMC.
     """
@@ -720,12 +774,12 @@ class ACPRule(FMCObject):
         if 'variableSet' in kwargs:
             self.variableSet = kwargs['variableSet']
         else:
-            self.variable_set()
+            self.variable_set(action='set')
         if 'ipsPolicy' in kwargs:
             self.ipsPolicy = kwargs['ipsPolicy']
-
         if 'vlanTags' in kwargs:
             self.vlanTags = kwargs['vlanTags']
+
         if 'sourcePorts' in kwargs:
             self.sourcePorts = kwargs['sourcePorts']
         if 'destinationPorts' in kwargs:
@@ -741,7 +795,7 @@ class ACPRule(FMCObject):
 
     def acp(self, name):
         logging.debug("In acp() for ACPRule class.")
-        acp = ACPPolicy(fmc=self.fmc)
+        acp = AccessControlPolicy(fmc=self.fmc)
         acp.get(name=name)
         if 'id' in acp.__dict__:
             self.acp_id = acp.id
@@ -750,86 +804,149 @@ class ACPRule(FMCObject):
             logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
                             'ACPRule.'.format(name))
 
-    def variable_set(self, name='Default-Set'):
-        vs = VariableSet(fmc=self.fmc)
-        vs.get(name=name)
-        self.variableSet = {'name': vs.name, 'id': vs.id}
-
-    def source_zone_add(self, name):
-        logging.debug("In source_zone_add() for ACPRule class.")
-        sz = SecurityZoneObject(fmc=self.fmc)
-        sz.get(name=name)
-        if 'id' in sz.__dict__:
-            if 'sourceZones' in self.__dict__:
-                new_zone = {'name': sz.name, 'id': sz.id}
-                duplicate = False
-                for object in self.sourceZones['objects']:
-                    if object['name'] == new_zone['name']:
-                        duplicate = True
-                        break
-                if not duplicate:
-                    self.sourceZones['objects'].append(new_zone)
-            else:
-                self.sourceZones = {'objects': [{'name': sz.name, 'id': sz.id}]}
-        else:
-            logging.warning('Security Zone, {}, not found.  Cannot add to ACPRule.'.format(name))
-
-    def source_zone_remove(self, name):
-        logging.debug("In source_zone_remove() for ACPRule class.")
-        sz = SecurityZoneObject(fmc=self.fmc)
-        sz.get(name=name)
-        if 'id' in sz.__dict__:
-            if 'sourceZones' in self.__dict__:
-                objects = []
-                for object in self.sourceZones['objects']:
-                    if object['name'] != name:
-                        objects.append(object)
-                self.sourceZones['objects'] = objects
-            else:
-                logging.info("sourceZones doesn't exist for this ACPRule.  Nothing to remove.")
-        else:
-            logging.warning('Security Zone, {}, not found.  Cannot remove from ACPRule.'.format(name))
-
-    def destination_zone_add(self, name):
-        logging.debug("In destination_zone_add() for ACPRule class.")
-        sz = SecurityZoneObject(fmc=self.fmc)
-        sz.get(name=name)
-        if 'id' in sz.__dict__:
-            if 'destinationZones' in self.__dict__:
-                new_zone = {'name': sz.name, 'id': sz.id}
-                duplicate = False
-                for object in self.destinationZones['objects']:
-                    if object['name'] == new_zone['name']:
-                        duplicate = True
-                        break
-                if not duplicate:
-                    self.destinationZones['objects'].append(new_zone)
-            else:
-                self.destinationZones = {'objects': [{'name': sz.name, 'id': sz.id}]}
-        else:
-            logging.warning('Security Zone, {}, not found.  Cannot add to ACPRule.'.format(name))
-
-    def destination_zone_remove(self, name):
-        logging.debug("In destination_zone_remove() for ACPRule class.")
-        sz = SecurityZoneObject(fmc=self.fmc)
-        sz.get(name=name)
-        if 'id' in sz.__dict__:
-            if 'destinationZones' in self.__dict__:
-                objects = []
-                for object in self.destinationZones['objects']:
-                    if object['name'] != name:
-                        objects.append(object)
-                self.destinationZones['objects'] = objects
-            else:
-                logging.info("destinationZones doesn't exist for this ACPRule.  Nothing to remove.")
-        else:
-            logging.warning('Security Zone, {}, not found.  Cannot remove from ACPRule.'.format(name))
-
-    def intrusion_policy(self, name=''):
-        logging.debug("In intrusion_policy_set() for ACPRule class.")
-        if name == '':
-            del self.ipsPolicy
-        else:
+    def intrusion_policy(self, action, name=''):
+        logging.debug("In intrusion_policy() for ACPRule class.")
+        if action == 'clear':
+            if 'ipsPolicy' in self.__dict__:
+                del self.ipsPolicy
+                logging.info('Intrusion Policy removed from this ACPRule object.')
+        elif action == 'set':
             ips = IntrusionPolicy(fmc=self.fmc, name=name)
             ips.get()
             self.ipsPolicy = {'name': ips.name, 'id': ips.id}
+            logging.info('Intrusion Policy set to "{}" for this ACPRule object.'.format(name))
+
+    def variable_set(self, action, name='Default-Set'):
+        logging.debug("In variable_set() for ACPRule class.")
+        if action == 'clear':
+            if 'variableSet' in self.__dict__:
+                del self.variableSet
+                logging.info('Variable Set removed from this ACPRule object.')
+        elif action == 'set':
+            vs = VariableSet(fmc=self.fmc)
+            vs.get(name=name)
+            self.variableSet = {'name': vs.name, 'id': vs.id}
+            logging.info('VariableSet set to "{}" for this ACPRule object.'.format(name))
+
+    def source_zone(self, action, name):
+        logging.debug("In source_zone() for ACPRule class.")
+        if action == 'add':
+            sz = SecurityZone(fmc=self.fmc)
+            sz.get(name=name)
+            if 'id' in sz.__dict__:
+                if 'sourceZones' in self.__dict__:
+                    new_zone = {'name': sz.name, 'id': sz.id}
+                    duplicate = False
+                    for object in self.sourceZones['objects']:
+                        if object['name'] == new_zone['name']:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.sourceZones['objects'].append(new_zone)
+                        logging.info('Adding "{}" to sourceZones for this ACPRule.'.format(name))
+                else:
+                    self.sourceZones = {'objects': [{'name': sz.name, 'id': sz.id}]}
+                    logging.info('Adding "{}" to sourceZones for this ACPRule.'.format(name))
+            else:
+                logging.warning('Security Zone, "{}", not found.  Cannot add to ACPRule.'.format(name))
+        elif action == 'remove':
+            sz = SecurityZone(fmc=self.fmc)
+            sz.get(name=name)
+            if 'id' in sz.__dict__:
+                if 'sourceZones' in self.__dict__:
+                    objects = []
+                    for object in self.sourceZones['objects']:
+                        if object['name'] != name:
+                            objects.append(object)
+                    self.sourceZones['objects'] = objects
+                    logging.info('Removed "{}" from sourceZones for this ACPRule.'.format(name))
+                else:
+                    logging.info("sourceZones doesn't exist for this ACPRule.  Nothing to remove.")
+            else:
+                logging.warning('Security Zone, "{}", not found.  Cannot remove from ACPRule.'.format(name))
+        elif action == 'clear':
+            if 'sourceZones' in self.__dict__:
+                del self.sourceZones
+                logging.info('All Source Zones removed from this ACPRule object.')
+
+    def destination_zone(self, action, name):
+        logging.debug("In destination_zone() for ACPRule class.")
+        if action == 'add':
+            sz = SecurityZone(fmc=self.fmc)
+            sz.get(name=name)
+            if 'id' in sz.__dict__:
+                if 'destinationZones' in self.__dict__:
+                    new_zone = {'name': sz.name, 'id': sz.id}
+                    duplicate = False
+                    for object in self.destinationZones['objects']:
+                        if object['name'] == new_zone['name']:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.destinationZones['objects'].append(new_zone)
+                        logging.info('Adding "{}" to destinationZones for this ACPRule.'.format(name))
+                else:
+                    self.destinationZones = {'objects': [{'name': sz.name, 'id': sz.id}]}
+                    logging.info('Adding "{}" to destinationZones for this ACPRule.'.format(name))
+            else:
+                logging.warning('Security Zone, "{}", not found.  Cannot add to ACPRule.'.format(name))
+        elif action == 'remove':
+            sz = SecurityZone(fmc=self.fmc)
+            sz.get(name=name)
+            if 'id' in sz.__dict__:
+                if 'destinationZones' in self.__dict__:
+                    objects = []
+                    for object in self.destinationZones['objects']:
+                        if object['name'] != name:
+                            objects.append(object)
+                    self.destinationZones['objects'] = objects
+                    logging.info('Removed "{}" from destinationZones for this ACPRule.'.format(name))
+                else:
+                    logging.info("destinationZones doesn't exist for this ACPRule.  Nothing to remove.")
+            else:
+                logging.warning('Security Zone, {}, not found.  Cannot remove from ACPRule.'.format(name))
+        elif action == 'clear':
+            if 'destinationZones' in self.__dict__:
+                del self.destinationZones
+                logging.info('All Destination Zones removed from this ACPRule object.')
+
+    def vlan_tags(self, action, name):
+        logging.debug("In vlan_tags() for ACPRule class.")
+        if action == 'add':
+            vlantag = VlanTag(fmc=self.fmc)
+            vlantag.get(name=name)
+            if 'id' in vlantag.__dict__:
+                if 'vlanTags' in self.__dict__:
+                    new_vlan = {'name': vlantag.name, 'id': vlantag.id}
+                    duplicate = False
+                    for object in self.vlanTags['objects']:
+                        if object['name'] == new_vlan['name']:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.vlanTags['objects'].append(new_vlan)
+                        logging.info('Adding "{}" to vlanTags for this ACPRule.'.format(name))
+                else:
+                    self.vlanTags = {'objects': [{'name': vlantag.name, 'id': vlantag.id}]}
+                    logging.info('Adding "{}" to vlanTags for this ACPRule.'.format(name))
+            else:
+                logging.warning('VLAN Tag, "{}", not found.  Cannot add to ACPRule.'.format(name))
+        elif action == 'remove':
+            vlantag = VlanTag(fmc=self.fmc)
+            vlantag.get(name=name)
+            if 'id' in vlantag.__dict__:
+                if 'vlanTags' in self.__dict__:
+                    objects = []
+                    for object in self.vlanTags['objects']:
+                        if object['name'] != name:
+                            objects.append(object)
+                    self.vlanTags['objects'] = objects
+                    logging.info('Removed "{}" from vlanTags for this ACPRule.'.format(name))
+                else:
+                    logging.info("vlanTags doesn't exist for this ACPRule.  Nothing to remove.")
+            else:
+                logging.warning('VLAN Tag, {}, not found.  Cannot remove from ACPRule.'.format(name))
+        elif action == 'clear':
+            if 'vlanTags' in self.__dict__:
+                del self.vlanTags
+                logging.info('All VLAN Tags removed from this ACPRule object.')
