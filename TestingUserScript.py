@@ -1,7 +1,7 @@
 """
 Just a rough working space for me to test running code against the fmcapi package.
 """
-
+import json
 from fmcapi import *
 import logging
 
@@ -15,9 +15,19 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     acp_rule1.name = 'my_test_rule'
     acp_rule1.acp(name='Example_Corp')
     #print(acp_rule1.__dict__)
-    #acp_rule1.post()
+    acp_rule1.destination_network(action='add', name='A_Dax_Mickelson')
+    acp_rule1.destination_network(action='add', name='A_Dax_Mickelson')
+    acp_rule1.destination_network(action='add', name='AB_Ranger')
+    print(json.dumps(acp_rule1.format_data()))
+    acp_rule1.post()
 
 '''
+    print(acp_rule1.__dict__)
+    acp_rule1.destination_network(action='remove', name='A_Dax_Mickelson')
+    print(acp_rule1.__dict__)
+    acp_rule1.destination_network(action='clear')
+    print(acp_rule1.__dict__)
+
     acp_rule1.source_port(action='add', name='AOL')
     acp_rule1.destination_port(action='add', name='AOL')
     acp_rule1.source_port(action='add', name='AOL')

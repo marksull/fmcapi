@@ -152,6 +152,38 @@ class APIClassTemplate(object):
 
 
 @export
+class IPAddresses(APIClassTemplate):
+    """
+    The IPAddresses Object in the FMC.
+    """
+
+    URL = '/object/networkaddresses'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for IPAddresses class.")
+        self.parse_kwargs(**kwargs)
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for IPAddresses class.")
+        if 'items' in kwargs:
+            self.items = kwargs['items']
+
+    def post(self):
+        logging.info('POST method for API for IPAddresses not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for IPAddresses not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for IPAddresses not supported.')
+        pass
+
+
+@export
 class IPHost(APIClassTemplate):
     """
     The Host Object in the FMC.
@@ -783,11 +815,11 @@ class ACPRule(APIClassTemplate):
             self.sourcePorts = kwargs['sourcePorts']
         if 'destinationPorts' in kwargs:
             self.destinationPorts = kwargs['destinationPorts']
-
         if 'sourceNetworks' in kwargs:
             self.sourceNetworks = kwargs['sourceNetworks']
         if 'destinationNetworks' in kwargs:
             self.destinationNetworks = kwargs['destinationNetworks']
+
         if 'urls' in kwargs:
             self.urls = kwargs['urls']
         if 'applications' in kwargs:
@@ -828,7 +860,7 @@ class ACPRule(APIClassTemplate):
             self.variableSet = {'name': vs.name, 'id': vs.id}
             logging.info('VariableSet set to "{}" for this ACPRule object.'.format(name))
 
-    def source_zone(self, action, name):
+    def source_zone(self, action, name=''):
         logging.debug("In source_zone() for ACPRule class.")
         if action == 'add':
             sz = SecurityZone(fmc=self.fmc)
@@ -869,7 +901,7 @@ class ACPRule(APIClassTemplate):
                 del self.sourceZones
                 logging.info('All Source Zones removed from this ACPRule object.')
 
-    def destination_zone(self, action, name):
+    def destination_zone(self, action, name=''):
         logging.debug("In destination_zone() for ACPRule class.")
         if action == 'add':
             sz = SecurityZone(fmc=self.fmc)
@@ -910,7 +942,7 @@ class ACPRule(APIClassTemplate):
                 del self.destinationZones
                 logging.info('All Destination Zones removed from this ACPRule object.')
 
-    def vlan_tags(self, action, name):
+    def vlan_tags(self, action, name=''):
         logging.debug("In vlan_tags() for ACPRule class.")
         if action == 'add':
             vlantag = VlanTag(fmc=self.fmc)
@@ -951,7 +983,7 @@ class ACPRule(APIClassTemplate):
                 del self.vlanTags
                 logging.info('All VLAN Tags removed from this ACPRule object.')
 
-    def source_port(self, action, name):
+    def source_port(self, action, name=''):
         logging.debug("In source_port() for ACPRule class.")
         if action == 'add':
             pport = ProtocolPort(fmc=self.fmc)
@@ -992,7 +1024,7 @@ class ACPRule(APIClassTemplate):
                 del self.sourcePorts
                 logging.info('All Source Ports removed from this ACPRule object.')
 
-    def destination_port(self, action, name):
+    def destination_port(self, action, name=''):
         logging.debug("In destination_port() for ACPRule class.")
         if action == 'add':
             pport = ProtocolPort(fmc=self.fmc)
@@ -1032,3 +1064,85 @@ class ACPRule(APIClassTemplate):
             if 'destinationPorts' in self.__dict__:
                 del self.destinationPorts
                 logging.info('All Destination Ports removed from this ACPRule object.')
+
+    def source_network(self, action, name=''):
+        logging.debug("In source_network() for ACPRule class.")
+        if action == 'add':
+            net1 = IPAddresses(fmc=self.fmc)
+            response = net1.get()
+            if 'items' in response:
+                new_net = None
+                for item in response['items']:
+                    if item['name'] == name:
+                        new_net = { 'name': item['name'], 'id': item['id'], 'type': item['type']}
+                        break
+                if new_net is None:
+                    logging.warning('Network "{}" is not found in FMC.  Cannot add to sourceNetworks.'.format(name))
+                else:
+                    if 'sourceNetworks' in self.__dict__:
+                        duplicate = False
+                        for object in self.sourceNetworks['objects']:
+                            if object['name'] == new_net['name']:
+                                duplicate = True
+                                break
+                        if not duplicate:
+                            self.sourceNetworks['objects'].append(new_net)
+                            logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
+                    else:
+                        self.sourceNetworks = {'objects': [new_net]}
+                        logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
+        elif action == 'remove':
+            if 'sourceNetworks' in self.__dict__:
+                objects = []
+                for object in self.sourceNetworks['objects']:
+                    if object['name'] != name:
+                        objects.append(object)
+                self.sourceNetworks['objects'] = objects
+                logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(name))
+            else:
+                logging.info("sourceNetworks doesn't exist for this ACPRule.  Nothing to remove.")
+        elif action == 'clear':
+            if 'sourceNetworks' in self.__dict__:
+                del self.sourceNetworks
+                logging.info('All Source Networks removed from this ACPRule object.')
+
+    def destination_network(self, action, name=''):
+        logging.debug("In destination_network() for ACPRule class.")
+        if action == 'add':
+            net1 = IPAddresses(fmc=self.fmc)
+            response = net1.get()
+            if 'items' in response:
+                new_net = None
+                for item in response['items']:
+                    if item['name'] == name:
+                        new_net = { 'name': item['name'], 'id': item['id'], 'type': item['type']}
+                        break
+                if new_net is None:
+                    logging.warning('Network "{}" is not found in FMC.  Cannot add to destinationNetworks.'.format(name))
+                else:
+                    if 'destinationNetworks' in self.__dict__:
+                        duplicate = False
+                        for object in self.destinationNetworks['objects']:
+                            if object['name'] == new_net['name']:
+                                duplicate = True
+                                break
+                        if not duplicate:
+                            self.destinationNetworks['objects'].append(new_net)
+                            logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
+                    else:
+                        self.destinationNetworks = {'objects': [new_net]}
+                        logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
+        elif action == 'remove':
+            if 'destinationNetworks' in self.__dict__:
+                objects = []
+                for object in self.destinationNetworks['objects']:
+                    if object['name'] != name:
+                        objects.append(object)
+                self.destinationNetworks['objects'] = objects
+                logging.info('Removed "{}" from destinationNetworks for this ACPRule.'.format(name))
+            else:
+                logging.info("destinationNetworks doesn't exist for this ACPRule.  Nothing to remove.")
+        elif action == 'clear':
+            if 'destinationNetworks' in self.__dict__:
+                del self.destinationNetworks
+                logging.info('All Destination Networks removed from this ACPRule object.')
