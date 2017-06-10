@@ -21,6 +21,7 @@ class FMCObject(object):
     REQUIRED_FOR_DELETE = ['id']
     FILTER_BY_NAME = False
     URL = None
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-]"""
 
     def __init__(self, fmc, **kwargs):
         logging.debug("In __init__() for fmc_object class.")
@@ -29,7 +30,10 @@ class FMCObject(object):
     def parse_kwargs(self, **kwargs):
         logging.debug("In parse_kwargs() for fmc_object class.")
         if 'name' in kwargs:
-            self.name = syntax_correcter(kwargs['name'])
+            self.name = syntax_correcter(kwargs['name'], permitted_syntax=self.VALID_CHARACTERS_FOR_NAME)
+            if self.name != kwargs['name']:
+                logging.info("""Adjusting name "{}" to "{}" due to containing invalid characters."""
+                             .format(kwargs['name'], self.name))
         if 'description' in kwargs:
             self.description = kwargs['description']
         else:
@@ -539,6 +543,8 @@ class IntrusionPolicy(FMCObject):
     """
 
     URL = '/policy/intrusionpolicies'
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
@@ -557,8 +563,6 @@ class IntrusionPolicy(FMCObject):
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for IntrusionPolicy class.")
-        if 'name' in kwargs:
-            self.name = kwargs['name']
 
     def post(self):
         logging.info('POST method for API for IntrusionPolicy not supported.')

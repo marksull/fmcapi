@@ -10,7 +10,7 @@ import logging
 logging.debug("In the {} module.".format(__name__))
 
 
-def syntax_correcter(value, permitted_syntax="[.\w\d_\-]", replacer='_'):
+def syntax_correcter(value, permitted_syntax="""[.\w\d_\-]""", replacer='_'):
     """
     Check 'value' for invalid characters (identified by 'permitted_syntax') and replace them with 'replacer'.
     :param value:  String to be checked.
