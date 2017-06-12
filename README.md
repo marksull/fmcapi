@@ -16,10 +16,18 @@ of the token.
   * Range Objects
   * Port Objects
   * Security Zones
-  * Network Objects
   * URL Objects
   * Access Control Policy (ACP)
   * ACP Rules
+  * VLAN Tags
+  
+* Other features:
+  * GET Intrusion Policy
+  * GET all Network Objects
+  * GET VariableSet(s)
+  * Register FTD Devices
+  * Deploy changes to FMC to affected managed devices.
+
 * This is now an installable Python package via pip!  I'm heavily developing this code so you might want to issue the 
 command **pip3 install -U fmcapi** to update your installed version.
 
@@ -29,8 +37,13 @@ Then to use the code best start a "with" statement that creates an instance of t
  **with FMC(host='192.168.11.15', username='admin', password='Admin123', autodeploy=False) as fmc:**
 Then either code away referencing the fmc variable to get to the internal methods of the FMC class **or**
  utilize the various class objects to ease your coding needs.
+ 
+**Note #1:  Check out the TestingUsersScript.py file for ideas on how to use fmcapi (until I get around to writing documentation).**
+
+**Note #2:  You can directly send requests to the FMC via the send_to_api() method in the FMC class.  This allows you to access any of the API features of the FMC.**
 
 # ToDos
 * Move the create_acp_rules FMC method into a class object in the api_objects module.
 * Build a complete system for all FMC API accessible objects (feature parity).
 * **Most importantly:** Write better how-to instructions.  (Anyone willing to help?) 
+* Too many to list.  By my rough guess I'd say that only 25% of the features of the FMC's API are available via pre-built classes.

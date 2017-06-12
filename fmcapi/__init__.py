@@ -41,4 +41,5 @@ via a Pull request from the github repository: https://github.com/daxm/fmcapi.
 ***********************************************************************************************************************
         """
         logging.debug(__authorship__.__doc__)
+
 __authorship__()
