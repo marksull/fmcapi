@@ -76,7 +76,6 @@ class APIClassTemplate(object):
 
     def post(self, **kwargs):
         logging.debug("In post() for APIClassTemplate class.")
-        self.parse_kwargs(**kwargs)
         if 'id' in self.__dict__:
             logging.info("ID value exists for this object.  Redirecting to put() method.")
             self.put()
@@ -84,6 +83,8 @@ class APIClassTemplate(object):
             if self.valid_for_post():
                 response = self.fmc.send_to_api(method='post', url=self.URL, json_data=self.format_data())
                 self.parse_kwargs(**response)
+                logging.info('POST success. Object with name: "{}" and id: "{}" created '
+                             'in FMC.'.format(self.name, self.id))
                 return True
             else:
                 logging.warning("post() method failed due to failure to pass valid_for_post() test.")
@@ -101,17 +102,20 @@ class APIClassTemplate(object):
             url = '{}/{}'.format(self.URL, self.id)
             response = self.fmc.send_to_api(method='get', url=url)
             self.parse_kwargs(**response)
+            logging.info('GET success. Object with name: "{}" and id: "{}" fetched from'
+                         ' FMC.'.format(self.name, self.id))
         elif 'name' in self.__dict__:
             if self.FILTER_BY_NAME:
                 url = '{}?name={}&expanded=true'.format(self.URL, self.name)
             else:
                 url = '{}?expanded=true'.format(self.URL)
             response = self.fmc.send_to_api(method='get', url=url)
-            print('My Response --> {}'.format(response))
             for item in response['items']:
                 if item['name'] == self.name:
                     self.id = item['id']
                     self.parse_kwargs(**item)
+                    logging.info('GET success. Object with name: "{}" and id: "{}" fetched from'
+                                 ' FMC.'.format(self.name, self.id))
                     break
             if 'id' not in self.__dict__:
                 logging.warning("\tGET query for {} is not found.\n\t\t"
@@ -130,6 +134,8 @@ class APIClassTemplate(object):
             url = '{}/{}'.format(self.URL, self.id)
             response = self.fmc.send_to_api(method='put', url=url, json_data=self.format_data())
             self.parse_kwargs(**response)
+            logging.info('PUT success. Object with name: "{}" and id: "{}" updated '
+                         'in FMC.'.format(self.name, self.id))
             return True
         else:
             logging.warning("put() method failed due to failure to pass valid_for_put() test.")
@@ -142,11 +148,29 @@ class APIClassTemplate(object):
             url = '{}/{}'.format(self.URL, self.id)
             response = self.fmc.send_to_api(method='delete', url=url, json_data=self.format_data())
             self.parse_kwargs(**response)
+            logging.info('DELETE success. Object with name: "{}" and id: "{}" deleted '
+                         'in FMC.'.format(self.name, self.id))
             return True
         else:
             logging.warning("delete() method failed due to failure to pass valid_for_delete() test.")
             return False
 
+    '''# Trying to deal with 'name' being set without using the syntax_correcter()
+    def namer(self, name):
+        logging.debug("In @name.setter name() method for APIClassTemplate class.")
+        self.name = syntax_correcter(kwargs['name'], permitted_syntax=self.VALID_CHARACTERS_FOR_NAME)
+        if self.name != kwargs['name']:
+            logging.info("""Adjusting name "{}" to "{}" due to containing invalid characters."""
+                         .format(kwargs['name'], self.name))
+
+    @namer.setter
+    def namer(self, name):
+        logging.debug("In @name.setter name() method for APIClassTemplate class.")
+        self.name = syntax_correcter(kwargs['name'], permitted_syntax=self.VALID_CHARACTERS_FOR_NAME)
+        if self.name != kwargs['name']:
+            logging.info("""Adjusting name "{}" to "{}" due to containing invalid characters."""
+                         .format(kwargs['name'], self.name))
+     '''
 
 # ################# API-Explorer Object Category Things ################# #
 
@@ -367,6 +391,7 @@ class VlanTag(APIClassTemplate):
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for VlanTag class.")
+        self.type = 'VlanTag'
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
@@ -380,6 +405,8 @@ class VlanTag(APIClassTemplate):
             json_data['data'] = self.data
         if 'description' in self.__dict__:
             json_data['description'] = self.description
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
         return json_data
 
     def parse_kwargs(self, **kwargs):
@@ -393,7 +420,7 @@ class VlanTag(APIClassTemplate):
         if self.validate_vlans(start_vlan=start_vlan, end_vlan=end_vlan):
             if end_vlan == '':
                 end_vlan = start_vlan
-            if end_vlan < start_vlan:
+            if int(end_vlan) < int(start_vlan):
                 tmp = end_vlan
                 end_vlan = start_vlan
                 start_vlan = tmp
@@ -403,7 +430,7 @@ class VlanTag(APIClassTemplate):
 
     def validate_vlans(self, start_vlan, end_vlan):
         logging.debug("In validate_vlans() for VlanTag class.")
-        if start_vlan > 0 and start_vlan < 4095 and end_vlan > 0 and end_vlan < 4095:
+        if int(start_vlan) > 0 and int(start_vlan) < 4095 and int(end_vlan) > 0 and int(end_vlan) < 4095:
             return True
         return False
 
@@ -581,32 +608,37 @@ class Device(APIClassTemplate):
         if 'acp_name' in kwargs:
             self.acp(name=kwargs['acp_name'])
 
-    def license_add(self, name='BASE'):
-        logging.debug("In license_add() for Device class.")
-        if name in self.LICENSES:
-            if 'license_caps' in self.__dict__:
-                self.license_caps.append(name)
-                self.license_caps = list(set(self.license_caps))
+    def licensing(self, action, name='BASE'):
+        logging.debug("In licensing() for Device class.")
+        if action == 'add':
+            if name in self.LICENSES:
+                if 'license_caps' in self.__dict__:
+                    self.license_caps.append(name)
+                    self.license_caps = list(set(self.license_caps))
+                else:
+                    self.license_caps = [name]
+                logging.info('License "{}" added to this Device object.'.format(name))
+
             else:
-                self.license_caps = [name]
-
-        else:
-            logging.warning('{} not found in {}.  Cannot add license to Device.'.format(name, self.LICENSES))
-
-    def license_remove(self, name=''):
-        logging.debug("In license_remove() for Device class.")
-        if name in self.LICENSES:
-            if 'license_caps' in self.__dict__:
-                try:
-                    self.license_caps.remove(name)
-                except ValueError:
+                logging.warning('{} not found in {}.  Cannot add license to Device.'.format(name, self.LICENSES))
+        elif action == 'remove':
+            if name in self.LICENSES:
+                if 'license_caps' in self.__dict__:
+                    try:
+                        self.license_caps.remove(name)
+                    except ValueError:
+                        logging.warning('{} is not assigned to this device thus cannot be removed.'.format(name))
+                    logging.info('License "{}" removed from this Device object.'.format(name))
+                else:
                     logging.warning('{} is not assigned to this device thus cannot be removed.'.format(name))
-            else:
-                logging.warning('{} is not assigned to this device thus cannot be removed.'.format(name))
 
-        else:
-            logging.warning('{} not found in {}.  Cannot remove license from '
-                            'Device.'.format(name, self.LICENSES))
+            else:
+                logging.warning('{} not found in {}.  Cannot remove license from '
+                                'Device.'.format(name, self.LICENSES))
+        elif action == 'clear':
+            if 'license_caps' in self.__dict__:
+                del self.license_caps
+                logging.info('All licensing removed from this Device object.')
 
     def acp(self, name=''):
         logging.debug("In acp() for Device class.")
@@ -644,6 +676,8 @@ class IntrusionPolicy(APIClassTemplate):
             json_data['id'] = self.id
         if 'name' in self.__dict__:
             json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
         return json_data
 
     def parse_kwargs(self, **kwargs):
@@ -689,7 +723,9 @@ class AccessControlPolicy(APIClassTemplate):
         if 'description' in self.__dict__:
             json_data['description'] = self.description
         if 'defaultAction' in self.__dict__:
-            json_data = self.defaultAction
+            json_data['defaultAction'] = self.defaultAction
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
         return json_data
 
     def parse_kwargs(self, **kwargs):
@@ -699,6 +735,11 @@ class AccessControlPolicy(APIClassTemplate):
             self.defaultAction = kwargs['defaultAction']
         else:
             self.defaultAction = {'action': 'BLOCK'}
+
+    def put(self, **kwargs):
+        logging.info('The put() method for the AccessControlPolicy() class can work but I need to write a '
+                     'DefaultAction() class and accommodate for such before "putting".')
+        pass
 
 
 @export
@@ -716,6 +757,7 @@ class ACPRule(APIClassTemplate):
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for ACPRule class.")
+        self.type = 'AccessRule'
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
@@ -844,7 +886,7 @@ class ACPRule(APIClassTemplate):
         elif action == 'set':
             ips = IntrusionPolicy(fmc=self.fmc, name=name)
             ips.get()
-            self.ipsPolicy = {'name': ips.name, 'id': ips.id}
+            self.ipsPolicy = {'name': ips.name, 'id': ips.id, 'type': ips.type}
             logging.info('Intrusion Policy set to "{}" for this ACPRule object.'.format(name))
 
     def variable_set(self, action, name='Default-Set'):
@@ -856,7 +898,7 @@ class ACPRule(APIClassTemplate):
         elif action == 'set':
             vs = VariableSet(fmc=self.fmc)
             vs.get(name=name)
-            self.variableSet = {'name': vs.name, 'id': vs.id}
+            self.variableSet = {'name': vs.name, 'id': vs.id, 'type': vs.type}
             logging.info('VariableSet set to "{}" for this ACPRule object.'.format(name))
 
     def source_zone(self, action, name=''):
@@ -866,7 +908,7 @@ class ACPRule(APIClassTemplate):
             sz.get(name=name)
             if 'id' in sz.__dict__:
                 if 'sourceZones' in self.__dict__:
-                    new_zone = {'name': sz.name, 'id': sz.id}
+                    new_zone = {'name': sz.name, 'id': sz.id, 'type': sz.type}
                     duplicate = False
                     for object in self.sourceZones['objects']:
                         if object['name'] == new_zone['name']:
@@ -876,7 +918,7 @@ class ACPRule(APIClassTemplate):
                         self.sourceZones['objects'].append(new_zone)
                         logging.info('Adding "{}" to sourceZones for this ACPRule.'.format(name))
                 else:
-                    self.sourceZones = {'objects': [{'name': sz.name, 'id': sz.id}]}
+                    self.sourceZones = {'objects': [{'name': sz.name, 'id': sz.id, 'type': sz.type}]}
                     logging.info('Adding "{}" to sourceZones for this ACPRule.'.format(name))
             else:
                 logging.warning('Security Zone, "{}", not found.  Cannot add to ACPRule.'.format(name))
@@ -907,7 +949,7 @@ class ACPRule(APIClassTemplate):
             sz.get(name=name)
             if 'id' in sz.__dict__:
                 if 'destinationZones' in self.__dict__:
-                    new_zone = {'name': sz.name, 'id': sz.id}
+                    new_zone = {'name': sz.name, 'id': sz.id, 'type': sz.type}
                     duplicate = False
                     for object in self.destinationZones['objects']:
                         if object['name'] == new_zone['name']:
@@ -917,7 +959,7 @@ class ACPRule(APIClassTemplate):
                         self.destinationZones['objects'].append(new_zone)
                         logging.info('Adding "{}" to destinationZones for this ACPRule.'.format(name))
                 else:
-                    self.destinationZones = {'objects': [{'name': sz.name, 'id': sz.id}]}
+                    self.destinationZones = {'objects': [{'name': sz.name, 'id': sz.id, 'type': sz.type}]}
                     logging.info('Adding "{}" to destinationZones for this ACPRule.'.format(name))
             else:
                 logging.warning('Security Zone, "{}", not found.  Cannot add to ACPRule.'.format(name))
@@ -948,7 +990,7 @@ class ACPRule(APIClassTemplate):
             vlantag.get(name=name)
             if 'id' in vlantag.__dict__:
                 if 'vlanTags' in self.__dict__:
-                    new_vlan = {'name': vlantag.name, 'id': vlantag.id}
+                    new_vlan = {'name': vlantag.name, 'id': vlantag.id, 'type': vlantag.type}
                     duplicate = False
                     for object in self.vlanTags['objects']:
                         if object['name'] == new_vlan['name']:
@@ -958,7 +1000,7 @@ class ACPRule(APIClassTemplate):
                         self.vlanTags['objects'].append(new_vlan)
                         logging.info('Adding "{}" to vlanTags for this ACPRule.'.format(name))
                 else:
-                    self.vlanTags = {'objects': [{'name': vlantag.name, 'id': vlantag.id}]}
+                    self.vlanTags = {'objects': [{'name': vlantag.name, 'id': vlantag.id, 'type': vlantag.type}]}
                     logging.info('Adding "{}" to vlanTags for this ACPRule.'.format(name))
             else:
                 logging.warning('VLAN Tag, "{}", not found.  Cannot add to ACPRule.'.format(name))
@@ -989,7 +1031,7 @@ class ACPRule(APIClassTemplate):
             pport.get(name=name)
             if 'id' in pport.__dict__:
                 if 'sourcePorts' in self.__dict__:
-                    new_port = {'name': pport.name, 'id': pport.id}
+                    new_port = {'name': pport.name, 'id': pport.id, 'type': pport.type}
                     duplicate = False
                     for object in self.sourcePorts['objects']:
                         if object['name'] == new_port['name']:
@@ -999,7 +1041,7 @@ class ACPRule(APIClassTemplate):
                         self.sourcePorts['objects'].append(new_port)
                         logging.info('Adding "{}" to sourcePorts for this ACPRule.'.format(name))
                 else:
-                    self.sourcePorts = {'objects': [{'name': pport.name, 'id': pport.id}]}
+                    self.sourcePorts = {'objects': [{'name': pport.name, 'id': pport.id, 'type': pport.type}]}
                     logging.info('Adding "{}" to sourcePorts for this ACPRule.'.format(name))
             else:
                 logging.warning('Protocol Port, "{}", not found.  Cannot add to ACPRule.'.format(name))
@@ -1030,7 +1072,7 @@ class ACPRule(APIClassTemplate):
             pport.get(name=name)
             if 'id' in pport.__dict__:
                 if 'destinationPorts' in self.__dict__:
-                    new_port = {'name': pport.name, 'id': pport.id}
+                    new_port = {'name': pport.name, 'id': pport.id, 'type': pport.type}
                     duplicate = False
                     for object in self.destinationPorts['objects']:
                         if object['name'] == new_port['name']:
@@ -1040,7 +1082,7 @@ class ACPRule(APIClassTemplate):
                         self.destinationPorts['objects'].append(new_port)
                         logging.info('Adding "{}" to destinationPorts for this ACPRule.'.format(name))
                 else:
-                    self.destinationPorts = {'objects': [{'name': pport.name, 'id': pport.id}]}
+                    self.destinationPorts = {'objects': [{'name': pport.name, 'id': pport.id, 'type': pport.type}]}
                     logging.info('Adding "{}" to destinationPorts for this ACPRule.'.format(name))
             else:
                 logging.warning('Protocol Port, "{}", not found.  Cannot add to ACPRule.'.format(name))

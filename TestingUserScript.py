@@ -4,6 +4,7 @@ Just a rough working space for me to test running code against the fmcapi packag
 import json
 from fmcapi import *
 import logging
+import time
 
 host = '192.168.11.5'
 username = 'apiscript'
@@ -11,113 +12,229 @@ password = 'Admin123'
 autodeploy = False
 
 with FMC(host=host, username=username, password=password, autodeploy=autodeploy) as fmc1:
-    acp_rule1 = ACPRule(fmc=fmc1)
-    acp_rule1.name = 'my_test_rule'
-    acp_rule1.acp(name='Example_Corp')
-    #print(acp_rule1.__dict__)
-    acp_rule1.destination_network(action='add', name='A_Dax_Mickelson')
-    acp_rule1.destination_network(action='add', name='A_Dax_Mickelson')
-    acp_rule1.destination_network(action='add', name='AB_Ranger')
-    print(json.dumps(acp_rule1.format_data()))
-    acp_rule1.post()
+    '''Note:  I'd like to be able to test a name with bad characters but I haven't figured out how to use the
+     "setter" decorator for this usecase yet.'''
+    logging.info('# ### Mega Test Start!!! ### #')
+    namer = '_fmcapi_test_{}'.format(str(int(time.time())))
+    obj1 = None
 
-'''
-    print(acp_rule1.__dict__)
-    acp_rule1.destination_network(action='remove', name='A_Dax_Mickelson')
-    print(acp_rule1.__dict__)
-    acp_rule1.destination_network(action='clear')
-    print(acp_rule1.__dict__)
+    logging.info('# Test IPAddresses.  This only returns a full list of Host/Network/Range objects.')
+    del obj1
+    obj1 = IPAddresses(fmc=fmc1)
+    response = obj1.get()
+    print(json.dumps(response))
+    logging.info('# Test IPAddresses done.\n')
 
-    acp_rule1.source_port(action='add', name='AOL')
-    acp_rule1.destination_port(action='add', name='AOL')
-    acp_rule1.source_port(action='add', name='AOL')
-    acp_rule1.destination_port(action='add', name='AOL')
-    print(acp_rule1.__dict__)
-    acp_rule1.destination_port(action='remove', name='AOL')
-    acp_rule1.source_port(action='clear', name='')
-    print(acp_rule1.__dict__)
+    logging.info('# Test VariableSet. Can only GET VariableSet objects.')
+    del obj1
+    obj1 = VariableSet(fmc=fmc1)
+    obj1.get(name='Default-Set')
+    print(json.dumps(obj1.format_data()))
+    logging.info('# Test VariableSet done.\n')
 
-    acp_rule1.vlan_tags(action='add', name='asdf')
-    acp_rule1.vlan_tags(action='add', name='asdf')
-    acp_rule1.vlan_tags(action='add', name='vlan1')
-    print(acp_rule1.__dict__)
-    acp_rule1.vlan_tags(action='remove', name='vlan1')
-    print(acp_rule1.__dict__)
-    acp_rule1.vlan_tags(action='clear', name='vlan1')
-    print(acp_rule1.__dict__)
+    logging.info('# Test IPHost.  Post, get, put, delete Host Objects.')
+    del obj1
+    obj1 = IPHost(fmc=fmc1)
+    obj1.name = namer
+    obj1.value = '8.8.8.8/32'
+    obj1.post()
+    time.sleep(5)
+    del obj1
+    obj1 = IPHost(fmc=fmc1, name=namer)
+    obj1.get()
+    obj1.value = '9.9.9.9'
+    obj1.put()
+    time.sleep(5)
+    obj1.delete()
+    logging.info('# Test IPHost done.\n')
 
-    vlan1 = VlanTag(fmc=fmc1, name='qwerty')
-    vlan1.vlans(start_vlan=1, end_vlan=4094)
-    vlan1.vlans(start_vlan=234, end_vlan=123)
-    vlan1.vlans(start_vlan=1, end_vlan=4095)
-    vlan1.vlans(start_vlan=0, end_vlan=4094)
-    print(vlan1.__dict__)
+    logging.info('# Test IPNetwork.  Post, get, put, delete Network Objects.')
+    del obj1
+    obj1 = IPNetwork(fmc=fmc1)
+    obj1.name = namer
+    obj1.value = '8.8.8.0/24'
+    obj1.post()
+    time.sleep(5)
+    del obj1
+    obj1 = IPNetwork(fmc=fmc1, name=namer)
+    obj1.get()
+    obj1.value = '9.9.9.0/24'
+    obj1.put()
+    time.sleep(5)
+    obj1.delete()
+    logging.info('# Test IPNetwork done.\n')
 
-    acp_rule1.source_zone(action='add', name='IN')
-    acp_rule1.source_zone(action='add', name='IN')
-    acp_rule1.source_zone(action='add', name='OUT')
-    print(acp_rule1.__dict__)
-    acp_rule1.source_zone(action='remove', name='OUT')
-    print(acp_rule1.__dict__)
-    acp_rule1.intrusion_policy(action='set', name='Connectivity Over Security')
-    acp_rule1.variable_set(action='set')
-    print(acp_rule1.__dict__)
-    acp_rule1.variable_set(action='clear')
-    acp_rule1.intrusion_policy(action='clear')
-    print(acp_rule1.__dict__)
+    logging.info('# Test IPRange.  Post, get, put, delete Range Objects.')
+    del obj1
+    obj1 = IPRange(fmc=fmc1)
+    obj1.name = namer
+    obj1.value = '1.1.1.1-2.2.2.2'
+    obj1.post()
+    time.sleep(5)
+    del obj1
+    obj1 = IPRange(fmc=fmc1, name=namer)
+    obj1.get()
+    obj1.value = '3.3.3.3-4.4.4.4'
+    obj1.put()
+    time.sleep(5)
+    obj1.delete()
+    logging.info('# Test IPRange done.\n')
 
-    device1 = Device(fmc=fmc1)
-    device1.license_add()
-    device1.license_add(license='VPN')
-    print(device1.__dict__)
-    device1.license_add(license='VPN')
-    print(device1.__dict__)
-    device1.license_add(license='MALWARE')
-    print(device1.__dict__)
-    device1.license_remove(license='MALWARE')
-    print(device1.__dict__)
-    device1.acp('Example_Corp')
-    print(device1.__dict__)
+    logging.info('# Test URL.  Post, get, put, delete URL Objects.')
+    del obj1
+    obj1 = URL(fmc=fmc1)
+    obj1.name = namer
+    obj1.url = 'daxm.com'
+    obj1.post()
+    time.sleep(5)
+    del obj1
+    obj1 = URL(fmc=fmc1, name=namer)
+    obj1.get()
+    obj1.url = 'daxm.lan'
+    obj1.put()
+    time.sleep(5)
+    obj1.delete()
+    logging.info('# Test URL done.\n')
 
-    acp1 = AccessControlPolicy(fmc=fmc1)
-    acp1.get(name='Example_Corp')
-    print(acp1.__dict__)
+    logging.info('# Test VlanTag.  Post, get, put, delete VLAN Tag Objects.')
+    del obj1
+    obj1 = VlanTag(fmc=fmc1)
+    obj1.name = namer
+    obj1.vlans(start_vlan='100', end_vlan='200')
+    obj1.post()
+    time.sleep(5)
+    del obj1
+    obj1 = VlanTag(fmc=fmc1, name=namer)
+    obj1.get()
+    obj1.vlans(start_vlan='300', end_vlan='400')
+    obj1.put()
+    time.sleep(5)
+    obj1.delete()
+    logging.info('# Test VlanTag done.\n')
 
-    sz1 = SecurityZone(fmc=fmc1)
-    sz1.post(name='Demo')
-    sz1.get()
-    sz1.delete()
-    print(sz1.__dict__)
+    logging.info('# Test ProtocolPort.  Post, get, put, delete Port Objects.')
+    del obj1
+    obj1 = ProtocolPort(fmc=fmc1)
+    obj1.name = namer
+    obj1.port = '1234'
+    obj1.protocol = 'TCP'
+    obj1.post()
+    time.sleep(5)
+    del obj1
+    obj1 = ProtocolPort(fmc=fmc1, name=namer)
+    obj1.get()
+    obj1.port = '5678'
+    obj1.put()
+    time.sleep(5)
+    obj1.delete()
+    logging.info('# Test ProtocolPort done.\n')
 
-    port1 = ProtocolPort(fmc=fmc1, name='_porter', port='8888', protocol='tcp')
-    port1.post()
-    port1.port='9999'
-    port1.put()
-    print(port1.__dict__)
-    port1.delete()
-    print(port1.__dict__)
+    logging.info('# Test SecurityZone.  Post, get, put, delete Security Zone Objects.')
+    del obj1
+    obj1 = SecurityZone(fmc=fmc1)
+    obj1.name = namer
+    obj1.interfaceMode = 'ROUTED'
+    obj1.post()
+    time.sleep(5)
+    del obj1
+    obj1 = SecurityZone(fmc=fmc1, name=namer)
+    obj1.get()
+    obj1.name = 'DEMO'
+    obj1.put()
+    time.sleep(5)
+    obj1.delete()
+    logging.info('# Test SecurityZone done.\n')
 
-    host2 = HostObject(fmc=fmc1)
-    stuff =host2.get()
-    print(stuff)
+    logging.info('# Test Device.  Though you can "Post" devices I do not have one handy. So '
+                 'add/remove licenses on Device Objects.')
+    del obj1
+    obj1 = Device(fmc=fmc1)
+    obj1.name = namer
+    obj1.acp(name='Example_Corp')
+    obj1.licensing(action='add', name='MALWARE')
+    obj1.licensing(action='add', name='VPN')
+    obj1.licensing(action='remove', name='VPN')
+    obj1.licensing(action='clear')
+    obj1.licensing(action='add', name='BASE')
+    print(json.dumps(obj1.format_data()))
+    logging.info('# Test Device done.\n')
 
-    host1 = HostObject(fmc=fmc1, name='daxm', value='1.2.3.4')
-    host1.post()
-    host1.value = '2.7.7.7'
-    host1.get()
-    print(host1.__dict__)
+    logging.info('# Test ItrusionPolicy. Can only GET IntrusionPolicy objects.')
+    del obj1
+    obj1 = IntrusionPolicy(fmc=fmc1)
+    obj1.get(name='Security Over Connectivity')
+    print(json.dumps(obj1.format_data()))
+    logging.info('# Test IntrusionPolicy done.\n')
 
-    host3 = HostObject(fmc=fmc1)
-    host3.name = 'daxm'
-    host3.get()
-    host3.delete()
-    print(host3.__dict__)
+    logging.info('# Test AccessControlPolicy.  Post, get, put, delete ACP Objects.')
+    del obj1
+    obj1 = AccessControlPolicy(fmc=fmc1)
+    obj1.name = namer
+    obj1.post()
+    time.sleep(5)
+    del obj1
+    obj1 = AccessControlPolicy(fmc=fmc1, name=namer)
+    obj1.get()
+    obj1.name = 'asdfasdf'
+    obj1.put()
+    time.sleep(5)
+    obj1.delete()
+    logging.info('# Test AccessControlPolicy done.\n')
 
-    url1 = URL(fmc=fmc1, name='daxm.net', url='daxm.net')
+    logging.info('\n# In preparation for testing ACPRule methods, set up some known objects in the FMC.')
+    iphost1 = IPHost(fmc=fmc1, name='_iphost1', value='7.7.7.7')
+    iphost1.post()
+    ipnet1 = IPNetwork(fmc=fmc1, name='_ipnet1', value='1.2.3.0/24')
+    ipnet1.post()
+    iprange1 = IPRange(fmc=fmc1, name='_iprange1', value='6.6.6.6-7.7.7.7')
+    iprange1.post()
+    url1 = URL(fmc=fmc1, name='_url1', url='asdf.org')
     url1.post()
-    url1.url='www.daxm.net'
-    url1.put()
-    print(url1.__dict__)
+    vlantag1 = VlanTag(fmc=fmc1, name='_vlantag1', data={'startTag': '888', 'endTag': '999'})
+    vlantag1.post()
+    pport1 = ProtocolPort(fmc=fmc1, name='_pport1', port='9090', protocol='UDP')
+    pport1.post()
+    sz1 = SecurityZone(fmc=fmc1, name='_sz1', interfaceMode='ROUTED')
+    sz1.post()
+    acp1 = AccessControlPolicy(fmc=fmc1, name='_acp1')
+    acp1.post()
+    time.sleep(5)
+    logging.info('# Setup of objects for ACPRule test done.\n')
+
+    logging.info('# Test ACPRule.  Try to test all features of all methods of the ACPRule class.')
+    acprule1 = ACPRule(fmc=fmc1, acp_name='_acp1')
+    acprule1.name = '_acprule1'
+    acprule1.action = 'ALLOW'
+    acprule1.enabled = False
+    acprule1.sendEventsToFMC = True
+    acprule1.logFiles = False
+    acprule1.logBegin = True
+    acprule1.logEnd = True
+    acprule1.variable_set(action='set', name='Default-Set')
+    acprule1.source_zone(action='add', name='_sz1')
+    acprule1.destination_zone(action='add', name='_sz1')
+    acprule1.intrusion_policy(action='set', name='Security Over Connectivity')
+    acprule1.vlan_tags(action='add', name='_vlantag1')
+    acprule1.source_port(action='add', name='_pport1')
+    acprule1.destination_port(action='add', name='_pport1')
+    acprule1.source_network(action='add', name='_iphost1')
+    acprule1.destination_network(action='add', name='_ipnet1')
+    acprule1.source_network(action='add', name='_iprange1')
+    acprule1.destination_network(action='add', name='_iprange1')
+    acprule1.post()
+    logging.info('# Test ACPRule done.\n')
+    
+    logging.info('\n# Cleanup of testing ACPRule methods.')
+    acprule1.delete()
+    time.sleep(5)
+    iphost1.delete()
+    ipnet1.delete()
+    iprange1.delete()
     url1.delete()
-    print(url1.__dict__)
-'''
+    vlantag1.delete()
+    pport1.delete()
+    sz1.delete()
+    acp1.delete()
+    logging.info('# Cleanup of objects for ACPRule test done.\n')
+
+    logging.info('# ### Mega Test Done!!! ### #')
