@@ -21,6 +21,7 @@ The fmcapi is to provide the following:
     * Add new API features as they are released.  (Such as NAT Policy/rule abilities, when they come available.)
     * Add feature(s) for Device Interface configuration.
     * Create Developer Documentation.  Help developers improve the fmcapi code.
+    * Deal with "paging" in the responses from FMC.
   * Long Term:
     * Feature parity to all API features.
     * Version parity to allow for differences of available API features based on the version of FMC being used.
