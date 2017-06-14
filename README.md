@@ -38,6 +38,8 @@ Then to use the code best start a "with" statement that creates an instance of t
 Then either code away referencing the fmc variable to get to the internal methods of the FMC class **or**
  utilize the various class objects to ease your coding needs.
  
+ I recorded a quick "howto" video which can be accessed via: https://www.youtube.com/watch?v=4NIe3T-HjDw
+ 
 **Note #1:  Check out the TestingUsersScript.py file for ideas on how to use fmcapi (until I get around to writing documentation).**
 
 **Note #2:  You can directly send requests to the FMC via the send_to_api() method in the FMC class.  This allows you to access any of the API features of the FMC.**
