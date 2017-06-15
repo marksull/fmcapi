@@ -18,6 +18,11 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     namer = '_fmcapi_test_{}'.format(str(int(time.time())))
     obj1 = None
 
+    logging.info('# Testing fmc.version() method.  Getting version information information from FMC.')
+    version_info = fmc1.version()
+    print(version_info)
+    logging.info('# Testing fmc.verson() done.')
+
     logging.info('# Test IPAddresses.  This only returns a full list of Host/Network/Range objects.')
     del obj1
     obj1 = IPAddresses(fmc=fmc1)
@@ -38,13 +43,13 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.name = namer
     obj1.value = '8.8.8.8/32'
     obj1.post()
-    time.sleep(5)
+    time.sleep(1)
     del obj1
     obj1 = IPHost(fmc=fmc1, name=namer)
     obj1.get()
     obj1.value = '9.9.9.9'
     obj1.put()
-    time.sleep(5)
+    time.sleep(1)
     obj1.delete()
     logging.info('# Test IPHost done.\n')
 
@@ -54,13 +59,13 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.name = namer
     obj1.value = '8.8.8.0/24'
     obj1.post()
-    time.sleep(5)
+    time.sleep(1)
     del obj1
     obj1 = IPNetwork(fmc=fmc1, name=namer)
     obj1.get()
     obj1.value = '9.9.9.0/24'
     obj1.put()
-    time.sleep(5)
+    time.sleep(1)
     obj1.delete()
     logging.info('# Test IPNetwork done.\n')
 
@@ -70,13 +75,13 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.name = namer
     obj1.value = '1.1.1.1-2.2.2.2'
     obj1.post()
-    time.sleep(5)
+    time.sleep(1)
     del obj1
     obj1 = IPRange(fmc=fmc1, name=namer)
     obj1.get()
     obj1.value = '3.3.3.3-4.4.4.4'
     obj1.put()
-    time.sleep(5)
+    time.sleep(1)
     obj1.delete()
     logging.info('# Test IPRange done.\n')
 
@@ -86,13 +91,13 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.name = namer
     obj1.url = 'daxm.com'
     obj1.post()
-    time.sleep(5)
+    time.sleep(1)
     del obj1
     obj1 = URL(fmc=fmc1, name=namer)
     obj1.get()
     obj1.url = 'daxm.lan'
     obj1.put()
-    time.sleep(5)
+    time.sleep(1)
     obj1.delete()
     logging.info('# Test URL done.\n')
 
@@ -102,13 +107,13 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.name = namer
     obj1.vlans(start_vlan='100', end_vlan='200')
     obj1.post()
-    time.sleep(5)
+    time.sleep(1)
     del obj1
     obj1 = VlanTag(fmc=fmc1, name=namer)
     obj1.get()
     obj1.vlans(start_vlan='300', end_vlan='400')
     obj1.put()
-    time.sleep(5)
+    time.sleep(1)
     obj1.delete()
     logging.info('# Test VlanTag done.\n')
 
@@ -119,13 +124,13 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.port = '1234'
     obj1.protocol = 'TCP'
     obj1.post()
-    time.sleep(5)
+    time.sleep(1)
     del obj1
     obj1 = ProtocolPort(fmc=fmc1, name=namer)
     obj1.get()
     obj1.port = '5678'
     obj1.put()
-    time.sleep(5)
+    time.sleep(1)
     obj1.delete()
     logging.info('# Test ProtocolPort done.\n')
 
@@ -135,13 +140,13 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.name = namer
     obj1.interfaceMode = 'ROUTED'
     obj1.post()
-    time.sleep(5)
+    time.sleep(1)
     del obj1
     obj1 = SecurityZone(fmc=fmc1, name=namer)
     obj1.get()
     obj1.name = 'DEMO'
     obj1.put()
-    time.sleep(5)
+    time.sleep(1)
     obj1.delete()
     logging.info('# Test SecurityZone done.\n')
 
@@ -171,13 +176,13 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1 = AccessControlPolicy(fmc=fmc1)
     obj1.name = namer
     obj1.post()
-    time.sleep(5)
+    time.sleep(1)
     del obj1
     obj1 = AccessControlPolicy(fmc=fmc1, name=namer)
     obj1.get()
     obj1.name = 'asdfasdf'
     obj1.put()
-    time.sleep(5)
+    time.sleep(1)
     obj1.delete()
     logging.info('# Test AccessControlPolicy done.\n')
 
@@ -198,7 +203,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     sz1.post()
     acp1 = AccessControlPolicy(fmc=fmc1, name='_acp1')
     acp1.post()
-    time.sleep(5)
+    time.sleep(1)
     logging.info('# Setup of objects for ACPRule test done.\n')
 
     logging.info('# Test ACPRule.  Try to test all features of all methods of the ACPRule class.')
@@ -226,7 +231,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     
     logging.info('\n# Cleanup of testing ACPRule methods.')
     acprule1.delete()
-    time.sleep(5)
+    time.sleep(1)
     iphost1.delete()
     ipnet1.delete()
     iprange1.delete()

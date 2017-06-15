@@ -41,6 +41,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
     logging.debug("In the FMC() class.")
 
     API_CONFIG_VERSION = 'api/fmc_config/v1'
+    API_PLATFORM_VERSION = 'api/fmc_platform/v1'
     VERIFY_CERT = False
 
     def __init__(self, host='192.168.45.45', username='admin', password='Admin123', autodeploy=True):
@@ -175,6 +176,28 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         logging.info("Deploying changes to devices.")
         response = self.send_to_api(method='post', url=url, json_data=json_data)
         return response['deviceList']
+
+    def version(self):
+        """
+        Get the FMC's version information.  Set instance variables for each version info returned as well as return
+        the whole response text.
+        :return:
+        """
+        logging.debug("In the FMC version() class method.")
+        logging.info('Collecting version information from FMC.')
+
+        # This query doesn't follow the same URL path all the other API paths do.  Building the query from scratch.
+        headers = {'Content-Type': 'application/json', 'X-auth-access-token': self.mytoken.get_token()}
+        url = "https://{}/{}/info/serverversion?offset=0&limit=1".format(self.host, self.API_PLATFORM_VERSION)
+        response = requests.get(url, headers=headers, verify=self.VERIFY_CERT)
+        response_text = json.loads(response.text)
+        if 'items' in response_text:
+            logging.info('Populating vdbVersion, sruVersion, serverVersion, and geoVersion FMC instance variables.')
+            self.vdbVersion = response_text['items'][0]['vdbVersion']
+            self.sruVersion = response_text['items'][0]['sruVersion']
+            self.serverVersion = response_text['items'][0]['serverVersion']
+            self.geoVersion = response_text['items'][0]['geoVersion']
+        return response_text
 
 
 class Token(object):
