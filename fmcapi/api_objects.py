@@ -26,6 +26,7 @@ class APIClassTemplate(object):
     def __init__(self, fmc, **kwargs):
         logging.debug("In __init__() for APIClassTemplate class.")
         self.fmc = fmc
+        self.URL = '{}{}'.format(self.fmc.configuration_url, self.URL_SUFFIX)
 
     def parse_kwargs(self, **kwargs):
         logging.debug("In parse_kwargs() for APIClassTemplate class.")
@@ -181,7 +182,7 @@ class IPAddresses(APIClassTemplate):
     The IPAddresses Object in the FMC.
     """
 
-    URL = '/object/networkaddresses'
+    URL_SUFFIX = '/object/networkaddresses'
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
@@ -213,7 +214,7 @@ class IPHost(APIClassTemplate):
     The Host Object in the FMC.
     """
 
-    URL = '/object/hosts'
+    URL_SUFFIX = '/object/hosts'
     REQUIRED_FOR_POST = ['name', 'value']
 
     def __init__(self, fmc, **kwargs):
@@ -259,7 +260,7 @@ class IPNetwork(APIClassTemplate):
     The Networkt Object in the FMC.
     """
 
-    URL = '/object/networks'
+    URL_SUFFIX = '/object/networks'
     REQUIRED_FOR_POST = ['name', 'value']
 
     def __init__(self, fmc, **kwargs):
@@ -305,7 +306,7 @@ class IPRange(APIClassTemplate):
     The Range Object in the FMC.
     """
 
-    URL = '/object/ranges'
+    URL_SUFFIX = '/object/ranges'
     REQUIRED_FOR_POST = ['name', 'value']
 
     def __init__(self, fmc, **kwargs):
@@ -351,7 +352,7 @@ class URL(APIClassTemplate):
     The URL Object in the FMC.
     """
 
-    URL = '/object/urls'
+    URL_SUFFIX = '/object/urls'
     REQUIRED_FOR_POST = ['name', 'url']
 
     def __init__(self, fmc, **kwargs):
@@ -385,7 +386,7 @@ class VlanTag(APIClassTemplate):
     The URL Object in the FMC.
     """
 
-    URL = '/object/vlantags'
+    URL_SUFFIX = '/object/vlantags'
     REQUIRED_FOR_POST = ['name', 'data']
 
     def __init__(self, fmc, **kwargs):
@@ -441,7 +442,7 @@ class VariableSet(APIClassTemplate):
     The VariableSet Object in the FMC.
     """
 
-    URL = '/object/variablesets'
+    URL_SUFFIX = '/object/variablesets'
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
@@ -482,7 +483,7 @@ class ProtocolPort(APIClassTemplate):
     The Port Object in the FMC.
     """
 
-    URL = '/object/protocolportobjects'
+    URL_SUFFIX = '/object/protocolportobjects'
     REQUIRED_FOR_POST = ['name', 'port', 'protocol']
 
     def __init__(self, fmc, **kwargs):
@@ -520,7 +521,7 @@ class SecurityZone(APIClassTemplate):
     The Security Zone Object in the FMC.
     """
 
-    URL = '/object/securityzones'
+    URL_SUFFIX = '/object/securityzones'
     REQUIRED_FOR_POST = ['name', 'interfaceMode']
     FILTER_BY_NAME = True
 
@@ -564,7 +565,7 @@ class Device(APIClassTemplate):
     The Device Object in the FMC.
     """
 
-    URL = '/devices/devicerecords'
+    URL_SUFFIX = '/devices/devicerecords'
     REQUIRED_FOR_POST = ['name', 'accessPolicy', 'hostName', 'regKey']
     LICENSES = ['BASE', 'PROTECT', 'MALWARE', 'URLFilter', 'CONTROL', 'VPN']
 
@@ -660,7 +661,7 @@ class IntrusionPolicy(APIClassTemplate):
     The Intrusion Policy Object in the FMC.
     """
 
-    URL = '/policy/intrusionpolicies'
+    URL_SUFFIX = '/policy/intrusionpolicies'
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 
 
@@ -703,7 +704,7 @@ class AccessControlPolicy(APIClassTemplate):
     The Access Control Policy Object in the FMC.
     """
 
-    URL = '/policy/accesspolicies'
+    URL_SUFFIX = '/policy/accesspolicies'
     REQUIRED_FOR_POST = ['name']
     DEFAULT_ACTION_OPTIONS = ['BLOCK', 'NETWORK_DISCOVERY', 'IPS']  # Not implemented yet.
     FILTER_BY_NAME = True
@@ -749,7 +750,7 @@ class ACPRule(APIClassTemplate):
     """
 
     PREFIX_URL = '/policy/accesspolicies'
-    URL = None
+    URL_SUFFIX = None
     REQUIRED_FOR_POST = ['name', 'acp_id']
     VALID_FOR_ACTION = ['ALLOW', 'TRUST', 'BLOCK', 'MONITOR', 'BLOCK_RESET', 'BLOCK_INTERACTIVE',
                         'BLOCK_RESET_INTERACTIVE']
@@ -872,7 +873,7 @@ class ACPRule(APIClassTemplate):
         acp1.get(name=name)
         if 'id' in acp1.__dict__:
             self.acp_id = acp1.id
-            self.URL = '{}/{}/accessrules'.format(self.PREFIX_URL, self.acp_id)
+            self.URL = '{}{}/{}/accessrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.acp_id)
         else:
             logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
                             'ACPRule.'.format(name))

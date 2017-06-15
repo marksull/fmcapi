@@ -67,7 +67,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         logging.debug("In the FMC __enter__() class method.")
         self.mytoken = Token(host=self.host, username=self.username, password=self.password, verify_cert=self.VERIFY_CERT)
         self.uuid = self.mytoken.uuid
-        self.base_url = "https://{}/{}/domain/{}".format(self.host, self.API_CONFIG_VERSION, self.uuid)
+        self.build_urls()
         return self
 
     def __exit__(self, *args):
@@ -84,7 +84,17 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             logging.info("Auto deploy changes set to False.  "
                          "Use the Deploy button in FMC to push changes to FTDs.\n\n")
 
-    def send_to_api(self, method='', url='', json_data=None):
+    def build_urls(self):
+        """
+        The FMC APIs appear to use 2 base URLs, depending on what that API is for.  One for "configuration" and the
+        other for FMC "platform" things.
+        """
+        logging.debug("In the FMC build_urls() class method.")
+        logging.info('Building base to URLs.')
+        self.configuration_url = "https://{}/{}/domain/{}".format(self.host, self.API_CONFIG_VERSION, self.uuid)
+        self.platform_url = "https://{}/{}".format(self.host, self.API_PLATFORM_VERSION)
+
+    def send_to_api(self, method='', url='', headers='', json_data=None):
         """
         Using the "method" type, send a request to the "url" with the "json_data" as the payload.
         :param method:
@@ -94,8 +104,9 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         """
         logging.debug("In the FMC send_to_api() class method.")
 
-        headers = {'Content-Type': 'application/json', 'X-auth-access-token': self.mytoken.get_token()}
-        url = self.base_url + url
+        if headers == '':
+            # These values for headers works for most API requests.
+            headers = {'Content-Type': 'application/json', 'X-auth-access-token': self.mytoken.get_token()}
         status_code = 429
         response = None
         json_response = None
@@ -186,18 +197,17 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         logging.debug("In the FMC version() class method.")
         logging.info('Collecting version information from FMC.')
 
-        # This query doesn't follow the same URL path all the other API paths do.  Building the query from scratch.
-        headers = {'Content-Type': 'application/json', 'X-auth-access-token': self.mytoken.get_token()}
-        url = "https://{}/{}/info/serverversion?offset=0&limit=1".format(self.host, self.API_PLATFORM_VERSION)
-        response = requests.get(url, headers=headers, verify=self.VERIFY_CERT)
-        response_text = json.loads(response.text)
-        if 'items' in response_text:
+        url_suffix = '/info/serverversion'
+        url = '{}{}'.format(self.platform_url, url_suffix)
+
+        response = self.send_to_api(method='get', url=url)
+        if 'items' in response:
             logging.info('Populating vdbVersion, sruVersion, serverVersion, and geoVersion FMC instance variables.')
-            self.vdbVersion = response_text['items'][0]['vdbVersion']
-            self.sruVersion = response_text['items'][0]['sruVersion']
-            self.serverVersion = response_text['items'][0]['serverVersion']
-            self.geoVersion = response_text['items'][0]['geoVersion']
-        return response_text
+            self.vdbVersion = response['items'][0]['vdbVersion']
+            self.sruVersion = response['items'][0]['sruVersion']
+            self.serverVersion = response['items'][0]['serverVersion']
+            self.geoVersion = response['items'][0]['geoVersion']
+        return response
 
 
 class Token(object):
