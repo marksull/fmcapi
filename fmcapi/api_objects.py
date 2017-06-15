@@ -283,7 +283,7 @@ class NetworkGroup(APIClassTemplate):
                 self.objects = objects_list
                 logging.info('Removed "{}" from NetworkGroup.'.format(name))
             else:
-                logging.info("This NetworkObject has no named_networks.  Nothing to remove.")
+                logging.info("This NetworkGroup has no named_networks.  Nothing to remove.")
         elif action == 'clear':
             if 'objects' in self.__dict__:
                 del self.objects
@@ -324,7 +324,7 @@ class NetworkGroup(APIClassTemplate):
                 self.literals = literals_list
                 logging.info('Removed "{}" from NetworkGroup.'.format(value))
             else:
-                logging.info("This NetworkObject has no unnamed_networks.  Nothing to remove.")
+                logging.info("This NetworkGroup has no unnamed_networks.  Nothing to remove.")
         elif action == 'clear':
             if 'literals' in self.__dict__:
                 del self.literals
@@ -501,6 +501,123 @@ class URL(APIClassTemplate):
         logging.debug("In parse_kwargs() for URL class.")
         if 'url' in kwargs:
             self.url = kwargs['url']
+
+
+@export
+class URLGroup(APIClassTemplate):
+    """
+    The URLGroup Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/urlgroups'
+
+    # Technically you can have objects OR literals but I'm not set up for "OR" logic, yet.
+    REQUIRED_FOR_POST = ['name', 'objects']
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for URLGroup class.")
+        self.parse_kwargs(**kwargs)
+        self.type = 'URLGroup'
+
+    def format_data(self):
+        logging.debug("In format_data() for URLGroup class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'objects' in self.__dict__:
+            json_data['objects'] = self.objects
+        if 'literals' in self.__dict__:
+            json_data['literals'] = self.literals
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for URLGroup class.")
+        if 'objects' in kwargs:
+            self.objects = kwargs['objects']
+        if 'literals' in kwargs:
+            self.literals = kwargs['literals']
+
+    def named_urls(self, action, name=''):
+        logging.debug("In named_urls() for URLGroup class.")
+        if action == 'add':
+            url1 = URL(fmc=self.fmc)
+            response = url1.get()
+            if 'items' in response:
+                new_url = None
+                for item in response['items']:
+                    if item['name'] == name:
+                        new_url = {'name': item['name'], 'id': item['id'], 'type': item['type']}
+                        break
+                if new_url is None:
+                    logging.warning('URL "{}" is not found in FMC.  Cannot add to URLGroup.'.format(name))
+                else:
+                    if 'objects' in self.__dict__:
+                        duplicate = False
+                        for object in self.objects:
+                            if object['name'] == new_url['name']:
+                                duplicate = True
+                                break
+                        if not duplicate:
+                            self.objects.append(new_url)
+                            logging.info('Adding "{}" to URLGroup.'.format(name))
+                    else:
+                        self.objects = [new_url]
+                        logging.info('Adding "{}" to URLGroup.'.format(name))
+        elif action == 'remove':
+            if 'objects' in self.__dict__:
+                objects_list = []
+                for obj in self.objects:
+                    if obj['name'] != name:
+                        objects_list.append(obj)
+                self.objects = objects_list
+                logging.info('Removed "{}" from URLGroup.'.format(name))
+            else:
+                logging.info("This URLGroup has no named_urls.  Nothing to remove.")
+        elif action == 'clear':
+            if 'objects' in self.__dict__:
+                del self.objects
+                logging.info('All named_urls removed from this URLGroup.')
+
+    def unnamed_urls(self, action, value=''):
+        logging.debug("In unnamed_urls() for URLGroup class.")
+        if action == 'add':
+            if value == '':
+                logging.error('Value assignment required to add unamed_url to URLGroup.')
+                return
+            value_type = 'Url'
+            new_literal = {'type': value_type, 'url': value}
+            if 'literals' in self.__dict__:
+                duplicate = False
+                for obj in self.literals:
+                    if obj['url'] == new_literal['url']:
+                        duplicate = True
+                        break
+                if not duplicate:
+                    self.literals.append(new_literal)
+                    logging.info('Adding "{}" to URLGroup.'.format(value))
+            else:
+                self.literals = [new_literal]
+                logging.info('Adding "{}" to URLGroup.'.format(value))
+        elif action == 'remove':
+            if 'literals' in self.__dict__:
+                literals_list = []
+                for obj in self.literals:
+                    if obj['url'] != value:
+                        literals_list.append(obj)
+                self.literals = literals_list
+                logging.info('Removed "{}" from URLGroup.'.format(value))
+            else:
+                logging.info("This URLGroup has no unnamed_urls.  Nothing to remove.")
+        elif action == 'clear':
+            if 'literals' in self.__dict__:
+                del self.literals
+                logging.info('All unnamed_urls removed from this URLGroup.')
 
 
 @export
