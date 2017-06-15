@@ -18,7 +18,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     namer = '_fmcapi_test_{}'.format(str(int(time.time())))
     obj1 = None
 
-    logging.info('# Testing NetworkGroup class.')
+    logging.info('# Testing URLGroup class.')
     url1 = URL(fmc=fmc1, name='_url1', url='example.org')
     url1.post()
     url2 = URL(fmc=fmc1, name='_url2', url='example.net')
@@ -53,7 +53,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     url1.delete()
     url2.delete()
     url3.delete()
-    logging.info('# Testing NetworkGroup class done.\n')
+    logging.info('# Testing URLGroup class done.\n')
 
     logging.info('# Testing NetworkGroup class.')
     obj10 = IPHost(fmc=fmc1, name='_iphost1', value='3.3.3.3')
