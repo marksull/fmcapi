@@ -1,5 +1,5 @@
 """
-Just a rough working space for me to test running code against the fmcapi package.
+Unit testing, of a sort, all the created methods/classes.
 """
 import json
 from fmcapi import *
