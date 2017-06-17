@@ -14,8 +14,8 @@ autodeploy = False
 
 with FMC(host=host, username=username, password=password, autodeploy=autodeploy) as fmc1:
     logging.info('# ### Mega Test Start!!! ### #')
-    namer = '_fmcapi_test_{}'.format(str(int(time.time())))
     starttime = str(int(time.time()))
+    namer = '_fmcapi_test_{}'.format(starttime)
     obj1 = None
     pp = pprint.PrettyPrinter(indent=4)
 

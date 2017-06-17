@@ -11,9 +11,9 @@ import datetime
 import json
 import requests
 import time
-
 import sys
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
 from .helper_functions import *
 from .api_objects import *
 from . import export
@@ -68,6 +68,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         self.mytoken = Token(host=self.host, username=self.username, password=self.password, verify_cert=self.VERIFY_CERT)
         self.uuid = self.mytoken.uuid
         self.build_urls()
+        self.version()
         return self
 
     def __exit__(self, *args):
