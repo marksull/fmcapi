@@ -31,7 +31,10 @@ class APIClassTemplate(object):
     def parse_kwargs(self, **kwargs):
         logging.debug("In parse_kwargs() for APIClassTemplate class.")
         if 'name' in kwargs:
-            self.name = kwargs['name']
+            self.name = syntax_correcter(kwargs['name'], permitted_syntax=self.VALID_CHARACTERS_FOR_NAME)
+            if self.name != kwargs['name']:
+                logging.info("""Adjusting name "{}" to "{}" due to containing invalid characters."""
+                             .format(kwargs['name'], self.name))
         if 'description' in kwargs:
             self.description = kwargs['description']
         else:
@@ -50,17 +53,6 @@ class APIClassTemplate(object):
             self.paging = kwargs['paging']
         if 'id' in kwargs:
             self.id = kwargs['id']
-
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, submitted_name):
-        self._name = syntax_correcter(submitted_name, permitted_syntax=self.VALID_CHARACTERS_FOR_NAME)
-        if self._name != submitted_name:
-            logging.info("""Adjusting name "{}" to "{}" due to containing invalid characters."""
-                         .format(submitted_name, self._name))
 
     def valid_for_post(self):
         logging.debug("In valid_for_post() for APIClassTemplate class.")
@@ -481,6 +473,48 @@ class NetworkGroup(APIClassTemplate):
             if 'literals' in self.__dict__:
                 del self.literals
                 logging.info('All unnamed_networks removed from this NetworkGroup.')
+
+
+@export
+class ApplicationCategory(APIClassTemplate):
+    """
+    The ApplicationCategory Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/applicationcategories'
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for ApplicationCategory class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for ApplicationCategory class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for ApplicationCategory class.")
+
+    def post(self):
+        logging.info('POST method for API for ApplicationCategory not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for ApplicationCategory not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for ApplicationCategory not supported.')
+        pass
 
 
 @export

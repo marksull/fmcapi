@@ -19,6 +19,23 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1 = None
     pp = pprint.PrettyPrinter(indent=4)
 
+    logging.info('# Testing ApplicationCategory class.')
+    del obj1
+    obj1 = ApplicationCategory(fmc=fmc1)
+    print('All ApplicationCategories -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
+    del obj1
+    obj1 = ApplicationCategory(fmc=fmc1, name='SMS tools')
+    print('One ApplicationCategory -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print('\n')
+    logging.info('# Testing ApplicationCategory class done.\n')
+
+    '''
     logging.info('# Testing Country class.')
     del obj1
     obj1 = Country(fmc=fmc1)
@@ -403,3 +420,4 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
         pp.pprint(fmc1.audit(username=username, subsystem=subsystem, starttime=starttime, endtime=endtime))
         print('\n')
     logging.info('# Testing fmc.audit() method done.\n')
+    '''
