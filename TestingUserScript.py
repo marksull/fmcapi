@@ -5,6 +5,8 @@ import json
 from fmcapi import *
 import logging
 import time
+import pprint
+import datetime
 
 host = '192.168.11.5'
 username = 'apiscript'
@@ -16,7 +18,10 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
      "setter" decorator for this usecase yet.'''
     logging.info('# ### Mega Test Start!!! ### #')
     namer = '_fmcapi_test_{}'.format(str(int(time.time())))
+    starttime = str(int(time.time()))
     obj1 = None
+    pp = pprint.PrettyPrinter(indent=4)
+
 
     logging.info('# Testing URLGroup class.')
     url1 = URL(fmc=fmc1, name='_url1', url='example.org')
@@ -93,21 +98,27 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
 
     logging.info('# Testing fmc.version() method.  Getting version information information from FMC.')
     version_info = fmc1.version()
-    print(version_info)
+    print('fmc.version() -- >')
+    pp.pprint(version_info)
+    print('\n')
     logging.info('# Testing fmc.verson() done.')
 
     logging.info('# Test IPAddresses.  This only returns a full list of Host/Network/Range objects.')
     del obj1
     obj1 = IPAddresses(fmc=fmc1)
     response = obj1.get()
-    print(json.dumps(response))
+    print('IPAddresses -->')
+    pp.pprint(response)
+    print('\n')
     logging.info('# Test IPAddresses done.\n')
 
     logging.info('# Test VariableSet. Can only GET VariableSet objects.')
     del obj1
     obj1 = VariableSet(fmc=fmc1)
     obj1.get(name='Default-Set')
-    print(json.dumps(obj1.format_data()))
+    print('VariableSet -->')
+    pp.pprint(obj1.format_data())
+    print('\n')
     logging.info('# Test VariableSet done.\n')
 
     logging.info('# Test IPHost.  Post, get, put, delete Host Objects.')
@@ -234,14 +245,18 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.licensing(action='remove', name='VPN')
     obj1.licensing(action='clear')
     obj1.licensing(action='add', name='BASE')
-    print(json.dumps(obj1.format_data()))
+    print('Device -->')
+    pp.pprint(obj1.format_data())
+    print('\n')
     logging.info('# Test Device done.\n')
 
-    logging.info('# Test ItrusionPolicy. Can only GET IntrusionPolicy objects.')
+    logging.info('# Test IntrusionPolicy. Can only GET IntrusionPolicy objects.')
     del obj1
     obj1 = IntrusionPolicy(fmc=fmc1)
     obj1.get(name='Security Over Connectivity')
-    print(json.dumps(obj1.format_data()))
+    print('IntrusionPolicy -->')
+    pp.pprint(obj1.format_data())
+    print('\n')
     logging.info('# Test IntrusionPolicy done.\n')
 
     logging.info('# Test AccessControlPolicy.  Post, get, put, delete ACP Objects.')
@@ -302,7 +317,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     acprule1.post()
     logging.info('# Test ACPRule done.\n')
     
-    logging.info('\n# Cleanup of testing ACPRule methods.')
+    logging.info('# Cleanup of testing ACPRule methods.')
     acprule1.delete()
     time.sleep(1)
     iphost1.delete()
@@ -315,4 +330,17 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     acp1.delete()
     logging.info('# Cleanup of objects for ACPRule test done.\n')
 
-    logging.info('# ### Mega Test Done!!! ### #')
+    logging.info('# Testing fmc.audit() method.')
+    subsytem_list = [
+        'Login',
+        'Session Expiration',
+        'Logout',
+        'Objects > Object Management > SecurityZone',
+        'API'
+    ]
+    endtime = str(int(time.time()))
+    for subsystem in subsytem_list:
+        print('fmc.audit() for {}. -->'.format(subsystem))
+        pp.pprint(fmc1.audit(username=username, subsystem=subsystem, starttime=starttime, endtime=endtime))
+        print('\n')
+    logging.info('# Testing fmc.audit() method done.\n')

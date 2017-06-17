@@ -209,6 +209,30 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             self.geoVersion = response['items'][0]['geoVersion']
         return response
 
+    def audit(self, **kwargs):
+        '''
+        This API function supports filtering the GET query URL with: username, subsystem, source, starttime, and
+        endtime parameters.
+        :return: response
+        '''
+        url_parameters = '?'
+        if 'username' in kwargs:
+            url_parameters = '{}&username={}'.format(url_parameters, kwargs['username'])
+        if 'subsystem' in kwargs:
+            url_parameters = '{}&subsystem={}'.format(url_parameters, kwargs['subsystem'])
+        if 'source' in kwargs:
+            url_parameters = '{}&source={}'.format(url_parameters, kwargs['source'])
+        if 'starttime' in kwargs:
+            url_parameters = '{}&starttime={}'.format(url_parameters, kwargs['starttime'])
+        if 'endtime' in kwargs:
+            url_parameters = '{}&endtime={}'.format(url_parameters, kwargs['endtime'])
+
+        url_suffix = '/audit/auditrecords'
+        url = '{}/domain/{}{}{}'.format(self.platform_url, self.uuid, url_suffix, url_parameters)
+
+        response = self.send_to_api(method='get', url=url)
+        return  response
+
 
 class Token(object):
     """
