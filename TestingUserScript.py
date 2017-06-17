@@ -30,17 +30,16 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     del obj1
     obj1 = ApplicationCategory(fmc=fmc1, name='SMS tools')
     print('One ApplicationCategory -- >')
-    result = obj1.get()
-    pp.pprint(result)
+    pp.pprint(obj1.get())
     print('\n')
     logging.info('# Testing ApplicationCategory class done.\n')
 
-    '''
     logging.info('# Testing Country class.')
     del obj1
     obj1 = Country(fmc=fmc1)
     print('All Countries -- >')
-    pp.pprint(obj1.get())
+    result = obj1.get()
+    pp.pprint(result)
     print('\n')
     del obj1
     obj1 = Country(fmc=fmc1, name='Isle Of Man')
@@ -53,7 +52,8 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     del obj1
     obj1 = Continent(fmc=fmc1)
     print('All Continents -- >')
-    pp.pprint(obj1.get())
+    result = obj1.get()
+    pp.pprint(result)
     print('\n')
     del obj1
     obj1 = Continent(fmc=fmc1, name='North Korea')
@@ -182,9 +182,9 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     logging.info('# Test IPAddresses.  This only returns a full list of Host/Network/Range objects.')
     del obj1
     obj1 = IPAddresses(fmc=fmc1)
-    response = obj1.get()
     print('IPAddresses -->')
-    pp.pprint(response)
+    result = obj1.get()
+    pp.pprint(result)
     print('\n')
     logging.info('# Test IPAddresses done.\n')
 
@@ -420,4 +420,3 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
         pp.pprint(fmc1.audit(username=username, subsystem=subsystem, starttime=starttime, endtime=endtime))
         print('\n')
     logging.info('# Testing fmc.audit() method done.\n')
-    '''

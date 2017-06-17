@@ -136,19 +136,25 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             logging.error("json_response -->\t{}".format(json_response))
         if response:
             response.close()
-        if 'next' in json_response['paging'] and self.page_counter <= self.MAX_PAGING_REQUESTS:
-            more_items += json_response['items']
-            logging.info('Paging:  Offset:{}, Limit:{}, Count:{}'.format(json_response['paging']['offset'],
-                                                                         json_response['paging']['limit'],
-                                                                         json_response['paging']['count']))
-            self.page_counter += 1
-            self.send_to_api(method=method,
-                             url=json_response['paging']['next'][0],
-                             json_data=json_data,
-                             more_items=more_items)
-        if self.page_counter > 0:
-            json_response['items'] = more_items
-            self.page_counter = 0
+        try:
+            if 'next' in json_response['paging'] and self.page_counter <= self.MAX_PAGING_REQUESTS:
+                pass
+                '''
+                more_items += json_response['items']
+                logging.info('Paging:  Offset:{}, Limit:{}, Count:{}'.format(json_response['paging']['offset'],
+                                                                             json_response['paging']['limit'],
+                                                                             json_response['paging']['count']))
+                self.page_counter += 1
+                new_response = self.send_to_api(method=method,
+                                 url=json_response['paging']['next'][0],
+                                 json_data=json_data,
+                                 more_items=more_items)
+                more_items += new_response['items']
+                '''
+            if self.page_counter > 0:
+                json_response['items'] = more_items
+        except KeyError:
+            pass
         return json_response
 
     def version(self):
