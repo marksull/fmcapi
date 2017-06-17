@@ -21,9 +21,6 @@ from . import export
 # Disable annoying HTTP warnings
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-# Print the DOCSTRING for this module.
-logging.debug(__doc__)
-
 """"
 The 'requests' package is very chatty on the INFO logging level.  Change its logging threshold sent to logger to 
 something greater than INFO (i.e. not INFO or DEBUG) will cause it to not log its INFO and DEBUG messages to the 
@@ -43,6 +40,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
     API_CONFIG_VERSION = 'api/fmc_config/v1'
     API_PLATFORM_VERSION = 'api/fmc_platform/v1'
     VERIFY_CERT = False
+    MAX_PAGING_REQUESTS = 100
 
     def __init__(self, host='192.168.45.45', username='admin', password='Admin123', autodeploy=True):
         """
@@ -95,7 +93,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         self.configuration_url = "https://{}/{}/domain/{}".format(self.host, self.API_CONFIG_VERSION, self.uuid)
         self.platform_url = "https://{}/{}".format(self.host, self.API_PLATFORM_VERSION)
 
-    def send_to_api(self, method='', url='', headers='', json_data=None):
+    def send_to_api(self, method='', url='', headers='', json_data=None, more_items=[]):
         """
         Using the "method" type, send a request to the "url" with the "json_data" as the payload.
         :param method:
@@ -105,6 +103,8 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         """
         logging.debug("In the FMC send_to_api() class method.")
 
+        if not more_items:
+            self.page_counter = 0
         if headers == '':
             # These values for headers works for most API requests.
             headers = {'Content-Type': 'application/json', 'X-auth-access-token': self.mytoken.get_token()}
@@ -136,7 +136,68 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             logging.error("json_response -->\t{}".format(json_response))
         if response:
             response.close()
+        try:
+            if 'next' in json_response['paging'] and self.page_counter <= self.MAX_PAGING_REQUESTS:
+                more_items += json_response['items']
+                logging.info('Paging:  Offset:{}, Limit:{}, Count:{}'.format(json_response['paging']['offset'],
+                                                                             json_response['paging']['limit'],
+                                                                             json_response['paging']['count']))
+                self.page_counter += 1
+                self.send_to_api(method=method,
+                                 url=json_response['paging']['next'][0],
+                                 json_data=json_data,
+                                 more_items=more_items)
+        except KeyError:
+            pass
+        if self.page_counter > 0:
+            json_response['items'] = more_items
+            self.page_counter = 0
         return json_response
+
+    def version(self):
+        """
+        Get the FMC's version information.  Set instance variables for each version info returned as well as return
+        the whole response text.
+        :return:
+        """
+        logging.debug("In the FMC version() class method.")
+        logging.info('Collecting version information from FMC.')
+
+        url_suffix = '/info/serverversion'
+        url = '{}{}'.format(self.platform_url, url_suffix)
+
+        response = self.send_to_api(method='get', url=url)
+        if 'items' in response:
+            logging.info('Populating vdbVersion, sruVersion, serverVersion, and geoVersion FMC instance variables.')
+            self.vdbVersion = response['items'][0]['vdbVersion']
+            self.sruVersion = response['items'][0]['sruVersion']
+            self.serverVersion = response['items'][0]['serverVersion']
+            self.geoVersion = response['items'][0]['geoVersion']
+        return response
+
+    def audit(self, **kwargs):
+        '''
+        This API function supports filtering the GET query URL with: username, subsystem, source, starttime, and
+        endtime parameters.
+        :return: response
+        '''
+        url_parameters = '?'
+        if 'username' in kwargs:
+            url_parameters = '{}&username={}'.format(url_parameters, kwargs['username'])
+        if 'subsystem' in kwargs:
+            url_parameters = '{}&subsystem={}'.format(url_parameters, kwargs['subsystem'])
+        if 'source' in kwargs:
+            url_parameters = '{}&source={}'.format(url_parameters, kwargs['source'])
+        if 'starttime' in kwargs:
+            url_parameters = '{}&starttime={}'.format(url_parameters, kwargs['starttime'])
+        if 'endtime' in kwargs:
+            url_parameters = '{}&endtime={}'.format(url_parameters, kwargs['endtime'])
+
+        url_suffix = '/audit/auditrecords'
+        url = '{}/domain/{}{}{}'.format(self.platform_url, self.uuid, url_suffix, url_parameters)
+
+        response = self.send_to_api(method='get', url=url)
+        return  response
 
     def get_deployable_devices(self):
         """
@@ -188,51 +249,6 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         logging.info("Deploying changes to devices.")
         response = self.send_to_api(method='post', url=url, json_data=json_data)
         return response['deviceList']
-
-    def version(self):
-        """
-        Get the FMC's version information.  Set instance variables for each version info returned as well as return
-        the whole response text.
-        :return:
-        """
-        logging.debug("In the FMC version() class method.")
-        logging.info('Collecting version information from FMC.')
-
-        url_suffix = '/info/serverversion'
-        url = '{}{}'.format(self.platform_url, url_suffix)
-
-        response = self.send_to_api(method='get', url=url)
-        if 'items' in response:
-            logging.info('Populating vdbVersion, sruVersion, serverVersion, and geoVersion FMC instance variables.')
-            self.vdbVersion = response['items'][0]['vdbVersion']
-            self.sruVersion = response['items'][0]['sruVersion']
-            self.serverVersion = response['items'][0]['serverVersion']
-            self.geoVersion = response['items'][0]['geoVersion']
-        return response
-
-    def audit(self, **kwargs):
-        '''
-        This API function supports filtering the GET query URL with: username, subsystem, source, starttime, and
-        endtime parameters.
-        :return: response
-        '''
-        url_parameters = '?'
-        if 'username' in kwargs:
-            url_parameters = '{}&username={}'.format(url_parameters, kwargs['username'])
-        if 'subsystem' in kwargs:
-            url_parameters = '{}&subsystem={}'.format(url_parameters, kwargs['subsystem'])
-        if 'source' in kwargs:
-            url_parameters = '{}&source={}'.format(url_parameters, kwargs['source'])
-        if 'starttime' in kwargs:
-            url_parameters = '{}&starttime={}'.format(url_parameters, kwargs['starttime'])
-        if 'endtime' in kwargs:
-            url_parameters = '{}&endtime={}'.format(url_parameters, kwargs['endtime'])
-
-        url_suffix = '/audit/auditrecords'
-        url = '{}/domain/{}{}{}'.format(self.platform_url, self.uuid, url_suffix, url_parameters)
-
-        response = self.send_to_api(method='get', url=url)
-        return  response
 
 
 class Token(object):

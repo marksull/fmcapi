@@ -12,7 +12,11 @@ logging_dateformat = '%Y/%m/%d-%H:%M:%S'
 logging_level = logging.INFO
 #logging_level = logging.DEBUG
 logging_filename = 'output.log'
-logging.basicConfig(format=logging_format, datefmt=logging_dateformat, filename=logging_filename, level=logging_level)
+logging.basicConfig(format=logging_format,
+                    datefmt=logging_dateformat,
+                    filename=logging_filename,
+                    filemode='w',
+                    level=logging_level)
 
 """
 When someone "imports *" from a package the __all__ list is what is imported.

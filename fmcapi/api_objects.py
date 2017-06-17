@@ -113,15 +113,19 @@ class APIClassTemplate(object):
                 url = '{}?expanded=true'.format(self.URL)
             response = self.fmc.send_to_api(method='get', url=url)
             for item in response['items']:
-                if item['name'] == self.name:
-                    self.id = item['id']
-                    self.parse_kwargs(**item)
-                    logging.info('GET success. Object with name: "{}" and id: "{}" fetched from'
-                                 ' FMC.'.format(self.name, self.id))
-                    return item
+                if 'name' in item:
+                    if item['name'] == self.name:
+                        self.id = item['id']
+                        self.parse_kwargs(**item)
+                        logging.info('GET success. Object with name: "{}" and id: "{}" fetched from'
+                                     ' FMC.'.format(self.name, self.id))
+                        return item
+                else:
+                    logging.warning('No "name" attribute associated with '
+                                    'this item to check against {}.'.format(self.name))
             if 'id' not in self.__dict__:
                 logging.warning("\tGET query for {} is not found.\n\t\t"
-                                "Response:{}".format(item['name'], response))
+                                "Response: {}".format(item['name'], json.dumps(response)))
             return response
         else:
             logging.info("GET query for object with no name or id set.  Returning full list of these object types "
