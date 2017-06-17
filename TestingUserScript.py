@@ -13,13 +13,37 @@ password = 'Admin123'
 autodeploy = False
 
 with FMC(host=host, username=username, password=password, autodeploy=autodeploy) as fmc1:
-    '''Note:  I'd like to be able to test a name with bad characters but I haven't figured out how to use the
-     "setter" decorator for this usecase yet.'''
     logging.info('# ### Mega Test Start!!! ### #')
     namer = '_fmcapi_test_{}'.format(str(int(time.time())))
     starttime = str(int(time.time()))
     obj1 = None
     pp = pprint.PrettyPrinter(indent=4)
+
+    logging.info('# Testing Country class.')
+    del obj1
+    obj1 = Country(fmc=fmc1)
+    print('All Countries -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    del obj1
+    obj1 = Country(fmc=fmc1, name='Dominican Republic')
+    print('One Country -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    logging.info('# Testing Country class done.\n')
+
+    logging.info('# Testing Continent class.')
+    del obj1
+    obj1 = Continent(fmc=fmc1)
+    print('All Continents -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    del obj1
+    obj1 = Continent(fmc=fmc1, name='North America')
+    print('One Continent -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    logging.info('# Testing Continent class done.\n')
 
     logging.info('# Testing VlanGroupTag class.')
     obj10 = VlanTag(fmc=fmc1, name='_vlantag10', data={'startTag': '888', 'endTag': '999'})
