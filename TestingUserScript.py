@@ -6,7 +6,6 @@ from fmcapi import *
 import logging
 import time
 import pprint
-import datetime
 
 host = '192.168.11.5'
 username = 'apiscript'
@@ -22,6 +21,42 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1 = None
     pp = pprint.PrettyPrinter(indent=4)
 
+    logging.info('# Testing VlanGroupTag class.')
+    obj10 = VlanTag(fmc=fmc1, name='_vlantag10', data={'startTag': '888', 'endTag': '999'})
+    obj10.post()
+    obj11 = VlanTag(fmc=fmc1, name='_vlantag11', data={'startTag': '222', 'endTag': '333'})
+    obj11.post()
+    obj12 = VlanTag(fmc=fmc1, name='_vlantag12', data={'startTag': '1', 'endTag': '999'})
+    obj12.post()
+    time.sleep(1)
+    del obj1
+    obj1 = VlanGroupTag(fmc=fmc1, name=namer)
+    obj1.named_vlantags(action='add', name='_vlantag10')
+    obj1.named_vlantags(action='add', name='_vlantag11')
+    obj1.named_vlantags(action='remove', name='_vlantag10')
+    obj1.named_vlantags(action='clear')
+    obj1.named_vlantags(action='add', name='_vlantag10')
+    obj1.named_vlantags(action='add', name='_vlantag11')
+    obj1.named_vlantags(action='add', name='_vlantag12')
+    obj1.named_vlantags(action='remove', name='_vlantag12')
+    obj1.post()
+    time.sleep(1)
+    del obj1
+    obj1 = VlanGroupTag(fmc=fmc1, name=namer)
+    obj1.get()
+    obj1.unnamed_vlantags(action='add', startvlan='22', endvlan='33')
+    obj1.unnamed_vlantags(action='clear')
+    obj1.unnamed_vlantags(action='add', startvlan='22', endvlan='33')
+    obj1.unnamed_vlantags(action='remove', startvlan='22', endvlan='33')
+    obj1.unnamed_vlantags(action='add', startvlan='44', endvlan='33')
+    obj1.unnamed_vlantags(action='add', startvlan='900')
+    obj1.put()
+    time.sleep(1)
+    obj1.delete()
+    obj10.delete()
+    obj11.delete()
+    obj12.delete()
+    logging.info('# Testing NetworkGroup class done.\n')
 
     logging.info('# Testing URLGroup class.')
     url1 = URL(fmc=fmc1, name='_url1', url='example.org')
@@ -195,7 +230,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     del obj1
     obj1 = VlanTag(fmc=fmc1, name=namer)
     obj1.get()
-    obj1.vlans(start_vlan='300', end_vlan='400')
+    obj1.vlans(start_vlan='400', end_vlan='300')
     obj1.put()
     time.sleep(1)
     obj1.delete()
@@ -274,7 +309,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.delete()
     logging.info('# Test AccessControlPolicy done.\n')
 
-    logging.info('\n# In preparation for testing ACPRule methods, set up some known objects in the FMC.')
+    logging.info('# In preparation for testing ACPRule methods, set up some known objects in the FMC.')
     iphost1 = IPHost(fmc=fmc1, name='_iphost1', value='7.7.7.7')
     iphost1.post()
     ipnet1 = IPNetwork(fmc=fmc1, name='_ipnet1', value='1.2.3.0/24')

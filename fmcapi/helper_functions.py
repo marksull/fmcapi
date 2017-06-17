@@ -18,6 +18,7 @@ def syntax_correcter(value, permitted_syntax="""[.\w\d_\-]""", replacer='_'):
     :param replacer: (optional) character used to replace invalid characters.
     :return: Modified string with "updated" characters.
     """
+    logging.debug("In syntax_correcter() helper_function.")
     new_value = ''
     for char in range(0, len(value)):
         if not re.match(permitted_syntax, value[char]):
@@ -33,6 +34,7 @@ def get_networkaddress_type(value):
     :param value: 
     :return: 'host'/'network'/'range'
     """
+    logging.debug("In get_networkaddress_type() helper_function.")
     if '/' in value:
         ip, bitmask = value.split('/')
         if ip == '32' or bitmask == '128':
@@ -52,6 +54,7 @@ def is_ip(ip):
     :param ip: String
     :return: True/False
     """
+    logging.debug("In is_ip() helper_function.")
     try:
         ipaddress.ip_address(ip)
     except ValueError as err:
@@ -67,6 +70,7 @@ def is_ip_network(ip):
     :param ip: String
     :return: True/False
     """
+    logging.debug("In is_ip_network() helper_function.")
     try:
         ipaddress.ip_network(ip)
     except ValueError as err:
@@ -82,6 +86,7 @@ def validate_ip_bitmask_range(value='', value_type=''):
     :param value_type: 'host'/'network'/'range'
     :return: dict {value=value_fixed, valid=boolean}
     """
+    logging.debug("In validate_ip_bitmask_range() helper_function.")
     return_dict = {'value': value, 'valid': False}
     if value_type == 'range':
         for ip in value.split('-'):
@@ -99,11 +104,27 @@ def mocked_requests_get(**kwargs):
     :param kwargs: 
     :return: 
     """
+    logging.debug("In mocked_requests_get() helper_function.")
+
     class MockResponse:
         def __init__(self, **kwargs):
+            logging.debug("In MockResponse __init__ method.")
             self.text = json.dumps(kwargs['text'])
             self.status_code = kwargs['status_code']
 
         def close(self):
+            logging.debug("In MockResponse close method.")
             return True
     return MockResponse(**kwargs)
+
+
+def validate_vlans(start_vlan, end_vlan=''):
+        logging.debug("In validate_vlans() helper_function.")
+        if end_vlan == '':
+            end_vlan = start_vlan
+        if int(end_vlan) < int(start_vlan):
+            start_vlan, end_vlan = end_vlan, start_vlan
+        if int(start_vlan) > 0 and int(start_vlan) < 4095 and int(end_vlan) > 0 and int(end_vlan) < 4095:
+            return start_vlan, end_vlan
+        else:
+            return 1, 4094

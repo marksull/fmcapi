@@ -6,7 +6,7 @@ __license__ = "BSD"
 
 setup(
     name='fmcapi',
-    version='0.41.0',
+    version='0.44.0',
     description="Easier interface to Cisco's FMC API than writing your own way.",
     long_description="""With the removal to configure a Cisco NGFW via the command line your only option is to
      do so via a manager.  Some things are better when automated so using the manager's API gives us that power. 
