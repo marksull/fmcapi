@@ -31,10 +31,7 @@ class APIClassTemplate(object):
     def parse_kwargs(self, **kwargs):
         logging.debug("In parse_kwargs() for APIClassTemplate class.")
         if 'name' in kwargs:
-            self.name = syntax_correcter(kwargs['name'], permitted_syntax=self.VALID_CHARACTERS_FOR_NAME)
-            if self.name != kwargs['name']:
-                logging.info("""Adjusting name "{}" to "{}" due to containing invalid characters."""
-                             .format(kwargs['name'], self.name))
+            self.name = kwargs['name']
         if 'description' in kwargs:
             self.description = kwargs['description']
         else:
@@ -53,6 +50,17 @@ class APIClassTemplate(object):
             self.paging = kwargs['paging']
         if 'id' in kwargs:
             self.id = kwargs['id']
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, submitted_name):
+        self._name = syntax_correcter(submitted_name, permitted_syntax=self.VALID_CHARACTERS_FOR_NAME)
+        if self._name != submitted_name:
+            logging.info("""Adjusting name "{}" to "{}" due to containing invalid characters."""
+                         .format(submitted_name, self._name))
 
     def valid_for_post(self):
         logging.debug("In valid_for_post() for APIClassTemplate class.")
