@@ -477,7 +477,7 @@ def test__access_control_policy():
     logging.info('# Test AccessControlPolicy done.\n')
 
 
-def test_acp_rule():
+def test__acp_rule():
     logging.info('# In preparation for testing ACPRule methods, set up some known objects in the FMC.')
     iphost1 = IPHost(fmc=fmc1, name='_iphost1', value='7.7.7.7')
     iphost1.post()
@@ -585,5 +585,5 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__device()
     test__intrusion_policy()
     test__access_control_policy()
-    test_acp_rule()
+    test__acp_rule()
     test__audit()
