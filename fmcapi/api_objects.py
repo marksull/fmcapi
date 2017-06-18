@@ -53,6 +53,8 @@ class APIClassTemplate(object):
             self.paging = kwargs['paging']
         if 'id' in kwargs:
             self.id = kwargs['id']
+        if 'items' in kwargs:
+            self.items = kwargs['items']
 
     def valid_for_post(self):
         logging.debug("In valid_for_post() for APIClassTemplate class.")
@@ -194,12 +196,6 @@ class IPAddresses(APIClassTemplate):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for IPAddresses class.")
         self.parse_kwargs(**kwargs)
-
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for IPAddresses class.")
-        if 'items' in kwargs:
-            self.items = kwargs['items']
 
     def post(self):
         logging.info('POST method for API for IPAddresses not supported.')
@@ -518,6 +514,227 @@ class ApplicationCategory(APIClassTemplate):
 
 
 @export
+class ApplicationProductivity(APIClassTemplate):
+    """
+    The ApplicationProductivity Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/applicationproductivities'
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for ApplicationProductivity class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for ApplicationProductivity class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for ApplicationProductivity class.")
+
+    def post(self):
+        logging.info('POST method for API for ApplicationProductivity not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for ApplicationProductivity not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for ApplicationProductivity not supported.')
+        pass
+
+
+@export
+class ApplicationRisk(APIClassTemplate):
+    """
+    The ApplicationRisk Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/applicationrisks'
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for ApplicationRisk class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for ApplicationRisk class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for ApplicationRisk class.")
+
+    def post(self):
+        logging.info('POST method for API for ApplicationRisk not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for ApplicationRisk not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for ApplicationRisk not supported.')
+        pass
+
+
+@export
+class Application(APIClassTemplate):
+    """
+    The Application Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/applications'
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-\/\. ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for Application class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for Application class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for Application class.")
+        if 'appProductivity' in kwargs:
+            self.appProductivity = kwargs['appProductivity']
+        if 'appCategories' in kwargs:
+            self.appCategories = kwargs['appCategories']
+        if 'appTags' in kwargs:
+            self.appTags = kwargs['appTags']
+        if 'appId' in kwargs:
+            self.appId = kwargs['appId']
+        if 'risk' in kwargs:
+            self.risk = kwargs['risk']
+        if 'applicationTypes' in kwargs:
+            self.applicationTypes = kwargs['applicationTypes']
+
+    def post(self):
+        logging.info('POST method for API for Application not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for Application not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for Application not supported.')
+        pass
+
+
+@export
+class ApplicationTag(APIClassTemplate):
+    """
+    The ApplicationTag Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/applicationtags'
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-\/\. ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for ApplicationTag class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for ApplicationTag class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for ApplicationTag class.")
+
+    def post(self):
+        logging.info('POST method for API for ApplicationTag not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for ApplicationTag not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for ApplicationTag not supported.')
+        pass
+
+
+@export
+class ApplicationType(APIClassTemplate):
+    """
+    The ApplicationType Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/applicationtypes'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for ApplicationTag class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for ApplicationType class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for ApplicationType class.")
+
+    def post(self):
+        logging.info('POST method for API for ApplicationType not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for ApplicationType not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for ApplicationType not supported.')
+        pass
+
+
+@export
 class URL(APIClassTemplate):
     """
     The URL Object in the FMC.
@@ -666,6 +883,48 @@ class URLGroup(APIClassTemplate):
             if 'literals' in self.__dict__:
                 del self.literals
                 logging.info('All unnamed_urls removed from this URLGroup.')
+
+
+@export
+class URLCategory(APIClassTemplate):
+    """
+    The URLCategory Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/urlcategories'
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-\/\.\(\) ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for URLCategory class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for URLCategory class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for URLCategory class.")
+
+    def post(self):
+        logging.info('POST method for API for URLCategory not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for URLCategory not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for URLCategory not supported.')
+        pass
 
 
 @export
@@ -865,6 +1124,32 @@ class VariableSet(APIClassTemplate):
 
     def delete(self):
         logging.info('DELETE method for API for VariableSets not supported.')
+        pass
+
+
+@export
+class Ports(APIClassTemplate):
+    """
+    The Ports Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/ports'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for Ports class.")
+        self.parse_kwargs(**kwargs)
+
+    def post(self):
+        logging.info('POST method for API for Ports not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for Ports not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for Ports not supported.')
         pass
 
 

@@ -7,20 +7,125 @@ import logging
 import time
 import pprint
 
+# ### Set these variables to match your environment. ### #
 host = '192.168.11.5'
 username = 'apiscript'
 password = 'Admin123'
 autodeploy = False
 
-with FMC(host=host, username=username, password=password, autodeploy=autodeploy) as fmc1:
-    logging.info('# ### Mega Test Start!!! ### #')
-    starttime = str(int(time.time()))
-    namer = '_fmcapi_test_{}'.format(starttime)
-    obj1 = None
-    pp = pprint.PrettyPrinter(indent=4)
+# ### These functions are the individual tests you can run to ensure functionality. ### #
 
-    logging.info('# Testing ApplicationCategory class.')
+
+def test__url_category():
+    logging.info('# Testing URLCategory class.')
+    obj1 = URLCategory(fmc=fmc1)
+    print('All URLCategories -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
     del obj1
+    obj1 = URLCategory(fmc=fmc1, name='SPAM URLs')
+    print('One URLCategory -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    logging.info('# Testing URLCategory class done.\n')
+
+
+def test__ports():
+    logging.info('# Test Ports.  This only returns a full list of various Port object types.')
+    obj1 = Ports(fmc=fmc1)
+    print('Ports -->')
+    result = obj1.get()
+    pp.pprint(result)
+    print('\n')
+    logging.info('# Test Ports done.\n')
+
+
+def test__application_type():
+    logging.info('# Testing ApplicationType class.')
+    obj1 = ApplicationType(fmc=fmc1)
+    print('All ApplicationType -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
+    del obj1
+    obj1 = ApplicationType(fmc=fmc1, name='Server')
+    print('One ApplicationType -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    logging.info('# Testing ApplicationType class done.\n')
+
+
+def test__application_tag():
+    logging.info('# Testing ApplicationTag class.')
+    obj1 = ApplicationTag(fmc=fmc1)
+    print('All ApplicationTag -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
+    del obj1
+    obj1 = ApplicationTag(fmc=fmc1, name='file sharing/transfer')
+    print('One ApplicationTag -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    logging.info('# Testing ApplicationTag class done.\n')
+
+
+def test__application():
+    logging.info('# Testing Application class.')
+    obj1 = Application(fmc=fmc1)
+    print('### Warning, this query takes a LONG time to process.  Watch the output.log file for regular updates. ###')
+    print('All Application -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
+    del obj1
+    obj1 = Application(fmc=fmc1, name='WD softwares Download/Update')
+    print('### Warning, this query takes a LONG time to process.  Watch the output.log file for regular updates. ###')
+    print('One Application -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    logging.info('# Testing Application class done.\n')
+
+
+def test__application_risk():
+    logging.info('# Testing ApplicationRisk class.')
+    obj1 = ApplicationRisk(fmc=fmc1)
+    print('All ApplicationRisks -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
+    del obj1
+    obj1 = ApplicationRisk(fmc=fmc1, name='Very High')
+    print('One ApplicationRisk -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    logging.info('# Testing ApplicationRisk class done.\n')
+
+
+def test__application_productivity():
+    logging.info('# Testing ApplicationProductivity class.')
+    obj1 = ApplicationProductivity(fmc=fmc1)
+    print('All ApplicationProductivities -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
+    del obj1
+    obj1 = ApplicationProductivity(fmc=fmc1, name='Very Low')
+    print('One ApplicationProductivity -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    logging.info('# Testing ApplicationProductivity class done.\n')
+
+
+def test__application_category():
+    logging.info('# Testing ApplicationCategory class.')
     obj1 = ApplicationCategory(fmc=fmc1)
     print('All ApplicationCategories -- >')
     result = obj1.get()
@@ -34,8 +139,9 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     print('\n')
     logging.info('# Testing ApplicationCategory class done.\n')
 
+
+def test__country():
     logging.info('# Testing Country class.')
-    del obj1
     obj1 = Country(fmc=fmc1)
     print('All Countries -- >')
     result = obj1.get()
@@ -49,8 +155,9 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     print('\n')
     logging.info('# Testing Country class done.\n')
 
+
+def test__continent():
     logging.info('# Testing Continent class.')
-    del obj1
     obj1 = Continent(fmc=fmc1)
     print('All Continents -- >')
     result = obj1.get()
@@ -64,6 +171,8 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     print('\n')
     logging.info('# Testing Continent class done.\n')
 
+
+def test__vlan_group_tag():
     logging.info('# Testing VlanGroupTag class.')
     obj10 = VlanTag(fmc=fmc1, name='_vlantag10', data={'startTag': '888', 'endTag': '999'})
     obj10.post()
@@ -72,7 +181,6 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj12 = VlanTag(fmc=fmc1, name='_vlantag12', data={'startTag': '1', 'endTag': '999'})
     obj12.post()
     time.sleep(1)
-    del obj1
     obj1 = VlanGroupTag(fmc=fmc1, name=namer)
     obj1.named_vlantags(action='add', name='_vlantag10')
     obj1.named_vlantags(action='add', name='_vlantag11')
@@ -99,8 +207,10 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj10.delete()
     obj11.delete()
     obj12.delete()
-    logging.info('# Testing NetworkGroup class done.\n')
+    logging.info('# Testing VlanGroupTag class done.\n')
 
+
+def test__url_group():
     logging.info('# Testing URLGroup class.')
     url1 = URL(fmc=fmc1, name='_url1', url='example.org')
     url1.post()
@@ -109,7 +219,6 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     url3 = URL(fmc=fmc1, name='_url3', url='example.com')
     url3.post()
     time.sleep(1)
-    del obj1
     obj1 = URLGroup(fmc=fmc1, name=namer)
     obj1.named_urls(action='add', name='_url1')
     obj1.named_urls(action='add', name='_url1')
@@ -138,6 +247,8 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     url3.delete()
     logging.info('# Testing URLGroup class done.\n')
 
+
+def test__network_group():
     logging.info('# Testing NetworkGroup class.')
     obj10 = IPHost(fmc=fmc1, name='_iphost1', value='3.3.3.3')
     obj10.post()
@@ -146,7 +257,6 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj12 = IPRange(fmc=fmc1, name='_iprange1', value='3.3.3.3-33.33.33.33')
     obj12.post()
     time.sleep(1)
-    del obj1
     obj1 = NetworkGroup(fmc=fmc1, name=namer)
     obj1.named_networks(action='add', name='_iphost1')
     obj1.named_networks(action='add', name='_iphost1')
@@ -174,15 +284,9 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj12.delete()
     logging.info('# Testing NetworkGroup class done.\n')
 
-    logging.info('# Testing fmc.version() method.  Getting version information information from FMC.')
-    version_info = fmc1.version()
-    print('fmc.version() -- >')
-    pp.pprint(version_info)
-    print('\n')
-    logging.info('# Testing fmc.verson() done.')
 
-    logging.info('# Test IPAddresses.  This only returns a full list of Host/Network/Range objects.')
-    del obj1
+def test__ip_addresses():
+    logging.info('# Test IPAddresses.  This only returns a full list of IP object types.')
     obj1 = IPAddresses(fmc=fmc1)
     print('IPAddresses -->')
     result = obj1.get()
@@ -190,8 +294,18 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     print('\n')
     logging.info('# Test IPAddresses done.\n')
 
+
+def test__fmc_version():
+    logging.info('# Testing fmc.version() method.  Getting version information information from FMC.')
+    version_info = fmc1.version()
+    print('fmc.version() -- >')
+    pp.pprint(version_info)
+    print('\n')
+    logging.info('# Testing fmc.verson() done.')
+
+
+def test__variable_set():
     logging.info('# Test VariableSet. Can only GET VariableSet objects.')
-    del obj1
     obj1 = VariableSet(fmc=fmc1)
     obj1.get(name='Default-Set')
     print('VariableSet -->')
@@ -199,8 +313,9 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     print('\n')
     logging.info('# Test VariableSet done.\n')
 
+
+def test__ip_host():
     logging.info('# Test IPHost.  Post, get, put, delete Host Objects.')
-    del obj1
     obj1 = IPHost(fmc=fmc1)
     obj1.name = namer
     obj1.value = '8.8.8.8/32'
@@ -215,8 +330,9 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.delete()
     logging.info('# Test IPHost done.\n')
 
+
+def test__ip_network():
     logging.info('# Test IPNetwork.  Post, get, put, delete Network Objects.')
-    del obj1
     obj1 = IPNetwork(fmc=fmc1)
     obj1.name = namer
     obj1.value = '8.8.8.0/24'
@@ -231,8 +347,9 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.delete()
     logging.info('# Test IPNetwork done.\n')
 
+
+def test__ip_range():
     logging.info('# Test IPRange.  Post, get, put, delete Range Objects.')
-    del obj1
     obj1 = IPRange(fmc=fmc1)
     obj1.name = namer
     obj1.value = '1.1.1.1-2.2.2.2'
@@ -247,8 +364,9 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.delete()
     logging.info('# Test IPRange done.\n')
 
+
+def test__url():
     logging.info('# Test URL.  Post, get, put, delete URL Objects.')
-    del obj1
     obj1 = URL(fmc=fmc1)
     obj1.name = namer
     obj1.url = 'daxm.com'
@@ -263,8 +381,9 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.delete()
     logging.info('# Test URL done.\n')
 
+
+def test__vlan_tag():
     logging.info('# Test VlanTag.  Post, get, put, delete VLAN Tag Objects.')
-    del obj1
     obj1 = VlanTag(fmc=fmc1)
     obj1.name = namer
     obj1.vlans(start_vlan='100', end_vlan='200')
@@ -279,8 +398,9 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.delete()
     logging.info('# Test VlanTag done.\n')
 
+
+def test__protocol_port():
     logging.info('# Test ProtocolPort.  Post, get, put, delete Port Objects.')
-    del obj1
     obj1 = ProtocolPort(fmc=fmc1)
     obj1.name = namer
     obj1.port = '1234'
@@ -296,8 +416,9 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.delete()
     logging.info('# Test ProtocolPort done.\n')
 
+
+def test__security_zone():
     logging.info('# Test SecurityZone.  Post, get, put, delete Security Zone Objects.')
-    del obj1
     obj1 = SecurityZone(fmc=fmc1)
     obj1.name = namer
     obj1.interfaceMode = 'ROUTED'
@@ -312,9 +433,10 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.delete()
     logging.info('# Test SecurityZone done.\n')
 
+
+def test__device():
     logging.info('# Test Device.  Though you can "Post" devices I do not have one handy. So '
                  'add/remove licenses on Device Objects.')
-    del obj1
     obj1 = Device(fmc=fmc1)
     obj1.name = namer
     obj1.acp(name='Example_Corp')
@@ -328,8 +450,9 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     print('\n')
     logging.info('# Test Device done.\n')
 
+
+def test__intrusion_policy():
     logging.info('# Test IntrusionPolicy. Can only GET IntrusionPolicy objects.')
-    del obj1
     obj1 = IntrusionPolicy(fmc=fmc1)
     obj1.get(name='Security Over Connectivity')
     print('IntrusionPolicy -->')
@@ -337,8 +460,9 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     print('\n')
     logging.info('# Test IntrusionPolicy done.\n')
 
+
+def test__access_control_policy():
     logging.info('# Test AccessControlPolicy.  Post, get, put, delete ACP Objects.')
-    del obj1
     obj1 = AccessControlPolicy(fmc=fmc1)
     obj1.name = namer
     obj1.post()
@@ -352,6 +476,8 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     obj1.delete()
     logging.info('# Test AccessControlPolicy done.\n')
 
+
+def test_acp_rule():
     logging.info('# In preparation for testing ACPRule methods, set up some known objects in the FMC.')
     iphost1 = IPHost(fmc=fmc1, name='_iphost1', value='7.7.7.7')
     iphost1.post()
@@ -394,7 +520,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     acprule1.destination_network(action='add', name='_iprange1')
     acprule1.post()
     logging.info('# Test ACPRule done.\n')
-    
+
     logging.info('# Cleanup of testing ACPRule methods.')
     acprule1.delete()
     time.sleep(1)
@@ -408,6 +534,8 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     acp1.delete()
     logging.info('# Cleanup of objects for ACPRule test done.\n')
 
+
+def test__audit():
     logging.info('# Testing fmc.audit() method.')
     subsytem_list = [
         'Login',
@@ -422,3 +550,40 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
         pp.pprint(fmc1.audit(username=username, subsystem=subsystem, starttime=starttime, endtime=endtime))
         print('\n')
     logging.info('# Testing fmc.audit() method done.\n')
+
+# ### Main Program ### #
+with FMC(host=host, username=username, password=password, autodeploy=autodeploy) as fmc1:
+    logging.info('# ### Mega Test Start!!! ### #')
+    starttime = str(int(time.time()))
+    namer = '_fmcapi_test_{}'.format(starttime)
+    obj1 = None
+    pp = pprint.PrettyPrinter(indent=4)
+
+    test__url_category()
+    test__ports()
+    test__application_type()
+    test__application_tag()
+    test__application()
+    test__application_risk()
+    test__application_productivity()
+    test__application_category()
+    test__country()
+    test__continent()
+    test__vlan_group_tag()
+    test__url_group()
+    test__network_group()
+    test__ip_addresses()
+    test__fmc_version()
+    test__variable_set()
+    test__ip_host()
+    test__ip_network()
+    test__ip_range()
+    test__url()
+    test__vlan_tag()
+    test__protocol_port()
+    test__security_zone()
+    test__device()
+    test__intrusion_policy()
+    test__access_control_policy()
+    test_acp_rule()
+    test__audit()
