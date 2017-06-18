@@ -104,6 +104,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         logging.debug("In the FMC send_to_api() class method.")
 
         if not more_items:
+            self.more_items = []
             self.page_counter = 0
         if headers == '':
             # These values for headers works for most API requests.
@@ -138,24 +139,23 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             response.close()
         try:
             if 'next' in json_response['paging'] and self.page_counter <= self.MAX_PAGING_REQUESTS:
-                pass
-                '''
-                more_items += json_response['items']
-                logging.info('Paging:  Offset:{}, Limit:{}, Count:{}'.format(json_response['paging']['offset'],
-                                                                             json_response['paging']['limit'],
-                                                                             json_response['paging']['count']))
+                self.more_items += json_response['items']
+                logging.info('Paging:  Offset:{}, Limit:{}, Count:{}, Gathered_Items:{}'.
+                             format(json_response['paging']['offset'],
+                                    json_response['paging']['limit'],
+                                    json_response['paging']['count'],
+                                    len(self.more_items)))
                 self.page_counter += 1
-                new_response = self.send_to_api(method=method,
+                return self.send_to_api(method=method,
                                  url=json_response['paging']['next'][0],
                                  json_data=json_data,
-                                 more_items=more_items)
-                more_items += new_response['items']
-                '''
-            if self.page_counter > 0:
-                json_response['items'] = more_items
+                                 more_items=self.more_items)
+            else:
+                json_response['items'] += self.more_items
+                self.more_items = []
+                return json_response
         except KeyError:
-            pass
-        return json_response
+            return json_response
 
     def version(self):
         """
