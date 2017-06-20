@@ -18,20 +18,9 @@ logging.basicConfig(format=logging_format,
                     filemode='w',
                     level=logging_level)
 
-"""
-When someone "imports *" from a package the __all__ list is what is imported.
-Thanks to David Beazley's (Live and Let Die!) youtube video I'm configuring this variable to only
-expose those functions and/or classes I want using the @export decorator.
-"""
-__all__ = []
-
-# A decorator to add functions and/or classes to the __all__ list.
-def export(defn):
-    globals()[defn.__name__] = defn
-    __all__.append(defn.__name__)
-    return defn
-
-from . import fmc
+from .fmc import *
+from .api_objects import *
+from .helper_functions import *
 
 logging.debug("In the fmcapi __init__.py file.")
 

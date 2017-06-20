@@ -1,7 +1,7 @@
 """
 Unit testing, of a sort, all the created methods/classes.
 """
-import json
+# import json
 from fmcapi import *
 import logging
 import time
@@ -556,7 +556,6 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     logging.info('# ### Mega Test Start!!! ### #')
     starttime = str(int(time.time()))
     namer = '_fmcapi_test_{}'.format(starttime)
-    obj1 = None
     pp = pprint.PrettyPrinter(indent=4)
 
     test__url_category()

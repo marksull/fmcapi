@@ -16,7 +16,6 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 from .helper_functions import *
 from .api_objects import *
-from . import export
 
 # Disable annoying HTTP warnings
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -29,7 +28,6 @@ default logger.  This reduces the size of our log files.
 logging.getLogger("requests").setLevel(logging.WARNING)
 
 
-@export
 class FMC(object):
     """
 The FMC class has a series of methods, lines that start with "def", that are used to interact with the Cisco FMC

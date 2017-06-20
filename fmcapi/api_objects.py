@@ -6,7 +6,6 @@ import logging
 import datetime
 import requests
 from .helper_functions import *
-from . import export
 
 logging.debug("In the {} module.".format(__name__))
 
@@ -184,7 +183,6 @@ class APIClassTemplate(object):
 # ################# API-Explorer Object Category Things ################# #
 
 
-@export
 class IPAddresses(APIClassTemplate):
     """
     The IPAddresses Object in the FMC.
@@ -210,7 +208,6 @@ class IPAddresses(APIClassTemplate):
         pass
 
 
-@export
 class IPHost(APIClassTemplate):
     """
     The Host Object in the FMC.
@@ -256,7 +253,6 @@ class IPHost(APIClassTemplate):
             self.value = kwargs['value']
 
 
-@export
 class IPNetwork(APIClassTemplate):
     """
     The Network Object in the FMC.
@@ -302,7 +298,6 @@ class IPNetwork(APIClassTemplate):
             self.value = kwargs['value']
 
 
-@export
 class IPRange(APIClassTemplate):
     """
     The Range Object in the FMC.
@@ -348,7 +343,6 @@ class IPRange(APIClassTemplate):
             self.value = kwargs['value']
 
 
-@export
 class NetworkGroup(APIClassTemplate):
     """
     The NetworkGroup Object in the FMC.
@@ -471,7 +465,6 @@ class NetworkGroup(APIClassTemplate):
                 logging.info('All unnamed_networks removed from this NetworkGroup.')
 
 
-@export
 class ApplicationCategory(APIClassTemplate):
     """
     The ApplicationCategory Object in the FMC.
@@ -513,7 +506,6 @@ class ApplicationCategory(APIClassTemplate):
         pass
 
 
-@export
 class ApplicationProductivity(APIClassTemplate):
     """
     The ApplicationProductivity Object in the FMC.
@@ -555,7 +547,6 @@ class ApplicationProductivity(APIClassTemplate):
         pass
 
 
-@export
 class ApplicationRisk(APIClassTemplate):
     """
     The ApplicationRisk Object in the FMC.
@@ -597,7 +588,6 @@ class ApplicationRisk(APIClassTemplate):
         pass
 
 
-@export
 class Application(APIClassTemplate):
     """
     The Application Object in the FMC.
@@ -651,7 +641,6 @@ class Application(APIClassTemplate):
         pass
 
 
-@export
 class ApplicationTag(APIClassTemplate):
     """
     The ApplicationTag Object in the FMC.
@@ -693,7 +682,6 @@ class ApplicationTag(APIClassTemplate):
         pass
 
 
-@export
 class ApplicationType(APIClassTemplate):
     """
     The ApplicationType Object in the FMC.
@@ -734,7 +722,6 @@ class ApplicationType(APIClassTemplate):
         pass
 
 
-@export
 class URL(APIClassTemplate):
     """
     The URL Object in the FMC.
@@ -768,7 +755,6 @@ class URL(APIClassTemplate):
             self.url = kwargs['url']
 
 
-@export
 class URLGroup(APIClassTemplate):
     """
     The URLGroup Object in the FMC.
@@ -885,7 +871,6 @@ class URLGroup(APIClassTemplate):
                 logging.info('All unnamed_urls removed from this URLGroup.')
 
 
-@export
 class URLCategory(APIClassTemplate):
     """
     The URLCategory Object in the FMC.
@@ -927,7 +912,6 @@ class URLCategory(APIClassTemplate):
         pass
 
 
-@export
 class VlanTag(APIClassTemplate):
     """
     The URL Object in the FMC.
@@ -969,7 +953,6 @@ class VlanTag(APIClassTemplate):
         self.data = {'startTag': start_vlan, 'endTag': end_vlan}
 
 
-@export
 class VlanGroupTag(APIClassTemplate):
     """
     The NetworkGroup Object in the FMC.
@@ -1086,7 +1069,6 @@ class VlanGroupTag(APIClassTemplate):
                 logging.info('All unnamed_vlantags removed from this VlanGroupTag.')
 
 
-@export
 class VariableSet(APIClassTemplate):
     """
     The VariableSet Object in the FMC.
@@ -1127,7 +1109,6 @@ class VariableSet(APIClassTemplate):
         pass
 
 
-@export
 class Ports(APIClassTemplate):
     """
     The Ports Object in the FMC.
@@ -1153,7 +1134,6 @@ class Ports(APIClassTemplate):
         pass
 
 
-@export
 class ProtocolPort(APIClassTemplate):
     """
     The Port Object in the FMC.
@@ -1191,7 +1171,6 @@ class ProtocolPort(APIClassTemplate):
             self.protocol = kwargs['protocol']
 
 
-@export
 class SecurityZone(APIClassTemplate):
     """
     The Security Zone Object in the FMC.
@@ -1232,7 +1211,6 @@ class SecurityZone(APIClassTemplate):
             self.interfaces = kwargs['interfaces']
 
 
-@export
 class Continent(APIClassTemplate):
     """
     The Continent Object in the FMC.
@@ -1277,7 +1255,6 @@ class Continent(APIClassTemplate):
         pass
 
 
-@export
 class Country(APIClassTemplate):
     """
     The Country Object in the FMC.
@@ -1328,7 +1305,6 @@ class Country(APIClassTemplate):
 # ################# API-Explorer Devices Category Things ################# #
 
 
-@export
 class Device(APIClassTemplate):
     """
     The Device Object in the FMC.
@@ -1437,7 +1413,6 @@ class Device(APIClassTemplate):
                             'Device.'.format(name))
 
 
-@export
 class PhysicalInterface(APIClassTemplate):
     """
     The Physical Interface Object in the FMC.
@@ -1884,7 +1859,6 @@ class PhysicalInterface(APIClassTemplate):
 # ################# API-Explorer Policy Category Things ################# #
 
 
-@export
 class IntrusionPolicy(APIClassTemplate):
     """
     The Intrusion Policy Object in the FMC.
@@ -1927,7 +1901,6 @@ class IntrusionPolicy(APIClassTemplate):
         pass
 
 
-@export
 class AccessControlPolicy(APIClassTemplate):
     """
     The Access Control Policy Object in the FMC.
@@ -1972,7 +1945,6 @@ class AccessControlPolicy(APIClassTemplate):
         pass
 
 
-@export
 class ACPRule(APIClassTemplate):
     """
     The ACP Rule Object in the FMC.
