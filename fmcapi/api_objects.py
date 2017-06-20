@@ -1325,7 +1325,6 @@ class Country(APIClassTemplate):
         logging.info('DELETE method for API for Country not supported.')
         pass
 
-
 # ################# API-Explorer Devices Category Things ################# #
 
 
@@ -1378,6 +1377,22 @@ class Device(APIClassTemplate):
             self.accessPolicy = kwargs['accessPolicy']
         if 'acp_name' in kwargs:
             self.acp(name=kwargs['acp_name'])
+        if 'model' in kwargs:
+            self.model(name=kwargs['model'])
+        if 'modelId' in kwargs:
+            self.modelId(name=kwargs['modelId'])
+        if 'modelNumber' in kwargs:
+            self.modelNumber(name=kwargs['modelNumber'])
+        if 'modelType' in kwargs:
+            self.modelType(name=kwargs['modelType'])
+        if 'healthStatus' in kwargs:
+            self.healthStatus(name=kwargs['healthStatus'])
+        if 'healthPolicy' in kwargs:
+            self.healthPolicy(name=kwargs['healthPolicy'])
+        if 'keepLocalEvents' in kwargs:
+            self.keepLocalEvents(name=kwargs['keepLocalEvents'])
+        if 'prohibitPacketTransfer' in kwargs:
+            self.prohibitPacketTransfer(name=kwargs['prohibitPacketTransfer'])
 
     def licensing(self, action, name='BASE'):
         logging.debug("In licensing() for Device class.")
@@ -1422,108 +1437,15 @@ class Device(APIClassTemplate):
                             'Device.'.format(name))
 
 
-# ################# API-Explorer Policy Category Things ################# #
-
-
 @export
-class IntrusionPolicy(APIClassTemplate):
+class PhysicalInterface(APIClassTemplate):
     """
-    The Intrusion Policy Object in the FMC.
-    """
-
-    URL_SUFFIX = '/policy/intrusionpolicies'
-    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
-
-
-    def __init__(self, fmc, **kwargs):
-        super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for IntrusionPolicy class.")
-        self.parse_kwargs(**kwargs)
-
-    def format_data(self):
-        logging.debug("In format_data() for IntrusionPolicy class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        return json_data
-
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for IntrusionPolicy class.")
-
-    def post(self):
-        logging.info('POST method for API for IntrusionPolicy not supported.')
-        pass
-
-    def put(self):
-        logging.info('PUT method for API for IntrusionPolicy not supported.')
-        pass
-
-    def delete(self):
-        logging.info('DELETE method for API for IntrusionPolicy not supported.')
-        pass
-
-
-@export
-class AccessControlPolicy(APIClassTemplate):
-    """
-    The Access Control Policy Object in the FMC.
+    The Physical Interface Object in the FMC.
     """
 
-    URL_SUFFIX = '/policy/accesspolicies'
-    REQUIRED_FOR_POST = ['name']
-    DEFAULT_ACTION_OPTIONS = ['BLOCK', 'NETWORK_DISCOVERY', 'IPS']  # Not implemented yet.
-    FILTER_BY_NAME = True
-
-    def __init__(self, fmc, **kwargs):
-        super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for AccessControlPolicy class.")
-        self.parse_kwargs(**kwargs)
-
-    def format_data(self):
-        logging.debug("In format_data() for AccessControlPolicy class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'description' in self.__dict__:
-            json_data['description'] = self.description
-        if 'defaultAction' in self.__dict__:
-            json_data['defaultAction'] = self.defaultAction
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        return json_data
-
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for AccessControlPolicy class.")
-        if 'defaultAction' in kwargs:
-            self.defaultAction = kwargs['defaultAction']
-        else:
-            self.defaultAction = {'action': 'BLOCK'}
-
-    def put(self, **kwargs):
-        logging.info('The put() method for the AccessControlPolicy() class can work but I need to write a '
-                     'DefaultAction() class and accommodate for such before "putting".')
-        pass
-
-
-@export
-class ACPRule(APIClassTemplate):
-    """
-    The ACP Rule Object in the FMC.
-    """
-
-    PREFIX_URL = '/policy/accesspolicies'
+    PREFIX_URL = '/devices/devicerecords'
     URL_SUFFIX = None
-    REQUIRED_FOR_POST = ['name', 'acp_id']
-    VALID_FOR_ACTION = ['ALLOW', 'TRUST', 'BLOCK', 'MONITOR', 'BLOCK_RESET', 'BLOCK_INTERACTIVE',
-                        'BLOCK_RESET_INTERACTIVE']
+    REQUIRED_FOR_PUT = ['id', 'device_id']
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
@@ -1644,6 +1566,545 @@ class ACPRule(APIClassTemplate):
         if 'id' in acp1.__dict__:
             self.acp_id = acp1.id
             self.URL = '{}{}/{}/accessrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.acp_id)
+        else:
+            logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
+                            'ACPRule.'.format(name))
+
+    def intrusion_policy(self, action, name=''):
+        logging.debug("In intrusion_policy() for ACPRule class.")
+        if action == 'clear':
+            if 'ipsPolicy' in self.__dict__:
+                del self.ipsPolicy
+                logging.info('Intrusion Policy removed from this ACPRule object.')
+        elif action == 'set':
+            ips = IntrusionPolicy(fmc=self.fmc, name=name)
+            ips.get()
+            self.ipsPolicy = {'name': ips.name, 'id': ips.id, 'type': ips.type}
+            logging.info('Intrusion Policy set to "{}" for this ACPRule object.'.format(name))
+
+    def variable_set(self, action, name='Default-Set'):
+        logging.debug("In variable_set() for ACPRule class.")
+        if action == 'clear':
+            if 'variableSet' in self.__dict__:
+                del self.variableSet
+                logging.info('Variable Set removed from this ACPRule object.')
+        elif action == 'set':
+            vs = VariableSet(fmc=self.fmc)
+            vs.get(name=name)
+            self.variableSet = {'name': vs.name, 'id': vs.id, 'type': vs.type}
+            logging.info('VariableSet set to "{}" for this ACPRule object.'.format(name))
+
+    def source_zone(self, action, name=''):
+        logging.debug("In source_zone() for ACPRule class.")
+        if action == 'add':
+            sz = SecurityZone(fmc=self.fmc)
+            sz.get(name=name)
+            if 'id' in sz.__dict__:
+                if 'sourceZones' in self.__dict__:
+                    new_zone = {'name': sz.name, 'id': sz.id, 'type': sz.type}
+                    duplicate = False
+                    for object in self.sourceZones['objects']:
+                        if object['name'] == new_zone['name']:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.sourceZones['objects'].append(new_zone)
+                        logging.info('Adding "{}" to sourceZones for this ACPRule.'.format(name))
+                else:
+                    self.sourceZones = {'objects': [{'name': sz.name, 'id': sz.id, 'type': sz.type}]}
+                    logging.info('Adding "{}" to sourceZones for this ACPRule.'.format(name))
+            else:
+                logging.warning('Security Zone, "{}", not found.  Cannot add to ACPRule.'.format(name))
+        elif action == 'remove':
+            sz = SecurityZone(fmc=self.fmc)
+            sz.get(name=name)
+            if 'id' in sz.__dict__:
+                if 'sourceZones' in self.__dict__:
+                    objects = []
+                    for object in self.sourceZones['objects']:
+                        if object['name'] != name:
+                            objects.append(object)
+                    self.sourceZones['objects'] = objects
+                    logging.info('Removed "{}" from sourceZones for this ACPRule.'.format(name))
+                else:
+                    logging.info("sourceZones doesn't exist for this ACPRule.  Nothing to remove.")
+            else:
+                logging.warning('Security Zone, "{}", not found.  Cannot remove from ACPRule.'.format(name))
+        elif action == 'clear':
+            if 'sourceZones' in self.__dict__:
+                del self.sourceZones
+                logging.info('All Source Zones removed from this ACPRule object.')
+
+    def destination_zone(self, action, name=''):
+        logging.debug("In destination_zone() for ACPRule class.")
+        if action == 'add':
+            sz = SecurityZone(fmc=self.fmc)
+            sz.get(name=name)
+            if 'id' in sz.__dict__:
+                if 'destinationZones' in self.__dict__:
+                    new_zone = {'name': sz.name, 'id': sz.id, 'type': sz.type}
+                    duplicate = False
+                    for object in self.destinationZones['objects']:
+                        if object['name'] == new_zone['name']:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.destinationZones['objects'].append(new_zone)
+                        logging.info('Adding "{}" to destinationZones for this ACPRule.'.format(name))
+                else:
+                    self.destinationZones = {'objects': [{'name': sz.name, 'id': sz.id, 'type': sz.type}]}
+                    logging.info('Adding "{}" to destinationZones for this ACPRule.'.format(name))
+            else:
+                logging.warning('Security Zone, "{}", not found.  Cannot add to ACPRule.'.format(name))
+        elif action == 'remove':
+            sz = SecurityZone(fmc=self.fmc)
+            sz.get(name=name)
+            if 'id' in sz.__dict__:
+                if 'destinationZones' in self.__dict__:
+                    objects = []
+                    for object in self.destinationZones['objects']:
+                        if object['name'] != name:
+                            objects.append(object)
+                    self.destinationZones['objects'] = objects
+                    logging.info('Removed "{}" from destinationZones for this ACPRule.'.format(name))
+                else:
+                    logging.info("destinationZones doesn't exist for this ACPRule.  Nothing to remove.")
+            else:
+                logging.warning('Security Zone, {}, not found.  Cannot remove from ACPRule.'.format(name))
+        elif action == 'clear':
+            if 'destinationZones' in self.__dict__:
+                del self.destinationZones
+                logging.info('All Destination Zones removed from this ACPRule object.')
+
+    def vlan_tags(self, action, name=''):
+        logging.debug("In vlan_tags() for ACPRule class.")
+        if action == 'add':
+            vlantag = VlanTag(fmc=self.fmc)
+            vlantag.get(name=name)
+            if 'id' in vlantag.__dict__:
+                if 'vlanTags' in self.__dict__:
+                    new_vlan = {'name': vlantag.name, 'id': vlantag.id, 'type': vlantag.type}
+                    duplicate = False
+                    for object in self.vlanTags['objects']:
+                        if object['name'] == new_vlan['name']:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.vlanTags['objects'].append(new_vlan)
+                        logging.info('Adding "{}" to vlanTags for this ACPRule.'.format(name))
+                else:
+                    self.vlanTags = {'objects': [{'name': vlantag.name, 'id': vlantag.id, 'type': vlantag.type}]}
+                    logging.info('Adding "{}" to vlanTags for this ACPRule.'.format(name))
+            else:
+                logging.warning('VLAN Tag, "{}", not found.  Cannot add to ACPRule.'.format(name))
+        elif action == 'remove':
+            vlantag = VlanTag(fmc=self.fmc)
+            vlantag.get(name=name)
+            if 'id' in vlantag.__dict__:
+                if 'vlanTags' in self.__dict__:
+                    objects = []
+                    for object in self.vlanTags['objects']:
+                        if object['name'] != name:
+                            objects.append(object)
+                    self.vlanTags['objects'] = objects
+                    logging.info('Removed "{}" from vlanTags for this ACPRule.'.format(name))
+                else:
+                    logging.info("vlanTags doesn't exist for this ACPRule.  Nothing to remove.")
+            else:
+                logging.warning('VLAN Tag, {}, not found.  Cannot remove from ACPRule.'.format(name))
+        elif action == 'clear':
+            if 'vlanTags' in self.__dict__:
+                del self.vlanTags
+                logging.info('All VLAN Tags removed from this ACPRule object.')
+
+    def source_port(self, action, name=''):
+        logging.debug("In source_port() for ACPRule class.")
+        if action == 'add':
+            pport = ProtocolPort(fmc=self.fmc)
+            pport.get(name=name)
+            if 'id' in pport.__dict__:
+                if 'sourcePorts' in self.__dict__:
+                    new_port = {'name': pport.name, 'id': pport.id, 'type': pport.type}
+                    duplicate = False
+                    for object in self.sourcePorts['objects']:
+                        if object['name'] == new_port['name']:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.sourcePorts['objects'].append(new_port)
+                        logging.info('Adding "{}" to sourcePorts for this ACPRule.'.format(name))
+                else:
+                    self.sourcePorts = {'objects': [{'name': pport.name, 'id': pport.id, 'type': pport.type}]}
+                    logging.info('Adding "{}" to sourcePorts for this ACPRule.'.format(name))
+            else:
+                logging.warning('Protocol Port, "{}", not found.  Cannot add to ACPRule.'.format(name))
+        elif action == 'remove':
+            pport = ProtocolPort(fmc=self.fmc)
+            pport.get(name=name)
+            if 'id' in pport.__dict__:
+                if 'sourcePorts' in self.__dict__:
+                    objects = []
+                    for object in self.sourcePorts['objects']:
+                        if object['name'] != name:
+                            objects.append(object)
+                    self.sourcePorts['objects'] = objects
+                    logging.info('Removed "{}" from sourcePorts for this ACPRule.'.format(name))
+                else:
+                    logging.info("sourcePorts doesn't exist for this ACPRule.  Nothing to remove.")
+            else:
+                logging.warning('Protocol Port, "{}", not found.  Cannot remove from ACPRule.'.format(name))
+        elif action == 'clear':
+            if 'sourcePorts' in self.__dict__:
+                del self.sourcePorts
+                logging.info('All Source Ports removed from this ACPRule object.')
+
+    def destination_port(self, action, name=''):
+        logging.debug("In destination_port() for ACPRule class.")
+        if action == 'add':
+            pport = ProtocolPort(fmc=self.fmc)
+            pport.get(name=name)
+            if 'id' in pport.__dict__:
+                if 'destinationPorts' in self.__dict__:
+                    new_port = {'name': pport.name, 'id': pport.id, 'type': pport.type}
+                    duplicate = False
+                    for object in self.destinationPorts['objects']:
+                        if object['name'] == new_port['name']:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.destinationPorts['objects'].append(new_port)
+                        logging.info('Adding "{}" to destinationPorts for this ACPRule.'.format(name))
+                else:
+                    self.destinationPorts = {'objects': [{'name': pport.name, 'id': pport.id, 'type': pport.type}]}
+                    logging.info('Adding "{}" to destinationPorts for this ACPRule.'.format(name))
+            else:
+                logging.warning('Protocol Port, "{}", not found.  Cannot add to ACPRule.'.format(name))
+        elif action == 'remove':
+            pport = ProtocolPort(fmc=self.fmc)
+            pport.get(name=name)
+            if 'id' in pport.__dict__:
+                if 'destinationPorts' in self.__dict__:
+                    objects = []
+                    for object in self.destinationPorts['objects']:
+                        if object['name'] != name:
+                            objects.append(object)
+                    self.destinationPorts['objects'] = objects
+                    logging.info('Removed "{}" from destinationPorts for this ACPRule.'.format(name))
+                else:
+                    logging.info("destinationPorts doesn't exist for this ACPRule.  Nothing to remove.")
+            else:
+                logging.warning('Protocol Port, {}, not found.  Cannot remove from ACPRule.'.format(name))
+        elif action == 'clear':
+            if 'destinationPorts' in self.__dict__:
+                del self.destinationPorts
+                logging.info('All Destination Ports removed from this ACPRule object.')
+
+    def source_network(self, action, name=''):
+        logging.debug("In source_network() for ACPRule class.")
+        if action == 'add':
+            net1 = IPAddresses(fmc=self.fmc)
+            response = net1.get()
+            if 'items' in response:
+                new_net = None
+                for item in response['items']:
+                    if item['name'] == name:
+                        new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
+                        break
+                if new_net is None:
+                    logging.warning('Network "{}" is not found in FMC.  Cannot add to sourceNetworks.'.format(name))
+                else:
+                    if 'sourceNetworks' in self.__dict__:
+                        duplicate = False
+                        for object in self.sourceNetworks['objects']:
+                            if object['name'] == new_net['name']:
+                                duplicate = True
+                                break
+                        if not duplicate:
+                            self.sourceNetworks['objects'].append(new_net)
+                            logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
+                    else:
+                        self.sourceNetworks = {'objects': [new_net]}
+                        logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
+        elif action == 'remove':
+            if 'sourceNetworks' in self.__dict__:
+                objects = []
+                for object in self.sourceNetworks['objects']:
+                    if object['name'] != name:
+                        objects.append(object)
+                self.sourceNetworks['objects'] = objects
+                logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(name))
+            else:
+                logging.info("sourceNetworks doesn't exist for this ACPRule.  Nothing to remove.")
+        elif action == 'clear':
+            if 'sourceNetworks' in self.__dict__:
+                del self.sourceNetworks
+                logging.info('All Source Networks removed from this ACPRule object.')
+
+    def destination_network(self, action, name=''):
+        logging.debug("In destination_network() for ACPRule class.")
+        if action == 'add':
+            net1 = IPAddresses(fmc=self.fmc)
+            response = net1.get()
+            if 'items' in response:
+                new_net = None
+                for item in response['items']:
+                    if item['name'] == name:
+                        new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
+                        break
+                if new_net is None:
+                    logging.warning('Network "{}" is not found in FMC.  Cannot add to destinationNetworks.'.format(name))
+                else:
+                    if 'destinationNetworks' in self.__dict__:
+                        duplicate = False
+                        for object in self.destinationNetworks['objects']:
+                            if object['name'] == new_net['name']:
+                                duplicate = True
+                                break
+                        if not duplicate:
+                            self.destinationNetworks['objects'].append(new_net)
+                            logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
+                    else:
+                        self.destinationNetworks = {'objects': [new_net]}
+                        logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
+        elif action == 'remove':
+            if 'destinationNetworks' in self.__dict__:
+                objects = []
+                for object in self.destinationNetworks['objects']:
+                    if object['name'] != name:
+                        objects.append(object)
+                self.destinationNetworks['objects'] = objects
+                logging.info('Removed "{}" from destinationNetworks for this ACPRule.'.format(name))
+            else:
+                logging.info("destinationNetworks doesn't exist for this ACPRule.  Nothing to remove.")
+        elif action == 'clear':
+            if 'destinationNetworks' in self.__dict__:
+                del self.destinationNetworks
+                logging.info('All Destination Networks removed from this ACPRule object.')
+
+# ################# API-Explorer Policy Category Things ################# #
+
+
+@export
+class IntrusionPolicy(APIClassTemplate):
+    """
+    The Intrusion Policy Object in the FMC.
+    """
+
+    URL_SUFFIX = '/policy/intrusionpolicies'
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for IntrusionPolicy class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for IntrusionPolicy class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for IntrusionPolicy class.")
+
+    def post(self):
+        logging.info('POST method for API for IntrusionPolicy not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for IntrusionPolicy not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for IntrusionPolicy not supported.')
+        pass
+
+
+@export
+class AccessControlPolicy(APIClassTemplate):
+    """
+    The Access Control Policy Object in the FMC.
+    """
+
+    URL_SUFFIX = '/policy/accesspolicies'
+    REQUIRED_FOR_POST = ['name']
+    DEFAULT_ACTION_OPTIONS = ['BLOCK', 'NETWORK_DISCOVERY', 'IPS']  # Not implemented yet.
+    FILTER_BY_NAME = True
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for AccessControlPolicy class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for AccessControlPolicy class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'description' in self.__dict__:
+            json_data['description'] = self.description
+        if 'defaultAction' in self.__dict__:
+            json_data['defaultAction'] = self.defaultAction
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for AccessControlPolicy class.")
+        if 'defaultAction' in kwargs:
+            self.defaultAction = kwargs['defaultAction']
+        else:
+            self.defaultAction = {'action': 'BLOCK'}
+
+    def put(self, **kwargs):
+        logging.info('The put() method for the AccessControlPolicy() class can work but I need to write a '
+                     'DefaultAction() class and accommodate for such before "putting".')
+        pass
+
+
+@export
+class ACPRule(APIClassTemplate):
+    """
+    The ACP Rule Object in the FMC.
+    """
+
+    PREFIX_URL = '/policy/accesspolicies'
+    URL_SUFFIX = None
+    REQUIRED_FOR_POST = ['name', 'acp_id']
+    VALID_FOR_ACTION = ['ALLOW', 'TRUST', 'BLOCK', 'MONITOR', 'BLOCK_RESET', 'BLOCK_INTERACTIVE',
+                        'BLOCK_RESET_INTERACTIVE']
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for ACPRule class.")
+        self.type = 'AccessRule'
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for ACPRule class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'action' in self.__dict__:
+            json_data['action'] = self.action
+        if 'enabled' in self.__dict__:
+            json_data['enabled'] = self.enabled
+        if 'sendEventsToFMC' in self.__dict__:
+            json_data['sendEventsToFMC'] = self.sendEventsToFMC
+        if 'logFiles' in self.__dict__:
+            json_data['logFiles'] = self.logFiles
+        if 'logBegin' in self.__dict__:
+            json_data['logBegin'] = self.logBegin
+        if 'logEnd' in self.__dict__:
+            json_data['logEnd'] = self.logEnd
+        if 'variableSet' in self.__dict__:
+            json_data['variableSet'] = self.variableSet
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'originalSourceNetworks' in self.__dict__:
+            json_data['originalSourceNetworks'] = self.originalSourceNetworks
+        if 'vlanTags' in self.__dict__:
+            json_data['vlanTags'] = self.vlanTags
+        if 'sourceNetworks' in self.__dict__:
+            json_data['sourceNetworks'] = self.sourceNetworks
+        if 'destinationNetworks' in self.__dict__:
+            json_data['destinationNetworks'] = self.destinationNetworks
+        if 'sourcePorts' in self.__dict__:
+            json_data['sourcePorts'] = self.sourcePorts
+        if 'destinationPorts' in self.__dict__:
+            json_data['destinationPorts'] = self.destinationPorts
+        if 'ipsPolicy' in self.__dict__:
+            json_data['ipsPolicy'] = self.ipsPolicy
+        if 'urls' in self.__dict__:
+            json_data['urls'] = self.urls
+        if 'sourceZones' in self.__dict__:
+            json_data['sourceZones'] = self.sourceZones
+        if 'destinationZones' in self.__dict__:
+            json_data['destinationZones'] = self.destinationZones
+        if 'applications' in self.__dict__:
+            json_data['applications'] = self.applications
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for ACPRule class.")
+        if 'action' in kwargs:
+            if kwargs['action'] in self.VALID_FOR_ACTION:
+                self.action = kwargs['action']
+            else:
+                logging.warning('Action {} is not a valid action.'.format(kwargs['action']))
+        else:
+            self.action = 'BLOCK'
+        if 'acp_name' in kwargs:
+            self.acp(name=kwargs['acp_name'])
+        if 'enabled' in kwargs:
+            self.enabled = kwargs['enabled']
+        else:
+            self.enabled = True
+        if 'sendEventsToFMC' in kwargs:
+            self.sendEventsToFMC = kwargs['sendEventsToFMC']
+        else:
+            self.sendEventsToFMC = True
+        if 'logFiles' in kwargs:
+            self.logFiles = kwargs['logFiles']
+        else:
+            self.logFiles = False
+        if 'logBegin' in kwargs:
+            self.logBegin = kwargs['logBegin']
+        else:
+            self.logBegin = False
+        if 'logEnd' in kwargs:
+            self.logEnd = kwargs['logEnd']
+        else:
+            self.logEnd = False
+        if 'originalSourceNetworks' in kwargs:
+            self.originalSourceNetworks = kwargs['originalSourceNetworks']
+        if 'sourceZones' in kwargs:
+            self.sourceZones = kwargs['sourceZones']
+        if 'destinationZones' in kwargs:
+            self.destinationZones = kwargs['destinationZones']
+        if 'variableSet' in kwargs:
+            self.variableSet = kwargs['variableSet']
+        else:
+            self.variable_set(action='set')
+        if 'ipsPolicy' in kwargs:
+            self.ipsPolicy = kwargs['ipsPolicy']
+        if 'vlanTags' in kwargs:
+            self.vlanTags = kwargs['vlanTags']
+        if 'sourcePorts' in kwargs:
+            self.sourcePorts = kwargs['sourcePorts']
+        if 'destinationPorts' in kwargs:
+            self.destinationPorts = kwargs['destinationPorts']
+        if 'sourceNetworks' in kwargs:
+            self.sourceNetworks = kwargs['sourceNetworks']
+        if 'destinationNetworks' in kwargs:
+            self.destinationNetworks = kwargs['destinationNetworks']
+        if 'urls' in kwargs:
+            self.urls = kwargs['urls']
+        if 'applications' in kwargs:
+            self.applications = kwargs['applications']
+
+    def acp(self, name):
+        logging.debug("In acp() for ACPRule class.")
+        acp1 = AccessControlPolicy(fmc=self.fmc)
+        acp1.get(name=name)
+        if 'id' in acp1.__dict__:
+            self.acp_id = acp1.id
+            self.URL = '{}{}/{}/accessrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.acp_id)
+            self.acp_added_to_url = True
         else:
             logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
                             'ACPRule.'.format(name))

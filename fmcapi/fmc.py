@@ -155,6 +155,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                 self.more_items = []
                 return json_response
         except KeyError:
+            # Used only when the response only has "one page" of results.
             return json_response
 
     def version(self):
