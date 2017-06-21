@@ -133,6 +133,9 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         except requests.exceptions.HTTPError as err:
             logging.error("Error in POST operation --> {}".format(str(err)))
             logging.error("json_response -->\t{}".format(json_response))
+            if response:
+                response.close()
+            return None
         if response:
             response.close()
         try:
@@ -212,7 +215,8 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         logging.info("Waiting {} seconds to allow the FMC to update the list of deployable devices.".format(waittime))
         time.sleep(waittime)
         logging.info("Getting a list of deployable devices.")
-        url = "/deployment/deployabledevices?expanded=true"
+        url_suffix = "/deployment/deployabledevices?expanded=true"
+        url = '{}{}'.format(self.configuration_url, url_suffix)
         response = self.send_to_api(method='get', url=url)
         # Now to parse the response list to get the UUIDs of each device.
         if 'items' not in response:
@@ -232,7 +236,8 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         """
         logging.debug("In the deploy_changes() class method.")
 
-        url = "/deployment/deploymentrequests"
+        url_suffix = "/deployment/deploymentrequests"
+        url = '{}{}'.format(self.configuration_url, url_suffix)
         devices = self.get_deployable_devices()
         if not devices:
             logging.info("No devices need deployed.\n\n")

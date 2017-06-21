@@ -84,9 +84,15 @@ class APIClassTemplate(object):
         else:
             if self.valid_for_post():
                 response = self.fmc.send_to_api(method='post', url=self.URL, json_data=self.format_data())
-                self.parse_kwargs(**response)
-                logging.info('POST success. Object with name: "{}" and id: "{}" created '
-                             'in FMC.'.format(self.name, self.id))
+                if response:
+                    self.parse_kwargs(**response)
+                    if 'name' in self.__dict__ and 'id' in self.__dict__:
+                        logging.info('POST success. Object with name: "{}" and id: "{}" created '
+                                     'in FMC.'.format(self.name, self.id))
+                    else:
+                        logging.info('POST success but no "id" or "name" values in API response.')
+                else:
+                    logging.warning('POST failure.  No data in API response.')
                 return response
             else:
                 logging.warning("post() method failed due to failure to pass valid_for_post() test.")
@@ -162,23 +168,6 @@ class APIClassTemplate(object):
         else:
             logging.warning("delete() method failed due to failure to pass valid_for_delete() test.")
             return False
-
-    '''# Trying to deal with 'name' being set without using the syntax_correcter()
-    def namer(self, name):
-        logging.debug("In @name.setter name() method for APIClassTemplate class.")
-        self.name = syntax_correcter(kwargs['name'], permitted_syntax=self.VALID_CHARACTERS_FOR_NAME)
-        if self.name != kwargs['name']:
-            logging.info("""Adjusting name "{}" to "{}" due to containing invalid characters."""
-                         .format(kwargs['name'], self.name))
-
-    @namer.setter
-    def namer(self, name):
-        logging.debug("In @name.setter name() method for APIClassTemplate class.")
-        self.name = syntax_correcter(kwargs['name'], permitted_syntax=self.VALID_CHARACTERS_FOR_NAME)
-        if self.name != kwargs['name']:
-            logging.info("""Adjusting name "{}" to "{}" due to containing invalid characters."""
-                         .format(kwargs['name'], self.name))
-     '''
 
 # ################# API-Explorer Object Category Things ################# #
 
@@ -1311,8 +1300,9 @@ class Device(APIClassTemplate):
     """
 
     URL_SUFFIX = '/devices/devicerecords'
-    REQUIRED_FOR_POST = ['name', 'accessPolicy', 'hostName', 'regKey']
-    LICENSES = ['BASE', 'PROTECT', 'MALWARE', 'URLFilter', 'CONTROL', 'VPN']
+    REQUIRED_FOR_POST = ['accessPolicy', 'hostName', 'regKey']
+    REQUIRED_FOR_PUT = ['id']
+    LICENSES = ['BASE', 'MALWARE', 'URLFilter', 'THREAT', 'VPN']
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
@@ -1354,21 +1344,21 @@ class Device(APIClassTemplate):
         if 'acp_name' in kwargs:
             self.acp(name=kwargs['acp_name'])
         if 'model' in kwargs:
-            self.model(name=kwargs['model'])
+            self.model = kwargs['model']
         if 'modelId' in kwargs:
-            self.modelId(name=kwargs['modelId'])
+            self.modelId = kwargs['modelId']
         if 'modelNumber' in kwargs:
-            self.modelNumber(name=kwargs['modelNumber'])
+            self.modelNumber = kwargs['modelNumber']
         if 'modelType' in kwargs:
-            self.modelType(name=kwargs['modelType'])
+            self.modelType = kwargs['modelType']
         if 'healthStatus' in kwargs:
-            self.healthStatus(name=kwargs['healthStatus'])
+            self.healthStatus = kwargs['healthStatus']
         if 'healthPolicy' in kwargs:
-            self.healthPolicy(name=kwargs['healthPolicy'])
+            self.healthPolicy = kwargs['healthPolicy']
         if 'keepLocalEvents' in kwargs:
-            self.keepLocalEvents(name=kwargs['keepLocalEvents'])
+            self.keepLocalEvents = kwargs['keepLocalEvents']
         if 'prohibitPacketTransfer' in kwargs:
-            self.prohibitPacketTransfer(name=kwargs['prohibitPacketTransfer'])
+            self.prohibitPacketTransfer = kwargs['prohibitPacketTransfer']
 
     def licensing(self, action, name='BASE'):
         logging.debug("In licensing() for Device class.")
@@ -1411,6 +1401,12 @@ class Device(APIClassTemplate):
         else:
             logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
                             'Device.'.format(name))
+
+    def post(self, **kwargs):
+        logging.debug("In post() for Device class.")
+        # Attempting to "Deploy" during Device registration causes issues.
+        self.fmc.autodeploy = False
+        super().post(**kwargs)
 
 
 class PhysicalInterface(APIClassTemplate):

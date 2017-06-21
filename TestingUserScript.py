@@ -8,7 +8,7 @@ import time
 import pprint
 
 # ### Set these variables to match your environment. ### #
-host = '192.168.11.5'
+host = '192.168.11.2'
 username = 'apiscript'
 password = 'Admin123'
 autodeploy = False
@@ -182,14 +182,14 @@ def test__vlan_group_tag():
     obj12.post()
     time.sleep(1)
     obj1 = VlanGroupTag(fmc=fmc1, name=namer)
-    obj1.named_vlantags(action='add', name='_vlantag10')
-    obj1.named_vlantags(action='add', name='_vlantag11')
-    obj1.named_vlantags(action='remove', name='_vlantag10')
+    obj1.named_vlantags(action='add', name=obj10.name)
+    obj1.named_vlantags(action='add', name=obj11.name)
+    obj1.named_vlantags(action='remove', name=obj11.name)
     obj1.named_vlantags(action='clear')
-    obj1.named_vlantags(action='add', name='_vlantag10')
-    obj1.named_vlantags(action='add', name='_vlantag11')
-    obj1.named_vlantags(action='add', name='_vlantag12')
-    obj1.named_vlantags(action='remove', name='_vlantag12')
+    obj1.named_vlantags(action='add', name=obj10.name)
+    obj1.named_vlantags(action='add', name=obj11.name)
+    obj1.named_vlantags(action='add', name=obj12.name)
+    obj1.named_vlantags(action='remove', name=obj12.name)
     obj1.post()
     time.sleep(1)
     del obj1
@@ -220,13 +220,13 @@ def test__url_group():
     url3.post()
     time.sleep(1)
     obj1 = URLGroup(fmc=fmc1, name=namer)
-    obj1.named_urls(action='add', name='_url1')
-    obj1.named_urls(action='add', name='_url1')
+    obj1.named_urls(action='add', name=url1.name)
+    obj1.named_urls(action='add', name=url1.name)
     obj1.named_urls(action='clear')
-    obj1.named_urls(action='add', name='_url2')
-    obj1.named_urls(action='add', name='_url3')
-    obj1.named_urls(action='add', name='_url1')
-    obj1.named_urls(action='remove', name='_url3')
+    obj1.named_urls(action='add', name=url2.name)
+    obj1.named_urls(action='add', name=url3.name)
+    obj1.named_urls(action='add', name=url1.name)
+    obj1.named_urls(action='remove', name=url3.name)
     obj1.post()
     time.sleep(1)
     del obj1
@@ -258,13 +258,13 @@ def test__network_group():
     obj12.post()
     time.sleep(1)
     obj1 = NetworkGroup(fmc=fmc1, name=namer)
-    obj1.named_networks(action='add', name='_iphost1')
-    obj1.named_networks(action='add', name='_iphost1')
-    obj1.named_networks(action='remove', name='_iphost1')
+    obj1.named_networks(action='add', name=obj10.name)
+    obj1.named_networks(action='add', name=obj10.name)
+    obj1.named_networks(action='remove', name=obj10.name)
     obj1.named_networks(action='clear')
-    obj1.named_networks(action='add', name='_ipnet1')
-    obj1.named_networks(action='add', name='_iprange1')
-    obj1.named_networks(action='remove', name='_iphost1')
+    obj1.named_networks(action='add', name=obj11.name)
+    obj1.named_networks(action='add', name=obj12.name)
+    obj1.named_networks(action='remove', name=obj11.name)
     obj1.post()
     time.sleep(1)
     del obj1
@@ -499,7 +499,7 @@ def test__acp_rule():
     logging.info('# Setup of objects for ACPRule test done.\n')
 
     logging.info('# Test ACPRule.  Try to test all features of all methods of the ACPRule class.')
-    acprule1 = ACPRule(fmc=fmc1, acp_name='_acp1')
+    acprule1 = ACPRule(fmc=fmc1, acp_name=acp1.name)
     acprule1.name = '_acprule1'
     acprule1.action = 'ALLOW'
     acprule1.enabled = False
@@ -508,16 +508,16 @@ def test__acp_rule():
     acprule1.logBegin = True
     acprule1.logEnd = True
     acprule1.variable_set(action='set', name='Default-Set')
-    acprule1.source_zone(action='add', name='_sz1')
-    acprule1.destination_zone(action='add', name='_sz1')
+    acprule1.source_zone(action='add', name=sz1.name)
+    acprule1.destination_zone(action='add', name=sz1.name)
     acprule1.intrusion_policy(action='set', name='Security Over Connectivity')
-    acprule1.vlan_tags(action='add', name='_vlantag1')
-    acprule1.source_port(action='add', name='_pport1')
-    acprule1.destination_port(action='add', name='_pport1')
-    acprule1.source_network(action='add', name='_iphost1')
-    acprule1.destination_network(action='add', name='_ipnet1')
-    acprule1.source_network(action='add', name='_iprange1')
-    acprule1.destination_network(action='add', name='_iprange1')
+    acprule1.vlan_tags(action='add', name=vlantag1.name)
+    acprule1.source_port(action='add', name=pport1.name)
+    acprule1.destination_port(action='add', name=pport1.name)
+    acprule1.source_network(action='add', name=iphost1.name)
+    acprule1.destination_network(action='add', name=ipnet1.name)
+    acprule1.source_network(action='add', name=iprange1.name)
+    acprule1.destination_network(action='add', name=iprange1.name)
     acprule1.post()
     logging.info('# Test ACPRule done.\n')
 
