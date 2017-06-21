@@ -437,9 +437,11 @@ def test__security_zone():
 def test__device():
     logging.info('# Test Device.  Though you can "Post" devices I do not have one handy. So '
                  'add/remove licenses on Device Objects.')
+    acp1 = AccessControlPolicy(fmc=fmc1, name=namer)
+    acp1.post()
     obj1 = Device(fmc=fmc1)
     obj1.name = namer
-    obj1.acp(name='Example_Corp')
+    obj1.acp(name=acp1.name)
     obj1.licensing(action='add', name='MALWARE')
     obj1.licensing(action='add', name='VPN')
     obj1.licensing(action='remove', name='VPN')
@@ -448,6 +450,7 @@ def test__device():
     print('Device -->')
     pp.pprint(obj1.format_data())
     print('\n')
+    acp1.delete()
     logging.info('# Test Device done.\n')
 
 
@@ -493,14 +496,14 @@ def test__acp_rule():
     pport1.post()
     sz1 = SecurityZone(fmc=fmc1, name='_sz1', interfaceMode='ROUTED')
     sz1.post()
-    acp1 = AccessControlPolicy(fmc=fmc1, name='_acp1')
+    acp1 = AccessControlPolicy(fmc=fmc1, name=namer)
     acp1.post()
     time.sleep(1)
     logging.info('# Setup of objects for ACPRule test done.\n')
 
     logging.info('# Test ACPRule.  Try to test all features of all methods of the ACPRule class.')
     acprule1 = ACPRule(fmc=fmc1, acp_name=acp1.name)
-    acprule1.name = '_acprule1'
+    acprule1.name = namer
     acprule1.action = 'ALLOW'
     acprule1.enabled = False
     acprule1.sendEventsToFMC = True
