@@ -2,9 +2,6 @@
 This module contains the class objects that represent the various objects in the FMC.
 """
 
-import logging
-import datetime
-import requests
 from .helper_functions import *
 
 logging.debug("In the {} module.".format(__name__))
@@ -19,7 +16,8 @@ class APIClassTemplate(object):
     REQUIRED_FOR_PUT = ['id']
     REQUIRED_FOR_DELETE = ['id']
     FILTER_BY_NAME = False
-    URL = None
+    URL = ''
+    URL_SUFFIX = ''
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-]"""
 
     def __init__(self, fmc, **kwargs):
@@ -98,6 +96,9 @@ class APIClassTemplate(object):
                 logging.warning("post() method failed due to failure to pass valid_for_post() test.")
                 return False
 
+    def format_data(self):
+        logging.debug("In format_data() for APIClassTemplate class.")
+
     def get(self, **kwargs):
         """
         If no self.name or self.id exists then return a full listing of all objects of this type.
@@ -132,7 +133,7 @@ class APIClassTemplate(object):
                                     'this item to check against {}.'.format(self.name))
             if 'id' not in self.__dict__:
                 logging.warning("\tGET query for {} is not found.\n\t\t"
-                                "Response: {}".format(item['name'], json.dumps(response)))
+                                "Response: {}".format(self.name, json.dumps(response)))
             return response
         else:
             logging.info("GET query for object with no name or id set.  Returning full list of these object types "
@@ -387,8 +388,8 @@ class NetworkGroup(APIClassTemplate):
                 else:
                     if 'objects' in self.__dict__:
                         duplicate = False
-                        for object in self.objects:
-                            if object['name'] == new_net['name']:
+                        for obj in self.objects:
+                            if obj['name'] == new_net['name']:
                                 duplicate = True
                                 break
                         if not duplicate:
@@ -414,6 +415,7 @@ class NetworkGroup(APIClassTemplate):
 
     def unnamed_networks(self, action, value=''):
         logging.debug("In unnamed_networks() for NetworkGroup class.")
+        new_literal = []
         if action == 'add':
             if value == '':
                 logging.error('Value assignment required to add unamed_network to NetworkGroup.')
@@ -799,8 +801,8 @@ class URLGroup(APIClassTemplate):
                 else:
                     if 'objects' in self.__dict__:
                         duplicate = False
-                        for object in self.objects:
-                            if object['name'] == new_url['name']:
+                        for obj in self.objects:
+                            if obj['name'] == new_url['name']:
                                 duplicate = True
                                 break
                         if not duplicate:
@@ -999,8 +1001,8 @@ class VlanGroupTag(APIClassTemplate):
                 else:
                     if 'objects' in self.__dict__:
                         duplicate = False
-                        for object in self.objects:
-                            if object['name'] == new_vlan['name']:
+                        for obj in self.objects:
+                            if obj['name'] == new_vlan['name']:
                                 duplicate = True
                                 break
                         if not duplicate:
@@ -1418,6 +1420,7 @@ class PhysicalInterface(APIClassTemplate):
     URL_SUFFIX = None
     REQUIRED_FOR_PUT = ['id', 'device_id']
 
+    '''
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for ACPRule class.")
@@ -1574,8 +1577,8 @@ class PhysicalInterface(APIClassTemplate):
                 if 'sourceZones' in self.__dict__:
                     new_zone = {'name': sz.name, 'id': sz.id, 'type': sz.type}
                     duplicate = False
-                    for object in self.sourceZones['objects']:
-                        if object['name'] == new_zone['name']:
+                    for obj in self.sourceZones['objects']:
+                        if obj['name'] == new_zone['name']:
                             duplicate = True
                             break
                     if not duplicate:
@@ -1592,9 +1595,9 @@ class PhysicalInterface(APIClassTemplate):
             if 'id' in sz.__dict__:
                 if 'sourceZones' in self.__dict__:
                     objects = []
-                    for object in self.sourceZones['objects']:
-                        if object['name'] != name:
-                            objects.append(object)
+                    for obj in self.sourceZones['objects']:
+                        if obj['name'] != name:
+                            objects.append(obj)
                     self.sourceZones['objects'] = objects
                     logging.info('Removed "{}" from sourceZones for this ACPRule.'.format(name))
                 else:
@@ -1615,8 +1618,8 @@ class PhysicalInterface(APIClassTemplate):
                 if 'destinationZones' in self.__dict__:
                     new_zone = {'name': sz.name, 'id': sz.id, 'type': sz.type}
                     duplicate = False
-                    for object in self.destinationZones['objects']:
-                        if object['name'] == new_zone['name']:
+                    for obj in self.destinationZones['objects']:
+                        if obj['name'] == new_zone['name']:
                             duplicate = True
                             break
                     if not duplicate:
@@ -1633,9 +1636,9 @@ class PhysicalInterface(APIClassTemplate):
             if 'id' in sz.__dict__:
                 if 'destinationZones' in self.__dict__:
                     objects = []
-                    for object in self.destinationZones['objects']:
-                        if object['name'] != name:
-                            objects.append(object)
+                    for obj in self.destinationZones['objects']:
+                        if obj['name'] != name:
+                            objects.append(obj)
                     self.destinationZones['objects'] = objects
                     logging.info('Removed "{}" from destinationZones for this ACPRule.'.format(name))
                 else:
@@ -1656,8 +1659,8 @@ class PhysicalInterface(APIClassTemplate):
                 if 'vlanTags' in self.__dict__:
                     new_vlan = {'name': vlantag.name, 'id': vlantag.id, 'type': vlantag.type}
                     duplicate = False
-                    for object in self.vlanTags['objects']:
-                        if object['name'] == new_vlan['name']:
+                    for obj in self.vlanTags['objects']:
+                        if obj['name'] == new_vlan['name']:
                             duplicate = True
                             break
                     if not duplicate:
@@ -1674,9 +1677,9 @@ class PhysicalInterface(APIClassTemplate):
             if 'id' in vlantag.__dict__:
                 if 'vlanTags' in self.__dict__:
                     objects = []
-                    for object in self.vlanTags['objects']:
-                        if object['name'] != name:
-                            objects.append(object)
+                    for obj in self.vlanTags['objects']:
+                        if obj['name'] != name:
+                            objects.append(obj)
                     self.vlanTags['objects'] = objects
                     logging.info('Removed "{}" from vlanTags for this ACPRule.'.format(name))
                 else:
@@ -1697,8 +1700,8 @@ class PhysicalInterface(APIClassTemplate):
                 if 'sourcePorts' in self.__dict__:
                     new_port = {'name': pport.name, 'id': pport.id, 'type': pport.type}
                     duplicate = False
-                    for object in self.sourcePorts['objects']:
-                        if object['name'] == new_port['name']:
+                    for obj in self.sourcePorts['objects']:
+                        if obj['name'] == new_port['name']:
                             duplicate = True
                             break
                     if not duplicate:
@@ -1715,9 +1718,9 @@ class PhysicalInterface(APIClassTemplate):
             if 'id' in pport.__dict__:
                 if 'sourcePorts' in self.__dict__:
                     objects = []
-                    for object in self.sourcePorts['objects']:
-                        if object['name'] != name:
-                            objects.append(object)
+                    for obj in self.sourcePorts['objects']:
+                        if obj['name'] != name:
+                            objects.append(obj)
                     self.sourcePorts['objects'] = objects
                     logging.info('Removed "{}" from sourcePorts for this ACPRule.'.format(name))
                 else:
@@ -1738,8 +1741,8 @@ class PhysicalInterface(APIClassTemplate):
                 if 'destinationPorts' in self.__dict__:
                     new_port = {'name': pport.name, 'id': pport.id, 'type': pport.type}
                     duplicate = False
-                    for object in self.destinationPorts['objects']:
-                        if object['name'] == new_port['name']:
+                    for obj in self.destinationPorts['objects']:
+                        if obj['name'] == new_port['name']:
                             duplicate = True
                             break
                     if not duplicate:
@@ -1756,9 +1759,9 @@ class PhysicalInterface(APIClassTemplate):
             if 'id' in pport.__dict__:
                 if 'destinationPorts' in self.__dict__:
                     objects = []
-                    for object in self.destinationPorts['objects']:
-                        if object['name'] != name:
-                            objects.append(object)
+                    for obj in self.destinationPorts['objects']:
+                        if obj['name'] != name:
+                            objects.append(obj)
                     self.destinationPorts['objects'] = objects
                     logging.info('Removed "{}" from destinationPorts for this ACPRule.'.format(name))
                 else:
@@ -1786,8 +1789,8 @@ class PhysicalInterface(APIClassTemplate):
                 else:
                     if 'sourceNetworks' in self.__dict__:
                         duplicate = False
-                        for object in self.sourceNetworks['objects']:
-                            if object['name'] == new_net['name']:
+                        for obj in self.sourceNetworks['objects']:
+                            if obj['name'] == new_net['name']:
                                 duplicate = True
                                 break
                         if not duplicate:
@@ -1799,9 +1802,9 @@ class PhysicalInterface(APIClassTemplate):
         elif action == 'remove':
             if 'sourceNetworks' in self.__dict__:
                 objects = []
-                for object in self.sourceNetworks['objects']:
-                    if object['name'] != name:
-                        objects.append(object)
+                for obj in self.sourceNetworks['objects']:
+                    if obj['name'] != name:
+                        objects.append(obj)
                 self.sourceNetworks['objects'] = objects
                 logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(name))
             else:
@@ -1823,12 +1826,13 @@ class PhysicalInterface(APIClassTemplate):
                         new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
                         break
                 if new_net is None:
-                    logging.warning('Network "{}" is not found in FMC.  Cannot add to destinationNetworks.'.format(name))
+                    logging.warning('Network "{}" is not found in FMC.  Cannot add to '
+                                    'destinationNetworks.'.format(name))
                 else:
                     if 'destinationNetworks' in self.__dict__:
                         duplicate = False
-                        for object in self.destinationNetworks['objects']:
-                            if object['name'] == new_net['name']:
+                        for obj in self.destinationNetworks['objects']:
+                            if obj['name'] == new_net['name']:
                                 duplicate = True
                                 break
                         if not duplicate:
@@ -1840,9 +1844,9 @@ class PhysicalInterface(APIClassTemplate):
         elif action == 'remove':
             if 'destinationNetworks' in self.__dict__:
                 objects = []
-                for object in self.destinationNetworks['objects']:
-                    if object['name'] != name:
-                        objects.append(object)
+                for obj in self.destinationNetworks['objects']:
+                    if obj['name'] != name:
+                        objects.append(obj)
                 self.destinationNetworks['objects'] = objects
                 logging.info('Removed "{}" from destinationNetworks for this ACPRule.'.format(name))
             else:
@@ -1851,7 +1855,7 @@ class PhysicalInterface(APIClassTemplate):
             if 'destinationNetworks' in self.__dict__:
                 del self.destinationNetworks
                 logging.info('All Destination Networks removed from this ACPRule object.')
-
+    '''
 # ################# API-Explorer Policy Category Things ################# #
 
 
@@ -1862,7 +1866,6 @@ class IntrusionPolicy(APIClassTemplate):
 
     URL_SUFFIX = '/policy/intrusionpolicies'
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
-
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
@@ -2110,8 +2113,8 @@ class ACPRule(APIClassTemplate):
                 if 'sourceZones' in self.__dict__:
                     new_zone = {'name': sz.name, 'id': sz.id, 'type': sz.type}
                     duplicate = False
-                    for object in self.sourceZones['objects']:
-                        if object['name'] == new_zone['name']:
+                    for obj in self.sourceZones['objects']:
+                        if obj['name'] == new_zone['name']:
                             duplicate = True
                             break
                     if not duplicate:
@@ -2128,9 +2131,9 @@ class ACPRule(APIClassTemplate):
             if 'id' in sz.__dict__:
                 if 'sourceZones' in self.__dict__:
                     objects = []
-                    for object in self.sourceZones['objects']:
-                        if object['name'] != name:
-                            objects.append(object)
+                    for obj in self.sourceZones['objects']:
+                        if obj['name'] != name:
+                            objects.append(obj)
                     self.sourceZones['objects'] = objects
                     logging.info('Removed "{}" from sourceZones for this ACPRule.'.format(name))
                 else:
@@ -2151,8 +2154,8 @@ class ACPRule(APIClassTemplate):
                 if 'destinationZones' in self.__dict__:
                     new_zone = {'name': sz.name, 'id': sz.id, 'type': sz.type}
                     duplicate = False
-                    for object in self.destinationZones['objects']:
-                        if object['name'] == new_zone['name']:
+                    for obj in self.destinationZones['objects']:
+                        if obj['name'] == new_zone['name']:
                             duplicate = True
                             break
                     if not duplicate:
@@ -2169,9 +2172,9 @@ class ACPRule(APIClassTemplate):
             if 'id' in sz.__dict__:
                 if 'destinationZones' in self.__dict__:
                     objects = []
-                    for object in self.destinationZones['objects']:
-                        if object['name'] != name:
-                            objects.append(object)
+                    for obj in self.destinationZones['objects']:
+                        if obj['name'] != name:
+                            objects.append(obj)
                     self.destinationZones['objects'] = objects
                     logging.info('Removed "{}" from destinationZones for this ACPRule.'.format(name))
                 else:
@@ -2192,8 +2195,8 @@ class ACPRule(APIClassTemplate):
                 if 'vlanTags' in self.__dict__:
                     new_vlan = {'name': vlantag.name, 'id': vlantag.id, 'type': vlantag.type}
                     duplicate = False
-                    for object in self.vlanTags['objects']:
-                        if object['name'] == new_vlan['name']:
+                    for obj in self.vlanTags['objects']:
+                        if obj['name'] == new_vlan['name']:
                             duplicate = True
                             break
                     if not duplicate:
@@ -2210,9 +2213,9 @@ class ACPRule(APIClassTemplate):
             if 'id' in vlantag.__dict__:
                 if 'vlanTags' in self.__dict__:
                     objects = []
-                    for object in self.vlanTags['objects']:
-                        if object['name'] != name:
-                            objects.append(object)
+                    for obj in self.vlanTags['objects']:
+                        if obj['name'] != name:
+                            objects.append(obj)
                     self.vlanTags['objects'] = objects
                     logging.info('Removed "{}" from vlanTags for this ACPRule.'.format(name))
                 else:
@@ -2233,8 +2236,8 @@ class ACPRule(APIClassTemplate):
                 if 'sourcePorts' in self.__dict__:
                     new_port = {'name': pport.name, 'id': pport.id, 'type': pport.type}
                     duplicate = False
-                    for object in self.sourcePorts['objects']:
-                        if object['name'] == new_port['name']:
+                    for obj in self.sourcePorts['objects']:
+                        if obj['name'] == new_port['name']:
                             duplicate = True
                             break
                     if not duplicate:
@@ -2251,9 +2254,9 @@ class ACPRule(APIClassTemplate):
             if 'id' in pport.__dict__:
                 if 'sourcePorts' in self.__dict__:
                     objects = []
-                    for object in self.sourcePorts['objects']:
-                        if object['name'] != name:
-                            objects.append(object)
+                    for obj in self.sourcePorts['objects']:
+                        if obj['name'] != name:
+                            objects.append(obj)
                     self.sourcePorts['objects'] = objects
                     logging.info('Removed "{}" from sourcePorts for this ACPRule.'.format(name))
                 else:
@@ -2274,8 +2277,8 @@ class ACPRule(APIClassTemplate):
                 if 'destinationPorts' in self.__dict__:
                     new_port = {'name': pport.name, 'id': pport.id, 'type': pport.type}
                     duplicate = False
-                    for object in self.destinationPorts['objects']:
-                        if object['name'] == new_port['name']:
+                    for obj in self.destinationPorts['objects']:
+                        if obj['name'] == new_port['name']:
                             duplicate = True
                             break
                     if not duplicate:
@@ -2292,9 +2295,9 @@ class ACPRule(APIClassTemplate):
             if 'id' in pport.__dict__:
                 if 'destinationPorts' in self.__dict__:
                     objects = []
-                    for object in self.destinationPorts['objects']:
-                        if object['name'] != name:
-                            objects.append(object)
+                    for obj in self.destinationPorts['objects']:
+                        if obj['name'] != name:
+                            objects.append(obj)
                     self.destinationPorts['objects'] = objects
                     logging.info('Removed "{}" from destinationPorts for this ACPRule.'.format(name))
                 else:
@@ -2322,8 +2325,8 @@ class ACPRule(APIClassTemplate):
                 else:
                     if 'sourceNetworks' in self.__dict__:
                         duplicate = False
-                        for object in self.sourceNetworks['objects']:
-                            if object['name'] == new_net['name']:
+                        for obj in self.sourceNetworks['objects']:
+                            if obj['name'] == new_net['name']:
                                 duplicate = True
                                 break
                         if not duplicate:
@@ -2335,9 +2338,9 @@ class ACPRule(APIClassTemplate):
         elif action == 'remove':
             if 'sourceNetworks' in self.__dict__:
                 objects = []
-                for object in self.sourceNetworks['objects']:
-                    if object['name'] != name:
-                        objects.append(object)
+                for obj in self.sourceNetworks['objects']:
+                    if obj['name'] != name:
+                        objects.append(obj)
                 self.sourceNetworks['objects'] = objects
                 logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(name))
             else:
@@ -2359,12 +2362,13 @@ class ACPRule(APIClassTemplate):
                         new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
                         break
                 if new_net is None:
-                    logging.warning('Network "{}" is not found in FMC.  Cannot add to destinationNetworks.'.format(name))
+                    logging.warning('Network "{}" is not found in FMC.  Cannot add to '
+                                    'destinationNetworks.'.format(name))
                 else:
                     if 'destinationNetworks' in self.__dict__:
                         duplicate = False
-                        for object in self.destinationNetworks['objects']:
-                            if object['name'] == new_net['name']:
+                        for obj in self.destinationNetworks['objects']:
+                            if obj['name'] == new_net['name']:
                                 duplicate = True
                                 break
                         if not duplicate:
@@ -2376,9 +2380,9 @@ class ACPRule(APIClassTemplate):
         elif action == 'remove':
             if 'destinationNetworks' in self.__dict__:
                 objects = []
-                for object in self.destinationNetworks['objects']:
-                    if object['name'] != name:
-                        objects.append(object)
+                for obj in self.destinationNetworks['objects']:
+                    if obj['name'] != name:
+                        objects.append(obj)
                 self.destinationNetworks['objects'] = objects
                 logging.info('Removed "{}" from destinationNetworks for this ACPRule.'.format(name))
             else:

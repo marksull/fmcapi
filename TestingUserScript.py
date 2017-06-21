@@ -1,7 +1,7 @@
 """
 Unit testing, of a sort, all the created methods/classes.
 """
-# import json
+
 from fmcapi import *
 import logging
 import time

@@ -6,15 +6,11 @@ Note: There exists a "Quick Start Guide" for the Cisco FMC API too.  Just Google
  release of code.
 """
 
-import logging
 import datetime
-import json
 import requests
 import time
-import sys
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
-from .helper_functions import *
 from .api_objects import *
 
 # Disable annoying HTTP warnings
@@ -61,7 +57,10 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         :return:
         """
         logging.debug("In the FMC __enter__() class method.")
-        self.mytoken = Token(host=self.host, username=self.username, password=self.password, verify_cert=self.VERIFY_CERT)
+        self.mytoken = Token(host=self.host,
+                             username=self.username,
+                             password=self.password,
+                             verify_cert=self.VERIFY_CERT)
         self.uuid = self.mytoken.uuid
         self.build_urls()
         self.version()
@@ -148,9 +147,9 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                                     len(self.more_items)))
                 self.page_counter += 1
                 return self.send_to_api(method=method,
-                                 url=json_response['paging']['next'][0],
-                                 json_data=json_data,
-                                 more_items=self.more_items)
+                                        url=json_response['paging']['next'][0],
+                                        json_data=json_data,
+                                        more_items=self.more_items)
             else:
                 json_response['items'] += self.more_items
                 self.more_items = []
@@ -181,11 +180,11 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         return response
 
     def audit(self, **kwargs):
-        '''
+        """
         This API function supports filtering the GET query URL with: username, subsystem, source, starttime, and
         endtime parameters.
         :return: response
-        '''
+        """
         url_parameters = '?'
         if 'username' in kwargs:
             url_parameters = '{}&username={}'.format(url_parameters, kwargs['username'])
@@ -202,7 +201,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         url = '{}/domain/{}{}{}'.format(self.platform_url, self.uuid, url_suffix, url_parameters)
 
         response = self.send_to_api(method='get', url=url)
-        return  response
+        return response
 
     def get_deployable_devices(self):
         """
