@@ -45,7 +45,9 @@ Then either code away referencing the fmc variable to get to the internal method
 **Note #2:  You can directly send requests to the FMC via the send_to_api() method in the FMC class.  This allows you to access any of the API features of the FMC.**
 
 # ToDos
+* Modify FTD devices' interfaces.
+* Add NAT Policy/Rule functionality if/when it becomes available.
+* Add Static Route functionality if/when it becomes available.
 * Move the create_acp_rules FMC method into a class object in the api_objects module.
-* Build a complete system for all FMC API accessible objects (feature parity).
+* Build a complete system for all FMC API accessible objects (feature parity).  Currently just over 50% of the FMC's API objects are represented in the fmcapi.
 * **Most importantly:** Write better how-to instructions.  (Anyone willing to help?) 
-* Too many to list.  By my rough guess I'd say that only 25% of the features of the FMC's API are available via pre-built classes.
