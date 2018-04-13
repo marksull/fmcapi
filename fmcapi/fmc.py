@@ -36,7 +36,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
     VERIFY_CERT = False
     MAX_PAGING_REQUESTS = 200
 
-    def __init__(self, host='192.168.45.45', username='admin', password='Admin123',domain=None, autodeploy=True):
+    def __init__(self, host='192.168.45.45', username='admin', password='Admin123', domain=None, autodeploy=True):
         """
         Instantiate some variables prior to calling the __enter__() method.
         :param host:
