@@ -36,7 +36,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
     VERIFY_CERT = False
     MAX_PAGING_REQUESTS = 200
 
-    def __init__(self, host='192.168.45.45', username='admin', password='Admin123', autodeploy=True):
+    def __init__(self, host='192.168.45.45', username='admin', password='Admin123',domain=None, autodeploy=True):
         """
         Instantiate some variables prior to calling the __enter__() method.
         :param host:
@@ -49,6 +49,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         self.host = host
         self.username = username
         self.password = password
+        self.domain = domain
         self.autodeploy = autodeploy
 
     def __enter__(self):
@@ -60,6 +61,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         self.mytoken = Token(host=self.host,
                              username=self.username,
                              password=self.password,
+                             domain=self.domain,
                              verify_cert=self.VERIFY_CERT)
         self.uuid = self.mytoken.uuid
         self.build_urls()
@@ -268,7 +270,7 @@ class Token(object):
     TOKEN_LIFETIME = 60 * 30
     API_PLATFORM_VERSION = 'api/fmc_platform/v1'
 
-    def __init__(self, host='192.168.45.45', username='admin', password='Admin123', verify_cert=False):
+    def __init__(self, host='192.168.45.45', username='admin', password='Admin123', domain=None, verify_cert=False):
         """
         Initialize variables used in the Token class.
         :param host:
@@ -281,6 +283,7 @@ class Token(object):
         self.__host = host
         self.__username = username
         self.__password = password
+        self.__domain = domain
         self.verify_cert = verify_cert
         self.token_expiry = None
         self.token_refreshes = 0
@@ -316,6 +319,13 @@ class Token(object):
         self.refresh_token = response.headers.get('X-authrefresh-token')
         self.token_expiry = datetime.datetime.now() + datetime.timedelta(seconds=self.TOKEN_LIFETIME)
         self.uuid = response.headers.get('DOMAIN_UUID')
+        all_domain = json.loads(response.headers.get('DOMAINS'))
+        if self.__domain is not None:
+            for domain in all_domain:
+                if 'global/' + self.__domain.lower() == domain['name'].lower():
+                    self.uuid = domain['uuid']
+                else:
+                    logging.info("Domain name entered not found in FMC, falling back to Global")
 
     def get_token(self):
         """
