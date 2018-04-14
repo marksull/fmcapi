@@ -554,6 +554,7 @@ def test__audit():
         print('\n')
     logging.info('# Testing fmc.audit() method done.\n')
 
+
 def test__port_object_group():
     logging.info('# Testing PortObjectGroup class.')
     obj10 = ProtocolPort(fmc=fmc1, name='_porttcp1', port='8443', protocol='TCP')
@@ -591,6 +592,8 @@ def test__port_object_group():
     logging.info('# Testing PortObjectGroup class done.\n')
 
 # ### Main Program ### #
+
+
 with FMC(host=host, username=username, password=password, autodeploy=autodeploy) as fmc1:
     logging.info('# ### Mega Test Start!!! ### #')
     starttime = str(int(time.time()))

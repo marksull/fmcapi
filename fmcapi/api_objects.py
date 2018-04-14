@@ -1293,6 +1293,7 @@ class Country(APIClassTemplate):
         logging.info('DELETE method for API for Country not supported.')
         pass
 
+
 class PortObjectGroup(APIClassTemplate):
     """
     The PortObjectGroup Object in the FMC.
@@ -1936,6 +1937,7 @@ class PhysicalInterface(APIClassTemplate):
                 del self.destinationNetworks
                 logging.info('All Destination Networks removed from this ACPRule object.')
     '''
+
 # ################# API-Explorer Policy Category Things ################# #
 
 
