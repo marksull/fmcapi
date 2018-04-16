@@ -8,7 +8,7 @@ import time
 import pprint
 
 # ### Set these variables to match your environment. ### #
-host = '192.168.11.2'
+host = '10.240.1.50'
 username = 'apiscript'
 password = 'Admin123'
 autodeploy = False
@@ -600,6 +600,8 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     namer = '_fmcapi_test_{}'.format(starttime)
     pp = pprint.PrettyPrinter(indent=4)
 
+    test__fmc_version()
+    """
     test__url_category()
     test__ports()
     test__application_type()
@@ -614,7 +616,6 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__url_group()
     test__network_group()
     test__ip_addresses()
-    test__fmc_version()
     test__variable_set()
     test__ip_host()
     test__ip_network()
@@ -628,4 +629,5 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__access_control_policy()
     test__acp_rule()
     test__audit()
+    """
     test__port_object_group()
