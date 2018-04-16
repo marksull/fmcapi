@@ -601,7 +601,6 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     pp = pprint.PrettyPrinter(indent=4)
 
     test__fmc_version()
-    """
     test__url_category()
     test__ports()
     test__application_type()
@@ -629,5 +628,4 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__access_control_policy()
     test__acp_rule()
     test__audit()
-    """
     test__port_object_group()
