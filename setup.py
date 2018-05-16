@@ -6,7 +6,7 @@ __license__ = "BSD"
 
 setup(
     name='fmcapi',
-    version='0.55.38',
+    version='0.56.dev1',
     description="Easier interface to Cisco's FMC API than writing your own way.",
     long_description="""With the removal to configure a Cisco NGFW via the command line your only option is to
      do so via a manager.  Some things are better when automated so using the manager's API gives us that power. 
@@ -14,9 +14,9 @@ setup(
      this "wrapper" to give you an easier to use way of communicating with the FMC's API than using the example code 
      provided in the API Explorer.""",
     url='https://github.com/daxm/fmcapi',
-    author=__author__,
-    author_email=__author_email,
-    license=__license__,
+    author='Dax Mickelson',
+    author_email='dmickels@cisco.com',
+    license='BSD',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Plugins',
@@ -41,6 +41,7 @@ setup(
     keywords='fmcapi fmc ftd security cisco ngfw api',
     packages=find_packages(exclude=['docs', 'tests*']),
     install_requires=['requests', 'datetime', 'ipaddress'],
+    python_requires='>=3',
     package_data={},
     data_files=None,
 )
