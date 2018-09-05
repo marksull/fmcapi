@@ -559,18 +559,7 @@ def test__acp_rule():
 
 def test__audit():
     logging.info('# Testing fmc.audit() method.')
-    subsytem_list = [
-        'Login',
-        'Session Expiration',
-        'Logout',
-        'Objects > Object Management > SecurityZone',
-        'API'
-    ]
-    endtime = str(int(time.time()))
-    for subsystem in subsytem_list:
-        print('fmc.audit() for {}. -->'.format(subsystem))
-        pp.pprint(fmc1.audit(username=username, subsystem=subsystem, starttime=starttime, endtime=endtime))
-        print('\n')
+    pp.pprint(fmc1.audit())
     logging.info('# Testing fmc.audit() method done.\n')
 
 
