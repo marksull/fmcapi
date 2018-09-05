@@ -520,8 +520,6 @@ def test__acp_rule():
     obj2.named_ports(action='add', name=obj11.name)
     obj2.named_ports(action='add', name=obj12.name)
     obj2.post()
-    time.sleep(1)
-    obj2.get()
     # Build a Security Zone object
     sz1 = SecurityZone(fmc=fmc1, name='_sz1', interfaceMode='ROUTED')
     sz1.post()
@@ -627,7 +625,6 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     namer = '_fmcapi_test_{}'.format(starttime)
     pp = pprint.PrettyPrinter(indent=4)
 
-    """
     test__fmc_version()
     test__url_category()
     test__ports()
@@ -657,6 +654,4 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__acp_rule()
     test__audit()
     test__port_object_group()
-    """
-    test__acp_rule()
 
