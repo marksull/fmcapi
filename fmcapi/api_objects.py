@@ -2312,11 +2312,16 @@ class ACPRule(APIClassTemplate):
     def source_port(self, action, name=''):
         logging.debug("In source_port() for ACPRule class.")
         if action == 'add':
-            pport = ProtocolPort(fmc=self.fmc)
-            pport.get(name=name)
-            if 'id' in pport.__dict__:
+            pport_json = ProtocolPort(fmc=self.fmc)
+            pport_json.get(name=name)
+            if 'id' in pport_json.__dict__:
+                item = pport_json
+            else:
+                item = PortObjectGroup(fmc=self.fmc)
+                item.get(name=name)
+            if 'id' in item.__dict__:
                 if 'sourcePorts' in self.__dict__:
-                    new_port = {'name': pport.name, 'id': pport.id, 'type': pport.type}
+                    new_port = {'name': item.name, 'id': item.id, 'type': item.type}
                     duplicate = False
                     for obj in self.sourcePorts['objects']:
                         if obj['name'] == new_port['name']:
@@ -2326,14 +2331,19 @@ class ACPRule(APIClassTemplate):
                         self.sourcePorts['objects'].append(new_port)
                         logging.info('Adding "{}" to sourcePorts for this ACPRule.'.format(name))
                 else:
-                    self.sourcePorts = {'objects': [{'name': pport.name, 'id': pport.id, 'type': pport.type}]}
+                    self.sourcePorts = {'objects': [{'name': item.name, 'id': item.id, 'type': item.type}]}
                     logging.info('Adding "{}" to sourcePorts for this ACPRule.'.format(name))
             else:
-                logging.warning('Protocol Port, "{}", not found.  Cannot add to ACPRule.'.format(name))
+                logging.warning('Protocol Port or Protocol Port Group: "{}", not found.  Cannot add to ACPRule.'.format(name))
         elif action == 'remove':
-            pport = ProtocolPort(fmc=self.fmc)
-            pport.get(name=name)
-            if 'id' in pport.__dict__:
+            pport_json = ProtocolPort(fmc=self.fmc)
+            pport_json.get(name=name)
+            if 'id' in pport_json.__dict__:
+                item = pport_json
+            else:
+                item = PortObjectGroup(fmc=self.fmc)
+                item.get(name=name)
+            if 'id' in item.__dict__:
                 if 'sourcePorts' in self.__dict__:
                     objects = []
                     for obj in self.sourcePorts['objects']:
@@ -2344,7 +2354,7 @@ class ACPRule(APIClassTemplate):
                 else:
                     logging.info("sourcePorts doesn't exist for this ACPRule.  Nothing to remove.")
             else:
-                logging.warning('Protocol Port, "{}", not found.  Cannot remove from ACPRule.'.format(name))
+                logging.warning('Protocol Port or Protocol Port Group: "{}", not found.  Cannot add to ACPRule.'.format(name))
         elif action == 'clear':
             if 'sourcePorts' in self.__dict__:
                 del self.sourcePorts
@@ -2353,11 +2363,16 @@ class ACPRule(APIClassTemplate):
     def destination_port(self, action, name=''):
         logging.debug("In destination_port() for ACPRule class.")
         if action == 'add':
-            pport = ProtocolPort(fmc=self.fmc)
-            pport.get(name=name)
-            if 'id' in pport.__dict__:
+            pport_json = ProtocolPort(fmc=self.fmc)
+            pport_json.get(name=name)
+            if 'id' in pport_json.__dict__:
+                item = pport_json
+            else:
+                item = PortObjectGroup(fmc=self.fmc)
+                item.get(name=name)
+            if 'id' in item.__dict__:
                 if 'destinationPorts' in self.__dict__:
-                    new_port = {'name': pport.name, 'id': pport.id, 'type': pport.type}
+                    new_port = {'name': item.name, 'id': item.id, 'type': item.type}
                     duplicate = False
                     for obj in self.destinationPorts['objects']:
                         if obj['name'] == new_port['name']:
@@ -2367,14 +2382,19 @@ class ACPRule(APIClassTemplate):
                         self.destinationPorts['objects'].append(new_port)
                         logging.info('Adding "{}" to destinationPorts for this ACPRule.'.format(name))
                 else:
-                    self.destinationPorts = {'objects': [{'name': pport.name, 'id': pport.id, 'type': pport.type}]}
+                    self.destinationPorts = {'objects': [{'name': item.name, 'id': item.id, 'type': item.type}]}
                     logging.info('Adding "{}" to destinationPorts for this ACPRule.'.format(name))
             else:
-                logging.warning('Protocol Port, "{}", not found.  Cannot add to ACPRule.'.format(name))
+                logging.warning('Protocol Port or Protocol Port Group: "{}", not found.  Cannot add to ACPRule.'.format(name))
         elif action == 'remove':
-            pport = ProtocolPort(fmc=self.fmc)
-            pport.get(name=name)
-            if 'id' in pport.__dict__:
+            pport_json = ProtocolPort(fmc=self.fmc)
+            pport_json.get(name=name)
+            if 'id' in pport_json.__dict__:
+                item = pport_json
+            else:
+                item = PortObjectGroup(fmc=self.fmc)
+                item.get(name=name)
+            if 'id' in item.__dict__:
                 if 'destinationPorts' in self.__dict__:
                     objects = []
                     for obj in self.destinationPorts['objects']:
@@ -2385,7 +2405,7 @@ class ACPRule(APIClassTemplate):
                 else:
                     logging.info("destinationPorts doesn't exist for this ACPRule.  Nothing to remove.")
             else:
-                logging.warning('Protocol Port, {}, not found.  Cannot remove from ACPRule.'.format(name))
+                logging.warning('Protocol Port or Protocol Port Group: "{}", not found.  Cannot add to ACPRule.'.format(name))
         elif action == 'clear':
             if 'destinationPorts' in self.__dict__:
                 del self.destinationPorts
@@ -2394,7 +2414,6 @@ class ACPRule(APIClassTemplate):
     def source_network(self, action, name=''):
         logging.debug("In source_network() for ACPRule class.")
         if action == 'add':
-            # What is being added?  An IPAddresses object or a NetworkGroup object.
             ipaddresses_json = IPAddresses(fmc=self.fmc).get()
             networkgroup_json = NetworkGroup(fmc=self.fmc).get()
             items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])

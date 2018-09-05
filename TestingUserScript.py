@@ -508,6 +508,20 @@ def test__acp_rule():
     # Build a Port object
     pport1 = ProtocolPort(fmc=fmc1, name='_pport1', port='9090', protocol='UDP')
     pport1.post()
+    # Build a Port Group Object
+    obj10 = ProtocolPort(fmc=fmc1, name='_porttcp1', port='8443', protocol='TCP')
+    obj10.post()
+    obj11 = ProtocolPort(fmc=fmc1, name='_portudp1', port='161', protocol='UDP')
+    obj11.post()
+    obj12 = ProtocolPort(fmc=fmc1, name='_portrangetcp1', port='0-1023', protocol='TCP')
+    obj12.post()
+    obj2 = PortObjectGroup(fmc=fmc1, name='_fmcapi_test_portobjectgroup')
+    obj2.named_ports(action='add', name=obj10.name)
+    obj2.named_ports(action='add', name=obj11.name)
+    obj2.named_ports(action='add', name=obj12.name)
+    obj2.post()
+    time.sleep(1)
+    obj2.get()
     # Build a Security Zone object
     sz1 = SecurityZone(fmc=fmc1, name='_sz1', interfaceMode='ROUTED')
     sz1.post()
@@ -533,6 +547,7 @@ def test__acp_rule():
     acprule1.vlan_tags(action='add', name=vlantag1.name)
     acprule1.source_port(action='add', name=pport1.name)
     acprule1.destination_port(action='add', name=pport1.name)
+    acprule1.destination_port(action='add', name=obj2.name)
     acprule1.source_network(action='add', name=iphost1.name)
     acprule1.source_network(action='add', name=obj1.name)
     acprule1.source_network(action='add', name=iprange1.name)
@@ -554,6 +569,10 @@ def test__acp_rule():
     vlantag1.delete()
     pport1.delete()
     sz1.delete()
+    obj2.delete()
+    obj10.delete()
+    obj11.delete()
+    obj12.delete()
     logging.info('# Cleanup of objects for ACPRule test done.\n')
 
 
@@ -608,6 +627,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     namer = '_fmcapi_test_{}'.format(starttime)
     pp = pprint.PrettyPrinter(indent=4)
 
+    """
     test__fmc_version()
     test__url_category()
     test__ports()
@@ -637,3 +657,6 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__acp_rule()
     test__audit()
     test__port_object_group()
+    """
+    test__acp_rule()
+
