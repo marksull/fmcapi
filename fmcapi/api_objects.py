@@ -2394,29 +2394,30 @@ class ACPRule(APIClassTemplate):
     def source_network(self, action, name=''):
         logging.debug("In source_network() for ACPRule class.")
         if action == 'add':
-            net1 = IPAddresses(fmc=self.fmc)
-            response = net1.get()
-            if 'items' in response:
-                new_net = None
-                for item in response['items']:
-                    if item['name'] == name:
-                        new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
-                        break
-                if new_net is None:
-                    logging.warning('Network "{}" is not found in FMC.  Cannot add to sourceNetworks.'.format(name))
-                else:
-                    if 'sourceNetworks' in self.__dict__:
-                        duplicate = False
-                        for obj in self.sourceNetworks['objects']:
-                            if obj['name'] == new_net['name']:
-                                duplicate = True
-                                break
-                        if not duplicate:
-                            self.sourceNetworks['objects'].append(new_net)
-                            logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
-                    else:
-                        self.sourceNetworks = {'objects': [new_net]}
+            # What is being added?  An IPAddresses object or a NetworkGroup object.
+            ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+            networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+            items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
+            new_net = None
+            for item in items:
+                if item['name'] == name:
+                    new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
+                    break
+            if new_net is None:
+                logging.warning('Network "{}" is not found in FMC.  Cannot add to sourceNetworks.'.format(name))
+            else:
+                if 'sourceNetworks' in self.__dict__:
+                    duplicate = False
+                    for obj in self.sourceNetworks['objects']:
+                        if obj['name'] == new_net['name']:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.sourceNetworks['objects'].append(new_net)
                         logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
+                else:
+                    self.sourceNetworks = {'objects': [new_net]}
+                    logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
         elif action == 'remove':
             if 'sourceNetworks' in self.__dict__:
                 objects = []
@@ -2435,30 +2436,30 @@ class ACPRule(APIClassTemplate):
     def destination_network(self, action, name=''):
         logging.debug("In destination_network() for ACPRule class.")
         if action == 'add':
-            net1 = IPAddresses(fmc=self.fmc)
-            response = net1.get()
-            if 'items' in response:
-                new_net = None
-                for item in response['items']:
-                    if item['name'] == name:
-                        new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
-                        break
-                if new_net is None:
-                    logging.warning('Network "{}" is not found in FMC.  Cannot add to '
-                                    'destinationNetworks.'.format(name))
-                else:
-                    if 'destinationNetworks' in self.__dict__:
-                        duplicate = False
-                        for obj in self.destinationNetworks['objects']:
-                            if obj['name'] == new_net['name']:
-                                duplicate = True
-                                break
-                        if not duplicate:
-                            self.destinationNetworks['objects'].append(new_net)
-                            logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
-                    else:
-                        self.destinationNetworks = {'objects': [new_net]}
+            ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+            networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+            items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
+            new_net = None
+            for item in items:
+                if item['name'] == name:
+                    new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
+                    break
+            if new_net is None:
+                logging.warning('Network "{}" is not found in FMC.  Cannot add to '
+                                'destinationNetworks.'.format(name))
+            else:
+                if 'destinationNetworks' in self.__dict__:
+                    duplicate = False
+                    for obj in self.destinationNetworks['objects']:
+                        if obj['name'] == new_net['name']:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.destinationNetworks['objects'].append(new_net)
                         logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
+                else:
+                    self.destinationNetworks = {'objects': [new_net]}
+                    logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
         elif action == 'remove':
             if 'destinationNetworks' in self.__dict__:
                 objects = []

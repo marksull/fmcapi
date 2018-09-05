@@ -8,7 +8,7 @@ import time
 import pprint
 
 # ### Set these variables to match your environment. ### #
-host = '10.240.1.50'
+host = '10.0.50.50'
 username = 'apiscript'
 password = 'Admin123'
 autodeploy = False
@@ -276,7 +276,7 @@ def test__network_group():
     obj1.unnamed_networks(action='remove', value='1.2.3.4')
     obj1.unnamed_networks(action='add', value='6.7.8.9')
     obj1.unnamed_networks(action='add', value='1.2.3.0/24')
-    obj1.put()
+    obj1.post()
     time.sleep(1)
     obj1.delete()
     obj10.delete()
@@ -482,20 +482,36 @@ def test__access_control_policy():
 
 def test__acp_rule():
     logging.info('# In preparation for testing ACPRule methods, set up some known objects in the FMC.')
+    # Build an IP host object
     iphost1 = IPHost(fmc=fmc1, name='_iphost1', value='7.7.7.7')
     iphost1.post()
+    # Build an IP Network object
     ipnet1 = IPNetwork(fmc=fmc1, name='_ipnet1', value='1.2.3.0/24')
     ipnet1.post()
+    # Build an IP range object
     iprange1 = IPRange(fmc=fmc1, name='_iprange1', value='6.6.6.6-7.7.7.7')
     iprange1.post()
+    # Build a Network Group object
+    ipnet2 = IPNetwork(fmc=fmc1, name='_ipnet2', value='5.5.5.0/24')
+    ipnet2.post()
+    time.sleep(1)
+    obj1 = NetworkGroup(fmc=fmc1, name='_fmcapi_test_networkgroup')
+    obj1.named_networks(action='add', name=ipnet2.name)
+    obj1.unnamed_networks(action='add', value='4.4.4.4/32')
+    obj1.post()
+    # Build a URL object
     url1 = URL(fmc=fmc1, name='_url1', url='asdf.org')
     url1.post()
+    # Build a VLAN Tag object
     vlantag1 = VlanTag(fmc=fmc1, name='_vlantag1', data={'startTag': '888', 'endTag': '999'})
     vlantag1.post()
+    # Build a Port object
     pport1 = ProtocolPort(fmc=fmc1, name='_pport1', port='9090', protocol='UDP')
     pport1.post()
+    # Build a Security Zone object
     sz1 = SecurityZone(fmc=fmc1, name='_sz1', interfaceMode='ROUTED')
     sz1.post()
+    # Build an ACP Object
     acp1 = AccessControlPolicy(fmc=fmc1, name=namer)
     acp1.post()
     time.sleep(1)
@@ -518,8 +534,9 @@ def test__acp_rule():
     acprule1.source_port(action='add', name=pport1.name)
     acprule1.destination_port(action='add', name=pport1.name)
     acprule1.source_network(action='add', name=iphost1.name)
-    acprule1.destination_network(action='add', name=ipnet1.name)
+    acprule1.source_network(action='add', name=obj1.name)
     acprule1.source_network(action='add', name=iprange1.name)
+    acprule1.destination_network(action='add', name=ipnet1.name)
     acprule1.destination_network(action='add', name=iprange1.name)
     acprule1.post()
     logging.info('# Test ACPRule done.\n')
@@ -527,14 +544,16 @@ def test__acp_rule():
     logging.info('# Cleanup of testing ACPRule methods.')
     acprule1.delete()
     time.sleep(1)
+    acp1.delete()
     iphost1.delete()
     ipnet1.delete()
     iprange1.delete()
+    obj1.delete()
+    ipnet2.delete()
     url1.delete()
     vlantag1.delete()
     pport1.delete()
     sz1.delete()
-    acp1.delete()
     logging.info('# Cleanup of objects for ACPRule test done.\n')
 
 
