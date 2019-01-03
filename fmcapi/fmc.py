@@ -316,7 +316,7 @@ class Token(object):
                                      verify=self.verify_cert)
             self.token_refreshes = 0
         self.access_token = response.headers.get('X-auth-access-token')
-        self.refresh_token = response.headers.get('X-authrefresh-token')
+        self.refresh_token = response.headers.get('X-auth-refresh-token')
         self.token_expiry = datetime.datetime.now() + datetime.timedelta(seconds=self.TOKEN_LIFETIME)
         self.uuid = response.headers.get('DOMAIN_UUID')
         all_domain = json.loads(response.headers.get('DOMAINS'))
