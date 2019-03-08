@@ -128,6 +128,11 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                 if status_code == 429:
                     logging.warning("Too many connections to the FMC.  Waiting 30 seconds and trying again.")
                     time.sleep(30)
+                if status_code == 401:
+                    logging.warning("Token has expired. Trying to refresh.")
+                    self.mytoken.access_token = self.mytoken.get_token()
+                    headers = {'Content-Type': 'application/json', 'X-auth-access-token': self.mytoken.access_token}
+                    status_code = 429
             json_response = json.loads(response.text)
             if status_code > 301 or 'error' in json_response:
                 response.raise_for_status()
