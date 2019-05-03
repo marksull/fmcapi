@@ -713,13 +713,12 @@ class ApplicationType(APIClassTemplate):
         pass
 
 class SLAMonitor(APIClassTemplate):
-    #Returns status 500 when put or post.  Seems to be an API bug.
     """
     The SLAMonitor Object in the FMC.
     """
     URL_SUFFIX = '/object/slamonitors'
     REQUIRED_FOR_POST = ['name', 'slaId', 'monitorAddress', 'interfaceObjects', 'type']
-    REQUIRED_FOR_PUT = ['id']
+    REQUIRED_FOR_PUT = ['id','type']
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
