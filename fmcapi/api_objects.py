@@ -712,6 +712,83 @@ class ApplicationType(APIClassTemplate):
         logging.info('DELETE method for API for ApplicationType not supported.')
         pass
 
+class SLAMonitor(APIClassTemplate):
+    #Returns status 500 when put or post.  Seems to be an API bug.
+    """
+    The SLAMonitor Object in the FMC.
+    """
+    URL_SUFFIX = '/object/slamonitors'
+    REQUIRED_FOR_POST = ['name', 'slaId', 'monitorAddress', 'interfaceObjects']
+    REQUIRED_FOR_PUT = ['id']
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for SLAMonitor class.")
+        self.parse_kwargs(**kwargs)
+    def format_data(self):
+        logging.debug("In format_data() for SLAMonitor class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'timeout' in self.__dict__:
+            json_data['timeout'] = self.timeout
+        if 'threshold' in self.__dict__:
+            json_data['threshold'] = self.threshold
+        if 'frequency' in self.__dict__:
+            json_data['frequency'] = self.frequency
+        if 'slaId' in self.__dict__:
+            json_data['slaId'] = self.slaId
+        if 'dataSize' in self.__dict__:
+            json_data['dataSize'] = self.dataSize
+        if 'tos' in self.__dict__:
+            json_data['tos'] = self.tos
+        if 'noOfPackets' in self.__dict__:
+            json_data['noOfPackets'] = self.noOfPackets
+        if 'monitorAddress' in self.__dict__:
+            json_data['monitorAddress'] = self.monitorAddress
+        if 'interfaceObjects' in self.__dict__:
+            json_data['interfaceObjects'] = self.interfaceObjects
+        if 'description' in self.__dict__:
+            json_data['description'] = self.description
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for SLAMonitor class.")
+        if 'timeout' in kwargs:
+            self.htimeout = kwargs['timeout']
+        if 'threshold' in kwargs:
+             self.securityZone = kwargs['threshold']
+        if 'frequency' in kwargs:
+            self.frequency = kwargs['frequency']
+        if 'slaId' in kwargs:
+            self.slaId = kwargs['slaId']
+        if 'dataSize' in kwargs:
+            self.dataSize = kwargs['dataSize']
+        if 'tos' in kwargs:
+            self.tos = kwargs['tos']
+        if 'noOfPackets' in kwargs:
+            self.noOfPackets = kwargs['noOfPackets']
+        if 'monitorAddress' in kwargs:
+            self.monitorAddress = kwargs['monitorAddress']
+        if 'interfaceObjects' in kwargs:
+            self.interfaceObjects = kwargs['interfaceObjects']
+        if 'description' in kwargs:
+            self.description = kwargs['description']
+
+    def interfaces(self, names):
+        logging.debug("In interfaces() for SLAMonitor class.")
+        zones = []
+        for name in names:
+            sz = SecurityZone(fmc=self.fmc)
+            sz.get(name=name)
+            if 'id' in sz.__dict__:
+                zones.append({'name': sz.name, 'id': sz.id, 'type': sz.type})
+            else:
+                logging.warning('Security Zone, "{}", not found.  Cannot add to SLAMonitor.'.format(name))
+        self.interfaceObjects = zones
 
 class URL(APIClassTemplate):
     """
@@ -1496,447 +1573,453 @@ class PhysicalInterface(APIClassTemplate):
     """
     The Physical Interface Object in the FMC.
     """
-
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-\/\. ]"""
     PREFIX_URL = '/devices/devicerecords'
     URL_SUFFIX = None
     REQUIRED_FOR_PUT = ['id', 'device_id']
-
-    '''
+    VALID_FOR_IPV4 = ['static', 'dhcp', 'pppoe']
+    VALID_FOR_MODE = ['INLINE', 'PASSIVE', 'TAP', 'ERSPAN', 'NONE']
+    VALID_FOR_MTU = range(64,9000)
+    VALID_FOR_HARDWARE_SPEED = ['AUTO', 'TEN', 'HUNDRED', 'THOUSAND', 'TEN_THOUSAND', 'FORTY_THOUSAND', 'LAKH']
+    VALID_FOR_HARDWARE_DUPLEX = ['AUTO', 'FULL', 'HALF']
+    
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for ACPRule class.")
-        self.type = 'AccessRule'
+        logging.debug("In __init__() for PhysicalInterface class.")
         self.parse_kwargs(**kwargs)
-
     def format_data(self):
-        logging.debug("In format_data() for ACPRule class.")
+        logging.debug("In format_data() for PhysicalInterface class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
         if 'name' in self.__dict__:
             json_data['name'] = self.name
-        if 'action' in self.__dict__:
-            json_data['action'] = self.action
+        if 'mode' in self.__dict__:
+            json_data['mode'] = self.mode
         if 'enabled' in self.__dict__:
             json_data['enabled'] = self.enabled
-        if 'sendEventsToFMC' in self.__dict__:
-            json_data['sendEventsToFMC'] = self.sendEventsToFMC
-        if 'logFiles' in self.__dict__:
-            json_data['logFiles'] = self.logFiles
-        if 'logBegin' in self.__dict__:
-            json_data['logBegin'] = self.logBegin
-        if 'logEnd' in self.__dict__:
-            json_data['logEnd'] = self.logEnd
-        if 'variableSet' in self.__dict__:
-            json_data['variableSet'] = self.variableSet
+        if 'hardware' in self.__dict__:
+            json_data['hardware'] = self.hardware
+        if 'MTU' in self.__dict__:
+            json_data['MTU'] = self.MTU
+        if 'managementOnly' in self.__dict__:
+            json_data['managementOnly'] = self.managementOnly
+        if 'ifname' in self.__dict__:
+            json_data['ifname'] = self.ifname
+        if 'securityZone' in self.__dict__:
+            json_data['securityZone'] = self.securityZone
         if 'type' in self.__dict__:
             json_data['type'] = self.type
-        if 'originalSourceNetworks' in self.__dict__:
-            json_data['originalSourceNetworks'] = self.originalSourceNetworks
-        if 'vlanTags' in self.__dict__:
-            json_data['vlanTags'] = self.vlanTags
-        if 'sourceNetworks' in self.__dict__:
-            json_data['sourceNetworks'] = self.sourceNetworks
-        if 'destinationNetworks' in self.__dict__:
-            json_data['destinationNetworks'] = self.destinationNetworks
-        if 'sourcePorts' in self.__dict__:
-            json_data['sourcePorts'] = self.sourcePorts
-        if 'destinationPorts' in self.__dict__:
-            json_data['destinationPorts'] = self.destinationPorts
-        if 'ipsPolicy' in self.__dict__:
-            json_data['ipsPolicy'] = self.ipsPolicy
-        if 'urls' in self.__dict__:
-            json_data['urls'] = self.urls
-        if 'sourceZones' in self.__dict__:
-            json_data['sourceZones'] = self.sourceZones
-        if 'destinationZones' in self.__dict__:
-            json_data['destinationZones'] = self.destinationZones
-        if 'applications' in self.__dict__:
-            json_data['applications'] = self.applications
+        if 'ipv4' in self.__dict__:
+            json_data['ipv4'] = self.ipv4
+        if 'ipv6' in self.__dict__:
+            json_data['ipv6'] = self.ipv6
+        if 'activeMACAddress' in self.__dict__:
+            json_data['activeMACAddress'] = self.activeMACAddress
+        if 'standbyMACAddress' in self.__dict__:
+            json_data['standbyMACAddress'] = self.standbyMACAddress
         return json_data
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for ACPRule class.")
-        if 'action' in kwargs:
-            if kwargs['action'] in self.VALID_FOR_ACTION:
-                self.action = kwargs['action']
+        logging.debug("In parse_kwargs() for PhysicalInterface class.")
+        if 'ipv4' in kwargs:
+            if list(kwargs['ipv4'].keys())[0] in self.VALID_FOR_IPV4:
+                self.ipv4 = kwargs['ipv4']
             else:
-                logging.warning('Action {} is not a valid action.'.format(kwargs['action']))
-        else:
-            self.action = 'BLOCK'
-        if 'acp_name' in kwargs:
-            self.acp(name=kwargs['acp_name'])
+                logging.warning('Method {} is not a valid ipv4 type.'.format(kwargs['ipv4']))
+        if 'device_name' in kwargs:
+            self.device(device_name=kwargs['device_name'])
+        if 'mode' in kwargs:
+            if kwargs['mode'] in self.VALID_FOR_MODE:
+                self.mode = kwargs['mode']
+            else:
+                logging.warning('Mode {} is not a valid mode.'.format(kwargs['mode']))
+        if 'hardware' in kwargs:
+            self.hardware = kwargs['hardware']
+        if 'securityZone' in kwargs:
+             self.securityZone = kwargs['securityZone']
         if 'enabled' in kwargs:
+            #This doesn't seem to be working
             self.enabled = kwargs['enabled']
         else:
-            self.enabled = True
-        if 'sendEventsToFMC' in kwargs:
-            self.sendEventsToFMC = kwargs['sendEventsToFMC']
+            self.enabled = False
+        if 'MTU' in kwargs:
+            if kwargs['MTU'] in self.VALID_FOR_MTU:
+                self.MTU = kwargs['MTU']
+            else:
+                logging.warning('MTU {} should be in the range 64-9000".'.format(kwargs['MTU'])) 
+                self.MTU = 1500
+        if 'managementOnly' in kwargs:
+            self.managementOnly = kwargs['managementOnly']
+        if 'ifname' in kwargs:
+            self.ifname = kwargs['ifname']
+        if 'ipv6' in kwargs:
+            self.ipv6 = kwargs['ipv6']
+        if 'activeMACAddress' in kwargs:
+            self.activeMACAddress = kwargs['activeMACAddress']
+        if 'standbyMACAddress' in kwargs:
+            self.standbyMACAddress = kwargs['standbyMACAddress']
+
+    def device(self, device_name):
+        logging.debug("In device() for PhysicalInterface class.")
+        device1 = Device(fmc=self.fmc)
+        device1.get(name=device_name)
+        if 'id' in device1.__dict__:
+            self.device_id = device1.id
+            self.URL = '{}{}/{}/physicalinterfaces'.format(self.fmc.configuration_url, self.PREFIX_URL, self.device_id)
+            self.device_added_to_url = True
         else:
-            self.sendEventsToFMC = True
-        if 'logFiles' in kwargs:
-            self.logFiles = kwargs['logFiles']
+            logging.warning('Device {} not found.  Cannot set up device for '
+                            'physicalInterface.'.format(device_name))
+    def sz(self, name):
+        logging.debug("In sz() for PhysicalInterface class.")
+        sz = SecurityZone(fmc=self.fmc)
+        sz.get(name=name)
+        if 'id' in sz.__dict__:
+            new_zone = {'name': sz.name, 'id': sz.id, 'type': sz.type}
+            self.securityZone = new_zone
         else:
-            self.logFiles = False
-        if 'logBegin' in kwargs:
-            self.logBegin = kwargs['logBegin']
+            logging.warning('Security Zone, "{}", not found.  Cannot add to PhysicalInterface.'.format(name))
+
+    def static(self, ipv4addr, ipv4mask):
+        logging.debug("In static() for PhysicalInterface class.")
+        self.ipv4 = {"static":{"address":ipv4addr,"netmask":ipv4mask }}
+
+    def dhcp(self, enableDefault=True, routeMetric=1):
+       logging.debug("In dhcp() for PhysicalInterface class.")
+       self.ipv4 = {"dhcp":{"enableDefaultRouteDHCP":enableDefault,"dhcpRouteMetric":routeMetric }}
+
+    def hwmode(self, mode):
+        logging.debug("In hwmode()) for PhysicalInterface class.")
+        if mode in self.VALID_FOR_MODE:
+            self.mode = mode
         else:
-            self.logBegin = False
-        if 'logEnd' in kwargs:
-            self.logEnd = kwargs['logEnd']
+            logging.warning('Mode {} is not a valid mode.'.format(mode))
+
+    def hardware(self, speed, duplex="FULL"):
+        #There are probably some incompatibilities that need to be accounted for
+        logging.debug("In hardware()) for PhysicalInterface class.")
+        if speed in self.VALID_FOR_HARDWARE_SPEED and duplex in self.VALID_FOR_HARDWARE_DUPLEX:
+            self.hardware = {"duplex":duplex,"speed":speed}
         else:
-            self.logEnd = False
-        if 'originalSourceNetworks' in kwargs:
-            self.originalSourceNetworks = kwargs['originalSourceNetworks']
-        if 'sourceZones' in kwargs:
-            self.sourceZones = kwargs['sourceZones']
-        if 'destinationZones' in kwargs:
-            self.destinationZones = kwargs['destinationZones']
-        if 'variableSet' in kwargs:
-            self.variableSet = kwargs['variableSet']
+            logging.warning('Speed {} or Duplex {} is not a valid mode.'.format(speed, duplex))
+
+class IPv4StaticRoutes(APIClassTemplate):
+    """
+    The IPv4StaticRoutes Object in the FMC.
+    """
+
+    PREFIX_URL = '/devices/devicerecords'
+    URL_SUFFIX = None
+    REQUIRED_FOR_POST = ['interfaceName', 'selectedNetworks', 'gateway']
+    REQUIRED_FOR_PUT = ['id', 'device_id']
+    
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for IPv4StaticRoutes class.")
+        self.parse_kwargs(**kwargs)
+    def format_data(self):
+        logging.debug("In format_data() for IPv4StaticRoutes class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'interfaceName' in self.__dict__:
+            json_data['interfaceName'] = self.interfaceName
+        if 'selectedNetworks' in self.__dict__:
+            json_data['selectedNetworks'] = self.selectedNetworks
+        if 'gateway' in self.__dict__:
+            json_data['gateway'] = self.gateway
+        if 'routeTracking' in self.__dict__:
+            json_data['routeTracking'] = self.routeTracking
+        if 'metricValue' in self.__dict__:
+            json_data['metricValue'] = self.metricValue
+        if 'isTunneled' in self.__dict__:
+            json_data['isTunneled'] = self.isTunneled
+        return json_data
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for IPv4StaticRoutes class.")
+        if 'device_name' in kwargs:
+            self.device(device_name=kwargs['device_name'])
+        if 'interfaceName' in kwargs:
+            self.interfaceName = kwargs['interfaceName']
+        if 'selectedNetworks' in kwargs:
+            self.selectedNetworks = kwargs['selectedNetworks']
+        if 'gateway' in kwargs:
+             self.gateway = kwargs['gateway']
+        if 'routeTracking' in kwargs:
+            self.routeTracking = kwargs['routeTracking']
+        if 'metricValue' in kwargs:
+            self.metricValue = kwargs['metricValue']
+        if 'isTunneled' in kwargs:
+            self.isTunneled = kwargs['isTunneled']
+    def device(self, device_name):
+        logging.debug("In device() for IPv4StaticRoutes class.")
+        device1 = Device(fmc=self.fmc)
+        device1.get(name=device_name)
+        if 'id' in device1.__dict__:
+            self.device_id = device1.id
+            self.URL = '{}{}/{}/routing/ipv4staticroutes'.format(self.fmc.configuration_url, self.PREFIX_URL, self.device_id)
+            self.device_added_to_url = True
         else:
-            self.variable_set(action='set')
-        if 'ipsPolicy' in kwargs:
-            self.ipsPolicy = kwargs['ipsPolicy']
-        if 'vlanTags' in kwargs:
-            self.vlanTags = kwargs['vlanTags']
-        if 'sourcePorts' in kwargs:
-            self.sourcePorts = kwargs['sourcePorts']
-        if 'destinationPorts' in kwargs:
-            self.destinationPorts = kwargs['destinationPorts']
-        if 'sourceNetworks' in kwargs:
-            self.sourceNetworks = kwargs['sourceNetworks']
-        if 'destinationNetworks' in kwargs:
-            self.destinationNetworks = kwargs['destinationNetworks']
-        if 'urls' in kwargs:
-            self.urls = kwargs['urls']
-        if 'applications' in kwargs:
-            self.applications = kwargs['applications']
-
-    def acp(self, name):
-        logging.debug("In acp() for ACPRule class.")
-        acp1 = AccessControlPolicy(fmc=self.fmc)
-        acp1.get(name=name)
-        if 'id' in acp1.__dict__:
-            self.acp_id = acp1.id
-            self.URL = '{}{}/{}/accessrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.acp_id)
-        else:
-            logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
-                            'ACPRule.'.format(name))
-
-    def intrusion_policy(self, action, name=''):
-        logging.debug("In intrusion_policy() for ACPRule class.")
-        if action == 'clear':
-            if 'ipsPolicy' in self.__dict__:
-                del self.ipsPolicy
-                logging.info('Intrusion Policy removed from this ACPRule object.')
-        elif action == 'set':
-            ips = IntrusionPolicy(fmc=self.fmc, name=name)
-            ips.get()
-            self.ipsPolicy = {'name': ips.name, 'id': ips.id, 'type': ips.type}
-            logging.info('Intrusion Policy set to "{}" for this ACPRule object.'.format(name))
-
-    def variable_set(self, action, name='Default-Set'):
-        logging.debug("In variable_set() for ACPRule class.")
-        if action == 'clear':
-            if 'variableSet' in self.__dict__:
-                del self.variableSet
-                logging.info('Variable Set removed from this ACPRule object.')
-        elif action == 'set':
-            vs = VariableSet(fmc=self.fmc)
-            vs.get(name=name)
-            self.variableSet = {'name': vs.name, 'id': vs.id, 'type': vs.type}
-            logging.info('VariableSet set to "{}" for this ACPRule object.'.format(name))
-
-    def source_zone(self, action, name=''):
-        logging.debug("In source_zone() for ACPRule class.")
+            logging.warning('Device {} not found.  Cannot set up device for '
+                            'IPv4StaticRoutes.'.format(device_name))
+    def selectedNetworks(self, action, names):
+        logging.warning("In selectedNetworks() for Device class.")
         if action == 'add':
-            sz = SecurityZone(fmc=self.fmc)
-            sz.get(name=name)
-            if 'id' in sz.__dict__:
-                if 'sourceZones' in self.__dict__:
-                    new_zone = {'name': sz.name, 'id': sz.id, 'type': sz.type}
-                    duplicate = False
-                    for obj in self.sourceZones['objects']:
-                        if obj['name'] == new_zone['name']:
-                            duplicate = True
-                            break
-                    if not duplicate:
-                        self.sourceZones['objects'].append(new_zone)
-                        logging.info('Adding "{}" to sourceZones for this ACPRule.'.format(name))
-                else:
-                    self.sourceZones = {'objects': [{'name': sz.name, 'id': sz.id, 'type': sz.type}]}
-                    logging.info('Adding "{}" to sourceZones for this ACPRule.'.format(name))
-            else:
-                logging.warning('Security Zone, "{}", not found.  Cannot add to ACPRule.'.format(name))
-        elif action == 'remove':
-            sz = SecurityZone(fmc=self.fmc)
-            sz.get(name=name)
-            if 'id' in sz.__dict__:
-                if 'sourceZones' in self.__dict__:
-                    objects = []
-                    for obj in self.sourceZones['objects']:
-                        if obj['name'] != name:
-                            objects.append(obj)
-                    self.sourceZones['objects'] = objects
-                    logging.info('Removed "{}" from sourceZones for this ACPRule.'.format(name))
-                else:
-                    logging.info("sourceZones doesn't exist for this ACPRule.  Nothing to remove.")
-            else:
-                logging.warning('Security Zone, "{}", not found.  Cannot remove from ACPRule.'.format(name))
-        elif action == 'clear':
-            if 'sourceZones' in self.__dict__:
-                del self.sourceZones
-                logging.info('All Source Zones removed from this ACPRule object.')
-
-    def destination_zone(self, action, name=''):
-        logging.debug("In destination_zone() for ACPRule class.")
-        if action == 'add':
-            sz = SecurityZone(fmc=self.fmc)
-            sz.get(name=name)
-            if 'id' in sz.__dict__:
-                if 'destinationZones' in self.__dict__:
-                    new_zone = {'name': sz.name, 'id': sz.id, 'type': sz.type}
-                    duplicate = False
-                    for obj in self.destinationZones['objects']:
-                        if obj['name'] == new_zone['name']:
-                            duplicate = True
-                            break
-                    if not duplicate:
-                        self.destinationZones['objects'].append(new_zone)
-                        logging.info('Adding "{}" to destinationZones for this ACPRule.'.format(name))
-                else:
-                    self.destinationZones = {'objects': [{'name': sz.name, 'id': sz.id, 'type': sz.type}]}
-                    logging.info('Adding "{}" to destinationZones for this ACPRule.'.format(name))
-            else:
-                logging.warning('Security Zone, "{}", not found.  Cannot add to ACPRule.'.format(name))
-        elif action == 'remove':
-            sz = SecurityZone(fmc=self.fmc)
-            sz.get(name=name)
-            if 'id' in sz.__dict__:
-                if 'destinationZones' in self.__dict__:
-                    objects = []
-                    for obj in self.destinationZones['objects']:
-                        if obj['name'] != name:
-                            objects.append(obj)
-                    self.destinationZones['objects'] = objects
-                    logging.info('Removed "{}" from destinationZones for this ACPRule.'.format(name))
-                else:
-                    logging.info("destinationZones doesn't exist for this ACPRule.  Nothing to remove.")
-            else:
-                logging.warning('Security Zone, {}, not found.  Cannot remove from ACPRule.'.format(name))
-        elif action == 'clear':
-            if 'destinationZones' in self.__dict__:
-                del self.destinationZones
-                logging.info('All Destination Zones removed from this ACPRule object.')
-
-    def vlan_tags(self, action, name=''):
-        logging.debug("In vlan_tags() for ACPRule class.")
-        if action == 'add':
-            vlantag = VlanTag(fmc=self.fmc)
-            vlantag.get(name=name)
-            if 'id' in vlantag.__dict__:
-                if 'vlanTags' in self.__dict__:
-                    new_vlan = {'name': vlantag.name, 'id': vlantag.id, 'type': vlantag.type}
-                    duplicate = False
-                    for obj in self.vlanTags['objects']:
-                        if obj['name'] == new_vlan['name']:
-                            duplicate = True
-                            break
-                    if not duplicate:
-                        self.vlanTags['objects'].append(new_vlan)
-                        logging.info('Adding "{}" to vlanTags for this ACPRule.'.format(name))
-                else:
-                    self.vlanTags = {'objects': [{'name': vlantag.name, 'id': vlantag.id, 'type': vlantag.type}]}
-                    logging.info('Adding "{}" to vlanTags for this ACPRule.'.format(name))
-            else:
-                logging.warning('VLAN Tag, "{}", not found.  Cannot add to ACPRule.'.format(name))
-        elif action == 'remove':
-            vlantag = VlanTag(fmc=self.fmc)
-            vlantag.get(name=name)
-            if 'id' in vlantag.__dict__:
-                if 'vlanTags' in self.__dict__:
-                    objects = []
-                    for obj in self.vlanTags['objects']:
-                        if obj['name'] != name:
-                            objects.append(obj)
-                    self.vlanTags['objects'] = objects
-                    logging.info('Removed "{}" from vlanTags for this ACPRule.'.format(name))
-                else:
-                    logging.info("vlanTags doesn't exist for this ACPRule.  Nothing to remove.")
-            else:
-                logging.warning('VLAN Tag, {}, not found.  Cannot remove from ACPRule.'.format(name))
-        elif action == 'clear':
-            if 'vlanTags' in self.__dict__:
-                del self.vlanTags
-                logging.info('All VLAN Tags removed from this ACPRule object.')
-
-    def source_port(self, action, name=''):
-        logging.debug("In source_port() for ACPRule class.")
-        if action == 'add':
-            pport = ProtocolPort(fmc=self.fmc)
-            pport.get(name=name)
-            if 'id' in pport.__dict__:
-                if 'sourcePorts' in self.__dict__:
-                    new_port = {'name': pport.name, 'id': pport.id, 'type': pport.type}
-                    duplicate = False
-                    for obj in self.sourcePorts['objects']:
-                        if obj['name'] == new_port['name']:
-                            duplicate = True
-                            break
-                    if not duplicate:
-                        self.sourcePorts['objects'].append(new_port)
-                        logging.info('Adding "{}" to sourcePorts for this ACPRule.'.format(name))
-                else:
-                    self.sourcePorts = {'objects': [{'name': pport.name, 'id': pport.id, 'type': pport.type}]}
-                    logging.info('Adding "{}" to sourcePorts for this ACPRule.'.format(name))
-            else:
-                logging.warning('Protocol Port, "{}", not found.  Cannot add to ACPRule.'.format(name))
-        elif action == 'remove':
-            pport = ProtocolPort(fmc=self.fmc)
-            pport.get(name=name)
-            if 'id' in pport.__dict__:
-                if 'sourcePorts' in self.__dict__:
-                    objects = []
-                    for obj in self.sourcePorts['objects']:
-                        if obj['name'] != name:
-                            objects.append(obj)
-                    self.sourcePorts['objects'] = objects
-                    logging.info('Removed "{}" from sourcePorts for this ACPRule.'.format(name))
-                else:
-                    logging.info("sourcePorts doesn't exist for this ACPRule.  Nothing to remove.")
-            else:
-                logging.warning('Protocol Port, "{}", not found.  Cannot remove from ACPRule.'.format(name))
-        elif action == 'clear':
-            if 'sourcePorts' in self.__dict__:
-                del self.sourcePorts
-                logging.info('All Source Ports removed from this ACPRule object.')
-
-    def destination_port(self, action, name=''):
-        logging.debug("In destination_port() for ACPRule class.")
-        if action == 'add':
-            pport = ProtocolPort(fmc=self.fmc)
-            pport.get(name=name)
-            if 'id' in pport.__dict__:
-                if 'destinationPorts' in self.__dict__:
-                    new_port = {'name': pport.name, 'id': pport.id, 'type': pport.type}
-                    duplicate = False
-                    for obj in self.destinationPorts['objects']:
-                        if obj['name'] == new_port['name']:
-                            duplicate = True
-                            break
-                    if not duplicate:
-                        self.destinationPorts['objects'].append(new_port)
-                        logging.info('Adding "{}" to destinationPorts for this ACPRule.'.format(name))
-                else:
-                    self.destinationPorts = {'objects': [{'name': pport.name, 'id': pport.id, 'type': pport.type}]}
-                    logging.info('Adding "{}" to destinationPorts for this ACPRule.'.format(name))
-            else:
-                logging.warning('Protocol Port, "{}", not found.  Cannot add to ACPRule.'.format(name))
-        elif action == 'remove':
-            pport = ProtocolPort(fmc=self.fmc)
-            pport.get(name=name)
-            if 'id' in pport.__dict__:
-                if 'destinationPorts' in self.__dict__:
-                    objects = []
-                    for obj in self.destinationPorts['objects']:
-                        if obj['name'] != name:
-                            objects.append(obj)
-                    self.destinationPorts['objects'] = objects
-                    logging.info('Removed "{}" from destinationPorts for this ACPRule.'.format(name))
-                else:
-                    logging.info("destinationPorts doesn't exist for this ACPRule.  Nothing to remove.")
-            else:
-                logging.warning('Protocol Port, {}, not found.  Cannot remove from ACPRule.'.format(name))
-        elif action == 'clear':
-            if 'destinationPorts' in self.__dict__:
-                del self.destinationPorts
-                logging.info('All Destination Ports removed from this ACPRule object.')
-
-    def source_network(self, action, name=''):
-        logging.debug("In source_network() for ACPRule class.")
-        if action == 'add':
-            net1 = IPAddresses(fmc=self.fmc)
-            response = net1.get()
-            if 'items' in response:
-                new_net = None
-                for item in response['items']:
-                    if item['name'] == name:
-                        new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
-                        break
-                if new_net is None:
-                    logging.warning('Network "{}" is not found in FMC.  Cannot add to sourceNetworks.'.format(name))
-                else:
-                    if 'sourceNetworks' in self.__dict__:
-                        duplicate = False
-                        for obj in self.sourceNetworks['objects']:
-                            if obj['name'] == new_net['name']:
-                                duplicate = True
-                                break
-                        if not duplicate:
-                            self.sourceNetworks['objects'].append(new_net)
-                            logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
+            if 'selectedNetworks' in self.__dict__: 
+                for name in names:
+                    net = IPAddresses(fmc=self.fmc)
+                    net.get(name=name)
+                    if 'id' in net.__dict__:
+                        new_net = {
+                            "type": net.type,
+                            "id": net.id,
+                            "name": net.name
+                        }
+                        self.selectedNetworks.append(new_net)
                     else:
-                        self.sourceNetworks = {'objects': [new_net]}
-                        logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
-        elif action == 'remove':
-            if 'sourceNetworks' in self.__dict__:
-                objects = []
-                for obj in self.sourceNetworks['objects']:
-                    if obj['name'] != name:
-                        objects.append(obj)
-                self.sourceNetworks['objects'] = objects
-                logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(name))
+                        logging.warning('Network {} not found.  Cannot set up device for '
+                                        'IPv4StaticRoutes.'.format(name))
             else:
-                logging.info("sourceNetworks doesn't exist for this ACPRule.  Nothing to remove.")
-        elif action == 'clear':
-            if 'sourceNetworks' in self.__dict__:
-                del self.sourceNetworks
-                logging.info('All Source Networks removed from this ACPRule object.')
-
-    def destination_network(self, action, name=''):
-        logging.debug("In destination_network() for ACPRule class.")
-        if action == 'add':
-            net1 = IPAddresses(fmc=self.fmc)
-            response = net1.get()
-            if 'items' in response:
-                new_net = None
-                for item in response['items']:
-                    if item['name'] == name:
-                        new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
-                        break
-                if new_net is None:
-                    logging.warning('Network "{}" is not found in FMC.  Cannot add to '
-                                    'destinationNetworks.'.format(name))
-                else:
-                    if 'destinationNetworks' in self.__dict__:
-                        duplicate = False
-                        for obj in self.destinationNetworks['objects']:
-                            if obj['name'] == new_net['name']:
-                                duplicate = True
-                                break
-                        if not duplicate:
-                            self.destinationNetworks['objects'].append(new_net)
-                            logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
+                self.selectedNetworks = []
+                for name in names:
+                    net = IPAddresses(fmc=self.fmc)
+                    net.get(name=name)
+                    if 'id' in net.__dict__:
+                        new_net = {
+                            "type": net.type,
+                            "id": net.id,
+                            "name": net.name
+                        }
+                        self.selectedNetworks.append(new_net)
                     else:
-                        self.destinationNetworks = {'objects': [new_net]}
-                        logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
-        elif action == 'remove':
-            if 'destinationNetworks' in self.__dict__:
-                objects = []
-                for obj in self.destinationNetworks['objects']:
-                    if obj['name'] != name:
-                        objects.append(obj)
-                self.destinationNetworks['objects'] = objects
-                logging.info('Removed "{}" from destinationNetworks for this ACPRule.'.format(name))
-            else:
-                logging.info("destinationNetworks doesn't exist for this ACPRule.  Nothing to remove.")
-        elif action == 'clear':
-            if 'destinationNetworks' in self.__dict__:
-                del self.destinationNetworks
-                logging.info('All Destination Networks removed from this ACPRule object.')
-    '''
+                        logging.warning('Network {} not found.  Cannot set up device for '
+                                        'IPv4StaticRoutes.'.format(name))
+    def gw(self, name):
+        gateway = IPAddresses(fmc=self.fmc)
+        gateway.get(name=name)
+        if 'id' in gateway.__dict__:
+                self.gateway = {
+                    "object":{
+                        "type": gateway.type,
+                        "id": gateway.id,
+                        "name": gateway.name}}
+        else:
+            logging.warning('Network {} not found.  Cannot set up device for '
+                            'IPv4StaticRoutes.'.format(name))
+    def ipsla(self, name):
+        route_track = SLAMonitor(fmc=self.fmc)
+        route_track.get(name=name)
+        if 'id' in route_track.__dict__:
+                self.routeTracking = {
+                    "type": route_track.type,
+                    "id": route_track.id,
+                    "name": route_track.name}
+        else:
+            logging.warning('Object {} not found.  Cannot set up device for '
+                            'IPv4StaticRoutes.'.format(name))
+            
+class DeviceHAPairs(APIClassTemplate):
+    """
+    The DeviceHAPairs Object in the FMC.
+    """
+
+    URL_SUFFIX = '/devicehapairs/ftddevicehapairs'
+    REQUIRED_FOR_POST = ['primary', 'secondary', 'ftdHABootstrap']
+    REQUIRED_FOR_PUT = ['id']
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for DeviceHAPairs class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for DeviceHAPairs class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'primary' in self.__dict__:
+            json_data['primary'] = self.primary
+        if 'secondary' in self.__dict__:
+            json_data['secondary'] = self.secondary
+        if 'ftdHABootstrap' in self.__dict__:
+            json_data['ftdHABootstrap'] = self.ftdHABootstrap
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for DeviceHAPairs class.")
+        if 'primary' in kwargs:
+            self.primary = kwargs['primary']
+        if 'secondary' in kwargs:
+            self.secondary = kwargs['secondary']
+        if 'ftdHABootstrap' in kwargs:
+            self.ftdHABootstrap = kwargs['ftdHABootstrap']
+
+    def device(self, primary_name="", secondary_name=""):
+        logging.debug("In device() for DeviceHAPairs class.")
+        primary = Device(fmc=self.fmc)
+        primary.get(name=primary_name)
+        secondary = Device(fmc=self.fmc)
+        secondary.get(name=secondary_name)
+        if 'id' in primary.__dict__:
+            self.primary_id = primary.id
+        else:
+            logging.warning('Device {} not found.  Cannot set up device for '
+                            'DeviceHAPairs.'.format(primary_name))
+        if 'id' in secondary.__dict__:
+            self.secondary_id = secondary.id
+        else:
+            logging.warning('Device {} not found.  Cannot set up device for '
+                            'DeviceHAPairs.'.format(secondary_name))
+
+    def primary(self, name):
+        logging.debug("In primary() for DeviceHAPairs class.")
+        primary = Device(fmc=self.fmc)
+        primary.get(name=name)
+        if 'id' in primary.__dict__:
+            self.primary = {"id": primary.id}
+        else:
+            logging.warning('Device {} not found.  Cannot set up device for '
+                            'DeviceHAPairs.'.format(primary_name))
+
+    def secondary(self, name):
+        logging.debug("In secondary() for DeviceHAPairs class.")
+        secondary = Device(fmc=self.fmc)
+        secondary.get(name=name)
+        if 'id' in secondary.__dict__:
+            self.secondary = {"id": secondary.id}
+        else:
+            logging.warning('Device {} not found.  Cannot set up device for '
+                            'DeviceHAPairs.'.format(primary_name))
+
+    def post(self, **kwargs):
+        logging.debug("In post() for DeviceHAPairs class.")
+        # Attempting to "Deploy" during Device registration causes issues.
+        self.fmc.autodeploy = False
+        return super().post(**kwargs)
+
+class DeviceHAMonitoredInterfaces(APIClassTemplate):
+    """
+    The DeviceHAMonitoredInterfaces Object in the FMC.
+    """
+
+    PREFIX_URL = '/devicehapairs/ftddevicehapairs'
+    REQUIRED_FOR_PUT = ['id']
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for DeviceHAMonitoredInterfaces class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for DeviceHAMonitoredInterfaces class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'ipv4Configuration' in self.__dict__:
+            json_data['ipv4Configuration'] = self.ipv4Configuration
+        if 'ipv6Configuration' in self.__dict__:
+            json_data['ipv6Configuration'] = self.ipv6Configuration
+        if 'monitorforFailures' in self.__dict__:
+            json_data['monitorforFailures'] = self.monitorforFailures
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for DeviceHAMonitoredInterfaces class.")
+        if 'ha_name' in kwargs:
+            self.device_ha(ha_name=kwargs['ha_name'])
+        if 'ipv4Configuration' in kwargs:
+            self.ipv4Configuration = kwargs['ipv4Configuration']
+        if 'ipv6Configuration' in kwargs:
+            self.ipv6Configuration = kwargs['ipv6Configuration']
+        if 'monitorforFailures' in kwargs:
+            self.monitorforFailures = kwargs['monitorforFailures']
+
+    def device_ha(self, ha_name):
+        logging.debug("In device_ha() for DeviceHAMonitoredInterfaces class.")
+        deviceha1 = DeviceHAPairs(fmc=self.fmc, name=ha_name)
+        deviceha1.get()
+        if 'id' in deviceha1.__dict__:
+            self.deviceha_id = deviceha1.id
+            self.URL = '{}{}/{}/monitoredinterfaces'.format(self.fmc.configuration_url, self.PREFIX_URL, self.deviceha_id)
+            self.deviceha_added_to_url = True
+        else:
+            logging.warning('Device HA {} not found.  Cannot set up device for '
+                            'DeviceHAMonitoredInterfaces.'.format(ha_name))
+
+    def ipv4(self, ipv4addr, ipv4mask, ipv4standbyaddr):
+        logging.debug("In ipv4() for DeviceHAMonitoredInterfaces class.")
+        self.ipv4Configuration = {
+            "activeIPv4Address": ipv4addr,
+            "activeIPv4Mask": ipv4mask,
+            "standbyIPv4Address": ipv4standbyaddr}
+
+    def post(self):
+        logging.info('POST method for API for DeviceHAMonitoredInterfaces not supported.')
+        pass
+
+class DeviceHAFailoverMAC(APIClassTemplate):
+    """
+    The DeviceHAFailoverMAC Object in the FMC.
+    """
+
+    PREFIX_URL = '/devicehapairs/ftddevicehapairs'
+    REQUIRED_FOR_POST = ['physicalInterface', 'failoverActiveMac', 'failoverStandbyMac']
+    REQUIRED_FOR_PUT = ['id']
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for DeviceHAFailoverMAC class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for DeviceHAFailoverMAC class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'physicalInterface' in self.__dict__:
+            json_data['physicalInterface'] = self.physicalInterface
+        if 'failoverActiveMac' in self.__dict__:
+            json_data['failoverActiveMac'] = self.failoverActiveMac
+        if 'failoverStandbyMac' in self.__dict__:
+            json_data['failoverStandbyMac'] = self.failoverStandbyMac
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for DeviceHAFailoverMAC class.")
+        if 'ha_name' in kwargs:
+            self.device_ha(ha_name=kwargs['ha_name'])
+        if 'physicalInterface' in kwargs:
+            self.physicalInterface = kwargs['physicalInterface']
+        if 'failoverActiveMac' in kwargs:
+            self.failoverActiveMac = kwargs['failoverActiveMac']
+        if 'failoverStandbyMac' in kwargs:
+            self.failoverStandbyMac = kwargs['failoverStandbyMac']
+
+    def device_ha(self, ha_name):
+        logging.debug("In device_ha() for DeviceHAFailoverMAC class.")
+        deviceha1 = DeviceHAPairs(fmc=self.fmc, name=ha_name)
+        deviceha1.get()
+        if 'id' in deviceha1.__dict__:
+            self.deviceha_id = deviceha1.id
+            self.URL = '{}{}/{}/monitoredinterfaces'.format(self.fmc.configuration_url, self.PREFIX_URL, self.deviceha_id)
+            self.deviceha_added_to_url = True
+        else:
+            logging.warning('Device HA {} not found.  Cannot set up device for '
+                            'DeviceHAFailoverMAC.'.format(ha_name))
 
 # ################# API-Explorer Policy Category Things ################# #
 
