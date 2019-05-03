@@ -718,7 +718,7 @@ class SLAMonitor(APIClassTemplate):
     The SLAMonitor Object in the FMC.
     """
     URL_SUFFIX = '/object/slamonitors'
-    REQUIRED_FOR_POST = ['name', 'slaId', 'monitorAddress', 'interfaceObjects']
+    REQUIRED_FOR_POST = ['name', 'slaId', 'monitorAddress', 'interfaceObjects', 'type']
     REQUIRED_FOR_PUT = ['id']
 
     def __init__(self, fmc, **kwargs):
@@ -732,6 +732,8 @@ class SLAMonitor(APIClassTemplate):
             json_data['id'] = self.id
         if 'name' in self.__dict__:
             json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
         if 'timeout' in self.__dict__:
             json_data['timeout'] = self.timeout
         if 'threshold' in self.__dict__:
@@ -757,6 +759,10 @@ class SLAMonitor(APIClassTemplate):
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for SLAMonitor class.")
+        if 'type' in kwargs:
+            self.type = kwargs['type']
+        else:
+            self.type = "SLAMonitor"
         if 'timeout' in kwargs:
             self.htimeout = kwargs['timeout']
         if 'threshold' in kwargs:
