@@ -782,13 +782,18 @@ class SLAMonitor(APIClassTemplate):
         logging.debug("In interfaces() for SLAMonitor class.")
         zones = []
         for name in names:
+            #Supports passing list of str
             sz = SecurityZone(fmc=self.fmc)
             sz.get(name=name)
             if 'id' in sz.__dict__:
                 zones.append({'name': sz.name, 'id': sz.id, 'type': sz.type})
             else:
                 logging.warning('Security Zone, "{}", not found.  Cannot add to SLAMonitor.'.format(name))
-        self.interfaceObjects = zones
+        if len(zones) != 0:
+            #Make sure we found at least one zone
+            self.interfaceObjects = zones
+        else:
+            logging.warning('No valid Security Zones found: "{}".  Cannot add to SLAMonitor.'.format(names))
 
 class URL(APIClassTemplate):
     """
