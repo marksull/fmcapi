@@ -2020,7 +2020,7 @@ class DeviceHAFailoverMAC(APIClassTemplate):
         deviceha1.get()
         if 'id' in deviceha1.__dict__:
             self.deviceha_id = deviceha1.id
-            self.URL = '{}{}/{}/monitoredinterfaces'.format(self.fmc.configuration_url, self.PREFIX_URL, self.deviceha_id)
+            self.URL = '{}{}/{}/failoverinterfacemacaddressconfigs'.format(self.fmc.configuration_url, self.PREFIX_URL, self.deviceha_id)
             self.deviceha_added_to_url = True
         else:
             logging.warning('Device HA {} not found.  Cannot set up device for '
