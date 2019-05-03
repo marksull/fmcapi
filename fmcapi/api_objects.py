@@ -1696,7 +1696,7 @@ class PhysicalInterface(APIClassTemplate):
        self.ipv4 = {"dhcp":{"enableDefaultRouteDHCP":enableDefault,"dhcpRouteMetric":routeMetric }}
 
     def hwmode(self, mode):
-        logging.debug("In hwmode()) for PhysicalInterface class.")
+        logging.debug("In hwmode() for PhysicalInterface class.")
         if mode in self.VALID_FOR_MODE:
             self.mode = mode
         else:
@@ -1704,7 +1704,7 @@ class PhysicalInterface(APIClassTemplate):
 
     def hardware(self, speed, duplex="FULL"):
         #There are probably some incompatibilities that need to be accounted for
-        logging.debug("In hardware()) for PhysicalInterface class.")
+        logging.debug("In hardware() for PhysicalInterface class.")
         if speed in self.VALID_FOR_HARDWARE_SPEED and duplex in self.VALID_FOR_HARDWARE_DUPLEX:
             self.hardware = {"duplex":duplex,"speed":speed}
         else:
