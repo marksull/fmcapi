@@ -497,6 +497,8 @@ def test__device_with_task():
     print('\n')
     response = obj2.post()
     wait_for_task(response["metadata"]["task"], 30)
+
+    #Wait some additional time to complete device registration before deletion
     time.sleep(180)
     obj1 = Device(fmc=fmc1)
     obj2 = Device(fmc=fmc1)
