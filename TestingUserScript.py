@@ -8,15 +8,10 @@ import time
 import pprint
 
 # ### Set these variables to match your environment. ### #
-'''
+
 host = '10.0.50.50'
 username = 'apiscript'
 password = 'Admin123'
-autodeploy = False
-'''
-host = '10.254.0.2'
-username = 'api'
-password = 'Vmware123!'
 autodeploy = False
 
 # ### These functions are the individual tests you can run to ensure functionality. ### #
