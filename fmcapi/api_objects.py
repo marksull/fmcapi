@@ -724,6 +724,8 @@ class SLAMonitor(APIClassTemplate):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for SLAMonitor class.")
         self.parse_kwargs(**kwargs)
+        self.type = "SLAMonitor"
+
     def format_data(self):
         logging.debug("In format_data() for SLAMonitor class.")
         json_data = {}
@@ -731,8 +733,6 @@ class SLAMonitor(APIClassTemplate):
             json_data['id'] = self.id
         if 'name' in self.__dict__:
             json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
         if 'timeout' in self.__dict__:
             json_data['timeout'] = self.timeout
         if 'threshold' in self.__dict__:
@@ -758,12 +758,8 @@ class SLAMonitor(APIClassTemplate):
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for SLAMonitor class.")
-        if 'type' in kwargs:
-            self.type = kwargs['type']
-        else:
-            self.type = "SLAMonitor"
         if 'timeout' in kwargs:
-            self.htimeout = kwargs['timeout']
+            self.timeout = kwargs['timeout']
         if 'threshold' in kwargs:
              self.securityZone = kwargs['threshold']
         if 'frequency' in kwargs:
