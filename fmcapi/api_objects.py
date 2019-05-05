@@ -733,6 +733,8 @@ class SLAMonitor(APIClassTemplate):
             json_data['id'] = self.id
         if 'name' in self.__dict__:
             json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
         if 'timeout' in self.__dict__:
             json_data['timeout'] = self.timeout
         if 'threshold' in self.__dict__:
@@ -1665,6 +1667,7 @@ class PhysicalInterface(APIClassTemplate):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for PhysicalInterface class.")
         self.parse_kwargs(**kwargs)
+
     def format_data(self):
         logging.debug("In format_data() for PhysicalInterface class.")
         json_data = {}
@@ -1782,6 +1785,7 @@ class PhysicalInterface(APIClassTemplate):
             self.hardware = {"duplex":duplex,"speed":speed}
         else:
             logging.warning('Speed {} or Duplex {} is not a valid mode.'.format(speed, duplex))
+
 
 class IPv4StaticRoutes(APIClassTemplate):
     """
@@ -1928,6 +1932,10 @@ class DeviceHAPairs(APIClassTemplate):
             json_data['secondary'] = self.secondary
         if 'ftdHABootstrap' in self.__dict__:
             json_data['ftdHABootstrap'] = self.ftdHABootstrap
+        if 'action' in self.__dict__:
+            json_data['action'] = self.action
+        if 'forceBreak' in self.__dict__:
+            json_data['forceBreak'] = self.forceBreak
         return json_data
 
     def parse_kwargs(self, **kwargs):
@@ -1939,6 +1947,10 @@ class DeviceHAPairs(APIClassTemplate):
             self.secondary = kwargs['secondary']
         if 'ftdHABootstrap' in kwargs:
             self.ftdHABootstrap = kwargs['ftdHABootstrap']
+        if 'action' in kwargs:
+            self.action = kwargs['action']
+        if 'forceBreak' in kwargs:
+            self.forceBreak = kwargs['forceBreak']
 
     def device(self, primary_name="", secondary_name=""):
         logging.debug("In device() for DeviceHAPairs class.")
@@ -1977,11 +1989,38 @@ class DeviceHAPairs(APIClassTemplate):
             logging.warning('Device {} not found.  Cannot set up device for '
                             'DeviceHAPairs.'.format(primary_name))
 
+    def switch_ha(self):
+        logging.debug("In switch_ha() for DeviceHAPairs class.")
+        ha1 = DeviceHAPairs(fmc=self.fmc)
+        ha1.get(name=self.name)
+        if 'id' in ha1.__dict__:
+            self.id = ha1.id
+            self.action = "SWITCH"
+        else:
+            logging.warning('DeviceHAPair {} not found.  Cannot set up HA for SWITCH.'.format(self.name))
+
+    def break_ha(self):
+        logging.debug("In break_ha() for DeviceHAPairs class.")
+        ha1 = DeviceHAPairs(fmc=self.fmc)
+        ha1.get(name=self.name)
+        if 'id' in ha1.__dict__:
+            self.id = ha1.id
+            self.action = "HABREAK"
+            self.forceBreak = True
+        else:
+            logging.warning('DeviceHAPair {} not found.  Cannot set up HA for BREAK.'.format(self.name))
+
     def post(self, **kwargs):
         logging.debug("In post() for DeviceHAPairs class.")
         # Attempting to "Deploy" during Device registration causes issues.
         self.fmc.autodeploy = False
         return super().post(**kwargs)
+
+    def put(self, **kwargs):
+        logging.debug("In put() for DeviceHAPairs class.")
+        # Attempting to "Deploy" during Device registration causes issues.
+        self.fmc.autodeploy = False
+        return super().put(**kwargs)
 
 class DeviceHAMonitoredInterfaces(APIClassTemplate):
     """

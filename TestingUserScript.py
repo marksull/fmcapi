@@ -434,6 +434,47 @@ def test__security_zone():
     logging.info('# Test SecurityZone done.\n')
 
 
+def test__slamonitor():
+    logging.info('# Test SLAMonitor.  Post, get, put, delete SLAMonitor Objects.')
+    sz1 = SecurityZone(fmc=fmc1)
+    sz1.name = "SZ-OUTSIDE1"
+    sz1.interfaceMode = 'ROUTED'
+    sz1.post()
+    time.sleep(1)
+
+    sz2 = SecurityZone(fmc=fmc1)
+    sz2.name = "SZ-OUTSIDE2"
+    sz2.interfaceMode = 'ROUTED'
+    sz2.post()
+    time.sleep(1)
+
+    obj1 = SLAMonitor(fmc=fmc1)
+    obj1.name = namer
+    obj1.frequency = 30
+    obj1.slaId = 1
+    obj1.monitorAddress = "8.8.8.7"
+    obj1.timeout = 5000
+    obj1.threshold = 2
+    obj1.noOfPackets = 1
+    obj1.dataSize = 28
+    obj1.tos = 1
+    obj1.interfaces(names=["SZ-OUTSIDE1","SZ-OUTSIDE2"])
+    obj1.post()
+    print('SLAMonitor Post -->')
+    pp.pprint(obj1.format_data())
+    print('\n')
+    obj1.get(name=namer)
+    obj1.monitorAddress = "8.8.8.8"
+    obj1.put()
+    print('SLAMonitor Put -->')
+    pp.pprint(obj1.format_data())
+    print('\n')
+    time.sleep(1)
+    obj1.delete()
+    sz1.delete()
+    sz2.delete()
+
+
 def test__device():
     logging.info('# Test Device.  Though you can "Post" devices I do not have one handy. So '
                  'add/remove licenses on Device Objects.')
@@ -453,6 +494,171 @@ def test__device():
     acp1.delete()
     logging.info('# Test Device done.\n')
 
+
+def test__phys_interfaces():
+    logging.info('# Test PhysicalInterface.  get, put PhysicalInterface Objects. Requires registered device')
+    sz1 = SecurityZone(fmc=fmc1)
+    sz1.name = "SZ-OUTSIDE1"
+    sz1.post()
+    time.sleep(1)
+    sz2 = SecurityZone(fmc=fmc1)
+    sz2.name = "SZ-OUTSIDE2"
+    sz2.post()
+    time.sleep(1)
+
+    intf1 = PhysicalInterface(fmc=fmc1, device_name="device-name")
+    intf1.get(name="GigabitEthernet0/0")
+    intf1.enabled = True
+    intf1.ifname = "OUTSIDE1"
+    intf1.activeMACAddress = "0050.5686.718f"
+    intf1.standbyMACAddress = "0050.5686.0c2e"
+    intf1.static(ipv4addr="10.254.0.3", ipv4mask=24)
+    intf1.sz(name="SZ-OUTSIDE1")
+    intf2 = PhysicalInterface(fmc=fmc1, device_name="device-name")
+    intf2.get(name="GigabitEthernet0/1")
+    intf2.enabled = True
+    intf2.ifname = "OUTSIDE2"
+    intf2.activeMACAddress = "0050.5686.821d"
+    intf2.standbyMACAddress = "0050.5686.11cb"
+    intf2.dhcp()
+    intf2.sz(name="SZ-OUTSIDE2")
+    intf1.put()
+    time.sleep(1)
+    intf2.put()
+    time.sleep(1)
+    intf1.get()
+    intf2.get()
+
+    intf1.enabled = False
+    intf1.activeMACAddress = ""
+    intf1.standbyMACAddress = ""
+    intf1.static(ipv4addr="", ipv4mask="")
+    intf1.securityZone = {}
+    intf1.activeMACAddress = ""
+    intf1.standbyMACAddress = ""
+    intf2.enabled = False
+    intf2.activeMACAddress = ""
+    intf2.standbyMACAddress = ""
+    intf2.static(ipv4addr="", ipv4mask="")
+    intf2.securityZone = {}
+    intf2.activeMACAddress = ""
+    intf2.standbyMACAddress = ""
+    intf1.put()
+    time.sleep(1)
+    intf2.put()
+    time.sleep(1)
+    intf1.get()
+    intf2.get()
+    intf1.ifname = ""
+    intf2.ifname = ""
+    intf1.put()
+    sz1.delete()
+    intf2.put()
+    sz2.delete()
+
+
+def test__device_ha_pair():    
+    logging.info('# Test DeviceHAPairs. After an HA Pair is created, all API calls to "devicerecords" objects should '
+                 'be directed at the currently active device not the ha pair')
+    failover1 = PhysicalInterface(fmc=fmc1)
+    failover1.get(device_name="PrimaryName", name="GigabitEthernet0/6")
+    stateful1 = PhysicalInterface(fmc=fmc1)
+    stateful1.get(device_name="PrimaryName", name="GigabitEthernet0/7")
+    obj1 = DeviceHAPairs(fmc=fmc1)
+    obj1.primary(name="PrimaryName")
+    obj1.secondary(name="SecondaryName")
+    obj1.name = "HaName"
+    #failover interface subnetMask must be in x.x.x.x format"
+    obj1.ftdHABootstrap = {
+        "isEncryptionEnabled": "true",
+        "encKeyGenerationScheme": "CUSTOM",
+        "sharedKey": "cisco123",
+        "useSameLinkForFailovers": False,
+        "lanFailover": {
+          "useIPv6Address": False,
+          "subnetMask": "255.255.255.252",
+          "interfaceObject": {
+            "type": "PhysicalInterface",
+            "name": failover1.name,
+            "id": failover1.id
+          },
+          "standbyIP": "192.168.1.2",
+          "logicalName": "HA-FAILOVER",
+          "activeIP": "192.168.1.1"
+        },
+        "statefulFailover": {
+          "useIPv6Address": False,
+          "subnetMask": "255.255.255.252",
+          "interfaceObject": {
+            "type": "PhysicalInterface",
+            "name": stateful1.name,
+            "id": stateful1.id
+          },
+          "standbyIP": "192.168.1.6",
+          "logicalName": "HA-STATEFUL",
+          "activeIP": "192.168.1.5"}}
+    #response = ha_pair.post()
+    #wait_for_task(response["metadata"]["task"], 30)
+    print('Device HA-->')
+    pp.pprint(obj1.format_data())
+    print('\n')
+    obj1.post()
+    time.sleep(300)
+    del obj1
+    
+    obj1 = DeviceHAPairs(fmc=fmc1, name="HaName")
+    obj1.switch_ha()
+    print('Device HA Switch-->')
+    pp.pprint(obj1.format_data())
+    print('\n')
+    response = obj1.put()
+    print(response)
+    time.sleep(20)
+    del obj1
+
+    obj1 = DeviceHAPairs(fmc=fmc1, name="HaName")
+    obj1.break_ha()
+    print('Device HA Break-->')
+    pp.pprint(obj1.format_data())
+    print('\n')
+    response = obj1.put()
+    print(response)
+
+    #time.sleep(300)
+    #del obj1
+    #obj1 = DeviceHAPairs(fmc=fmc1)
+    #obj1.get(name="FTDv-HA2")
+    #Deleting the HAPair object will delete the HA configuration AND remove the devices from the FPMC
+    #response = obj1.delete()
+
+
+def test__ipv4_static_routes():
+    #put, delete operations are going to be problematic since there is no name associated with a route.
+    logging.info('# Test IPv4StaticRoutes. get, post, put, delete IPv4StaticRoutes Objects. Requires registered device')
+    obj1 = IPHost(fmc=fmc1, name='_iphost1', value='10.254.0.1')
+    obj1.post()
+    obj2 = IPNetwork(fmc=fmc1, name='_ipnet1', value='208.67.220.0/24')
+    obj2.post()
+    obj3 = IPNetwork(fmc=fmc1, name='_ipnet2', value='208.67.222.0/24')
+    obj3.post()
+    route1 = IPv4StaticRoutes(fmc=fmc1, device_name="FTDv03.ccie.lab")
+    #Interface logical name (ifname)
+    route1.interfaceName = "OUTSIDE1"
+    #Host or Network object only.  No network groups.  Only supports "add" action currently
+    route1.selectedNetworks(action="add", names=["_ipnet1"])
+    route1.gw(name="_iphost1")
+    print('IPv4StaticRoutes Post-->')
+    pp.pprint(route1.format_data())
+    print('\n')
+    route1.post()
+    '''
+    route1.selectedNetworks(action="add", names=["_ipnet2"])
+    print('IPv4StaticRoutes Put-->')
+    pp.pprint(route1.format_data())
+    print('\n')
+    route1.put()
+    hash ifname, gateway.name,routeTracking.name, metric
+    '''
 
 def test__intrusion_policy():
     logging.info('# Test IntrusionPolicy. Can only GET IntrusionPolicy objects.')
@@ -647,11 +853,14 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__url()
     test__vlan_tag()
     test__protocol_port()
+    test__slamonitor()
     test__security_zone()
     test__device()
+    test__phys_interfaces()
+    test__ipv4_static_routes()
+    #test__device_ha_pair()
     test__intrusion_policy()
     test__access_control_policy()
     test__acp_rule()
     test__audit()
     test__port_object_group()
-
