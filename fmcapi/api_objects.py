@@ -2046,8 +2046,8 @@ class DeviceHAMonitoredInterfaces(APIClassTemplate):
             json_data['ipv4Configuration'] = self.ipv4Configuration
         if 'ipv6Configuration' in self.__dict__:
             json_data['ipv6Configuration'] = self.ipv6Configuration
-        if 'monitorforFailures' in self.__dict__:
-            json_data['monitorforFailures'] = self.monitorforFailures
+        if 'monitorForFailures' in self.__dict__:
+            json_data['monitorForFailures'] = self.monitorForFailures
         return json_data
 
     def parse_kwargs(self, **kwargs):
@@ -2059,8 +2059,8 @@ class DeviceHAMonitoredInterfaces(APIClassTemplate):
             self.ipv4Configuration = kwargs['ipv4Configuration']
         if 'ipv6Configuration' in kwargs:
             self.ipv6Configuration = kwargs['ipv6Configuration']
-        if 'monitorforFailures' in kwargs:
-            self.monitorforFailures = kwargs['monitorforFailures']
+        if 'monitorForFailures' in kwargs:
+            self.monitorForFailures = kwargs['monitorForFailures']
 
     def device_ha(self, ha_name):
         logging.debug("In device_ha() for DeviceHAMonitoredInterfaces class.")
@@ -2137,6 +2137,37 @@ class DeviceHAFailoverMAC(APIClassTemplate):
         else:
             logging.warning('Device HA {} not found.  Cannot set up device for '
                             'DeviceHAFailoverMAC.'.format(ha_name))
+
+    def p_interface(self, name, device_name):
+        logging.debug("In p_interface() for DeviceHAFailoverMAC class.")
+        intf1 = PhysicalInterface(fmc=self.fmc)
+        intf1.get(name=name,device_name=device_name)
+        if 'id' in intf1.__dict__:
+            self.physicalInterface = {'name': intf1.name, 'id': intf1.id, 'type': intf1.type}
+        else:
+            logging.warning('PhysicalInterface, "{}", not found.  Cannot add to DeviceHAFailoverMAC.'.format(name))
+
+    def edit(self, name, ha_name):
+        deviceha1 = DeviceHAPairs(fmc=self.fmc, name=ha_name)
+        deviceha1.get()
+        obj1 = DeviceHAFailoverMAC(fmc=self.fmc)
+        obj1.device_ha(ha_name=ha_name)
+        failovermac_json = obj1.get()
+        items = failovermac_json.get('items', [])
+        found = False
+        for item in items:
+            if item['physicalInterface']['name'] == name:
+                found = True
+                self.id = item['id']
+                self.name = item['physicalInterface']['name']
+                self.failoverActiveMac = item['failoverActiveMac']
+                self.failoverStandbyMac = item['failoverStandbyMac']
+                self.deviceha_id = deviceha1.id
+                self.URL = '{}{}/{}/failoverinterfacemacaddressconfigs'.format(self.fmc.configuration_url, self.PREFIX_URL, self.deviceha_id)
+                break
+        if found is False:
+            logging.warning('PhysicalInterface, "{}", not found.  Cannot add to DeviceHAFailoverMAC.'.format(name))
+
 
 # ################# API-Explorer Policy Category Things ################# #
 

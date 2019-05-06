@@ -632,6 +632,44 @@ def test__device_ha_pair():
     #response = obj1.delete()
 
 
+def test__device_ha_monitored_interfaces():
+    logging.info('# Test DeviceHAMonitoredInterfaces. get, put DeviceHAMonitoredInterfaces Objects')
+    obj1 = DeviceHAMonitoredInterfaces(fmc=fmc1, ha_name="ftdv03")
+    #Interface logical name (ifname)
+    obj1.get(name="OUTSIDE1")
+    obj1.monitorForFailures = True
+    obj1.ipv4(ipv4addr="10.254.0.4",ipv4mask=29,ipv4standbyaddr="10.254.0.3")
+    print('DeviceHAMonitoredInterfaces PUT-->')
+    pp.pprint(obj1.format_data())
+    print('\n')
+    print(obj1.put())
+
+
+def test__device_ha_failover_mac():
+    
+    logging.info('# Test DeviceHAFailoverMAC. get, post, put, delete DeviceHAFailoverMAC Objects')
+    obj1 = DeviceHAFailoverMAC(fmc=fmc1, ha_name="ftdv03")
+    obj1.p_interface(name="GigabitEthernet0/0", device_name="FTDv03.ccie.lab")
+    obj1.failoverActiveMac = "0050.5686.718f"
+    obj1.failoverStandbyMac = "1050.5686.0c2e"
+    print('DeviceHAFailoverMAC POST->')
+    pp.pprint(obj1.format_data())
+    print('\n')
+    obj1.post()
+    del obj1    
+
+    obj1 = DeviceHAFailoverMAC(fmc=fmc1)
+    obj1.edit(name="GigabitEthernet0/0", ha_name="ftdv03")
+    obj1.failoverStandbyMac = "0050.5686.0c2e"
+    print('DeviceHAFailoverMAC PUT->')
+    print('\n')
+    pp.pprint(obj1.format_data())
+    del obj1
+
+    obj1 = DeviceHAFailoverMAC(fmc=fmc1)
+    obj1.edit(name="GigabitEthernet0/0", ha_name="ftdv03")
+    obj1.delete()
+
 def test__ipv4_static_routes():
     #put, delete operations are going to be problematic since there is no name associated with a route.
     logging.info('# Test IPv4StaticRoutes. get, post, put, delete IPv4StaticRoutes Objects. Requires registered device')
@@ -856,9 +894,11 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__slamonitor()
     test__security_zone()
     test__device()
-    test__phys_interfaces()
-    test__ipv4_static_routes()
+    #test__phys_interfaces()
+    #test__ipv4_static_routes()
     #test__device_ha_pair()
+    #test__device_ha_monitored_interfaces()
+    #test__device_ha_failover_mac()
     test__intrusion_policy()
     test__access_control_policy()
     test__acp_rule()
