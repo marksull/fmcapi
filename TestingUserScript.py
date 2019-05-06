@@ -679,7 +679,7 @@ def test__device_ha_pair():
 
 def test__device_ha_monitored_interfaces():
     logging.info('# Test DeviceHAMonitoredInterfaces. get, put DeviceHAMonitoredInterfaces Objects')
-    obj1 = DeviceHAMonitoredInterfaces(fmc=fmc1, ha_name="ftdv03")
+    obj1 = DeviceHAMonitoredInterfaces(fmc=fmc1, ha_name="HaName")
     #Interface logical name (ifname)
     obj1.get(name="OUTSIDE1")
     obj1.monitorForFailures = True
@@ -693,8 +693,8 @@ def test__device_ha_monitored_interfaces():
 def test__device_ha_failover_mac():
     
     logging.info('# Test DeviceHAFailoverMAC. get, post, put, delete DeviceHAFailoverMAC Objects')
-    obj1 = DeviceHAFailoverMAC(fmc=fmc1, ha_name="ftdv03")
-    obj1.p_interface(name="GigabitEthernet0/0", device_name="FTDv03.ccie.lab")
+    obj1 = DeviceHAFailoverMAC(fmc=fmc1, ha_name="HaName")
+    obj1.p_interface(name="GigabitEthernet0/0", device_name="device-name")
     obj1.failoverActiveMac = "0050.5686.718f"
     obj1.failoverStandbyMac = "1050.5686.0c2e"
     print('DeviceHAFailoverMAC POST->')
@@ -704,7 +704,7 @@ def test__device_ha_failover_mac():
     del obj1    
 
     obj1 = DeviceHAFailoverMAC(fmc=fmc1)
-    obj1.edit(name="GigabitEthernet0/0", ha_name="ftdv03")
+    obj1.edit(name="GigabitEthernet0/0", ha_name="HaName")
     obj1.failoverStandbyMac = "0050.5686.0c2e"
     print('DeviceHAFailoverMAC PUT->')
     print('\n')
@@ -715,33 +715,6 @@ def test__device_ha_failover_mac():
     obj1.edit(name="GigabitEthernet0/0", ha_name="ftdv03")
     obj1.delete()
 
-def test__ipv4_static_routes():
-    #put, delete operations are going to be problematic since there is no name associated with a route.
-    logging.info('# Test IPv4StaticRoutes. get, post, put, delete IPv4StaticRoutes Objects. Requires registered device')
-    obj1 = IPHost(fmc=fmc1, name='_iphost1', value='10.254.0.1')
-    obj1.post()
-    obj2 = IPNetwork(fmc=fmc1, name='_ipnet1', value='208.67.220.0/24')
-    obj2.post()
-    obj3 = IPNetwork(fmc=fmc1, name='_ipnet2', value='208.67.222.0/24')
-    obj3.post()
-    route1 = IPv4StaticRoutes(fmc=fmc1, device_name="FTDv03.ccie.lab")
-    #Interface logical name (ifname)
-    route1.interfaceName = "OUTSIDE1"
-    #Host or Network object only.  No network groups.  Only supports "add" action currently
-    route1.selectedNetworks(action="add", names=["_ipnet1"])
-    route1.gw(name="_iphost1")
-    print('IPv4StaticRoutes Post-->')
-    pp.pprint(route1.format_data())
-    print('\n')
-    route1.post()
-    '''
-    route1.selectedNetworks(action="add", names=["_ipnet2"])
-    print('IPv4StaticRoutes Put-->')
-    pp.pprint(route1.format_data())
-    print('\n')
-    route1.put()
-    hash ifname, gateway.name,routeTracking.name, metric
-    '''
 
 def test__intrusion_policy():
     logging.info('# Test IntrusionPolicy. Can only GET IntrusionPolicy objects.')
@@ -941,7 +914,6 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     #test__interface_group()
     test__device()
     #test__phys_interfaces()
-    #test__ipv4_static_routes()
     #test__device_ha_pair()
     #test__device_ha_monitored_interfaces()
     #test__device_ha_failover_mac()

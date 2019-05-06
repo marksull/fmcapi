@@ -1799,10 +1799,12 @@ class IPv4StaticRoutes(APIClassTemplate):
     REQUIRED_FOR_POST = ['interfaceName', 'selectedNetworks', 'gateway']
     REQUIRED_FOR_PUT = ['id', 'device_id']
     
+    '''
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for IPv4StaticRoutes class.")
         self.parse_kwargs(**kwargs)
+
     def format_data(self):
         logging.debug("In format_data() for IPv4StaticRoutes class.")
         json_data = {}
@@ -1823,6 +1825,7 @@ class IPv4StaticRoutes(APIClassTemplate):
         if 'isTunneled' in self.__dict__:
             json_data['isTunneled'] = self.isTunneled
         return json_data
+
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for IPv4StaticRoutes class.")
@@ -1840,6 +1843,7 @@ class IPv4StaticRoutes(APIClassTemplate):
             self.metricValue = kwargs['metricValue']
         if 'isTunneled' in kwargs:
             self.isTunneled = kwargs['isTunneled']
+
     def device(self, device_name):
         logging.debug("In device() for IPv4StaticRoutes class.")
         device1 = Device(fmc=self.fmc)
@@ -1851,6 +1855,25 @@ class IPv4StaticRoutes(APIClassTemplate):
         else:
             logging.warning('Device {} not found.  Cannot set up device for '
                             'IPv4StaticRoutes.'.format(device_name))
+
+    def edit(self, device_name, ifname, gateway):
+        logging.debug("In edit() for IPv4StaticRoutes class.")
+        obj1 = IPv4StaticRoutes(fmc=self.fmc, device_name=device_name)
+        route_json = obj1.get()
+        items = route_json.get('items', [])
+        found = False
+        for item in items:
+            if item["gateway"]["object"]["name"] == gateway and item["interfaceName"] == ifname:
+                found = True
+                self.selectedNetworks = item["selectedNetworks"]
+                self.interfaceName = item["interfaceName"]
+                self.gateway = item["gateway"]
+                self.id = item["id"]
+                break
+        if found == False:
+            logging.warning('Gateway {} and interface {} combination not found.  Cannot set up device for '
+                            'IPv4StaticRoutes.'.format(gateway, ifname))
+
     def selectedNetworks(self, action, names):
         logging.warning("In selectedNetworks() for Device class.")
         if action == 'add':
@@ -1906,6 +1929,7 @@ class IPv4StaticRoutes(APIClassTemplate):
         else:
             logging.warning('Object {} not found.  Cannot set up device for '
                             'IPv4StaticRoutes.'.format(name))
+    '''
             
 class DeviceHAPairs(APIClassTemplate):
     """
@@ -2150,6 +2174,7 @@ class DeviceHAFailoverMAC(APIClassTemplate):
             logging.warning('PhysicalInterface, "{}", not found.  Cannot add to DeviceHAFailoverMAC.'.format(name))
 
     def edit(self, name, ha_name):
+        logging.debug("In edit() for DeviceHAFailoverMAC class.")
         deviceha1 = DeviceHAPairs(fmc=self.fmc, name=ha_name)
         deviceha1.get()
         obj1 = DeviceHAFailoverMAC(fmc=self.fmc)
