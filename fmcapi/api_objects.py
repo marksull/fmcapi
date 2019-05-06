@@ -1327,22 +1327,24 @@ class InterfaceGroup(APIClassTemplate):
         if 'interfaces' in kwargs:
             self.interfaces = kwargs['interfaces']
 
-    def fpinterface(self, device_name, action="add", names=[]):
+    def p_interface(self, device_name="", action="add", names=[]):
         logging.debug("In interfaces() for InterfaceGroup class.")
         if action == 'add':
             intfs = []
             for name in names:
                 intf = PhysicalInterface(fmc=self.fmc)
                 intf.get(name=name,device_name=device_name)
-                if 'id' in intf.__dict__:
+                if 'id' in intf.__dict__ and 'ifname' in intf.__dict__:
                     intfs.append({'name': intf.name, 'id': intf.id, 'type': intf.type})
+                elif 'id' in intf.__dict__:
+                    logging.warning('PhysicalInterface, "{}", found without logical ifname.  Cannot add to InterfaceGroup.'.format(name))
                 else:
-                    logging.warning('PhysicalInterface, "{}", not found.  Cannot add to DeviceGroup.'.format(name))
+                    logging.warning('PhysicalInterface, "{}", not found.  Cannot add to InterfaceGroup.'.format(name))
             if len(intfs) != 0:
                 #Make sure we found at least one intf
                 self.interfaces = intfs
             else:
-                logging.warning('No valid PhysicalInterface found: "{}".  Cannot remove from DeviceGroup.'.format(names))
+                logging.warning('No valid PhysicalInterface found: "{}".  Cannot remove from InterfaceGroup.'.format(names))
         elif action == 'remove':
             if 'interfaces' in self.__dict__:
                 intfs = []
@@ -1354,7 +1356,7 @@ class InterfaceGroup(APIClassTemplate):
                 self.interfaces = intfs
             else:
                 logging.warning("This InterfaceObject has no interfaces.  Nothing to remove.")
-        elif action == 'clear':
+        elif action == 'clear-all':
             if 'interfaces' in self.__dict__:
                 del self.interfaces
                 logging.info('All PhysicalInterfaces removed from this InterfaceGroup.')

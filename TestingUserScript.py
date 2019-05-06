@@ -1,3 +1,4 @@
+  
 """
 Unit testing, of a sort, all the created methods/classes.
 """
@@ -432,6 +433,50 @@ def test__security_zone():
     time.sleep(1)
     obj1.delete()
     logging.info('# Test SecurityZone done.\n')
+
+
+def test__interface_group():
+    logging.info('# Test InterfaceGroup.  Post, get, put, delete InterfaceGroup Objects.')
+    obj1 = InterfaceGroup(fmc=fmc1)
+    obj1.name = "_ig_outside_all"
+    obj1.interfaceMode = 'ROUTED'
+    print('InterfaceGroup POST-->')
+    pp.pprint(obj1.format_data())
+    print('\n')
+    obj1.post()
+    time.sleep(1)
+    del obj1
+
+    obj1 = InterfaceGroup(fmc=fmc1, name="_ig_outside_all")
+    obj1.get()
+    obj1.p_interface(device_name="FTDv03.ccie.lab", action="add", names=["GigabitEthernet0/0","GigabitEthernet0/1","GigabitEthernet0/2"])
+    print('InterfaceGroup PUT-->')
+    pp.pprint(obj1.format_data())
+    print('\n')
+    obj1.put()
+    time.sleep(1)
+    del obj1
+    
+    obj1 = InterfaceGroup(fmc=fmc1, name="_ig_outside_all")
+    obj1.get()
+    obj1.p_interface(device_name="FTDv03.ccie.lab", action="remove", names=["GigabitEthernet0/1"])
+    print('InterfaceGroup PUT-->')
+    pp.pprint(obj1.format_data())
+    print('\n')
+    obj1.put()
+    time.sleep(1)
+    del obj1
+    
+    obj1 = InterfaceGroup(fmc=fmc1, name="_ig_outside_all")
+    obj1.get()
+    obj1.p_interface(action="clear-all")
+    obj1.put()
+    print('InterfaceGroup DELETE-->')
+    pp.pprint(obj1.format_data())
+    print('\n')
+    obj1.delete()
+    del obj1
+    logging.info('# Test InterfaceGroup done.\n')
 
 
 def test__slamonitor():
@@ -893,6 +938,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__protocol_port()
     test__slamonitor()
     test__security_zone()
+    #test__interface_group()
     test__device()
     #test__phys_interfaces()
     #test__ipv4_static_routes()
