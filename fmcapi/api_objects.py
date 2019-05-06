@@ -1246,6 +1246,31 @@ class ProtocolPort(APIClassTemplate):
         if 'protocol' in kwargs:
             self.protocol = kwargs['protocol']
 
+class InterfaceObject(APIClassTemplate):
+    """
+    The Interface Object Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/interfaceobjects'
+    REQUIRED_FOR_POST = ['name', 'interfaceMode']
+    FILTER_BY_NAME = True
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for InterfaceObject class.")
+        self.parse_kwargs(**kwargs)
+
+    def post(self):
+        logging.info('POST method for API for InterfaceObject not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for InterfaceObject not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for InterfaceObject not supported.')
+        pass
 
 class SecurityZone(APIClassTemplate):
     """
@@ -1288,7 +1313,7 @@ class SecurityZone(APIClassTemplate):
 
 class InterfaceGroup(APIClassTemplate):
     """
-    The Security Zone Object in the FMC.
+    The InterfaceGroup Object in the FMC.
     """
 
     URL_SUFFIX = '/object/interfacegroups'
@@ -2751,6 +2776,631 @@ class ACPRule(APIClassTemplate):
             if 'destinationNetworks' in self.__dict__:
                 del self.destinationNetworks
                 logging.info('All Destination Networks removed from this ACPRule object.')
+
+class FTDNatPolicy(APIClassTemplate):
+    """
+    The FTDNATPolicy Object in the FMC.
+    """
+
+    URL_SUFFIX = '/policy/ftdnatpolicies'
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for FTDNatPolicy class.")
+        self.parse_kwargs(**kwargs)
+        self.type = "FTDNatPolicy"
+
+    def format_data(self):
+        logging.debug("In format_data() for FTDNatPolicy class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for FTDNatPolicy class.")
+
+class AutoNatRules(APIClassTemplate):
+    """
+    The AutoNatRules Object in the FMC.
+    """
+
+    PREFIX_URL = '/policy/ftdnatpolicies'
+    REQUIRED_FOR_POST = ["nat_id"]
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for AutoNatRules class.")
+        self.parse_kwargs(**kwargs)
+        self.type = "FTDAutoNatRule"
+
+    def format_data(self):
+        logging.debug("In format_data() for AutoNatRules class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'originalNetwork' in self.__dict__:
+            json_data['originalNetwork'] = self.originalNetwork
+        if 'translatedNetwork' in self.__dict__:
+            json_data['translatedNetwork'] = self.translatedNetwork
+        if 'interfaceInTranslatedNetwork' in self.__dict__:
+            json_data['interfaceInTranslatedNetwork'] = self.interfaceInTranslatedNetwork
+        if 'natType' in self.__dict__:
+            json_data['natType'] = self.natType
+        if 'interfaceIpv6' in self.__dict__:
+            json_data['interfaceIpv6'] = self.interfaceIpv6
+        if 'fallThrough' in self.__dict__:
+            json_data['fallThrough'] = self.fallThrough
+        if 'dns' in self.__dict__:
+            json_data['dns'] = self.dns
+        if 'routeLookup' in self.__dict__:
+            json_data['routeLookup'] = self.routeLookup
+        if 'noProxyArp' in self.__dict__:
+            json_data['noProxyArp'] = self.noProxyArp
+        if 'netToNet' in self.__dict__:
+            json_data['netToNet'] = self.netToNet
+        if 'sourceInterface' in self.__dict__:
+            json_data['sourceInterface'] = self.sourceInterface
+        if 'destinationInterface' in self.__dict__:
+            json_data['destinationInterface'] = self.destinationInterface
+        if 'originalPort' in self.__dict__:
+            json_data['originalPort'] = self.originalPort
+        if 'translatedPort' in self.__dict__:
+            json_data['translatedPort'] = self.translatedPort
+        if 'serviceProtocol' in self.__dict__:
+            json_data['serviceProtocol'] = self.serviceProtocol
+        if 'patOptions' in self.__dict__:
+            json_data['patOptions'] = self.patOptions
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for AutoNatRules class.")
+        if 'originalNetwork' in kwargs:
+            self.originalNetwork = kwargs['originalNetwork']
+        if 'translatedNetwork' in kwargs and 'interfaceInTranslatedNetwork' is True:
+            logging.warning("Cannot have both a translatedNetwork and interfaceInTranslatedNetwork")
+        elif 'translatedNetwork' in kwargs:
+            self.translatedNetwork = kwargs['translatedNetwork']
+        elif 'interfaceInTranslatedNetwork' in kwargs:
+            self.interfaceInTranslatedNetwork = kwargs['interfaceInTranslatedNetwork']
+        if 'natType' in kwargs:
+            self.natType = kwargs['natType']
+        if 'interfaceIpv6' in kwargs:
+            self.interfaceIpv6 = kwargs['interfaceIpv6']
+        if 'fallThrough' in kwargs:
+            self.fallThrough = kwargs['fallThrough']
+        if 'dns' in kwargs:
+            self.dns = kwargs['dns']
+        if 'routeLookup' in kwargs:
+            self.routeLookup = kwargs['routeLookup']
+        if 'noProxyArp' in kwargs:
+            self.noProxyArp = kwargs['noProxyArp']
+        if 'netToNet' in kwargs:
+            self.netToNet = kwargs['netToNet']
+        if 'sourceInterface' in kwargs:
+            self.sourceInterface = kwargs['sourceInterface']
+        if 'destinationInterface' in kwargs:
+            self.destinationInterface = kwargs['destinationInterface']
+        if 'originalPort' in kwargs:
+            self.originalPort = kwargs['originalPort']
+        if 'translatedPort' in kwargs:
+            self.translatedPort = kwargs['translatedPort']
+        if 'serviceProtocol' in kwargs:
+            self.serviceProtocol = kwargs['serviceProtocol']
+        if 'patOptions' in kwargs:
+            self.patOptions = kwargs['patOptions']
+
+    def nat_policy(self,name):
+        logging.debug("In nat_policy() for AutoNatRules class.")
+        ftd_nat = FTDNatPolicy(fmc=self.fmc)
+        ftd_nat.get(name=name)
+        if 'id' in ftd_nat.__dict__:
+            self.nat_id = ftd_nat.id
+            self.URL = '{}{}/{}/autonatrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.nat_id)
+            self.nat_added_to_url = True
+        else:
+            logging.warning('FTD NAT Policy {} not found.  Cannot set up AutoNatRule for '
+                            'NAT Policy.'.format(name))
+
+    def original_network(self, name):
+        logging.debug("In original_network() for AutoNatRules class.")
+        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+        items = ipaddresses_json.get('items', [])
+        new_net = None
+        for item in items:
+            if item['name'] == name:
+                new_net = {'id': item['id'], 'type': item['type']}
+                break
+        if new_net is None:
+            logging.warning('Network "{}" is not found in FMC.  Cannot add to originalNetwork.'.format(name))
+        else:
+            self.originalNetwork = new_net
+            logging.info('Adding "{}" to sourceNetworks for this AutoNatRule.'.format(name))
+
+    def translated_network(self,name):
+        #Auto Nat rules can't use network group objects
+        logging.debug("In translated_network() for AutoNatRules class.")
+        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+        items = ipaddresses_json.get('items', [])
+        new_net = None
+        for item in items:
+            if item['name'] == name:
+                new_net = {'id': item['id'], 'type': item['type']}
+                break
+        if new_net is None:
+            logging.warning('Network "{}" is not found in FMC.  Cannot add to translatedNetwork.'.format(name))
+        else:
+            self.translatedNetwork = new_net
+            logging.info('Adding "{}" to destinationNetworks for this AutoNatRule.'.format(name))
+
+    def source_intf(self,name):
+        logging.debug("In source_intf() for AutoNatRules class.")
+        intf_obj = InterfaceObject(fmc=self.fmc).get()
+        items = intf_obj.get('items', [])
+        new_intf = None
+        for item in items:
+            if item["name"] == name:
+                new_intf = {'id': item['id'], 'type': item['type']}
+                break
+        if new_intf == None:
+            logging.warning('Interface Object "{}" is not found in FMC.  Cannot add to sourceInterface.'.format(name))
+        else:
+            if new_intf.type == "InterfaceGroup" and len(new_intf.interfaces) > 1:
+                logging.warning('Interface Object "{}" contains more than one physical interface.  Cannot add to sourceInterface.'.format(name))
+            else:
+                self.sourceInterface = new_intf
+                logging.info('Interface Object "{}" added to NAT Policy.'.format(name))
+
+    def destination_intf(self,name):
+        logging.debug("In destination_intf() for AutoNatRules class.")
+        intf_obj = InterfaceObject(fmc=self.fmc).get()
+        items = intf_obj.get('items', [])
+        new_intf = None
+        for item in items:
+            if item["name"] == name:
+                new_intf = {'id': item['id'], 'type': item['type']}
+                break
+        if new_intf == None:
+            logging.warning('Interface Object "{}" is not found in FMC.  Cannot add to destinationInterface.'.format(name))
+        else:
+            if new_intf.type == "InterfaceGroup" and len(new_intf.interfaces) > 1:
+                logging.warning('Interface Object "{}" contains more than one physical interface.  Cannot add to destinationInterface.'.format(name))
+            else:
+                self.destinationInterface = new_intf
+                logging.info('Interface Object "{}" added to NAT Policy.'.format(name))
+
+    def identity_nat(self, name):
+        logging.debug("In identity_nat() for AutoNatRules class.")
+        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+        items = ipaddresses_json.get('items', [])
+        new_net = None
+        for item in items:
+            if item['name'] == name:
+                new_net = {'id': item['id'], 'type': item['type']}
+                break
+        if new_net is None:
+            logging.warning('Network "{}" is not found in FMC.  Cannot add to this AutoNatRule.'.format(name))
+        else:
+            self.natType = "STATIC"
+            self.originalNetwork = new_net
+            self.translatedNetwork = new_net
+            logging.info('Adding "{}" to AutoNatRule.'.format(name))
+
+    def patPool(self, name, options={}):
+        #Network Group Object permitted for patPool
+        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+        items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
+        new_net = None
+        for item in items:
+            if item['name'] == name:
+                new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
+                break
+        if new_net is None:
+            logging.warning('Network "{}" is not found in FMC.  Cannot add to patPool.'.format(name))
+        else:
+            self.natType = "DYNAMIC"
+            self.patOptions = {"patPoolAddress": new_net}
+            self.patOptions["interfacePat"] = options.interfacePat if "interfacePat" in options.keys() else False
+            self.patOptions["includeReserve"] = options.includeReserve if "includeReserve" in options.keys() else False
+            self.patOptions["roundRobin"] = options.roundRobin if "roundRobin" in options.keys() else False
+            self.patOptions["extendedPat"] = options.extendedPat if "extendedPat" in options.keys() else False
+            self.patOptions["flatPortRange"] = options.flatPortRange if "flatPortRange" in options.keys() else False
+            logging.info('Adding "{}" to patPool for this AutoNatRule.'.format(name))
+
+class ManualNatRules(APIClassTemplate):
+    #Host,Network,NetworkGroup objects
+    """
+    The ManualNatRules Object in the FMC.
+    """
+
+    PREFIX_URL = '/policy/ftdnatpolicies'
+    REQUIRED_FOR_POST = ["nat_id"]
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for ManualNatRules class.")
+        self.parse_kwargs(**kwargs)
+        self.type = "FTDManualNatRule"
+
+    def format_data(self):
+        logging.debug("In format_data() for ManualNatRules class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'originalSource' in self.__dict__:
+            json_data['originalSource'] = self.originalSource
+        if 'originalDestination' in self.__dict__:
+            json_data['originalDestination'] = self.originalDestination
+        if 'translatedSource' in self.__dict__:
+            json_data['translatedSource'] = self.translatedSource
+        if 'translatedDestination' in self.__dict__:
+            json_data['translatedDestination'] = self.translatedDestination
+        if 'interfaceInTranslatedSource' in self.__dict__:
+            json_data['interfaceInTranslatedSource'] = self.interfaceInTranslatedSource
+        if 'interfaceInOriginalDestination' in self.__dict__:
+            json_data['interfaceInOriginalDestination'] = self.interfaceInOriginalDestination
+        if 'natType' in self.__dict__:
+            json_data['natType'] = self.natType
+        if 'interfaceIpv6' in self.__dict__:
+            json_data['interfaceIpv6'] = self.interfaceIpv6
+        if 'fallThrough' in self.__dict__:
+            json_data['fallThrough'] = self.fallThrough
+        if 'dns' in self.__dict__:
+            json_data['dns'] = self.dns
+        if 'routeLookup' in self.__dict__:
+            json_data['routeLookup'] = self.routeLookup
+        if 'noProxyArp' in self.__dict__:
+            json_data['noProxyArp'] = self.noProxyArp
+        if 'netToNet' in self.__dict__:
+            json_data['netToNet'] = self.netToNet
+        if 'sourceInterface' in self.__dict__:
+            json_data['sourceInterface'] = self.sourceInterface
+        if 'destinationInterface' in self.__dict__:
+            json_data['destinationInterface'] = self.destinationInterface
+        if 'originalSourcePort' in self.__dict__:
+            json_data['originalSourcePort'] = self.originalSourcePort
+        if 'translatedSourcePort' in self.__dict__:
+            json_data['translatedSourcePort'] = self.translatedSourcePort
+        if 'originalDestinationPort' in self.__dict__:
+            json_data['originalDestinationPort'] = self.originalDestinationPort
+        if 'translatedDestinationPort' in self.__dict__:
+            json_data['translatedDestinationPort'] = self.translatedDestinationPort
+        if 'patOptions' in self.__dict__:
+            json_data['patOptions'] = self.patOptions
+        if 'unidirectional' in self.__dict__:
+            json_data['unidirectional'] = self.unidirectional
+        if 'enabled' in self.__dict__:
+            json_data['enabled'] = self.enabled
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for ManualNatRules class.")
+        if 'originalSource' in kwargs:
+            self.originalSource = kwargs['originalSource']
+        if 'originalDestination' in kwargs:
+            self.originalDestination = kwargs['originalDestination']
+        if 'translatedSource' in kwargs and 'interfaceInTranslatedSource' is True:
+            logging.warning("Cannot have both a translatedSource and interfaceInTranslatedSource")
+        elif 'translatedSource' in kwargs:
+            self.translatedSource = kwargs['translatedSource']
+        elif 'interfaceInTranslatedSource' in kwargs:
+            self.interfaceInTranslatedSource = kwargs['interfaceInTranslatedSource']
+        if 'translatedDestination' in kwargs:
+            self.translatedDestination = kwargs['translatedDestination']
+        if 'interfaceInOriginalDestination' in kwargs:
+            self.interfaceInOriginalDestination = kwargs['interfaceInOriginalDestination']
+        if 'natType' in kwargs:
+            self.natType = kwargs['natType']
+        if 'interfaceIpv6' in kwargs:
+            self.interfaceIpv6 = kwargs['interfaceIpv6']
+        if 'fallThrough' in kwargs:
+            self.fallThrough = kwargs['fallThrough']
+        if 'dns' in kwargs:
+            self.dns = kwargs['dns']
+        if 'routeLookup' in kwargs:
+            self.routeLookup = kwargs['routeLookup']
+        if 'noProxyArp' in kwargs:
+            self.noProxyArp = kwargs['noProxyArp']
+        if 'netToNet' in kwargs:
+            self.netToNet = kwargs['netToNet']
+        if 'sourceInterface' in kwargs:
+            self.sourceInterface = kwargs['sourceInterface']
+        if 'destinationInterface' in kwargs:
+            self.destinationInterface = kwargs['destinationInterface']
+        if 'originalSourcePort' in kwargs:
+            self.originalSourcePort = kwargs['originalSourcePort']
+        if 'translatedSourcePort' in kwargs:
+            self.translatedSourcePort = kwargs['translatedSourcePort']
+        if 'originalDestinationPort' in kwargs:
+            self.originalDestinationPort = kwargs['originalDestinationPort']
+        if 'translatedDestinationPort' in kwargs:
+            self.translatedDestinationPort = kwargs['translatedDestinationPort']
+        if 'patOptions' in kwargs:
+            self.patOptions = kwargs['patOptions']
+        if 'unidirectional' in kwargs:
+            self.unidirectional = kwargs['unidirectional']
+        if 'enabled' in kwargs:
+            self.enabled = kwargs['enabled']
+
+    def nat_policy(self,name):
+        logging.debug("In nat_policy() for ManualNatRules class.")
+        ftd_nat = FTDNatPolicy(fmc=self.fmc)
+        ftd_nat.get(name=name)
+        if 'id' in ftd_nat.__dict__:
+            self.nat_id = ftd_nat.id
+            self.URL = '{}{}/{}/autonatrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.nat_id)
+            self.nat_added_to_url = True
+        else:
+            logging.warning('FTD NAT Policy {} not found.  Cannot set up ManualNatRule for '
+                            'NAT Policy.'.format(name))
+
+    def original_source(self, name):
+        logging.debug("In original_source() for ManualNatRules class.")
+        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+        items = ipaddresses_json.get('items', [])
+        new_net = None
+        for item in items:
+            if item['name'] == name:
+                new_net = {'id': item['id'], 'type': item['type']}
+                break
+        if new_net is None:
+            logging.warning('Network "{}" is not found in FMC.  Cannot add to original_source.'.format(name))
+        else:
+            self.originalSource = new_net
+            logging.info('Adding "{}" to original_source for this ManualNatRule.'.format(name))
+
+    def translated_source(self,name):
+        logging.debug("In translated_source() for ManualNatRules class.")
+        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+        items = ipaddresses_json.get('items', [])
+        new_net = None
+        for item in items:
+            if item['name'] == name:
+                new_net = {'id': item['id'], 'type': item['type']}
+                break
+        if new_net is None:
+            logging.warning('Network "{}" is not found in FMC.  Cannot add to translated_source.'.format(name))
+        else:
+            self.translatedSource = new_net
+            logging.info('Adding "{}" to translated_source for this ManualNatRule.'.format(name))
+
+    def original_destination(self, name):
+        logging.debug("In original_destination() for ManualNatRules class.")
+        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+        items = ipaddresses_json.get('items', [])
+        new_net = None
+        for item in items:
+            if item['name'] == name:
+                new_net = {'id': item['id'], 'type': item['type']}
+                break
+        if new_net is None:
+            logging.warning('Network "{}" is not found in FMC.  Cannot add to original_destination.'.format(name))
+        else:
+            self.originalDestination = new_net
+            logging.info('Adding "{}" to original_destination for this ManualNatRule.'.format(name))
+
+    def translated_destination(self,name):
+        logging.debug("In translated_destination() for ManualNatRules class.")
+        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+        items = ipaddresses_json.get('items', [])
+        new_net = None
+        for item in items:
+            if item['name'] == name:
+                new_net = {'id': item['id'], 'type': item['type']}
+                break
+        if new_net is None:
+            logging.warning('Network "{}" is not found in FMC.  Cannot add to translated_destination.'.format(name))
+        else:
+            self.translatedDestination = new_net
+            logging.info('Adding "{}" to translated_destination for this ManualNatRule.'.format(name))
+
+    def original_source_port(self, name):
+        logging.debug("In original_source_port() for ManualNatRules class.")
+        ports_json = ProtocolPort(fmc=self.fmc).get()
+        portgroup_json = PortObjectGroup(fmc=self.fmc).get()
+        items = ports_json.get('items', []) + portgroup_json.get('items', [])
+        new_port = None
+        for item in items:
+            if item['name'] == name:
+                new_port = {'id': item['id'], 'type': item['type']}
+                break
+        if new_port is None:
+            logging.warning('Port "{}" is not found in FMC.  Cannot add to original_source_port.'.format(name))
+        else:
+            self.originalSourcePort = new_port
+            logging.info('Adding "{}" to original_source_port for this ManualNatRule.'.format(name))
+
+    def translated_source_port(self, name):
+        logging.debug("In translated_source_port() for ManualNatRules class.")
+        ports_json = ProtocolPort(fmc=self.fmc).get()
+        portgroup_json = PortObjectGroup(fmc=self.fmc).get()
+        items = ports_json.get('items', []) + portgroup_json.get('items', [])
+        new_port = None
+        for item in items:
+            if item['name'] == name:
+                new_port = {'id': item['id'], 'type': item['type']}
+                break
+        if new_port is None:
+            logging.warning('Port "{}" is not found in FMC.  Cannot add to translated_source_port.'.format(name))
+        else:
+            self.translatedSourcePort = new_port
+            logging.info('Adding "{}" to translated_source_port for this ManualNatRule.'.format(name))
+
+    def original_destination_port(self, name):
+        logging.debug("In original_destination_port() for ManualNatRules class.")
+        ports_json = ProtocolPort(fmc=self.fmc).get()
+        portgroup_json = PortObjectGroup(fmc=self.fmc).get()
+        items = ports_json.get('items', []) + portgroup_json.get('items', [])
+        new_port = None
+        for item in items:
+            if item['name'] == name:
+                new_port = {'id': item['id'], 'type': item['type']}
+                break
+        if new_port is None:
+            logging.warning('Port "{}" is not found in FMC.  Cannot add to original_destination_port.'.format(name))
+        else:
+            self.originalDestinationPort = new_port
+            logging.info('Adding "{}" to original_destination_port for this ManualNatRule.'.format(name))
+
+    def translated_destination_port(self, name):
+        logging.debug("In translated_destination_port() for ManualNatRules class.")
+        ports_json = ProtocolPort(fmc=self.fmc).get()
+        portgroup_json = PortObjectGroup(fmc=self.fmc).get()
+        items = ports_json.get('items', []) + portgroup_json.get('items', [])
+        new_port = None
+        for item in items:
+            if item['name'] == name:
+                new_port = {'id': item['id'], 'type': item['type']}
+                break
+        if new_port is None:
+            logging.warning('Port "{}" is not found in FMC.  Cannot add to translated_destination_port.'.format(name))
+        else:
+            self.translatedDestinationPort = new_port
+            logging.info('Adding "{}" to translated_destination_port for this ManualNatRule.'.format(name))
+
+    def source_intf(self,name):
+        logging.debug("In source_intf() for ManualNatRules class.")
+        intf_obj = InterfaceObject(fmc=self.fmc).get()
+        items = intf_obj.get('items', [])
+        new_intf = None
+        for item in items:
+            if item["name"] == name:
+                new_intf = {'id': item['id'], 'type': item['type']}
+                break
+        if new_intf == None:
+            logging.warning('Interface Object "{}" is not found in FMC.  Cannot add to sourceInterface.'.format(name))
+        else:
+            self.sourceInterface = new_intf
+            logging.info('Interface Object "{}" added to NAT Policy.'.format(name))
+
+    def destination_intf(self,name):
+        logging.debug("In destination_intf() for ManualNatRules class.")
+        intf_obj = InterfaceObject(fmc=self.fmc).get()
+        items = intf_obj.get('items', [])
+        new_intf = None
+        for item in items:
+            if item["name"] == name:
+                new_intf = {'id': item['id'], 'type': item['type']}
+                break
+        if new_intf == None:
+            logging.warning('Interface Object "{}" is not found in FMC.  Cannot add to destinationInterface.'.format(name))
+        else:
+            if new_intf.type == "InterfaceGroup" and len(new_intf.items) > 1:
+                
+            self.destinationInterface = new_intf
+            logging.info('Interface Object "{}" added to NAT Policy.'.format(name))
+
+    def identity_nat(self, name):
+        logging.debug("In identity_nat() for ManualNatRules class.")
+        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+        items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
+        new_net = None
+        for item in items:
+            if item['name'] == name:
+                new_net = {'id': item['id'], 'type': item['type']}
+                break
+        if new_net is None:
+            logging.warning('Network "{}" is not found in FMC.  Cannot add to this ManualNatRules.'.format(name))
+        else:
+            self.natType = "STATIC"
+            self.originalSource = new_net
+            self.translatedSource = new_net
+            logging.info('Adding "{}" to ManualNatRules.'.format(name))
+
+    def patPool(self, name, options={}):
+        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+        items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
+        new_net = None
+        for item in items:
+            if item['name'] == name:
+                new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
+                break
+        if new_net is None:
+            logging.warning('Network "{}" is not found in FMC.  Cannot add to patPool.'.format(name))
+        else:
+            self.natType = "DYNAMIC"
+            self.patOptions = {"patPoolAddress": new_net}
+            self.patOptions["interfacePat"] = options.interfacePat if "interfacePat" in options.keys() else False
+            self.patOptions["includeReserve"] = options.includeReserve if "includeReserve" in options.keys() else False
+            self.patOptions["roundRobin"] = options.roundRobin if "roundRobin" in options.keys() else False
+            self.patOptions["extendedPat"] = options.extendedPat if "extendedPat" in options.keys() else False
+            self.patOptions["flatPortRange"] = options.flatPortRange if "flatPortRange" in options.keys() else False
+            logging.info('Adding "{}" to patPool for this AutoNatRule.'.format(name))
+
+class NatRules(APIClassTemplate):
+    """
+    The NatRules Object in the FMC.
+    """
+
+    PREFIX_URL = '/policy/ftdnatpolicies'
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for NatRules class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for NatRules class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for NatRules class.")
+
+    def nat_policy(self,name):
+        logging.debug("In nat_policy() for NatRules class.")
+        ftd_nat = FTDNatPolicy(fmc=self.fmc)
+        ftd_nat.get(name=name)
+        if 'id' in ftd_nat.__dict__:
+            self.nat_id = ftd_nat.id
+            self.URL = '{}{}/{}/autonatrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.nat_id)
+            self.nat_added_to_url = True
+        else:
+            logging.warning('FTD NAT Policy {} not found.  Cannot set up NatRules for '
+                            'NAT Policy.'.format(name))
+
+    def post(self):
+        logging.info('POST method for API for NatRules not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for NatRules not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for NatRules not supported.')
+        pass
 
 class TaskStatuses(APIClassTemplate):
     """
