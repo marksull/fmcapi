@@ -8,6 +8,7 @@ import time
 import pprint
 
 # ### Set these variables to match your environment. ### #
+
 host = '10.0.50.50'
 username = 'apiscript'
 password = 'Admin123'
@@ -453,6 +454,62 @@ def test__device():
     acp1.delete()
     logging.info('# Test Device done.\n')
 
+def test__device_with_task():
+    logging.info('# Test Device1 with Task.  This requires having an actual device with the "configure manager add" '
+                 'statement enabled.')
+    acp1 = AccessControlPolicy(fmc=fmc1, name=namer)
+    acp1.post()
+
+    starttime = str(int(time.time()))
+    obj1_namer = '_fmcapi_test_{}'.format(starttime)
+
+    obj1 = Device(fmc=fmc1)
+    obj1.hostName = "10.255.0.43"
+    obj1.name = obj1_namer
+    obj1.regKey = "cisco123"
+    obj1.natID = "cisco123"
+    obj1.acp(name=acp1.name)
+    obj1.licensing(action='add', name='BASE')
+    obj1.licensing(action='add', name='THREAT')
+    obj1.licensing(action='add', name='MALWARE')
+    print('Device -->')
+    pp.pprint(obj1.format_data())
+    print('\n')
+    response = obj1.post()
+    wait_for_task(response["metadata"]["task"], 30)
+    logging.info('# Test Device2 with Task.  This requires having an actual device with the "configure manager add" '
+                 'statement enabled.')
+
+    starttime = str(int(time.time()))
+    obj2_namer = '_fmcapi_test_{}'.format(starttime)
+
+    obj2 = Device(fmc=fmc1)
+    obj2.hostName = "10.255.0.44"
+    obj2.name = obj2_namer
+    obj2.regKey = "cisco123"
+    obj2.natID = "cisco123"
+    obj2.acp(name=acp1.name)
+    obj2.licensing(action='add', name='BASE')
+    obj2.licensing(action='add', name='THREAT')
+    obj2.licensing(action='add', name='MALWARE')
+    print('Device -->')
+    pp.pprint(obj2.format_data())
+    print('\n')
+    response = obj2.post()
+    wait_for_task(response["metadata"]["task"], 30)
+
+    #Wait some additional time to complete device registration before deletion
+    time.sleep(180)
+    obj1 = Device(fmc=fmc1)
+    obj2 = Device(fmc=fmc1)
+    obj1.get(name=obj1_namer)
+    obj2.get(name=obj2_namer)
+
+    obj1.delete()
+    time.sleep(30)
+    obj2.delete()
+    time.sleep(30)
+    acp1.delete()
 
 def test__intrusion_policy():
     logging.info('# Test IntrusionPolicy. Can only GET IntrusionPolicy objects.')
@@ -616,6 +673,30 @@ def test__port_object_group():
     obj12.delete()
     logging.info('# Testing PortObjectGroup class done.\n')
 
+def wait_for_task(task, wait_time=10):
+    try:
+        status = TaskStatuses(
+            fmc=fmc1,
+            id=task["id"],
+            name=task["name"])
+        current_status = status.get()
+        '''
+        Task Status for new device registration behaves differently than other tasks
+        On new device registration, a task is sent for the initial registration. After completion 
+        the UUID is deleted without any change in task status. So we check to see if the object no longer exists
+        to assume the registration is complete.  After registration, discovery of the device begins, but there is
+        no way to check for this with a task status.  The device can't be modified during this time, but a new device
+        registration can begin.
+
+        OTOH, a device HA operation will update its status to "Success" on completion.  Hence the two different checks.
+        '''
+        while current_status["status"] is not None and current_status["status"] != "Success":
+            print("Task: %s %s %s" % (current_status["taskType"], current_status["status"], current_status["id"]))
+            time.sleep(wait_time)
+            current_status = status.get()
+        print("Task: %s %s %s %s" % (current_status["taskType"], current_status["status"], current_status["id"]))
+    except Exception as e: print(type(e),e)
+
 # ### Main Program ### #
 
 
@@ -649,9 +730,8 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__protocol_port()
     test__security_zone()
     test__device()
+    #test__device_with_task()
     test__intrusion_policy()
     test__access_control_policy()
     test__acp_rule()
     test__audit()
-    test__port_object_group()
-
