@@ -733,6 +733,8 @@ class SLAMonitor(APIClassTemplate):
             json_data['id'] = self.id
         if 'name' in self.__dict__:
             json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
         if 'timeout' in self.__dict__:
             json_data['timeout'] = self.timeout
         if 'threshold' in self.__dict__:
@@ -1350,15 +1352,17 @@ class InterfaceGroup(APIClassTemplate):
         if 'interfaces' in kwargs:
             self.interfaces = kwargs['interfaces']
 
-    def fpinterface(self, device_name, action="add", names=[]):
+    def p_interface(self, device_name="", action="add", names=[]):
         logging.debug("In interfaces() for InterfaceGroup class.")
         if action == 'add':
             intfs = []
             for name in names:
                 intf = PhysicalInterface(fmc=self.fmc)
                 intf.get(name=name,device_name=device_name)
-                if 'id' in intf.__dict__:
+                if 'id' in intf.__dict__ and 'ifname' in intf.__dict__:
                     intfs.append({'name': intf.name, 'id': intf.id, 'type': intf.type})
+                elif 'id' in intf.__dict__:
+                    logging.warning('PhysicalInterface, "{}", found without logical ifname.  Cannot add to InterfaceGroup.'.format(name))
                 else:
                     logging.warning('PhysicalInterface, "{}", not found.  Cannot add to InterfaceGroup.'.format(name))
             if len(intfs) != 0:
@@ -1377,7 +1381,7 @@ class InterfaceGroup(APIClassTemplate):
                 self.interfaces = intfs
             else:
                 logging.warning("This InterfaceObject has no interfaces.  Nothing to remove.")
-        elif action == 'clear':
+        elif action == 'clear-all':
             if 'interfaces' in self.__dict__:
                 del self.interfaces
                 logging.info('All PhysicalInterfaces removed from this InterfaceGroup.')
@@ -1690,6 +1694,7 @@ class PhysicalInterface(APIClassTemplate):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for PhysicalInterface class.")
         self.parse_kwargs(**kwargs)
+
     def format_data(self):
         logging.debug("In format_data() for PhysicalInterface class.")
         json_data = {}
@@ -1808,6 +1813,7 @@ class PhysicalInterface(APIClassTemplate):
         else:
             logging.warning('Speed {} or Duplex {} is not a valid mode.'.format(speed, duplex))
 
+
 class IPv4StaticRoutes(APIClassTemplate):
     """
     The IPv4StaticRoutes Object in the FMC.
@@ -1818,10 +1824,12 @@ class IPv4StaticRoutes(APIClassTemplate):
     REQUIRED_FOR_POST = ['interfaceName', 'selectedNetworks', 'gateway']
     REQUIRED_FOR_PUT = ['id', 'device_id']
     
+    '''
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for IPv4StaticRoutes class.")
         self.parse_kwargs(**kwargs)
+
     def format_data(self):
         logging.debug("In format_data() for IPv4StaticRoutes class.")
         json_data = {}
@@ -1842,6 +1850,7 @@ class IPv4StaticRoutes(APIClassTemplate):
         if 'isTunneled' in self.__dict__:
             json_data['isTunneled'] = self.isTunneled
         return json_data
+
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for IPv4StaticRoutes class.")
@@ -1859,6 +1868,7 @@ class IPv4StaticRoutes(APIClassTemplate):
             self.metricValue = kwargs['metricValue']
         if 'isTunneled' in kwargs:
             self.isTunneled = kwargs['isTunneled']
+
     def device(self, device_name):
         logging.debug("In device() for IPv4StaticRoutes class.")
         device1 = Device(fmc=self.fmc)
@@ -1870,6 +1880,25 @@ class IPv4StaticRoutes(APIClassTemplate):
         else:
             logging.warning('Device {} not found.  Cannot set up device for '
                             'IPv4StaticRoutes.'.format(device_name))
+
+    def edit(self, device_name, ifname, gateway):
+        logging.debug("In edit() for IPv4StaticRoutes class.")
+        obj1 = IPv4StaticRoutes(fmc=self.fmc, device_name=device_name)
+        route_json = obj1.get()
+        items = route_json.get('items', [])
+        found = False
+        for item in items:
+            if item["gateway"]["object"]["name"] == gateway and item["interfaceName"] == ifname:
+                found = True
+                self.selectedNetworks = item["selectedNetworks"]
+                self.interfaceName = item["interfaceName"]
+                self.gateway = item["gateway"]
+                self.id = item["id"]
+                break
+        if found == False:
+            logging.warning('Gateway {} and interface {} combination not found.  Cannot set up device for '
+                            'IPv4StaticRoutes.'.format(gateway, ifname))
+
     def selectedNetworks(self, action, names):
         logging.warning("In selectedNetworks() for Device class.")
         if action == 'add':
@@ -1925,6 +1954,7 @@ class IPv4StaticRoutes(APIClassTemplate):
         else:
             logging.warning('Object {} not found.  Cannot set up device for '
                             'IPv4StaticRoutes.'.format(name))
+    '''
             
 class DeviceHAPairs(APIClassTemplate):
     """
@@ -1953,6 +1983,10 @@ class DeviceHAPairs(APIClassTemplate):
             json_data['secondary'] = self.secondary
         if 'ftdHABootstrap' in self.__dict__:
             json_data['ftdHABootstrap'] = self.ftdHABootstrap
+        if 'action' in self.__dict__:
+            json_data['action'] = self.action
+        if 'forceBreak' in self.__dict__:
+            json_data['forceBreak'] = self.forceBreak
         return json_data
 
     def parse_kwargs(self, **kwargs):
@@ -1964,6 +1998,10 @@ class DeviceHAPairs(APIClassTemplate):
             self.secondary = kwargs['secondary']
         if 'ftdHABootstrap' in kwargs:
             self.ftdHABootstrap = kwargs['ftdHABootstrap']
+        if 'action' in kwargs:
+            self.action = kwargs['action']
+        if 'forceBreak' in kwargs:
+            self.forceBreak = kwargs['forceBreak']
 
     def device(self, primary_name="", secondary_name=""):
         logging.debug("In device() for DeviceHAPairs class.")
@@ -2002,11 +2040,38 @@ class DeviceHAPairs(APIClassTemplate):
             logging.warning('Device {} not found.  Cannot set up device for '
                             'DeviceHAPairs.'.format(primary_name))
 
+    def switch_ha(self):
+        logging.debug("In switch_ha() for DeviceHAPairs class.")
+        ha1 = DeviceHAPairs(fmc=self.fmc)
+        ha1.get(name=self.name)
+        if 'id' in ha1.__dict__:
+            self.id = ha1.id
+            self.action = "SWITCH"
+        else:
+            logging.warning('DeviceHAPair {} not found.  Cannot set up HA for SWITCH.'.format(self.name))
+
+    def break_ha(self):
+        logging.debug("In break_ha() for DeviceHAPairs class.")
+        ha1 = DeviceHAPairs(fmc=self.fmc)
+        ha1.get(name=self.name)
+        if 'id' in ha1.__dict__:
+            self.id = ha1.id
+            self.action = "HABREAK"
+            self.forceBreak = True
+        else:
+            logging.warning('DeviceHAPair {} not found.  Cannot set up HA for BREAK.'.format(self.name))
+
     def post(self, **kwargs):
         logging.debug("In post() for DeviceHAPairs class.")
         # Attempting to "Deploy" during Device registration causes issues.
         self.fmc.autodeploy = False
         return super().post(**kwargs)
+
+    def put(self, **kwargs):
+        logging.debug("In put() for DeviceHAPairs class.")
+        # Attempting to "Deploy" during Device registration causes issues.
+        self.fmc.autodeploy = False
+        return super().put(**kwargs)
 
 class DeviceHAMonitoredInterfaces(APIClassTemplate):
     """
@@ -2032,8 +2097,8 @@ class DeviceHAMonitoredInterfaces(APIClassTemplate):
             json_data['ipv4Configuration'] = self.ipv4Configuration
         if 'ipv6Configuration' in self.__dict__:
             json_data['ipv6Configuration'] = self.ipv6Configuration
-        if 'monitorforFailures' in self.__dict__:
-            json_data['monitorforFailures'] = self.monitorforFailures
+        if 'monitorForFailures' in self.__dict__:
+            json_data['monitorForFailures'] = self.monitorForFailures
         return json_data
 
     def parse_kwargs(self, **kwargs):
@@ -2045,8 +2110,8 @@ class DeviceHAMonitoredInterfaces(APIClassTemplate):
             self.ipv4Configuration = kwargs['ipv4Configuration']
         if 'ipv6Configuration' in kwargs:
             self.ipv6Configuration = kwargs['ipv6Configuration']
-        if 'monitorforFailures' in kwargs:
-            self.monitorforFailures = kwargs['monitorforFailures']
+        if 'monitorForFailures' in kwargs:
+            self.monitorForFailures = kwargs['monitorForFailures']
 
     def device_ha(self, ha_name):
         logging.debug("In device_ha() for DeviceHAMonitoredInterfaces class.")
@@ -2123,6 +2188,38 @@ class DeviceHAFailoverMAC(APIClassTemplate):
         else:
             logging.warning('Device HA {} not found.  Cannot set up device for '
                             'DeviceHAFailoverMAC.'.format(ha_name))
+
+    def p_interface(self, name, device_name):
+        logging.debug("In p_interface() for DeviceHAFailoverMAC class.")
+        intf1 = PhysicalInterface(fmc=self.fmc)
+        intf1.get(name=name,device_name=device_name)
+        if 'id' in intf1.__dict__:
+            self.physicalInterface = {'name': intf1.name, 'id': intf1.id, 'type': intf1.type}
+        else:
+            logging.warning('PhysicalInterface, "{}", not found.  Cannot add to DeviceHAFailoverMAC.'.format(name))
+
+    def edit(self, name, ha_name):
+        logging.debug("In edit() for DeviceHAFailoverMAC class.")
+        deviceha1 = DeviceHAPairs(fmc=self.fmc, name=ha_name)
+        deviceha1.get()
+        obj1 = DeviceHAFailoverMAC(fmc=self.fmc)
+        obj1.device_ha(ha_name=ha_name)
+        failovermac_json = obj1.get()
+        items = failovermac_json.get('items', [])
+        found = False
+        for item in items:
+            if item['physicalInterface']['name'] == name:
+                found = True
+                self.id = item['id']
+                self.name = item['physicalInterface']['name']
+                self.failoverActiveMac = item['failoverActiveMac']
+                self.failoverStandbyMac = item['failoverStandbyMac']
+                self.deviceha_id = deviceha1.id
+                self.URL = '{}{}/{}/failoverinterfacemacaddressconfigs'.format(self.fmc.configuration_url, self.PREFIX_URL, self.deviceha_id)
+                break
+        if found is False:
+            logging.warning('PhysicalInterface, "{}", not found.  Cannot add to DeviceHAFailoverMAC.'.format(name))
+
 
 # ################# API-Explorer Policy Category Things ################# #
 
