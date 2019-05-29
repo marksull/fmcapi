@@ -2,16 +2,18 @@
 Unit testing, of a sort, all the created methods/classes.
 """
 
-from fmcapi import *
+from fmcapi.fmc import *
+from fmcapi.api_objects import *
+from fmcapi.helper_functions import *
 import logging
 import time
 import pprint
 
 # ### Set these variables to match your environment. ### #
 
-host = '10.0.50.50'
+host = 'fmclab.tor.afilias-int.info'
 username = 'apiscript'
-password = 'Admin123'
+password = 'XXXXXXXX'
 autodeploy = False
 
 
