@@ -3382,8 +3382,10 @@ class NatRules(APIClassTemplate):
         ftd_nat = FTDNatPolicy(fmc=self.fmc)
         ftd_nat.get(name=name)
         if 'id' in ftd_nat.__dict__:
+            print(ftd_nat.__dict__)
             self.nat_id = ftd_nat.id
             self.URL = '{}{}/{}/autonatrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.nat_id)
+            self.URL = '{}{}/{}/natrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.nat_id)
             self.nat_added_to_url = True
         else:
             logging.warning('FTD NAT Policy {} not found.  Cannot set up NatRules for '
