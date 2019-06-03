@@ -1,19 +1,21 @@
-  
 """
 Unit testing, of a sort, all the created methods/classes.
 """
 
-from fmcapi import *
+from fmcapi.fmc import *
+from fmcapi.api_objects import *
+from fmcapi.helper_functions import *
 import logging
 import time
 import pprint
 
 # ### Set these variables to match your environment. ### #
 
-host = '10.0.50.50'
+host = 'fmclab.tor.afilias-int.info'
 username = 'apiscript'
-password = 'Admin123'
+password = 'XXXXXXXX'
 autodeploy = False
+
 
 # ### These functions are the individual tests you can run to ensure functionality. ### #
 
@@ -450,14 +452,15 @@ def test__interface_group():
 
     obj1 = InterfaceGroup(fmc=fmc1, name="_ig_outside_all")
     obj1.get()
-    obj1.p_interface(device_name="FTDv03.ccie.lab", action="add", names=["GigabitEthernet0/0","GigabitEthernet0/1","GigabitEthernet0/2"])
+    obj1.p_interface(device_name="FTDv03.ccie.lab", action="add",
+                     names=["GigabitEthernet0/0", "GigabitEthernet0/1", "GigabitEthernet0/2"])
     print('InterfaceGroup PUT-->')
     pp.pprint(obj1.format_data())
     print('\n')
     obj1.put()
     time.sleep(1)
     del obj1
-    
+
     obj1 = InterfaceGroup(fmc=fmc1, name="_ig_outside_all")
     obj1.get()
     obj1.p_interface(device_name="FTDv03.ccie.lab", action="remove", names=["GigabitEthernet0/1"])
@@ -467,7 +470,7 @@ def test__interface_group():
     obj1.put()
     time.sleep(1)
     del obj1
-    
+
     obj1 = InterfaceGroup(fmc=fmc1, name="_ig_outside_all")
     obj1.get()
     obj1.p_interface(action="clear-all")
@@ -504,7 +507,7 @@ def test__slamonitor():
     obj1.noOfPackets = 1
     obj1.dataSize = 28
     obj1.tos = 1
-    obj1.interfaces(names=["SZ-OUTSIDE1","SZ-OUTSIDE2"])
+    obj1.interfaces(names=["SZ-OUTSIDE1", "SZ-OUTSIDE2"])
     obj1.post()
     print('SLAMonitor Post -->')
     pp.pprint(obj1.format_data())
@@ -539,6 +542,7 @@ def test__device():
     print('\n')
     acp1.delete()
     logging.info('# Test Device done.\n')
+
 
 def test__device_with_task():
     logging.info('# Test Device1 with Task.  This requires having an actual device with the "configure manager add" '
@@ -584,7 +588,7 @@ def test__device_with_task():
     response = obj2.post()
     wait_for_task(response["metadata"]["task"], 30)
 
-    #Wait some additional time to complete device registration before deletion
+    # Wait some additional time to complete device registration before deletion
     time.sleep(180)
     obj1 = Device(fmc=fmc1)
     obj2 = Device(fmc=fmc1)
@@ -596,6 +600,7 @@ def test__device_with_task():
     obj2.delete()
     time.sleep(30)
     acp1.delete()
+
 
 def test__phys_interfaces():
     logging.info('# Test PhysicalInterface.  get, put PhysicalInterface Objects. Requires registered device')
@@ -659,7 +664,7 @@ def test__phys_interfaces():
     sz2.delete()
 
 
-def test__device_ha_pair():    
+def test__device_ha_pair():
     logging.info('# Test DeviceHAPairs. After an HA Pair is created, all API calls to "devicerecords" objects should '
                  'be directed at the currently active device not the ha pair')
     failover1 = PhysicalInterface(fmc=fmc1)
@@ -670,44 +675,44 @@ def test__device_ha_pair():
     obj1.primary(name="PrimaryName")
     obj1.secondary(name="SecondaryName")
     obj1.name = "HaName"
-    #failover interface subnetMask must be in x.x.x.x format"
+    # failover interface subnetMask must be in x.x.x.x format"
     obj1.ftdHABootstrap = {
         "isEncryptionEnabled": "true",
         "encKeyGenerationScheme": "CUSTOM",
         "sharedKey": "cisco123",
         "useSameLinkForFailovers": False,
         "lanFailover": {
-          "useIPv6Address": False,
-          "subnetMask": "255.255.255.252",
-          "interfaceObject": {
-            "type": "PhysicalInterface",
-            "name": failover1.name,
-            "id": failover1.id
-          },
-          "standbyIP": "192.168.1.2",
-          "logicalName": "HA-FAILOVER",
-          "activeIP": "192.168.1.1"
+            "useIPv6Address": False,
+            "subnetMask": "255.255.255.252",
+            "interfaceObject": {
+                "type": "PhysicalInterface",
+                "name": failover1.name,
+                "id": failover1.id
+            },
+            "standbyIP": "192.168.1.2",
+            "logicalName": "HA-FAILOVER",
+            "activeIP": "192.168.1.1"
         },
         "statefulFailover": {
-          "useIPv6Address": False,
-          "subnetMask": "255.255.255.252",
-          "interfaceObject": {
-            "type": "PhysicalInterface",
-            "name": stateful1.name,
-            "id": stateful1.id
-          },
-          "standbyIP": "192.168.1.6",
-          "logicalName": "HA-STATEFUL",
-          "activeIP": "192.168.1.5"}}
-    #response = ha_pair.post()
-    #wait_for_task(response["metadata"]["task"], 30)
+            "useIPv6Address": False,
+            "subnetMask": "255.255.255.252",
+            "interfaceObject": {
+                "type": "PhysicalInterface",
+                "name": stateful1.name,
+                "id": stateful1.id
+            },
+            "standbyIP": "192.168.1.6",
+            "logicalName": "HA-STATEFUL",
+            "activeIP": "192.168.1.5"}}
+    # response = ha_pair.post()
+    # wait_for_task(response["metadata"]["task"], 30)
     print('Device HA-->')
     pp.pprint(obj1.format_data())
     print('\n')
     obj1.post()
     time.sleep(300)
     del obj1
-    
+
     obj1 = DeviceHAPairs(fmc=fmc1, name="HaName")
     obj1.switch_ha()
     print('Device HA Switch-->')
@@ -726,21 +731,21 @@ def test__device_ha_pair():
     response = obj1.put()
     print(response)
 
-    #time.sleep(300)
-    #del obj1
-    #obj1 = DeviceHAPairs(fmc=fmc1)
-    #obj1.get(name="FTDv-HA2")
-    #Deleting the HAPair object will delete the HA configuration AND remove the devices from the FPMC
-    #response = obj1.delete()
+    # time.sleep(300)
+    # del obj1
+    # obj1 = DeviceHAPairs(fmc=fmc1)
+    # obj1.get(name="FTDv-HA2")
+    # Deleting the HAPair object will delete the HA configuration AND remove the devices from the FPMC
+    # response = obj1.delete()
 
 
 def test__device_ha_monitored_interfaces():
     logging.info('# Test DeviceHAMonitoredInterfaces. get, put DeviceHAMonitoredInterfaces Objects')
     obj1 = DeviceHAMonitoredInterfaces(fmc=fmc1, ha_name="HaName")
-    #Interface logical name (ifname)
+    # Interface logical name (ifname)
     obj1.get(name="OUTSIDE1")
     obj1.monitorForFailures = True
-    obj1.ipv4(ipv4addr="10.254.0.4",ipv4mask=29,ipv4standbyaddr="10.254.0.3")
+    obj1.ipv4(ipv4addr="10.254.0.4", ipv4mask=29, ipv4standbyaddr="10.254.0.3")
     print('DeviceHAMonitoredInterfaces PUT-->')
     pp.pprint(obj1.format_data())
     print('\n')
@@ -748,7 +753,6 @@ def test__device_ha_monitored_interfaces():
 
 
 def test__device_ha_failover_mac():
-    
     logging.info('# Test DeviceHAFailoverMAC. get, post, put, delete DeviceHAFailoverMAC Objects')
     obj1 = DeviceHAFailoverMAC(fmc=fmc1, ha_name="HaName")
     obj1.p_interface(name="GigabitEthernet0/0", device_name="device-name")
@@ -758,7 +762,7 @@ def test__device_ha_failover_mac():
     pp.pprint(obj1.format_data())
     print('\n')
     obj1.post()
-    del obj1    
+    del obj1
 
     obj1 = DeviceHAFailoverMAC(fmc=fmc1)
     obj1.edit(name="GigabitEthernet0/0", ha_name="HaName")
@@ -935,6 +939,7 @@ def test__port_object_group():
     obj12.delete()
     logging.info('# Testing PortObjectGroup class done.\n')
 
+
 def wait_for_task(task, wait_time=10):
     try:
         status = TaskStatuses(
@@ -957,7 +962,9 @@ def wait_for_task(task, wait_time=10):
             time.sleep(wait_time)
             current_status = status.get()
         print("Task: %s %s %s %s" % (current_status["taskType"], current_status["status"], current_status["id"]))
-    except Exception as e: print(type(e),e)
+    except Exception as e:
+        print(type(e), e)
+
 
 # ### Main Program ### #
 
@@ -992,20 +999,20 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__protocol_port()
     test__slamonitor()
     test__security_zone()
-    #test__interface_group()
+    # test__interface_group()
     test__device()
 
-    #test__phys_interfaces()
-    #test__device_ha_pair()
-    #test__device_ha_monitored_interfaces()
-    #test__device_ha_failover_mac()
+    # test__phys_interfaces()
+    # test__device_ha_pair()
+    # test__device_ha_monitored_interfaces()
+    # test__device_ha_failover_mac()
     test__intrusion_policy()
     test__access_control_policy()
     test__acp_rule()
     test__audit()
     test__port_object_group()
 
-    #test__device_with_task()
+    # test__device_with_task()
     test__intrusion_policy()
     test__access_control_policy()
     test__acp_rule()
