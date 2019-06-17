@@ -16,10 +16,14 @@ of the token.
   * Range Objects
   * Port Objects
   * Security Zones
+  * Interface Groups
   * URL Objects
   * Access Control Policy (ACP)
   * ACP Rules
   * VLAN Tags
+  * DeviceHA
+  * DeviceHA Monitored Interfaces
+  * NAT Policy
   
 * Other features:
   * GET Intrusion Policy
@@ -27,6 +31,7 @@ of the token.
   * GET VariableSet(s)
   * Register FTD Devices
   * Deploy changes to FMC to affected managed devices.
+  * Task Status checking.
 
 * This is now an installable Python package via pip!  I'm heavily developing this code so you might want to issue the 
 command **pip3 install -U fmcapi** to update your installed version.
@@ -46,8 +51,8 @@ Then either code away referencing the fmc variable to get to the internal method
 
 # ToDos
 * Modify FTD devices' interfaces.
-* Add NAT Policy/Rule functionality if/when it becomes available.
 * Add Static Route functionality if/when it becomes available.
+* Add Device Groups functionality.
 * Move the create_acp_rules FMC method into a class object in the api_objects module.
 * Build a complete system for all FMC API accessible objects (feature parity).  Currently just over 50% of the FMC's API objects are represented in the fmcapi.
 * **Most importantly:** Write better how-to instructions.  (Anyone willing to help?) 
