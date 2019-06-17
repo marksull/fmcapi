@@ -3014,7 +3014,7 @@ class AutoNatRules(APIClassTemplate):
             self.patOptions = {"patPoolAddress": new_net}
             self.patOptions["interfacePat"] = options.interfacePat if "interfacePat" in options.keys() else False
             self.patOptions["includeReserve"] = options.includeReserve if "includeReserve" in options.keys() else False
-            self.patOptions["roundRobin"] = options.roundRobin if "roundRobin" in options.keys() else False
+            self.patOptions["roundRobin"] = options.roundRobin if "roundRobin" in options.keys() else True
             self.patOptions["extendedPat"] = options.extendedPat if "extendedPat" in options.keys() else False
             self.patOptions["flatPortRange"] = options.flatPortRange if "flatPortRange" in options.keys() else False
             logging.info('Adding "{}" to patPool for this AutoNatRule.'.format(name))
@@ -3306,9 +3306,8 @@ class ManualNatRules(APIClassTemplate):
         if new_intf == None:
             logging.warning('Interface Object "{}" is not found in FMC.  Cannot add to destinationInterface.'.format(name))
         else:
-            if new_intf.type == "InterfaceGroup" and len(new_intf.items) > 1:                    
-                self.destinationInterface = new_intf
-                logging.info('Interface Object "{}" added to NAT Policy.'.format(name))
+            self.destinationInterface = new_intf
+            logging.info('Interface Object "{}" added to NAT Policy.'.format(name))
 
     def identity_nat(self, name):
         logging.debug("In identity_nat() for ManualNatRules class.")
@@ -3341,10 +3340,11 @@ class ManualNatRules(APIClassTemplate):
             logging.warning('Network "{}" is not found in FMC.  Cannot add to patPool.'.format(name))
         else:
             self.natType = "DYNAMIC"
+            self.unidirectional = True
             self.patOptions = {"patPoolAddress": new_net}
             self.patOptions["interfacePat"] = options.interfacePat if "interfacePat" in options.keys() else False
             self.patOptions["includeReserve"] = options.includeReserve if "includeReserve" in options.keys() else False
-            self.patOptions["roundRobin"] = options.roundRobin if "roundRobin" in options.keys() else False
+            self.patOptions["roundRobin"] = options.roundRobin if "roundRobin" in options.keys() else True
             self.patOptions["extendedPat"] = options.extendedPat if "extendedPat" in options.keys() else False
             self.patOptions["flatPortRange"] = options.flatPortRange if "flatPortRange" in options.keys() else False
             logging.info('Adding "{}" to patPool for this AutoNatRule.'.format(name))
