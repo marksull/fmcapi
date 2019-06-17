@@ -16,7 +16,6 @@ username = 'apiscript'
 password = 'XXXXXXXX'
 autodeploy = False
 
-
 # ### These functions are the individual tests you can run to ensure functionality. ### #
 
 
@@ -664,6 +663,40 @@ def test__phys_interfaces():
     sz2.delete()
 
 
+def test__bridge_group_interfaces():
+    logging.info('# Test BridgeGroupInterfaces.  get, post, put, delete BridgeGroupInterfaces Objects. Requires registered device')
+    sz1 = SecurityZone(fmc=fmc1)
+    sz1.name = "_sz1" + namer
+    sz1.post()
+    time.sleep(1)
+    sz2 = SecurityZone(fmc=fmc1)
+    sz2.name = "_sz2" + namer
+    sz2.post()
+    time.sleep(1)
+
+    br1 = BridgeGroupInterfaces(fmc=fmc1, device_name="ftdv01.ccie.lab")
+    br1.p_interfaces(p_interfaces=["GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="ftdv01.ccie.lab")
+    br1.enabled = True
+    br1.ifname = "_br1" + namer
+    br1.bridgeGroupId = "1"
+    br1.static(ipv4addr="192.0.2.1", ipv4mask=24)
+    br1.sz(name=sz1.name)
+    br1.post()
+    time.sleep(2)
+
+    br1.get()
+    br1.enabled = False
+    br1.sz(name=sz2.name)
+    br1.put()
+    time.sleep(1)
+
+    logging.info('# Testing BridgeGroupInterfaces class done.\n')
+    br1.get()
+    br1.delete()
+    sz1.delete()
+    sz2.delete()
+
+
 def test__device_ha_pair():
     logging.info('# Test DeviceHAPairs. After an HA Pair is created, all API calls to "devicerecords" objects should '
                  'be directed at the currently active device not the ha pair')
@@ -1303,10 +1336,11 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__manualnat()
     '''
     These tests require registered devices
-    #test__device_with_task()
-    #test__phys_interfaces()
-    #test__device_ha_pair()
-    #test__device_ha_monitored_interfaces()
-    #test__device_ha_failover_mac()
-    #test__interface_group()
+    test__device_with_task()
+    test__phys_interfaces()
+    test__bridge_group_interfaces()
+    test__device_ha_pair()
+    test__device_ha_monitored_interfaces()
+    test__device_ha_failover_mac()
+    test__interface_group()
     '''
