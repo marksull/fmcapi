@@ -4,7 +4,7 @@ FMC's API can do so without needing to have deep knowledge of the proper JSON fo
 needed to issue valid requests to the API.
 
 The fmcapi is to provide the following:
- * FMC connection setup/maintainence/teardown.  (AKA Authentication and token management.)
+ * FMC connection setup/maintenance/teardown.  (AKA Authentication and token management.)
  * A "user friendly" mechanism for formatting JSON to send GET/POST/PUT/DELETE requests to the FMC's API.
  * A "user friendly" way of dealing with issues, such as minimum required fields, to perform API requests. 
  * Provide mechanisms for interacting with all API functions available in the FMC while also allowing more advanced 
