@@ -808,6 +808,39 @@ def test__subinterfaces():
     sz2.delete()
 
 
+def test__device_group():
+    logging.info('# Test DeviceGroups.  get, post, put, delete DeviceGroups Objects. Requires registered device')
+    device_list = [{"name": "ftdv-HA", "type": "deviceHAPair"}]
+    dg1 = DeviceGroups(fmc=fmc1)
+    dg1.name = "_dg1" + namer
+    dg1.devices(action='add',members=device_list)
+    dg1.post()
+    time.sleep(1)
+
+    dg1.get()
+    pp.pprint(dg1.format_data())
+    dg1.devices(action='remove',members=device_list)
+    pp.pprint(dg1.format_data())
+    dg1.put()
+    time.sleep(1)
+
+    dg1.get()
+    pp.pprint(dg1.format_data())
+    dg1.devices(action='add',members=device_list)
+    dg1.put()
+    time.sleep(1)
+
+    dg1.get()
+    pp.pprint(dg1.format_data())
+    dg1.devices(action='clear')
+    dg1.put()
+    time.sleep(1)
+
+    logging.info('# Testing DeviceGroups class done.\n')
+    dg1.get()
+    dg1.delete()
+
+
 def test__device_ha_pair():
     logging.info('# Test DeviceHAPairs. After an HA Pair is created, all API calls to "devicerecords" objects should '
                  'be directed at the currently active device not the ha pair')
@@ -1453,6 +1486,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__redundant_interfaces()
     test__etherchannel_interfaces()
     test__subinterfaces()
+    test__device_group()
     test__device_ha_pair()
     test__device_ha_monitored_interfaces()
     test__device_ha_failover_mac()
