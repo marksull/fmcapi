@@ -451,7 +451,7 @@ def test__interface_group():
 
     obj1 = InterfaceGroup(fmc=fmc1, name="_ig_outside_all")
     obj1.get()
-    obj1.p_interface(device_name="FTDv03.ccie.lab", action="add",
+    obj1.p_interface(device_name="device-name", action="add",
                      names=["GigabitEthernet0/0", "GigabitEthernet0/1", "GigabitEthernet0/2"])
     print('InterfaceGroup PUT-->')
     pp.pprint(obj1.format_data())
@@ -462,7 +462,7 @@ def test__interface_group():
 
     obj1 = InterfaceGroup(fmc=fmc1, name="_ig_outside_all")
     obj1.get()
-    obj1.p_interface(device_name="FTDv03.ccie.lab", action="remove", names=["GigabitEthernet0/1"])
+    obj1.p_interface(device_name="device-name", action="remove", names=["GigabitEthernet0/1"])
     print('InterfaceGroup PUT-->')
     pp.pprint(obj1.format_data())
     print('\n')
@@ -745,8 +745,8 @@ def test__etherchannel_interfaces():
     sz2.post()
     time.sleep(1)
 
-    eth1 = EtherchannelInterfaces(fmc=fmc1, device_name="ftdv01.ccie.lab")
-    eth1.p_interfaces(p_interfaces=["GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="ftdv01.ccie.lab")
+    eth1 = EtherchannelInterfaces(fmc=fmc1, device_name="device-name")
+    eth1.p_interfaces(p_interfaces=["GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="device-name")
     eth1.enabled = True
     eth1.ifname = "_eth1" + namer
     eth1.etherChannelId = "1"
@@ -768,6 +768,42 @@ def test__etherchannel_interfaces():
     logging.info('# Testing EtherchannelInterfaces class done.\n')
     eth1.get()
     eth1.delete()
+    sz1.delete()
+    sz2.delete()
+
+
+def test__subinterfaces():
+    logging.info('# Test SubInterfaces.  get, post, put, delete SubInterfaces Objects. Requires registered device')
+    sz1 = SecurityZone(fmc=fmc1)
+    sz1.name = "_sz1" + namer
+    sz1.post()
+    time.sleep(1)
+    sz2 = SecurityZone(fmc=fmc1)
+    sz2.name = "_sz2" + namer
+    sz2.post()
+    time.sleep(1)
+
+    sub1 = SubInterfaces(fmc=fmc1, device_name="device-name")
+    sub1.p_interface(p_interface="GigabitEthernet0/3", device_name="device-name")
+    sub1.enabled = True
+    sub1.ifname = "_sub1" + namer
+    sub1.subIntfId = "300"
+    sub1.vlanId = "300"
+    sub1.static(ipv4addr="192.0.2.1", ipv4mask=24)
+    sub1.sz(name=sz1.name)
+    sub1.post()
+    pp.pprint(sub1.format_data())
+    time.sleep(2)
+
+    sub1.get()
+    sub1.enabled = False
+    sub1.sz(name=sz2.name)
+    sub1.put()
+    time.sleep(1)
+
+    logging.info('# Testing SubInterfaces class done.\n')
+    sub1.get()
+    sub1.delete()
     sz1.delete()
     sz2.delete()
 
@@ -881,7 +917,7 @@ def test__device_ha_failover_mac():
     del obj1
 
     obj1 = DeviceHAFailoverMAC(fmc=fmc1)
-    obj1.edit(name="GigabitEthernet0/0", ha_name="ftdv03")
+    obj1.edit(name="GigabitEthernet0/0", ha_name="HaName")
     obj1.delete()
 
 
@@ -1416,6 +1452,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__bridge_group_interfaces()
     test__redundant_interfaces()
     test__etherchannel_interfaces()
+    test__subinterfaces()
     test__device_ha_pair()
     test__device_ha_monitored_interfaces()
     test__device_ha_failover_mac()
