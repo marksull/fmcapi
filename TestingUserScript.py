@@ -818,20 +818,16 @@ def test__device_group():
     time.sleep(1)
 
     dg1.get()
-    pp.pprint(dg1.format_data())
     dg1.devices(action='remove',members=device_list)
-    pp.pprint(dg1.format_data())
     dg1.put()
     time.sleep(1)
 
     dg1.get()
-    pp.pprint(dg1.format_data())
     dg1.devices(action='add',members=device_list)
     dg1.put()
     time.sleep(1)
 
     dg1.get()
-    pp.pprint(dg1.format_data())
     dg1.devices(action='clear')
     dg1.put()
     time.sleep(1)
