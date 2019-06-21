@@ -16,7 +16,6 @@ username = 'apiscript'
 password = 'XXXXXXXX'
 autodeploy = False
 
-
 # ### These functions are the individual tests you can run to ensure functionality. ### #
 
 
@@ -452,7 +451,7 @@ def test__interface_group():
 
     obj1 = InterfaceGroup(fmc=fmc1, name="_ig_outside_all")
     obj1.get()
-    obj1.p_interface(device_name="FTDv03.ccie.lab", action="add",
+    obj1.p_interface(device_name="device-name", action="add",
                      names=["GigabitEthernet0/0", "GigabitEthernet0/1", "GigabitEthernet0/2"])
     print('InterfaceGroup PUT-->')
     pp.pprint(obj1.format_data())
@@ -463,7 +462,7 @@ def test__interface_group():
 
     obj1 = InterfaceGroup(fmc=fmc1, name="_ig_outside_all")
     obj1.get()
-    obj1.p_interface(device_name="FTDv03.ccie.lab", action="remove", names=["GigabitEthernet0/1"])
+    obj1.p_interface(device_name="device-name", action="remove", names=["GigabitEthernet0/1"])
     print('InterfaceGroup PUT-->')
     pp.pprint(obj1.format_data())
     print('\n')
@@ -664,6 +663,151 @@ def test__phys_interfaces():
     sz2.delete()
 
 
+def test__bridge_group_interfaces():
+    logging.info('# Test BridgeGroupInterfaces.  get, post, put, delete BridgeGroupInterfaces Objects. Requires registered device')
+    sz1 = SecurityZone(fmc=fmc1)
+    sz1.name = "_sz1" + namer
+    sz1.post()
+    time.sleep(1)
+    sz2 = SecurityZone(fmc=fmc1)
+    sz2.name = "_sz2" + namer
+    sz2.post()
+    time.sleep(1)
+
+    br1 = BridgeGroupInterfaces(fmc=fmc1, device_name="device-name")
+    br1.p_interfaces(p_interfaces=["GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="device-name")
+    br1.enabled = True
+    br1.ifname = "_br1" + namer
+    br1.bridgeGroupId = "1"
+    br1.static(ipv4addr="192.0.2.1", ipv4mask=24)
+    br1.sz(name=sz1.name)
+    br1.post()
+    time.sleep(2)
+
+    br1.get()
+    br1.enabled = False
+    br1.sz(name=sz2.name)
+    br1.put()
+    time.sleep(1)
+
+    logging.info('# Testing BridgeGroupInterfaces class done.\n')
+    br1.get()
+    br1.delete()
+    sz1.delete()
+    sz2.delete()
+
+
+def test__redundant_interfaces():
+    logging.info('# Test RedundantInterfaces.  get, post, put, delete RedundantInterfaces Objects. Requires registered device')
+    sz1 = SecurityZone(fmc=fmc1)
+    sz1.name = "_sz1" + namer
+    sz1.post()
+    time.sleep(1)
+    sz2 = SecurityZone(fmc=fmc1)
+    sz2.name = "_sz2" + namer
+    sz2.post()
+    time.sleep(1)
+
+    red1 = RedundantInterfaces(fmc=fmc1, device_name="device-name")
+    red1.primary(p_interface="GigabitEthernet0/3", device_name="device-name")
+    red1.secondary(p_interface="GigabitEthernet0/5", device_name="device-name")
+    red1.enabled = "True"
+    red1.ifname = "_red1" + namer
+    red1.redundantId = "1"
+    red1.static(ipv4addr="192.0.2.1", ipv4mask=24)
+    red1.sz(name=sz1.name)
+    red1.post()
+    time.sleep(2)
+
+    red1.get()
+    pp.pprint(red1.format_data())
+    red1.enabled = False
+    red1.sz(name=sz2.name)
+    red1.put()
+    time.sleep(1)
+
+    logging.info('# Testing RedundantInterfaces class done.\n')
+    red1.get()
+    pp.pprint(red1.format_data())
+    red1.delete()
+    sz1.delete()
+    sz2.delete()
+
+
+def test__etherchannel_interfaces():
+    logging.info('# Test EtherchannelInterfaces.  get, post, put, delete EtherchannelInterfaces Objects. Requires registered physical device')
+    sz1 = SecurityZone(fmc=fmc1)
+    sz1.name = "_sz1" + namer
+    sz1.post()
+    time.sleep(1)
+    sz2 = SecurityZone(fmc=fmc1)
+    sz2.name = "_sz2" + namer
+    sz2.post()
+    time.sleep(1)
+
+    eth1 = EtherchannelInterfaces(fmc=fmc1, device_name="device-name")
+    eth1.p_interfaces(p_interfaces=["GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="device-name")
+    eth1.enabled = True
+    eth1.ifname = "_eth1" + namer
+    eth1.etherChannelId = "1"
+    eth1.static(ipv4addr="192.0.2.1", ipv4mask=24)
+    eth1.sz(name=sz1.name)
+    eth1.mode = "NONE"
+    eth1.MTU = "1500"
+    eth1.lacpMode = "ACTIVE"
+    eth1.loadBalancing = "SRC_DST_IP_PORT"
+    eth1.post()
+    time.sleep(2)
+
+    eth1.get()
+    eth1.enabled = False
+    eth1.sz(name=sz2.name)
+    eth1.put()
+    time.sleep(1)
+
+    logging.info('# Testing EtherchannelInterfaces class done.\n')
+    eth1.get()
+    eth1.delete()
+    sz1.delete()
+    sz2.delete()
+
+
+def test__subinterfaces():
+    logging.info('# Test SubInterfaces.  get, post, put, delete SubInterfaces Objects. Requires registered device')
+    sz1 = SecurityZone(fmc=fmc1)
+    sz1.name = "_sz1" + namer
+    sz1.post()
+    time.sleep(1)
+    sz2 = SecurityZone(fmc=fmc1)
+    sz2.name = "_sz2" + namer
+    sz2.post()
+    time.sleep(1)
+
+    sub1 = SubInterfaces(fmc=fmc1, device_name="device-name")
+    sub1.p_interface(p_interface="GigabitEthernet0/3", device_name="device-name")
+    sub1.enabled = True
+    sub1.ifname = "_sub1" + namer
+    sub1.subIntfId = "300"
+    sub1.vlanId = "300"
+    sub1.static(ipv4addr="192.0.2.1", ipv4mask=24)
+    sub1.sz(name=sz1.name)
+    sub1.post()
+    pp.pprint(sub1.format_data())
+    time.sleep(2)
+
+    sub1.get()
+    sub1.enabled = False
+    sub1.sz(name=sz2.name)
+    sub1.put()
+    time.sleep(1)
+
+    logging.info('# Testing SubInterfaces class done.\n')
+    sub1.get()
+    sub1.delete()
+    sz1.delete()
+    sz2.delete()
+
+
 def test__device_ha_pair():
     logging.info('# Test DeviceHAPairs. After an HA Pair is created, all API calls to "devicerecords" objects should '
                  'be directed at the currently active device not the ha pair')
@@ -773,7 +917,7 @@ def test__device_ha_failover_mac():
     del obj1
 
     obj1 = DeviceHAFailoverMAC(fmc=fmc1)
-    obj1.edit(name="GigabitEthernet0/0", ha_name="ftdv03")
+    obj1.edit(name="GigabitEthernet0/0", ha_name="HaName")
     obj1.delete()
 
 
@@ -1303,10 +1447,14 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__manualnat()
     '''
     These tests require registered devices
-    #test__device_with_task()
-    #test__phys_interfaces()
-    #test__device_ha_pair()
-    #test__device_ha_monitored_interfaces()
-    #test__device_ha_failover_mac()
-    #test__interface_group()
+    test__device_with_task()
+    test__phys_interfaces()
+    test__bridge_group_interfaces()
+    test__redundant_interfaces()
+    test__etherchannel_interfaces()
+    test__subinterfaces()
+    test__device_ha_pair()
+    test__device_ha_monitored_interfaces()
+    test__device_ha_failover_mac()
+    test__interface_group()
     '''
