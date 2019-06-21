@@ -674,8 +674,8 @@ def test__bridge_group_interfaces():
     sz2.post()
     time.sleep(1)
 
-    br1 = BridgeGroupInterfaces(fmc=fmc1, device_name="ftdv01.ccie.lab")
-    br1.p_interfaces(p_interfaces=["GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="ftdv01.ccie.lab")
+    br1 = BridgeGroupInterfaces(fmc=fmc1, device_name="device-name")
+    br1.p_interfaces(p_interfaces=["GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="device-name")
     br1.enabled = True
     br1.ifname = "_br1" + namer
     br1.bridgeGroupId = "1"
@@ -693,6 +693,43 @@ def test__bridge_group_interfaces():
     logging.info('# Testing BridgeGroupInterfaces class done.\n')
     br1.get()
     br1.delete()
+    sz1.delete()
+    sz2.delete()
+
+
+def test__redundant_interfaces():
+    logging.info('# Test RedundantInterfaces.  get, post, put, delete RedundantInterfaces Objects. Requires registered device')
+    sz1 = SecurityZone(fmc=fmc1)
+    sz1.name = "_sz1" + namer
+    sz1.post()
+    time.sleep(1)
+    sz2 = SecurityZone(fmc=fmc1)
+    sz2.name = "_sz2" + namer
+    sz2.post()
+    time.sleep(1)
+
+    red1 = RedundantInterfaces(fmc=fmc1, device_name="device-name")
+    red1.primary(p_interface="GigabitEthernet0/3", device_name="device-name")
+    red1.secondary(p_interface="GigabitEthernet0/5", device_name="device-name")
+    red1.enabled = "True"
+    red1.ifname = "_red1" + namer
+    red1.redundantId = "1"
+    red1.static(ipv4addr="192.0.2.1", ipv4mask=24)
+    red1.sz(name=sz1.name)
+    red1.post()
+    time.sleep(2)
+
+    red1.get()
+    pp.pprint(red1.format_data())
+    red1.enabled = False
+    red1.sz(name=sz2.name)
+    red1.put()
+    time.sleep(1)
+
+    logging.info('# Testing RedundantInterfaces class done.\n')
+    red1.get()
+    pp.pprint(red1.format_data())
+    red1.delete()
     sz1.delete()
     sz2.delete()
 
@@ -1339,6 +1376,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__device_with_task()
     test__phys_interfaces()
     test__bridge_group_interfaces()
+    test__redundant_interfaces()
     test__device_ha_pair()
     test__device_ha_monitored_interfaces()
     test__device_ha_failover_mac()
