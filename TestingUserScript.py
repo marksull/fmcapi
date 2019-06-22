@@ -1113,6 +1113,24 @@ def test__port_object_group():
     logging.info('# Testing PortObjectGroup class done.\n')
 
 
+def test__dns_servers_group():
+    logging.info(
+    '# Test DNSServerGroups.  Post, get, put, delete DNSServerGroups Objects.')
+    server_list = ["192.0.2.1", "192.0.2.2"]
+    obj1 = DNSServerGroups(fmc=fmc1)
+    obj1.name = "_dns1" + namer
+    obj1.timeout = "3"
+    obj1.defaultdomain = "ccie.lab"
+    obj1.post()
+
+    obj1.get()
+    obj1.servers(action='add', name_servers=server_list)
+    obj1.put()
+
+    obj1.delete()
+    logging.info('# Testing DNSServerGroups class done.\n')
+
+
 def test__autonat():
     logging.info('# Testing FTDNatPolicy class.')
     # Create a container policy for FTD NAT rules
@@ -1472,6 +1490,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__access_control_policy()
     test__acp_rule()
     test__audit()
+    test__dns_servers_group()
     test__autonat()
     test__manualnat()
     '''
