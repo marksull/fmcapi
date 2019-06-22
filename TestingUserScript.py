@@ -409,6 +409,39 @@ def test__ip_range():
     logging.info('# Test IPRange done.\n')
 
 
+def test__icmpv4_objects():
+    logging.info(
+    '# Test ICMPv4Object.  Post, get, put, delete ICMPv4Object Objects.')
+    obj1 = ICMPv4Object(fmc=fmc1)
+    obj1.name = "_icmpv4" + namer
+    obj1.icmpType = "3"
+    obj1.code = "0"
+    obj1.post()
+
+    obj1.get()
+    obj1.code = "3"
+    obj1.put()
+
+    obj1.delete()
+    logging.info('# FQDNS ICMPv4Object class done.\n')
+
+def test__icmpv6_objects():
+    logging.info(
+    '# Test ICMPv6Object.  Post, get, put, delete ICMPv6Object Objects.')
+    obj1 = ICMPv6Object(fmc=fmc1)
+    obj1.name = "_icmpv6" + namer
+    obj1.icmpType = "1"
+    obj1.code = "0"
+    obj1.post()
+
+    obj1.get()
+    obj1.code = "3"
+    obj1.put()
+
+    obj1.delete()
+    logging.info('# FQDNS ICMPv6Object class done.\n')
+
+
 def test__url():
     logging.info('# Test URL.  Post, get, put, delete URL Objects.')
     obj1 = URL(fmc=fmc1)
@@ -1538,6 +1571,8 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__ip_host()
     test__ip_network()
     test__ip_range()
+    test__icmpv4_objects()
+    test__icmpv6_objects()
     test__url()
     test__vlan_tag()
     test__protocol_port()
