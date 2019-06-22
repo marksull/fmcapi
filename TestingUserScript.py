@@ -200,7 +200,7 @@ def test__fqdns():
     obj1 = FQDNS(fmc=fmc1)
     obj1.name = "_fqdns1" + namer
     obj1.value = "www.cisco.com"
-    obj1.dnsResolution = "IPV5_ONLY"
+    obj1.dnsResolution = "IPV4_ONLY"
     obj1.post()
 
     obj1.get()

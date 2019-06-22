@@ -3605,7 +3605,8 @@ class ACPRule(APIClassTemplate):
         if action == 'add':
             ipaddresses_json = IPAddresses(fmc=self.fmc).get()
             networkgroup_json = NetworkGroup(fmc=self.fmc).get()
-            items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
+            fqdns_json = FQDNS(fmc=self.fmc).get()
+            items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', []) + fqdns_json.get('items', [])
             new_net = None
             for item in items:
                 if item['name'] == name:
@@ -3646,7 +3647,8 @@ class ACPRule(APIClassTemplate):
         if action == 'add':
             ipaddresses_json = IPAddresses(fmc=self.fmc).get()
             networkgroup_json = NetworkGroup(fmc=self.fmc).get()
-            items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
+            fqdns_json = FQDNS(fmc=self.fmc).get()
+            items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', []) + fqdns_json.get('items', [])
             new_net = None
             for item in items:
                 if item['name'] == name:
