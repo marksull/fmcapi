@@ -442,7 +442,8 @@ def test__ip_range():
 
 
 def test__extended_acls():
-    logging.info('# Testing ExtendedAccessList class. Requires a configured ExtendedAccessList')
+    logging.info(
+        '# Testing ExtendedAccessList class. Requires a configured ExtendedAccessList')
     obj1 = ExtendedAccessList(fmc=fmc1)
     print('All ExtendedAccessList -- >')
     result = obj1.get()
@@ -458,7 +459,8 @@ def test__extended_acls():
 
 
 def test__geolocations():
-    logging.info('# Testing Geolocation class. Requires a configured Geolocation')
+    logging.info(
+        '# Testing Geolocation class. Requires a configured Geolocation')
     obj1 = Geolocation(fmc=fmc1)
     print('All Geolocation -- >')
     result = obj1.get()
@@ -475,7 +477,7 @@ def test__geolocations():
 
 def test__icmpv4():
     logging.info(
-    '# Test ICMPv4Object.  Post, get, put, delete ICMPv4Object Objects.')
+        '# Test ICMPv4Object.  Post, get, put, delete ICMPv4Object Objects.')
     obj1 = ICMPv4Object(fmc=fmc1)
     obj1.name = "_icmpv4" + namer
     obj1.icmpType = "3"
@@ -489,9 +491,10 @@ def test__icmpv4():
     obj1.delete()
     logging.info('# FQDNS ICMPv4Object class done.\n')
 
+
 def test__icmpv6():
     logging.info(
-    '# Test ICMPv6Object.  Post, get, put, delete ICMPv6Object Objects.')
+        '# Test ICMPv6Object.  Post, get, put, delete ICMPv6Object Objects.')
     obj1 = ICMPv6Object(fmc=fmc1)
     obj1.name = "_icmpv6" + namer
     obj1.icmpType = "1"
@@ -508,7 +511,7 @@ def test__icmpv6():
 
 def test__ikev1():
     logging.info(
-    '# Test IKEv1Policies and IKEv1IpsecProposals.  Post, get, put, delete IKEv1Policies and IKEv1IpsecProposals Objects.')
+        '# Test IKEv1Policies and IKEv1IpsecProposals.  Post, get, put, delete IKEv1Policies and IKEv1IpsecProposals Objects.')
     ipsec1 = IKEv1IpsecProposals(fmc=fmc1)
     ipsec1.name = "_ipsec" + namer
     ipsec1.espEncryption = "AES-128"
@@ -535,18 +538,19 @@ def test__ikev1():
 
     ipsec1.delete()
     pol1.delete()
-    logging.info('# Test IKEv1Policies and IKEv1IpsecProposals classes done.\n')
+    logging.info(
+        '# Test IKEv1Policies and IKEv1IpsecProposals classes done.\n')
 
 
 def test__ikev2():
     logging.info(
-    '# Test IKEv2Policies and IKEv2IpsecProposals.  Post, get, put, delete IKEv2Policies and IKEv2IpsecProposals Objects.')
+        '# Test IKEv2Policies and IKEv2IpsecProposals.  Post, get, put, delete IKEv2Policies and IKEv2IpsecProposals Objects.')
     encryption_list = ['AES', 'AES-192', 'AES-256', 'NULL']
     integrity_list1 = ['NULL', 'SHA-1', 'SHA-256', 'SHA-384', 'SHA-512']
     ipsec_integrity_list1 = ['NULL', 'SHA', 'SHA-256', 'SHA-384', 'SHA-512']
     # 'NULL' is invalid for prf_integrity.  Should generate a warning log and ignore that type.
     prf_integrity_list1 = ['NULL', 'SHA', 'SHA-256', 'SHA-384', 'SHA-512']
-    
+
     ipsec1 = IKEv2IpsecProposals(fmc=fmc1)
     ipsec1.name = "_ipsec" + namer
     ipsec1.encryption(action='add', algorithms=encryption_list)
@@ -569,7 +573,6 @@ def test__ikev2():
     ipsec1.encryption(action='add', algorithms=['AES-192'])
     ipsec1.hash(action='add', algorithms=['SHA-1'])
     ipsec1.put()
-    
 
     pol1 = IKEv2Policies(fmc=fmc1)
     pol1.name = "_pol" + namer
@@ -604,7 +607,8 @@ def test__ikev2():
 
     ipsec1.delete()
     pol1.delete()
-    logging.info('# Test IKEv2Policies and IKEv2IpsecProposals classes done.\n')
+    logging.info(
+        '# Test IKEv2Policies and IKEv2IpsecProposals classes done.\n')
 
 
 def test__url():
@@ -1070,6 +1074,42 @@ def test__static_routes():
     print('\n')
     logging.info('# Testing StaticRoutes class done.\n')
     del obj1
+
+
+def test__ipv4_static_routes():
+    logging.info(
+        '# Testing IPv4StaticRoute class. get, post, put, delete IPv4StaticRoute Objects. Requires a registered device')
+
+    iphost1 = IPHost(fmc=fmc1, name='_iphost1' + namer, value='10.254.0.1')
+    iphost1.post()
+    ipnet1 = IPNetwork(fmc=fmc1, name='_ipnet1' + namer, value='192.0.2.0/25')
+    ipnet2 = IPNetwork(fmc=fmc1, name='_ipnet2' +
+                       namer, value='192.0.2.128/25')
+    ipnet1.post()
+    ipnet2.post()
+
+    ipv4route1 = IPv4StaticRoute(fmc=fmc1, name='_ipv4route1')
+    ipv4route1.device(device_name='ftdv01.ccie.lab')
+    ipv4route1.networks(action='add', networks=[ipnet1.name, ipnet2.name])
+    ipv4route1.gw(name=iphost1.name)
+    ipv4route1.interfaceName = "ifname"
+    ipv4route1.metricValue = 1
+    result = ipv4route1.post()
+
+    ipv4route2 = IPv4StaticRoute(fmc=fmc1, name='_ipv4route1')
+    ipv4route2.device(device_name='ftdv01.ccie.lab')
+    ipv4route2.id = result['id']
+    ipv4route2.get()
+
+    del ipv4route1
+    ipv4route2.networks(action='remove', networks=[ipnet2.name])
+    ipv4route2.put()
+
+    ipv4route2.delete()
+    ipnet1.delete()
+    ipnet2.delete()
+    iphost1.delete()
+    logging.info('# Testing IPv4StaticRoute class done.\n')
 
 
 def test__device_group():
@@ -1738,7 +1778,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__application_filter()
     test__application_productivity()
     test__application_category()
-    #test__cert_enrollment()
+    # test__cert_enrollment()
     test__country()
     test__continent()
     test__dns_servers_group()
@@ -1751,8 +1791,8 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__ip_host()
     test__ip_network()
     test__ip_range()
-    #test__extended_acls()
-    #test__geolocations()
+    # test__extended_acls()
+    # test__geolocations()
     test__icmpv4()
     test__icmpv6()
     test__ikev1()
@@ -1783,6 +1823,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__etherchannel_interfaces()
     test__subinterfaces()
     test__static_routes()
+    test__ipv4_static_routes()
     test__device_group()
     test__device_ha_pair()
     test__device_ha_monitored_interfaces()
