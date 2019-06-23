@@ -497,6 +497,53 @@ class ApplicationCategory(APIClassTemplate):
         pass
 
 
+class ApplicationFilter(APIClassTemplate):
+    """
+    The ApplicationFilter Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/applicationfilters'
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for ApplicationFilter class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for ApplicationFilter class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'appConditions' in self.__dict__:
+            json_data['appConditions'] = self.appConditions
+        if 'applications' in self.__dict__:
+            json_data['applications'] = self.applications
+        if 'conditions' in self.__dict__:
+            json_data['conditions'] = self.conditions
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for ApplicationFilter class.")
+
+    def post(self):
+        logging.info('POST method for API for ApplicationFilter not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for ApplicationFilter not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for ApplicationFilter not supported.')
+        pass
+
+
 class ApplicationProductivity(APIClassTemplate):
     """
     The ApplicationProductivity Object in the FMC.
@@ -711,6 +758,47 @@ class ApplicationType(APIClassTemplate):
     def delete(self):
         logging.info('DELETE method for API for ApplicationType not supported.')
         pass
+
+
+class CertEnrollment(APIClassTemplate):
+    """
+    The CertEnrollment Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/certenrollments'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for CertEnrollment class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for CertEnrollment class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for CertEnrollment class.")
+
+    def post(self):
+        logging.info('POST method for API for CertEnrollment not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for CertEnrollment not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for CertEnrollment not supported.')
+        pass
+
 
 class SLAMonitor(APIClassTemplate):
     """
@@ -1476,6 +1564,647 @@ class Country(APIClassTemplate):
     def delete(self):
         logging.info('DELETE method for API for Country not supported.')
         pass
+
+
+class DNSServerGroups(APIClassTemplate):
+    """
+    The DNSServerGroups Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/dnsservergroups'
+    REQUIRED_FOR_POST = ['name', 'timeout']
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for DNSServerGroups class.")
+        self.parse_kwargs(**kwargs)
+        self.type = 'DNSServerGroupObject'
+
+    def format_data(self):
+        logging.debug("In format_data() for DNSServerGroups class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'retries' in self.__dict__:
+            json_data['retries'] = self.retries
+        if 'timeout' in self.__dict__:
+            json_data['timeout'] = self.timeout
+        if 'dnsservers' in self.__dict__:
+            json_data['dnsservers'] = self.dnsservers
+        if 'defaultdomain' in self.__dict__:
+            json_data['defaultdomain'] = self.defaultdomain
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for DNSServerGroups class.")
+        if 'retries' in kwargs:
+            self.retries = kwargs['retries']
+        if 'timeout' in kwargs:
+            self.timeout = kwargs['timeout']
+        if 'dnsservers' in kwargs:
+            self.dnsservers = kwargs['dnsservers']
+        if 'defaultdomain' in kwargs:
+            self.defaultdomain = kwargs['defaultdomain']
+
+    def servers(self, action, name_servers):
+        logging.debug("In servers() for DNSServerGroups class.")
+        if action == 'add':
+            for name_server in name_servers:
+                if 'dnsservers' in self.__dict__:
+                    self.dnsservers.append({"name-server":name_server})
+                else:
+                    self.dnsservers = [{"name-server":name_server}]
+                logging.info('Name-server "{}" added to this DNSServerGroups object.'.format(name_server))
+        elif action == 'remove':
+            if 'dnsservers' in self.__dict__:
+                for name_server in name_servers:
+                    self.dnsservers = list(filter(lambda i: i['name-server'] != name_server, self.dnsservers))
+            else:
+                logging.warning('DNSServerGroups has no members.  Cannot remove name-server.')
+        elif action == 'clear':
+            if 'dnsservers' in self.__dict__:
+                del self.dnsservers
+                logging.info('All name-servers removed from this DNSServerGroups object.')
+
+
+class ExtendedAccessList(APIClassTemplate):
+    """
+    The ExtendedAccessList Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/extendedaccesslist'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for ExtendedAccessList class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for ExtendedAccessList class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for ExtendedAccessList class.")
+
+    def post(self):
+        logging.info('POST method for API for ExtendedAccessList not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for ExtendedAccessList not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for ExtendedAccessList not supported.')
+        pass
+
+
+class FQDNS(APIClassTemplate):
+    """
+    The FQDNS Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/fqdns'
+    VALID_FOR_DNS_RESOLUTION = ['IPV4_ONLY', 'IPV6_ONLY', 'IPV4_AND_IPV6']
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for FQDNS class.")
+        self.parse_kwargs(**kwargs)
+        self.type = 'FQDN'
+
+    def format_data(self):
+        logging.debug("In format_data() for FQDNS class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'overrideTargetId' in self.__dict__:
+            json_data['overrideTargetId'] = self.overrideTargetId
+        if 'value' in self.__dict__:
+            json_data['value'] = self.value
+        if 'dnsResolution' in self.__dict__:
+            if self.dnsResolution in self.VALID_FOR_DNS_RESOLUTION:
+                json_data['dnsResolution'] = self.dnsResolution
+            else:
+                logging.warning('dnsResolution {} not a valid type".'.format(self.dnsResolution))
+        if 'overrides' in self.__dict__:
+            json_data['overrides'] = self.overrides
+        if 'overridable' in self.__dict__:
+            json_data['overridable'] = self.overridable
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for FQDNS class.")
+        if 'overrideTargetId' in kwargs:
+            self.overrideTargetId = kwargs['overrideTargetId']
+        if 'value' in kwargs:
+            self.value = kwargs['value']
+        if 'dnsResolution' in kwargs:
+            if kwargs['dnsResolution'] in self.VALID_FOR_DNS_RESOLUTION:
+                self.dnsResolution = kwargs['dnsResolution']
+            else:
+                logging.warning('dnsResolution {} not a valid type".'.format(kwargs['dnsResolution']))
+        if 'overrides' in kwargs:
+            self.overrides = kwargs['overrides']
+        if 'overridable' in kwargs:
+            self.overridable = kwargs['overridable']
+
+
+class Geolocation(APIClassTemplate):
+    """
+    The Geolocation Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/geolocations'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for Geolocation class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for Geolocation class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'continentId' in self.__dict__:
+            json_data['continentId'] = self.continentId
+        if 'continents' in self.__dict__:
+            json_data['continents'] = self.continents
+        if 'countries' in self.__dict__:
+            json_data['countries'] = self.countries
+        if 'continentUUID' in self.__dict__:
+            json_data['continentUUID'] = self.continentUUID
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for Geolocation class.")
+
+    def post(self):
+        logging.info('POST method for API for Geolocation not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for Geolocation not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for Geolocation not supported.')
+        pass
+
+
+class ICMPv4Object(APIClassTemplate):
+    """
+    The ICMPv4Object Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/icmpv4objects'
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for ICMPv4Object class.")
+        self.parse_kwargs(**kwargs)
+        self.type = 'ICMPV4Object'
+
+    def format_data(self):
+        logging.debug("In format_data() for ICMPv4Object class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'overrideTargetId' in self.__dict__:
+            json_data['overrideTargetId'] = self.overrideTargetId
+        if 'code' in self.__dict__:
+            json_data['code'] = self.code
+        if 'icmpType' in self.__dict__:
+            json_data['icmpType'] = self.icmpType
+        if 'overrides' in self.__dict__:
+            json_data['overrides'] = self.overrides
+        if 'overridable' in self.__dict__:
+            json_data['overridable'] = self.overridable
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for ICMPv4Object class.")
+        if 'overrideTargetId' in kwargs:
+            self.overrideTargetId = kwargs['overrideTargetId']
+        if 'code' in kwargs:
+            self.code = kwargs['code']
+        if 'icmpType' in kwargs:
+            self.icmpType = kwargs['icmpType']
+        if 'overrides' in kwargs:
+            self.overrides = kwargs['overrides']
+        if 'overridable' in kwargs:
+            self.overridable = kwargs['overridable']
+
+
+class ICMPv6Object(APIClassTemplate):
+    """
+    The ICMPv6Object Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/icmpv6objects'
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for ICMPv6Object class.")
+        self.parse_kwargs(**kwargs)
+        self.type = 'ICMPV6Object'
+
+    def format_data(self):
+        logging.debug("In format_data() for ICMPv6Object class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'overrideTargetId' in self.__dict__:
+            json_data['overrideTargetId'] = self.overrideTargetId
+        if 'code' in self.__dict__:
+            json_data['code'] = self.code
+        if 'icmpType' in self.__dict__:
+            json_data['icmpType'] = self.icmpType
+        if 'overrides' in self.__dict__:
+            json_data['overrides'] = self.overrides
+        if 'overridable' in self.__dict__:
+            json_data['overridable'] = self.overridable
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for ICMPv6Object class.")
+        if 'overrideTargetId' in kwargs:
+            self.overrideTargetId = kwargs['overrideTargetId']
+        if 'code' in kwargs:
+            self.code = kwargs['code']
+        if 'icmpType' in kwargs:
+            self.icmpType = kwargs['icmpType']
+        if 'overrides' in kwargs:
+            self.overrides = kwargs['overrides']
+        if 'overridable' in kwargs:
+            self.overridable = kwargs['overridable']
+
+
+class IKEv1IpsecProposals(APIClassTemplate):
+    """
+    The IKEv1IpsecProposals Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/ikev1ipsecproposals'
+    REQUIRED_FOR_POST = ['name', 'espEncryption', 'espHash']
+    VALID_FOR_ENCRYPTION = ['DES', '3DES', 'AES-128', 'AES-192', 'AES-256', 'ESP-NULL']
+    VALID_FOR_HASH = ['NONE', 'MD5', 'SHA']
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for IKEv1IpsecProposals class.")
+        self.parse_kwargs(**kwargs)
+        self.type = 'IKEv1IPsecProposal'
+
+    def format_data(self):
+        logging.debug("In format_data() for IKEv1IpsecProposals class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'espEncryption' in self.__dict__:
+            json_data['espEncryption'] = self.espEncryption
+        if 'espHash' in self.__dict__:
+            json_data['espHash'] = self.espHash
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for IKEv1IpsecProposals class.")
+        if 'espEncryption' in kwargs:
+            self.espEncryption = kwargs['espEncryption']
+        if 'espHash' in kwargs:
+            self.espHash = kwargs['espHash']
+
+
+class IKEv1Policies(APIClassTemplate):
+    """
+    The IKEv1Policies Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/ikev1policies'
+    REQUIRED_FOR_POST = ['name', 'encryption', 'hash', 'diffieHellmanGroup', 'lifetimeInSeconds', 'authenticationMethod']
+    VALID_FOR_ENCRYPTION = ['DES', '3DES', 'AES-128', 'AES-192', 'AES-256']
+    VALID_FOR_HASH = ['MD5', 'SHA']
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for IKEv1Policies class.")
+        self.parse_kwargs(**kwargs)
+        self.type = 'Ikev1PolicyObject'
+
+    def format_data(self):
+        logging.debug("In format_data() for IKEv1Policies class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'encryption' in self.__dict__:
+            if self.encryption in self.VALID_FOR_ENCRYPTION:
+                json_data['encryption'] = self.encryption
+            else:
+                logging.warning('encryption {} not a valid type".'.format(self.encryption))
+        if 'hash' in self.__dict__:
+            if self.hash in self.VALID_FOR_HASH:
+                json_data['hash'] = self.hash
+            else:
+                logging.warning('hash {} not a valid type".'.format(self.hash))
+        if 'priority' in self.__dict__:
+            json_data['priority'] = self.priority
+        if 'diffieHellmanGroup' in self.__dict__:
+            json_data['diffieHellmanGroup'] = self.diffieHellmanGroup
+        if 'authenticationMethod' in self.__dict__:
+            json_data['authenticationMethod'] = self.authenticationMethod
+        if 'lifetimeInSeconds' in self.__dict__:
+            json_data['lifetimeInSeconds'] = self.lifetimeInSeconds
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for IKEv1Policies class.")
+        if 'encryption' in kwargs:
+            self.encryption = kwargs['encryption']
+        if 'hash' in kwargs:
+            self.hash = kwargs['hash']
+        if 'priority' in kwargs:
+            self.priority = kwargs['priority']
+        if 'diffieHellmanGroup' in kwargs:
+            self.diffieHellmanGroup = kwargs['diffieHellmanGroup']
+        if 'authenticationMethod' in kwargs:
+            self.authenticationMethod = kwargs['authenticationMethod']
+        if 'lifetimeInSeconds' in kwargs:
+            self.lifetimeInSeconds = kwargs['lifetimeInSeconds']
+
+
+class IKEv2IpsecProposals(APIClassTemplate):
+    """
+    The IKEv2IpsecProposals Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/ikev2ipsecproposals'
+    REQUIRED_FOR_POST = ['name', 'encryptionAlgorithms', 'integrityAlgorithms']
+    VALID_FOR_ENCRYPTION = ['DES', '3DES', 'AES', 'AES-192', 'AES-256', 'NULL', 'AES-GCM', 'AES-GCM-192', 'AES-GCM-256', 'AES-GMAC', 'AES-GMAC-192', 'AES-GMAC-256']
+    VALID_FOR_HASH = ['NULL', 'MD5', 'SHA-1', 'SHA-256', 'SHA-384', 'SHA-512']
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for IKEv2IpsecProposals class.")
+        self.parse_kwargs(**kwargs)
+        self.type = 'IKEv2IPsecProposal'
+
+    def format_data(self):
+        logging.debug("In format_data() for IKEv2IpsecProposals class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'encryptionAlgorithms' in self.__dict__:
+            json_data['encryptionAlgorithms'] = self.encryptionAlgorithms
+        if 'integrityAlgorithms' in self.__dict__:
+            json_data['integrityAlgorithms'] = self.integrityAlgorithms
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for IKEv2IpsecProposals class.")
+        if 'encryptionAlgorithms' in kwargs:
+            self.encryptionAlgorithms = kwargs['encryptionAlgorithms']
+        if 'integrityAlgorithms' in kwargs:
+            self.integrityAlgorithms = kwargs['integrityAlgorithms']
+
+    def encryption(self, action, algorithms=[]):
+        logging.debug("In encryption() for IKEv2IpsecProposals class.")
+        if action == 'add':
+            for algorithm in algorithms:
+                if 'encryptionAlgorithms' in self.__dict__:
+                        if algorithm in self.encryptionAlgorithms:
+                            logging.warning('encryptionAlgorithms {} already exists".'.format(algorithm))
+                        elif algorithm in self.VALID_FOR_ENCRYPTION:
+                            self.encryptionAlgorithms.append(algorithm)
+                        else:
+                            logging.warning('encryptionAlgorithms {} not a valid type".'.format(algorithm))
+                else:
+                    self.encryptionAlgorithms = [algorithm]
+        elif action == 'remove':
+            if 'encryptionAlgorithms' in self.__dict__:
+                for algorithm in algorithms:
+                    self.encryptionAlgorithms = list(filter(lambda i: i != algorithm, self.encryptionAlgorithms))
+            else:
+                logging.warning('IKEv2IpsecProposals has no members.  Cannot remove encryptionAlgorithms.')
+        elif action == 'clear':
+            if 'encryptionAlgorithms' in self.__dict__:
+                del self.encryptionAlgorithms
+                logging.info('All encryptionAlgorithms removed from this IKEv2IpsecProposals object.')
+
+    def hash(self, action, algorithms=[]):
+        logging.debug("In hash() for IKEv2IpsecProposals class.")
+        if action == 'add':
+            for algorithm in algorithms:
+                if 'integrityAlgorithms' in self.__dict__:
+                        if algorithm in self.integrityAlgorithms:
+                            logging.warning('integrityAlgorithms {} already exists".'.format(algorithm))
+                        elif algorithm in self.VALID_FOR_HASH:
+                            self.integrityAlgorithms.append(algorithm)
+                        else:
+                            logging.warning('integrityAlgorithms {} not a valid type".'.format(algorithm))
+                else:
+                    self.integrityAlgorithms = [algorithm]
+        elif action == 'remove':
+            if 'integrityAlgorithms' in self.__dict__:
+                for algorithm in algorithms:
+                    self.integrityAlgorithms = list(filter(lambda i: i != algorithm, self.integrityAlgorithms))
+            else:
+                logging.warning('IKEv2IpsecProposals has no members.  Cannot remove integrityAlgorithms.')
+        elif action == 'clear':
+            if 'integrityAlgorithms' in self.__dict__:
+                del self.integrityAlgorithms
+                logging.info('All integrityAlgorithms removed from this IKEv2IpsecProposals object.')
+
+
+class IKEv2Policies(APIClassTemplate):
+    """
+    The IKEv2Policies Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/ikev2policies'
+    REQUIRED_FOR_POST = ['name', 'integrityAlgorithms', 'prfIntegrityAlgorithms', 'encryptionAlgorithms', 'diffieHellmanGroups']
+    VALID_FOR_ENCRYPTION = ['DES', '3DES', 'AES', 'AES-192', 'AES-256', 'NULL', 'AES-GCM', 'AES-GCM-192', 'AES-GCM-256']
+    VALID_FOR_INTEGRITY = ['NULL', 'MD5', 'SHA', 'SHA-256', 'SHA-384', 'SHA-512']
+    VALID_FOR_PRF_INTEGRITY = ['MD5', 'SHA', 'SHA-256', 'SHA-384', 'SHA-512']
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for IKEv2Policies class.")
+        self.parse_kwargs(**kwargs)
+        self.type = 'Ikev2PolicyObject'
+
+    def format_data(self):
+        logging.debug("In format_data() for IKEv2Policies class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'priority' in self.__dict__:
+            json_data['priority'] = self.priority
+        if 'diffieHellmanGroups' in self.__dict__:
+            json_data['diffieHellmanGroups'] = self.diffieHellmanGroups
+        if 'integrityAlgorithms' in self.__dict__:
+            json_data['integrityAlgorithms'] = self.integrityAlgorithms
+        if 'prfIntegrityAlgorithms' in self.__dict__:
+            json_data['prfIntegrityAlgorithms'] = self.prfIntegrityAlgorithms
+        if 'encryptionAlgorithms' in self.__dict__:
+            json_data['encryptionAlgorithms'] = self.encryptionAlgorithms
+        if 'lifetimeInSeconds' in self.__dict__:
+            json_data['lifetimeInSeconds'] = self.lifetimeInSeconds
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for IKEv2Policies class.")
+        if 'priority' in kwargs:
+            self.priority = kwargs['priority']
+        if 'diffieHellmanGroups' in kwargs:
+            self.diffieHellmanGroups = kwargs['diffieHellmanGroups']
+        if 'integrityAlgorithms' in kwargs:
+            self.integrityAlgorithms = kwargs['integrityAlgorithms']
+        if 'prfIntegrityAlgorithms' in kwargs:
+            self.prfIntegrityAlgorithms = kwargs['prfIntegrityAlgorithms']
+        if 'encryptionAlgorithms' in kwargs:
+            self.encryptionAlgorithms = kwargs['encryptionAlgorithms']
+        if 'lifetimeInSeconds' in kwargs:
+            self.lifetimeInSeconds = kwargs['lifetimeInSeconds']
+
+    def encryption(self, action, algorithms=[]):
+        logging.debug("In encryption() for IKEv2Policies class.")
+        if action == 'add':
+            for algorithm in algorithms:
+                if 'encryptionAlgorithms' in self.__dict__:
+                        if algorithm in self.encryptionAlgorithms:
+                            logging.warning('encryptionAlgorithms {} already exists".'.format(algorithm))
+                        elif algorithm in self.VALID_FOR_ENCRYPTION:
+                            self.encryptionAlgorithms.append(algorithm)
+                        else:
+                            logging.warning('encryptionAlgorithms {} not a valid type".'.format(algorithm))
+                else:
+                    self.encryptionAlgorithms = [algorithm]
+        elif action == 'remove':
+            if 'encryptionAlgorithms' in self.__dict__:
+                for algorithm in algorithms:
+                    self.encryptionAlgorithms = list(filter(lambda i: i != algorithm, self.encryptionAlgorithms))
+            else:
+                logging.warning('IKEv2Policies has no members.  Cannot remove encryptionAlgorithms.')
+        elif action == 'clear':
+            if 'encryptionAlgorithms' in self.__dict__:
+                del self.encryptionAlgorithms
+                logging.info('All encryptionAlgorithms removed from this IKEv2Policies object.')
+
+    def hash(self, action, algorithms=[]):
+        logging.debug("In hash() for IKEv2Policies class.")
+        if action == 'add':
+            for algorithm in algorithms:
+                if 'integrityAlgorithms' in self.__dict__:
+                        if algorithm in self.integrityAlgorithms:
+                            logging.warning('integrityAlgorithms {} already exists".'.format(algorithm))
+                        elif algorithm in self.VALID_FOR_INTEGRITY:
+                            self.integrityAlgorithms.append(algorithm)
+                        else:
+                            logging.warning('integrityAlgorithms {} not a valid type".'.format(algorithm))
+                else:
+                    if algorithm in self.VALID_FOR_INTEGRITY:
+                        self.integrityAlgorithms = [algorithm]
+                    else:
+                        logging.warning('integrityAlgorithms {} not a valid type".'.format(algorithm))
+        elif action == 'remove':
+            if 'integrityAlgorithms' in self.__dict__:
+                for algorithm in algorithms:
+                    self.integrityAlgorithms = list(filter(lambda i: i != algorithm, self.integrityAlgorithms))
+            else:
+                logging.warning('IKEv2Policies has no members.  Cannot remove integrityAlgorithms.')
+        elif action == 'clear':
+            if 'integrityAlgorithms' in self.__dict__:
+                del self.integrityAlgorithms
+                logging.info('All integrityAlgorithms removed from this IKEv2Policies object.')
+
+    def prf_hash(self, action, algorithms=[]):
+        logging.debug("In prf_hash() for IKEv2Policies class.")
+        if action == 'add':
+            for algorithm in algorithms:
+                if 'prfIntegrityAlgorithms' in self.__dict__:
+                        if algorithm in self.prfIntegrityAlgorithms:
+                            logging.warning('prfIntegrityAlgorithms {} already exists".'.format(algorithm))
+                        elif algorithm in self.VALID_FOR_PRF_INTEGRITY:
+                            self.prfIntegrityAlgorithms.append(algorithm)
+                        else:
+                            logging.warning('prfIntegrityAlgorithms {} not a valid type".'.format(algorithm))
+                else:
+                    if algorithm in self.VALID_FOR_PRF_INTEGRITY:
+                        self.prfIntegrityAlgorithms = [algorithm]
+                    else:
+                      logging.warning('prfIntegrityAlgorithms {} not a valid type".'.format(algorithm))  
+        elif action == 'remove':
+            if 'prfIntegrityAlgorithms' in self.__dict__:
+                for algorithm in algorithms:
+                    self.prfIntegrityAlgorithms = list(filter(lambda i: i != algorithm, self.prfIntegrityAlgorithms))
+            else:
+                logging.warning('IKEv2Policies has no members.  Cannot remove prfIntegrityAlgorithms.')
+        elif action == 'clear':
+            if 'prfIntegrityAlgorithms' in self.__dict__:
+                del self.prfIntegrityAlgorithms
+                logging.info('All prfIntegrityAlgorithms removed from this IKEv2Policies object.')
 
 
 class PortObjectGroup(APIClassTemplate):
@@ -2520,6 +3249,67 @@ class SubInterfaces(APIClassTemplate):
             logging.warning('PhysicalInterface, "{}", not found.  Cannot add to SubInterfaces.'.format(name))
 
 
+class StaticRoutes(APIClassTemplate):
+    """
+    The StaticRoutes Object in the FMC.
+    """
+
+    PREFIX_URL = '/devices/devicerecords'
+    URL_SUFFIX = None
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for StaticRoutes class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for StaticRoutes class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'continentId' in self.__dict__:
+            json_data['continentId'] = self.continentId
+        if 'continents' in self.__dict__:
+            json_data['continents'] = self.continents
+        if 'countries' in self.__dict__:
+            json_data['countries'] = self.countries
+        if 'continentUUID' in self.__dict__:
+            json_data['continentUUID'] = self.continentUUID
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for StaticRoutes class.")
+
+    def device(self, device_name):
+        logging.debug("In device() for StaticRoutes class.")
+        device1 = Device(fmc=self.fmc)
+        device1.get(name=device_name)
+        if 'id' in device1.__dict__:
+            self.device_id = device1.id
+            self.URL = '{}{}/{}/routing/staticroutes'.format(self.fmc.configuration_url, self.PREFIX_URL, self.device_id)
+            self.device_added_to_url = True
+        else:
+            logging.warning('Device {} not found.  Cannot set up device for '
+                            'physicalInterface.'.format(device_name))
+
+    def post(self):
+        logging.info('POST method for API for StaticRoutes not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for StaticRoutes not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for StaticRoutes not supported.')
+        pass
+
+
 class IPv4StaticRoutes(APIClassTemplate):
     """
     The IPv4StaticRoutes Object in the FMC.
@@ -3481,7 +4271,8 @@ class ACPRule(APIClassTemplate):
         if action == 'add':
             ipaddresses_json = IPAddresses(fmc=self.fmc).get()
             networkgroup_json = NetworkGroup(fmc=self.fmc).get()
-            items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
+            fqdns_json = FQDNS(fmc=self.fmc).get()
+            items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', []) + fqdns_json.get('items', [])
             new_net = None
             for item in items:
                 if item['name'] == name:
@@ -3522,7 +4313,8 @@ class ACPRule(APIClassTemplate):
         if action == 'add':
             ipaddresses_json = IPAddresses(fmc=self.fmc).get()
             networkgroup_json = NetworkGroup(fmc=self.fmc).get()
-            items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
+            fqdns_json = FQDNS(fmc=self.fmc).get()
+            items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', []) + fqdns_json.get('items', [])
             new_net = None
             for item in items:
                 if item['name'] == name:
@@ -3558,6 +4350,7 @@ class ACPRule(APIClassTemplate):
             if 'destinationNetworks' in self.__dict__:
                 del self.destinationNetworks
                 logging.info('All Destination Networks removed from this ACPRule object.')
+
 
 class FTDNatPolicy(APIClassTemplate):
     """

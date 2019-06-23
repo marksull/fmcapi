@@ -36,7 +36,8 @@ def test__url_category():
 
 
 def test__ports():
-    logging.info('# Test Ports.  This only returns a full list of various Port object types.')
+    logging.info(
+        '# Test Ports.  This only returns a full list of various Port object types.')
     obj1 = Ports(fmc=fmc1)
     print('Ports -->')
     result = obj1.get()
@@ -111,6 +112,22 @@ def test__application_risk():
     logging.info('# Testing ApplicationRisk class done.\n')
 
 
+def test__application_filter():
+    logging.info('# Testing ApplicationFilter class.')
+    obj1 = ApplicationFilter(fmc=fmc1)
+    print('All ApplicationFilters -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
+    del obj1
+    obj1 = ApplicationFilter(fmc=fmc1, name='_tmp')
+    print('One ApplicationFilter -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    logging.info('# Testing ApplicationFilter class done.\n')
+
+
 def test__application_productivity():
     logging.info('# Testing ApplicationProductivity class.')
     obj1 = ApplicationProductivity(fmc=fmc1)
@@ -141,6 +158,22 @@ def test__application_category():
     pp.pprint(obj1.get())
     print('\n')
     logging.info('# Testing ApplicationCategory class done.\n')
+
+
+def test__cert_enrollment():
+    logging.info('# Testing CertEnrollment class. Requires a CertEnrollment')
+    obj1 = CertEnrollment(fmc=fmc1)
+    print('All CertEnrollments -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
+    del obj1
+    obj1 = CertEnrollment(fmc=fmc1, name='_tmp')
+    print('One CertEnrollment -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    logging.info('# Testing CertEnrollment class done.\n')
 
 
 def test__country():
@@ -175,13 +208,51 @@ def test__continent():
     logging.info('# Testing Continent class done.\n')
 
 
+def test__dns_servers_group():
+    logging.info(
+        '# Test DNSServerGroups.  Post, get, put, delete DNSServerGroups Objects.')
+    server_list = ["192.0.2.1", "192.0.2.2"]
+    obj1 = DNSServerGroups(fmc=fmc1)
+    obj1.name = "_dns1" + namer
+    obj1.timeout = "3"
+    obj1.defaultdomain = "cisco.com"
+    obj1.post()
+
+    obj1.get()
+    obj1.servers(action='add', name_servers=server_list)
+    obj1.put()
+
+    obj1.delete()
+    logging.info('# Testing DNSServerGroups class done.\n')
+
+
+def test__fqdns():
+    logging.info(
+        '# Test FQDNS.  Post, get, put, delete FQDNS Objects.')
+    obj1 = FQDNS(fmc=fmc1)
+    obj1.name = "_fqdns1" + namer
+    obj1.value = "www.cisco.com"
+    obj1.dnsResolution = "IPV4_ONLY"
+    obj1.post()
+
+    obj1.get()
+    obj1.dnsResolution = "IPV4_AND_IPV6"
+    obj1.put()
+
+    obj1.delete()
+    logging.info('# FQDNS DNSServerGroups class done.\n')
+
+
 def test__vlan_group_tag():
     logging.info('# Testing VlanGroupTag class.')
-    obj10 = VlanTag(fmc=fmc1, name='_vlantag10', data={'startTag': '888', 'endTag': '999'})
+    obj10 = VlanTag(fmc=fmc1, name='_vlantag10', data={
+                    'startTag': '888', 'endTag': '999'})
     obj10.post()
-    obj11 = VlanTag(fmc=fmc1, name='_vlantag11', data={'startTag': '222', 'endTag': '333'})
+    obj11 = VlanTag(fmc=fmc1, name='_vlantag11', data={
+                    'startTag': '222', 'endTag': '333'})
     obj11.post()
-    obj12 = VlanTag(fmc=fmc1, name='_vlantag12', data={'startTag': '1', 'endTag': '999'})
+    obj12 = VlanTag(fmc=fmc1, name='_vlantag12', data={
+                    'startTag': '1', 'endTag': '999'})
     obj12.post()
     time.sleep(1)
     obj1 = VlanGroupTag(fmc=fmc1, name=namer)
@@ -289,7 +360,8 @@ def test__network_group():
 
 
 def test__ip_addresses():
-    logging.info('# Test IPAddresses.  This only returns a full list of IP object types.')
+    logging.info(
+        '# Test IPAddresses.  This only returns a full list of IP object types.')
     obj1 = IPAddresses(fmc=fmc1)
     print('IPAddresses -->')
     result = obj1.get()
@@ -299,7 +371,8 @@ def test__ip_addresses():
 
 
 def test__fmc_version():
-    logging.info('# Testing fmc.version() method.  Getting version information information from FMC.')
+    logging.info(
+        '# Testing fmc.version() method.  Getting version information information from FMC.')
     version_info = fmc1.version()
     print('fmc.version() -- >')
     pp.pprint(version_info)
@@ -368,6 +441,172 @@ def test__ip_range():
     logging.info('# Test IPRange done.\n')
 
 
+def test__extended_acls():
+    logging.info('# Testing ExtendedAccessList class. Requires a configured ExtendedAccessList')
+    obj1 = ExtendedAccessList(fmc=fmc1)
+    print('All ExtendedAccessList -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
+    del obj1
+    obj1 = ExtendedAccessList(fmc=fmc1, name='_tmp')
+    print('One ExtendedAccessList -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    logging.info('# Testing ExtendedAccessList class done.\n')
+
+
+def test__geolocations():
+    logging.info('# Testing Geolocation class. Requires a configured Geolocation')
+    obj1 = Geolocation(fmc=fmc1)
+    print('All Geolocation -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
+    del obj1
+    obj1 = Geolocation(fmc=fmc1, name='_tmp')
+    print('One Geolocation -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    logging.info('# Testing Geolocation class done.\n')
+
+
+def test__icmpv4():
+    logging.info(
+    '# Test ICMPv4Object.  Post, get, put, delete ICMPv4Object Objects.')
+    obj1 = ICMPv4Object(fmc=fmc1)
+    obj1.name = "_icmpv4" + namer
+    obj1.icmpType = "3"
+    obj1.code = "0"
+    obj1.post()
+
+    obj1.get()
+    obj1.code = "3"
+    obj1.put()
+
+    obj1.delete()
+    logging.info('# FQDNS ICMPv4Object class done.\n')
+
+def test__icmpv6():
+    logging.info(
+    '# Test ICMPv6Object.  Post, get, put, delete ICMPv6Object Objects.')
+    obj1 = ICMPv6Object(fmc=fmc1)
+    obj1.name = "_icmpv6" + namer
+    obj1.icmpType = "1"
+    obj1.code = "0"
+    obj1.post()
+
+    obj1.get()
+    obj1.code = "3"
+    obj1.put()
+
+    obj1.delete()
+    logging.info('# FQDNS ICMPv6Object class done.\n')
+
+
+def test__ikev1():
+    logging.info(
+    '# Test IKEv1Policies and IKEv1IpsecProposals.  Post, get, put, delete IKEv1Policies and IKEv1IpsecProposals Objects.')
+    ipsec1 = IKEv1IpsecProposals(fmc=fmc1)
+    ipsec1.name = "_ipsec" + namer
+    ipsec1.espEncryption = "AES-128"
+    ipsec1.espHash = "SHA"
+    ipsec1.post()
+
+    ipsec1.get()
+    ipsec1.espEncryption = "AES-192"
+    ipsec1.put()
+
+    pol1 = IKEv1Policies(fmc=fmc1)
+    pol1.name = "_pol" + namer
+    pol1.encryption = "3DES"
+    pol1.hash = "SHA"
+    pol1.priority = "10"
+    pol1.diffieHellmanGroup = "5"
+    pol1.authenticationMethod = "Preshared Key"
+    pol1.lifetimeInSeconds = "3600"
+    pol1.post()
+
+    pol1.get()
+    pol1.encryption = "AES-128"
+    pol1.put()
+
+    ipsec1.delete()
+    pol1.delete()
+    logging.info('# Test IKEv1Policies and IKEv1IpsecProposals classes done.\n')
+
+
+def test__ikev2():
+    logging.info(
+    '# Test IKEv2Policies and IKEv2IpsecProposals.  Post, get, put, delete IKEv2Policies and IKEv2IpsecProposals Objects.')
+    encryption_list = ['AES', 'AES-192', 'AES-256', 'NULL']
+    integrity_list1 = ['NULL', 'SHA-1', 'SHA-256', 'SHA-384', 'SHA-512']
+    ipsec_integrity_list1 = ['NULL', 'SHA', 'SHA-256', 'SHA-384', 'SHA-512']
+    # 'NULL' is invalid for prf_integrity.  Should generate a warning log and ignore that type.
+    prf_integrity_list1 = ['NULL', 'SHA', 'SHA-256', 'SHA-384', 'SHA-512']
+    
+    ipsec1 = IKEv2IpsecProposals(fmc=fmc1)
+    ipsec1.name = "_ipsec" + namer
+    ipsec1.encryption(action='add', algorithms=encryption_list)
+    ipsec1.hash(action='add', algorithms=integrity_list1)
+    ipsec1.post()
+
+    ipsec1.get()
+    # Try to add a duplicate
+    ipsec1.encryption(action='add', algorithms=['AES-192'])
+    ipsec1.hash(action='add', algorithms=['SHA-1'])
+
+    ipsec1.encryption(action='remove', algorithms=['NULL'])
+    ipsec1.hash(action='remove', algorithms=['NULL'])
+    ipsec1.put()
+
+    # None of the algorithms can contain an empty list
+    ipsec1.get()
+    ipsec1.encryption(action='clear')
+    ipsec1.hash(action='clear')
+    ipsec1.encryption(action='add', algorithms=['AES-192'])
+    ipsec1.hash(action='add', algorithms=['SHA-1'])
+    ipsec1.put()
+    
+
+    pol1 = IKEv2Policies(fmc=fmc1)
+    pol1.name = "_pol" + namer
+    pol1.priority = "10"
+    pol1.diffieHellmanGroups = ["2", "5"]
+    pol1.encryption(action='add', algorithms=encryption_list)
+    pol1.hash(action='add', algorithms=ipsec_integrity_list1)
+    pol1.prf_hash(action='add', algorithms=prf_integrity_list1)
+    pol1.lifetimeInSeconds = "3600"
+    pol1.post()
+
+    pol1.get()
+    # Try to add a duplicate
+    pol1.encryption(action='add', algorithms=['AES-192'])
+    pol1.hash(action='add', algorithms=['NULL'])
+    pol1.prf_hash(action='add', algorithms=['SHA'])
+
+    pol1.encryption(action='remove', algorithms=['NULL'])
+    pol1.hash(action='remove', algorithms=['NULL'])
+    pol1.prf_hash(action='remove', algorithms=['SHA'])
+    pol1.put()
+
+    # None of the algorithms can contain an empty list
+    pol1.get()
+    pol1.encryption(action='clear')
+    pol1.hash(action='clear')
+    pol1.prf_hash(action='clear')
+    pol1.encryption(action='add', algorithms=['AES-192'])
+    pol1.hash(action='add', algorithms=['NULL'])
+    pol1.prf_hash(action='add', algorithms=['SHA'])
+    pol1.put()
+
+    ipsec1.delete()
+    pol1.delete()
+    logging.info('# Test IKEv2Policies and IKEv2IpsecProposals classes done.\n')
+
+
 def test__url():
     logging.info('# Test URL.  Post, get, put, delete URL Objects.')
     obj1 = URL(fmc=fmc1)
@@ -421,7 +660,8 @@ def test__protocol_port():
 
 
 def test__security_zone():
-    logging.info('# Test SecurityZone.  Post, get, put, delete Security Zone Objects.')
+    logging.info(
+        '# Test SecurityZone.  Post, get, put, delete Security Zone Objects.')
     obj1 = SecurityZone(fmc=fmc1)
     obj1.name = namer
     obj1.interfaceMode = 'ROUTED'
@@ -438,7 +678,8 @@ def test__security_zone():
 
 
 def test__interface_group():
-    logging.info('# Test InterfaceGroup.  Post, get, put, delete InterfaceGroup Objects.')
+    logging.info(
+        '# Test InterfaceGroup.  Post, get, put, delete InterfaceGroup Objects.')
     obj1 = InterfaceGroup(fmc=fmc1)
     obj1.name = "_ig_outside_all"
     obj1.interfaceMode = 'ROUTED'
@@ -451,7 +692,7 @@ def test__interface_group():
 
     obj1 = InterfaceGroup(fmc=fmc1, name="_ig_outside_all")
     obj1.get()
-    obj1.p_interface(device_name="device-name", action="add",
+    obj1.p_interface(device_name="device_name", action="add",
                      names=["GigabitEthernet0/0", "GigabitEthernet0/1", "GigabitEthernet0/2"])
     print('InterfaceGroup PUT-->')
     pp.pprint(obj1.format_data())
@@ -462,7 +703,8 @@ def test__interface_group():
 
     obj1 = InterfaceGroup(fmc=fmc1, name="_ig_outside_all")
     obj1.get()
-    obj1.p_interface(device_name="device-name", action="remove", names=["GigabitEthernet0/1"])
+    obj1.p_interface(device_name="device_name",
+                     action="remove", names=["GigabitEthernet0/1"])
     print('InterfaceGroup PUT-->')
     pp.pprint(obj1.format_data())
     print('\n')
@@ -483,7 +725,8 @@ def test__interface_group():
 
 
 def test__slamonitor():
-    logging.info('# Test SLAMonitor.  Post, get, put, delete SLAMonitor Objects.')
+    logging.info(
+        '# Test SLAMonitor.  Post, get, put, delete SLAMonitor Objects.')
     sz1 = SecurityZone(fmc=fmc1)
     sz1.name = "SZ-OUTSIDE1"
     sz1.interfaceMode = 'ROUTED'
@@ -602,7 +845,8 @@ def test__device_with_task():
 
 
 def test__phys_interfaces():
-    logging.info('# Test PhysicalInterface.  get, put PhysicalInterface Objects. Requires registered device')
+    logging.info(
+        '# Test PhysicalInterface.  get, put PhysicalInterface Objects. Requires registered device')
     sz1 = SecurityZone(fmc=fmc1)
     sz1.name = "SZ-OUTSIDE1"
     sz1.post()
@@ -612,7 +856,7 @@ def test__phys_interfaces():
     sz2.post()
     time.sleep(1)
 
-    intf1 = PhysicalInterface(fmc=fmc1, device_name="device-name")
+    intf1 = PhysicalInterface(fmc=fmc1, device_name="device_name")
     intf1.get(name="GigabitEthernet0/0")
     intf1.enabled = True
     intf1.ifname = "OUTSIDE1"
@@ -620,7 +864,7 @@ def test__phys_interfaces():
     intf1.standbyMACAddress = "0050.5686.0c2e"
     intf1.static(ipv4addr="10.254.0.3", ipv4mask=24)
     intf1.sz(name="SZ-OUTSIDE1")
-    intf2 = PhysicalInterface(fmc=fmc1, device_name="device-name")
+    intf2 = PhysicalInterface(fmc=fmc1, device_name="device_name")
     intf2.get(name="GigabitEthernet0/1")
     intf2.enabled = True
     intf2.ifname = "OUTSIDE2"
@@ -664,7 +908,8 @@ def test__phys_interfaces():
 
 
 def test__bridge_group_interfaces():
-    logging.info('# Test BridgeGroupInterfaces.  get, post, put, delete BridgeGroupInterfaces Objects. Requires registered device')
+    logging.info(
+        '# Test BridgeGroupInterfaces.  get, post, put, delete BridgeGroupInterfaces Objects. Requires registered device')
     sz1 = SecurityZone(fmc=fmc1)
     sz1.name = "_sz1" + namer
     sz1.post()
@@ -674,8 +919,9 @@ def test__bridge_group_interfaces():
     sz2.post()
     time.sleep(1)
 
-    br1 = BridgeGroupInterfaces(fmc=fmc1, device_name="device-name")
-    br1.p_interfaces(p_interfaces=["GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="device-name")
+    br1 = BridgeGroupInterfaces(fmc=fmc1, device_name="device_name")
+    br1.p_interfaces(p_interfaces=[
+                     "GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="device_name")
     br1.enabled = True
     br1.ifname = "_br1" + namer
     br1.bridgeGroupId = "1"
@@ -698,7 +944,8 @@ def test__bridge_group_interfaces():
 
 
 def test__redundant_interfaces():
-    logging.info('# Test RedundantInterfaces.  get, post, put, delete RedundantInterfaces Objects. Requires registered device')
+    logging.info(
+        '# Test RedundantInterfaces.  get, post, put, delete RedundantInterfaces Objects. Requires registered device')
     sz1 = SecurityZone(fmc=fmc1)
     sz1.name = "_sz1" + namer
     sz1.post()
@@ -708,9 +955,9 @@ def test__redundant_interfaces():
     sz2.post()
     time.sleep(1)
 
-    red1 = RedundantInterfaces(fmc=fmc1, device_name="device-name")
-    red1.primary(p_interface="GigabitEthernet0/3", device_name="device-name")
-    red1.secondary(p_interface="GigabitEthernet0/5", device_name="device-name")
+    red1 = RedundantInterfaces(fmc=fmc1, device_name="device_name")
+    red1.primary(p_interface="GigabitEthernet0/3", device_name="device_name")
+    red1.secondary(p_interface="GigabitEthernet0/5", device_name="device_name")
     red1.enabled = "True"
     red1.ifname = "_red1" + namer
     red1.redundantId = "1"
@@ -735,7 +982,8 @@ def test__redundant_interfaces():
 
 
 def test__etherchannel_interfaces():
-    logging.info('# Test EtherchannelInterfaces.  get, post, put, delete EtherchannelInterfaces Objects. Requires registered physical device')
+    logging.info(
+        '# Test EtherchannelInterfaces.  get, post, put, delete EtherchannelInterfaces Objects. Requires registered physical device')
     sz1 = SecurityZone(fmc=fmc1)
     sz1.name = "_sz1" + namer
     sz1.post()
@@ -745,8 +993,9 @@ def test__etherchannel_interfaces():
     sz2.post()
     time.sleep(1)
 
-    eth1 = EtherchannelInterfaces(fmc=fmc1, device_name="device-name")
-    eth1.p_interfaces(p_interfaces=["GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="device-name")
+    eth1 = EtherchannelInterfaces(fmc=fmc1, device_name="device_name")
+    eth1.p_interfaces(p_interfaces=[
+                      "GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="device_name")
     eth1.enabled = True
     eth1.ifname = "_eth1" + namer
     eth1.etherChannelId = "1"
@@ -773,7 +1022,8 @@ def test__etherchannel_interfaces():
 
 
 def test__subinterfaces():
-    logging.info('# Test SubInterfaces.  get, post, put, delete SubInterfaces Objects. Requires registered device')
+    logging.info(
+        '# Test SubInterfaces.  get, post, put, delete SubInterfaces Objects. Requires registered device')
     sz1 = SecurityZone(fmc=fmc1)
     sz1.name = "_sz1" + namer
     sz1.post()
@@ -783,8 +1033,9 @@ def test__subinterfaces():
     sz2.post()
     time.sleep(1)
 
-    sub1 = SubInterfaces(fmc=fmc1, device_name="device-name")
-    sub1.p_interface(p_interface="GigabitEthernet0/3", device_name="device-name")
+    sub1 = SubInterfaces(fmc=fmc1, device_name="device_name")
+    sub1.p_interface(p_interface="GigabitEthernet0/3",
+                     device_name="device_name")
     sub1.enabled = True
     sub1.ifname = "_sub1" + namer
     sub1.subIntfId = "300"
@@ -808,22 +1059,36 @@ def test__subinterfaces():
     sz2.delete()
 
 
+def test__static_routes():
+    logging.info('# Testing StaticRoutes class. Requires a registered device')
+    obj1 = StaticRoutes(fmc=fmc1)
+    obj1.device(device_name="device_name")
+    print('All StaticRoutes -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
+    logging.info('# Testing StaticRoutes class done.\n')
+    del obj1
+
+
 def test__device_group():
-    logging.info('# Test DeviceGroups.  get, post, put, delete DeviceGroups Objects. Requires registered device')
+    logging.info(
+        '# Test DeviceGroups.  get, post, put, delete DeviceGroups Objects. Requires registered device')
     device_list = [{"name": "ftdv-HA", "type": "deviceHAPair"}]
     dg1 = DeviceGroups(fmc=fmc1)
     dg1.name = "_dg1" + namer
-    dg1.devices(action='add',members=device_list)
+    dg1.devices(action='add', members=device_list)
     dg1.post()
     time.sleep(1)
 
     dg1.get()
-    dg1.devices(action='remove',members=device_list)
+    dg1.devices(action='remove', members=device_list)
     dg1.put()
     time.sleep(1)
 
     dg1.get()
-    dg1.devices(action='add',members=device_list)
+    dg1.devices(action='add', members=device_list)
     dg1.put()
     time.sleep(1)
 
@@ -913,7 +1178,8 @@ def test__device_ha_pair():
 
 
 def test__device_ha_monitored_interfaces():
-    logging.info('# Test DeviceHAMonitoredInterfaces. get, put DeviceHAMonitoredInterfaces Objects')
+    logging.info(
+        '# Test DeviceHAMonitoredInterfaces. get, put DeviceHAMonitoredInterfaces Objects')
     obj1 = DeviceHAMonitoredInterfaces(fmc=fmc1, ha_name="HaName")
     # Interface logical name (ifname)
     obj1.get(name="OUTSIDE1")
@@ -926,9 +1192,10 @@ def test__device_ha_monitored_interfaces():
 
 
 def test__device_ha_failover_mac():
-    logging.info('# Test DeviceHAFailoverMAC. get, post, put, delete DeviceHAFailoverMAC Objects')
+    logging.info(
+        '# Test DeviceHAFailoverMAC. get, post, put, delete DeviceHAFailoverMAC Objects')
     obj1 = DeviceHAFailoverMAC(fmc=fmc1, ha_name="HaName")
-    obj1.p_interface(name="GigabitEthernet0/0", device_name="device-name")
+    obj1.p_interface(name="GigabitEthernet0/0", device_name="device_name")
     obj1.failoverActiveMac = "0050.5686.718f"
     obj1.failoverStandbyMac = "1050.5686.0c2e"
     print('DeviceHAFailoverMAC POST->')
@@ -951,7 +1218,8 @@ def test__device_ha_failover_mac():
 
 
 def test__intrusion_policy():
-    logging.info('# Test IntrusionPolicy. Can only GET IntrusionPolicy objects.')
+    logging.info(
+        '# Test IntrusionPolicy. Can only GET IntrusionPolicy objects.')
     obj1 = IntrusionPolicy(fmc=fmc1)
     obj1.get(name='Security Over Connectivity')
     print('IntrusionPolicy -->')
@@ -961,7 +1229,8 @@ def test__intrusion_policy():
 
 
 def test__access_control_policy():
-    logging.info('# Test AccessControlPolicy.  Post, get, put, delete ACP Objects.')
+    logging.info(
+        '# Test AccessControlPolicy.  Post, get, put, delete ACP Objects.')
     obj1 = AccessControlPolicy(fmc=fmc1)
     obj1.name = namer
     obj1.post()
@@ -977,7 +1246,8 @@ def test__access_control_policy():
 
 
 def test__acp_rule():
-    logging.info('# In preparation for testing ACPRule methods, set up some known objects in the FMC.')
+    logging.info(
+        '# In preparation for testing ACPRule methods, set up some known objects in the FMC.')
     # Build an IP host object
     iphost1 = IPHost(fmc=fmc1, name='_iphost1', value='7.7.7.7')
     iphost1.post()
@@ -991,6 +1261,10 @@ def test__acp_rule():
     ipnet2 = IPNetwork(fmc=fmc1, name='_ipnet2', value='5.5.5.0/24')
     ipnet2.post()
     time.sleep(1)
+    # Build an FQDNS object
+    fqdns1 = FQDNS(fmc=fmc1, name='_fqdns1', value='www.cisco.com')
+    fqdns1.post()
+
     obj1 = NetworkGroup(fmc=fmc1, name='_fmcapi_test_networkgroup')
     obj1.named_networks(action='add', name=ipnet2.name)
     obj1.unnamed_networks(action='add', value='4.4.4.4/32')
@@ -998,18 +1272,24 @@ def test__acp_rule():
     # Build a URL object
     url1 = URL(fmc=fmc1, name='_url1', url='asdf.org')
     url1.post()
+    lists = [{"type": url1.type, "id": url1.id, "name": url1.name}]
     # Build a VLAN Tag object
-    vlantag1 = VlanTag(fmc=fmc1, name='_vlantag1', data={'startTag': '888', 'endTag': '999'})
+    vlantag1 = VlanTag(fmc=fmc1, name='_vlantag1', data={
+                       'startTag': '888', 'endTag': '999'})
     vlantag1.post()
     # Build a Port object
-    pport1 = ProtocolPort(fmc=fmc1, name='_pport1', port='9090', protocol='UDP')
+    pport1 = ProtocolPort(fmc=fmc1, name='_pport1',
+                          port='9090', protocol='UDP')
     pport1.post()
     # Build a Port Group Object
-    obj10 = ProtocolPort(fmc=fmc1, name='_porttcp1', port='8443', protocol='TCP')
+    obj10 = ProtocolPort(fmc=fmc1, name='_porttcp1',
+                         port='8443', protocol='TCP')
     obj10.post()
-    obj11 = ProtocolPort(fmc=fmc1, name='_portudp1', port='161', protocol='UDP')
+    obj11 = ProtocolPort(fmc=fmc1, name='_portudp1',
+                         port='161', protocol='UDP')
     obj11.post()
-    obj12 = ProtocolPort(fmc=fmc1, name='_portrangetcp1', port='0-1023', protocol='TCP')
+    obj12 = ProtocolPort(fmc=fmc1, name='_portrangetcp1',
+                         port='0-1023', protocol='TCP')
     obj12.post()
     obj2 = PortObjectGroup(fmc=fmc1, name='_fmcapi_test_portobjectgroup')
     obj2.named_ports(action='add', name=obj10.name)
@@ -1025,7 +1305,8 @@ def test__acp_rule():
     time.sleep(1)
     logging.info('# Setup of objects for ACPRule test done.\n')
 
-    logging.info('# Test ACPRule.  Try to test all features of all methods of the ACPRule class.')
+    logging.info(
+        '# Test ACPRule.  Try to test all features of all methods of the ACPRule class.')
     acprule1 = ACPRule(fmc=fmc1, acp_name=acp1.name)
     acprule1.name = namer
     acprule1.action = 'ALLOW'
@@ -1047,7 +1328,10 @@ def test__acp_rule():
     acprule1.source_network(action='add', name=iprange1.name)
     acprule1.destination_network(action='add', name=ipnet1.name)
     acprule1.destination_network(action='add', name=iprange1.name)
+    acprule1.destination_network(action='add', name=fqdns1.name)
+    acprule1.urls = {"objects": lists}
     acprule1.post()
+
     logging.info('# Test ACPRule done.\n')
 
     logging.info('# Cleanup of testing ACPRule methods.')
@@ -1057,6 +1341,7 @@ def test__acp_rule():
     iphost1.delete()
     ipnet1.delete()
     iprange1.delete()
+    fqdns1.delete()
     obj1.delete()
     ipnet2.delete()
     url1.delete()
@@ -1078,11 +1363,14 @@ def test__audit():
 
 def test__port_object_group():
     logging.info('# Testing PortObjectGroup class.')
-    obj10 = ProtocolPort(fmc=fmc1, name='_porttcp1', port='8443', protocol='TCP')
+    obj10 = ProtocolPort(fmc=fmc1, name='_porttcp1',
+                         port='8443', protocol='TCP')
     obj10.post()
-    obj11 = ProtocolPort(fmc=fmc1, name='_portudp1', port='161', protocol='UDP')
+    obj11 = ProtocolPort(fmc=fmc1, name='_portudp1',
+                         port='161', protocol='UDP')
     obj11.post()
-    obj12 = ProtocolPort(fmc=fmc1, name='_portrangetcp1', port='0-1023', protocol='TCP')
+    obj12 = ProtocolPort(fmc=fmc1, name='_portrangetcp1',
+                         port='0-1023', protocol='TCP')
     obj12.post()
     time.sleep(1)
     obj1 = PortObjectGroup(fmc=fmc1, name=namer)
@@ -1316,7 +1604,7 @@ def test__manualnat():
     manualnat1.destination_intf(name="SZ-OUTSIDE1")
     manualnat1.enabled = True
     manualnat1.nat_policy(name=namer)
-    
+
     # Manualnat identity nat
     manualnat2 = ManualNatRules(fmc=fmc1)
     manualnat2.identity_nat(name="_net_identity")
@@ -1348,7 +1636,7 @@ def test__manualnat():
     # Manualnat divert
     manualnat5 = ManualNatRules(fmc=fmc1)
     manualnat5.identity_nat(name="_net_source_divert")
-    manualnat5.original_destination(name="_net_destination_divert")    
+    manualnat5.original_destination(name="_net_destination_divert")
     manualnat5.source_intf(name="IG-INSIDE")
     manualnat5.destination_intf(name="SZ-OUTSIDE1")
     manualnat5.enabled = True
@@ -1421,10 +1709,12 @@ def wait_for_task(task, wait_time=10):
         OTOH, a device HA operation will update its status to "Success" on completion.  Hence the two different checks.
         '''
         while current_status["status"] is not None and current_status["status"] != "Success":
-            print("Task: %s %s %s" % (current_status["taskType"], current_status["status"], current_status["id"]))
+            print("Task: %s %s %s" % (
+                current_status["taskType"], current_status["status"], current_status["id"]))
             time.sleep(wait_time)
             current_status = status.get()
-        print("Task: %s %s %s %s" % (current_status["taskType"], current_status["status"], current_status["id"]))
+        print("Task: %s %s %s %s" % (
+            current_status["taskType"], current_status["status"], current_status["id"]))
     except Exception as e:
         print(type(e), e)
 
@@ -1445,10 +1735,14 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__application_tag()
     test__application()
     test__application_risk()
+    test__application_filter()
     test__application_productivity()
     test__application_category()
+    #test__cert_enrollment()
     test__country()
     test__continent()
+    test__dns_servers_group()
+    test__fqdns()
     test__vlan_group_tag()
     test__url_group()
     test__network_group()
@@ -1457,17 +1751,23 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__ip_host()
     test__ip_network()
     test__ip_range()
+    #test__extended_acls()
+    #test__geolocations()
+    test__icmpv4()
+    test__icmpv6()
+    test__ikev1()
+    test__ikev2()
     test__url()
     test__vlan_tag()
     test__protocol_port()
     test__slamonitor()
-    test__security_zone()    
+    test__security_zone()
     test__device()
     test__intrusion_policy()
     test__access_control_policy()
     test__acp_rule()
     test__audit()
-    test__port_object_group()    
+    test__port_object_group()
     test__intrusion_policy()
     test__access_control_policy()
     test__acp_rule()
@@ -1482,6 +1782,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__redundant_interfaces()
     test__etherchannel_interfaces()
     test__subinterfaces()
+    test__static_routes()
     test__device_group()
     test__device_ha_pair()
     test__device_ha_monitored_interfaces()
