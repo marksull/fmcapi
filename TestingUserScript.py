@@ -1097,7 +1097,7 @@ def test__ipv4_static_routes():
     result = ipv4route1.post()
 
     ipv4route2 = IPv4StaticRoute(fmc=fmc1, name='_ipv4route1')
-    ipv4route2.device(device_name='ftdv01.ccie.lab')
+    ipv4route2.device(device_name='device_name')
     ipv4route2.id = result['id']
     ipv4route2.get()
 
