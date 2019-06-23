@@ -112,6 +112,22 @@ def test__application_risk():
     logging.info('# Testing ApplicationRisk class done.\n')
 
 
+def test__application_filter():
+    logging.info('# Testing ApplicationFilter class.')
+    obj1 = ApplicationFilter(fmc=fmc1)
+    print('All ApplicationFilters -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
+    del obj1
+    obj1 = ApplicationFilter(fmc=fmc1, name='_tmp')
+    print('One ApplicationFilter -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    logging.info('# Testing ApplicationFilter class done.\n')
+
+
 def test__application_productivity():
     logging.info('# Testing ApplicationProductivity class.')
     obj1 = ApplicationProductivity(fmc=fmc1)
@@ -1658,6 +1674,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__application_tag()
     test__application()
     test__application_risk()
+    test__application_filter()
     test__application_productivity()
     test__application_category()
     test__country()
