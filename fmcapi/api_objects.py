@@ -111,8 +111,12 @@ class APIClassTemplate(object):
             url = '{}/{}'.format(self.URL, self.id)
             response = self.fmc.send_to_api(method='get', url=url)
             self.parse_kwargs(**response)
-            logging.info('GET success. Object with name: "{}" and id: "{}" fetched from'
-                         ' FMC.'.format(self.name, self.id))
+            if 'name' in self.__dict__:
+                logging.info('GET success. Object with name: "{}" and id: "{}" fetched from'
+                             ' FMC.'.format(self.name, self.id))
+            else:
+                logging.info('GET success. Object with id: "{}" fetched from'
+                             ' FMC.'.format(self.id))
             return response
         elif 'name' in self.__dict__:
             if self.FILTER_BY_NAME:
@@ -149,8 +153,12 @@ class APIClassTemplate(object):
             url = '{}/{}'.format(self.URL, self.id)
             response = self.fmc.send_to_api(method='put', url=url, json_data=self.format_data())
             self.parse_kwargs(**response)
-            logging.info('PUT success. Object with name: "{}" and id: "{}" updated '
-                         'in FMC.'.format(self.name, self.id))
+            if 'name' in self.__dict__:
+                logging.info('PUT success. Object with name: "{}" and id: "{}" updated '
+                             'in FMC.'.format(self.name, self.id))
+            else:
+                logging.info('PUT success. Object with id: "{}" updated '
+                             'in FMC.'.format(self.id))
             return response
         else:
             logging.warning("put() method failed due to failure to pass valid_for_put() test.")
@@ -163,8 +171,12 @@ class APIClassTemplate(object):
             url = '{}/{}'.format(self.URL, self.id)
             response = self.fmc.send_to_api(method='delete', url=url, json_data=self.format_data())
             self.parse_kwargs(**response)
-            logging.info('DELETE success. Object with name: "{}" and id: "{}" deleted '
-                         'in FMC.'.format(self.name, self.id))
+            if 'name' in self.name:
+                logging.info('DELETE success. Object with name: "{}" and id: "{}" deleted '
+                             'in FMC.'.format(self.name, self.id))
+            else:
+                logging.info('DELETE success. Object id: "{}" deleted '
+                             'in FMC.'.format(self.id))
             return response
         else:
             logging.warning("delete() method failed due to failure to pass valid_for_delete() test.")
@@ -3310,9 +3322,9 @@ class StaticRoutes(APIClassTemplate):
         pass
 
 
-class IPv4StaticRoutes(APIClassTemplate):
+class IPv4StaticRoute(APIClassTemplate):
     """
-    The IPv4StaticRoutes Object in the FMC.
+    The IPv4StaticRoute Object in the FMC.
     """
 
     PREFIX_URL = '/devices/devicerecords'
@@ -3320,14 +3332,14 @@ class IPv4StaticRoutes(APIClassTemplate):
     REQUIRED_FOR_POST = ['interfaceName', 'selectedNetworks', 'gateway']
     REQUIRED_FOR_PUT = ['id', 'device_id']
     
-    '''
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for IPv4StaticRoutes class.")
+        logging.debug("In __init__() for IPv4StaticRoute class.")
+        self.type = 'IPv4StaticRoute'
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
-        logging.debug("In format_data() for IPv4StaticRoutes class.")
+        logging.debug("In format_data() for IPv4StaticRoute class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -3349,7 +3361,7 @@ class IPv4StaticRoutes(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for IPv4StaticRoutes class.")
+        logging.debug("In parse_kwargs() for IPv4StaticRoute class.")
         if 'device_name' in kwargs:
             self.device(device_name=kwargs['device_name'])
         if 'interfaceName' in kwargs:
@@ -3366,7 +3378,7 @@ class IPv4StaticRoutes(APIClassTemplate):
             self.isTunneled = kwargs['isTunneled']
 
     def device(self, device_name):
-        logging.debug("In device() for IPv4StaticRoutes class.")
+        logging.debug("In device() for IPv4StaticRoute class.")
         device1 = Device(fmc=self.fmc)
         device1.get(name=device_name)
         if 'id' in device1.__dict__:
@@ -3375,82 +3387,197 @@ class IPv4StaticRoutes(APIClassTemplate):
             self.device_added_to_url = True
         else:
             logging.warning('Device {} not found.  Cannot set up device for '
-                            'IPv4StaticRoutes.'.format(device_name))
+                            'IPv4StaticRoute.'.format(device_name))
 
-    def edit(self, device_name, ifname, gateway):
-        logging.debug("In edit() for IPv4StaticRoutes class.")
-        obj1 = IPv4StaticRoutes(fmc=self.fmc, device_name=device_name)
-        route_json = obj1.get()
-        items = route_json.get('items', [])
-        found = False
-        for item in items:
-            if item["gateway"]["object"]["name"] == gateway and item["interfaceName"] == ifname:
-                found = True
-                self.selectedNetworks = item["selectedNetworks"]
-                self.interfaceName = item["interfaceName"]
-                self.gateway = item["gateway"]
-                self.id = item["id"]
-                break
-        if found == False:
-            logging.warning('Gateway {} and interface {} combination not found.  Cannot set up device for '
-                            'IPv4StaticRoutes.'.format(gateway, ifname))
-
-    def selectedNetworks(self, action, names):
-        logging.warning("In selectedNetworks() for Device class.")
+    def networks(self, action, networks):
+        logging.info("In networks() for IPv4StaticRoute class.")
         if action == 'add':
-            if 'selectedNetworks' in self.__dict__: 
-                for name in names:
-                    net = IPAddresses(fmc=self.fmc)
-                    net.get(name=name)
-                    if 'id' in net.__dict__:
-                        new_net = {
-                            "type": net.type,
-                            "id": net.id,
-                            "name": net.name
-                        }
-                        self.selectedNetworks.append(new_net)
+            # Valid objects are IPHost, IPNetwork and NetworkGroup.  Create a dictionary to contain all three object type.
+            ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+            networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+            items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
+            for network in networks:
+                # Find the matching object name in the dictionary if it exists
+                net1 = list(filter(lambda i: i['name'] == network, items))
+                if len(net1) > 0:
+                    if 'selectedNetworks' in self.__dict__:
+                        # Check to see if network already exists
+                        exists = list(filter(lambda i: i['id'] == net1[0]['id'], self.selectedNetworks))
+                        if 'id' in exists:
+                            logging.warning('Network {} already exists in selectedNetworks.'.format(network))
+                        else:
+                            self.selectedNetworks.append({"type":net1[0]['type'],"id":net1[0]['id'],"name":net1[0]['name']})
                     else:
-                        logging.warning('Network {} not found.  Cannot set up device for '
-                                        'IPv4StaticRoutes.'.format(name))
-            else:
-                self.selectedNetworks = []
-                for name in names:
-                    net = IPAddresses(fmc=self.fmc)
-                    net.get(name=name)
-                    if 'id' in net.__dict__:
-                        new_net = {
-                            "type": net.type,
-                            "id": net.id,
-                            "name": net.name
-                        }
-                        self.selectedNetworks.append(new_net)
+                        self.selectedNetworks = [{"type":net1[0]['type'],"id":net1[0]['id'],"name":net1[0]['name']}]
+                else:
+                    logging.warning('Network {} not found.  Cannot set up device for '
+                                    'IPv4StaticRoute.'.format(network))
+        elif action == 'remove':
+            ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+            networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+            items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
+            for network in networks:
+                net1 = list(filter(lambda i: i['name'] == network, items))
+                if len(net1) > 0:
+                    if 'selectedNetworks' in self.__dict__:
+                        new_net1 = list(filter(lambda i: i['id'] != net1[0]['id'], self.selectedNetworks))
                     else:
-                        logging.warning('Network {} not found.  Cannot set up device for '
-                                        'IPv4StaticRoutes.'.format(name))
+                        logging.warning('No selectedNetworks found for this Device '
+                            'IPv4StaticRoute.'.format(network))
+                else:
+                    logging.warning('Network {} not found.  Cannot set up device for '
+                                    'IPv4StaticRoute.'.format(network))
+        elif action == 'clear':
+            if 'selectedNetworks' in self.__dict__:
+                del self.selectedNetworks
+                logging.info('All selectedNetworks removed from this IPv4StaticRoute object.')
+
     def gw(self, name):
-        gateway = IPAddresses(fmc=self.fmc)
-        gateway.get(name=name)
-        if 'id' in gateway.__dict__:
+        logging.info("In gw() for IPv4StaticRoute class.")
+        gw1 = IPHost(fmc=self.fmc)
+        gw1.get(name=name)
+        if 'id' in gw1.__dict__:
                 self.gateway = {
                     "object":{
-                        "type": gateway.type,
-                        "id": gateway.id,
-                        "name": gateway.name}}
+                        "type": gw1.type,
+                        "id": gw1.id,
+                        "name": gw1.name}}
         else:
             logging.warning('Network {} not found.  Cannot set up device for '
-                            'IPv4StaticRoutes.'.format(name))
+                            'IPv4StaticRoute.'.format(name))
     def ipsla(self, name):
-        route_track = SLAMonitor(fmc=self.fmc)
-        route_track.get(name=name)
-        if 'id' in route_track.__dict__:
+        logging.info("In ipsla() for IPv4StaticRoute class.")
+        ipsla1 = SLAMonitor(fmc=self.fmc)
+        ipsla1.get(name=name)
+        if 'id' in ipsla1.__dict__:
                 self.routeTracking = {
-                    "type": route_track.type,
-                    "id": route_track.id,
-                    "name": route_track.name}
+                    "type": ipsla1.type,
+                    "id": ipsla1.id,
+                    "name": ipsla1.name}
         else:
             logging.warning('Object {} not found.  Cannot set up device for '
-                            'IPv4StaticRoutes.'.format(name))
-    '''
+                            'IPv4StaticRoute.'.format(name))
+
+
+class IPv6StaticRoute(APIClassTemplate):
+    """
+    The IPv6StaticRoute Object in the FMC.
+    """
+
+    PREFIX_URL = '/devices/devicerecords'
+    URL_SUFFIX = None
+    REQUIRED_FOR_POST = ['interfaceName', 'selectedNetworks', 'gateway']
+    REQUIRED_FOR_PUT = ['id', 'device_id']
+    
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for IPv6StaticRoute class.")
+        self.type = 'IPv6StaticRoute'
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for IPv6StaticRoute class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'interfaceName' in self.__dict__:
+            json_data['interfaceName'] = self.interfaceName
+        if 'selectedNetworks' in self.__dict__:
+            json_data['selectedNetworks'] = self.selectedNetworks
+        if 'gateway' in self.__dict__:
+            json_data['gateway'] = self.gateway
+        if 'metricValue' in self.__dict__:
+            json_data['metricValue'] = self.metricValue
+        if 'isTunneled' in self.__dict__:
+            json_data['isTunneled'] = self.isTunneled
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for IPv6StaticRoute class.")
+        if 'device_name' in kwargs:
+            self.device(device_name=kwargs['device_name'])
+        if 'interfaceName' in kwargs:
+            self.interfaceName = kwargs['interfaceName']
+        if 'selectedNetworks' in kwargs:
+            self.selectedNetworks = kwargs['selectedNetworks']
+        if 'gateway' in kwargs:
+             self.gateway = kwargs['gateway']
+        if 'metricValue' in kwargs:
+            self.metricValue = kwargs['metricValue']
+        if 'isTunneled' in kwargs:
+            self.isTunneled = kwargs['isTunneled']
+
+    def device(self, device_name):
+        logging.debug("In device() for IPv6StaticRoute class.")
+        device1 = Device(fmc=self.fmc)
+        device1.get(name=device_name)
+        if 'id' in device1.__dict__:
+            self.device_id = device1.id
+            self.URL = '{}{}/{}/routing/ipv6staticroutes'.format(self.fmc.configuration_url, self.PREFIX_URL, self.device_id)
+            self.device_added_to_url = True
+        else:
+            logging.warning('Device {} not found.  Cannot set up device for '
+                            'IPv6StaticRoute.'.format(device_name))
+
+    def networks(self, action, networks):
+        logging.info("In networks() for IPv6StaticRoute class.")
+        if action == 'add':
+            # Valid objects are IPHost, IPNetwork and NetworkGroup.  Create a dictionary to contain all three object type.
+            ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+            networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+            items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
+            for network in networks:
+                # Find the matching object name in the dictionary if it exists
+                net1 = list(filter(lambda i: i['name'] == network, items))
+                if len(net1) > 0:
+                    if 'selectedNetworks' in self.__dict__:
+                        # Check to see if network already exists
+                        exists = list(filter(lambda i: i['id'] == net1[0]['id'], self.selectedNetworks))
+                        if 'id' in exists:
+                            logging.warning('Network {} already exists in selectedNetworks.'.format(network))
+                        else:
+                            self.selectedNetworks.append({"type":net1[0]['type'],"id":net1[0]['id'],"name":net1[0]['name']})
+                    else:
+                        self.selectedNetworks = [{"type":net1[0]['type'],"id":net1[0]['id'],"name":net1[0]['name']}]
+                else:
+                    logging.warning('Network {} not found.  Cannot set up device for '
+                                    'IPv6StaticRoute.'.format(network))
+        elif action == 'remove':
+            ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+            networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+            items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
+            for network in networks:
+                net1 = list(filter(lambda i: i['name'] == network, items))
+                if len(net1) > 0:
+                    if 'selectedNetworks' in self.__dict__:
+                        new_net1 = list(filter(lambda i: i['id'] != net1[0]['id'], self.selectedNetworks))
+                    else:
+                        logging.warning('No selectedNetworks found for this Device '
+                            'IPv6StaticRoute.'.format(network))
+                else:
+                    logging.warning('Network {} not found.  Cannot set up device for '
+                                    'IPv6StaticRoute.'.format(network))
+        elif action == 'clear':
+            if 'selectedNetworks' in self.__dict__:
+                del self.selectedNetworks
+                logging.info('All selectedNetworks removed from this IPv6StaticRoute object.')
+
+    def gw(self, name):
+        logging.info("In gw() for IPv6StaticRoute class.")
+        gw1 = IPHost(fmc=self.fmc)
+        gw1.get(name=name)
+        if 'id' in gw1.__dict__:
+                self.gateway = {
+                    "object":{
+                        "type": gw1.type,
+                        "id": gw1.id,
+                        "name": gw1.name}}
+        else:
+            logging.warning('Network {} not found.  Cannot set up device for '
+                            'IPv6StaticRoute.'.format(name))
 
 
 class DeviceGroups(APIClassTemplate):
