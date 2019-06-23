@@ -692,7 +692,7 @@ def test__interface_group():
 
     obj1 = InterfaceGroup(fmc=fmc1, name="_ig_outside_all")
     obj1.get()
-    obj1.p_interface(device_name="device-name", action="add",
+    obj1.p_interface(device_name="device_name", action="add",
                      names=["GigabitEthernet0/0", "GigabitEthernet0/1", "GigabitEthernet0/2"])
     print('InterfaceGroup PUT-->')
     pp.pprint(obj1.format_data())
@@ -703,7 +703,7 @@ def test__interface_group():
 
     obj1 = InterfaceGroup(fmc=fmc1, name="_ig_outside_all")
     obj1.get()
-    obj1.p_interface(device_name="device-name",
+    obj1.p_interface(device_name="device_name",
                      action="remove", names=["GigabitEthernet0/1"])
     print('InterfaceGroup PUT-->')
     pp.pprint(obj1.format_data())
@@ -856,7 +856,7 @@ def test__phys_interfaces():
     sz2.post()
     time.sleep(1)
 
-    intf1 = PhysicalInterface(fmc=fmc1, device_name="device-name")
+    intf1 = PhysicalInterface(fmc=fmc1, device_name="device_name")
     intf1.get(name="GigabitEthernet0/0")
     intf1.enabled = True
     intf1.ifname = "OUTSIDE1"
@@ -864,7 +864,7 @@ def test__phys_interfaces():
     intf1.standbyMACAddress = "0050.5686.0c2e"
     intf1.static(ipv4addr="10.254.0.3", ipv4mask=24)
     intf1.sz(name="SZ-OUTSIDE1")
-    intf2 = PhysicalInterface(fmc=fmc1, device_name="device-name")
+    intf2 = PhysicalInterface(fmc=fmc1, device_name="device_name")
     intf2.get(name="GigabitEthernet0/1")
     intf2.enabled = True
     intf2.ifname = "OUTSIDE2"
@@ -919,9 +919,9 @@ def test__bridge_group_interfaces():
     sz2.post()
     time.sleep(1)
 
-    br1 = BridgeGroupInterfaces(fmc=fmc1, device_name="device-name")
+    br1 = BridgeGroupInterfaces(fmc=fmc1, device_name="device_name")
     br1.p_interfaces(p_interfaces=[
-                     "GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="device-name")
+                     "GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="device_name")
     br1.enabled = True
     br1.ifname = "_br1" + namer
     br1.bridgeGroupId = "1"
@@ -955,9 +955,9 @@ def test__redundant_interfaces():
     sz2.post()
     time.sleep(1)
 
-    red1 = RedundantInterfaces(fmc=fmc1, device_name="device-name")
-    red1.primary(p_interface="GigabitEthernet0/3", device_name="device-name")
-    red1.secondary(p_interface="GigabitEthernet0/5", device_name="device-name")
+    red1 = RedundantInterfaces(fmc=fmc1, device_name="device_name")
+    red1.primary(p_interface="GigabitEthernet0/3", device_name="device_name")
+    red1.secondary(p_interface="GigabitEthernet0/5", device_name="device_name")
     red1.enabled = "True"
     red1.ifname = "_red1" + namer
     red1.redundantId = "1"
@@ -993,9 +993,9 @@ def test__etherchannel_interfaces():
     sz2.post()
     time.sleep(1)
 
-    eth1 = EtherchannelInterfaces(fmc=fmc1, device_name="device-name")
+    eth1 = EtherchannelInterfaces(fmc=fmc1, device_name="device_name")
     eth1.p_interfaces(p_interfaces=[
-                      "GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="device-name")
+                      "GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="device_name")
     eth1.enabled = True
     eth1.ifname = "_eth1" + namer
     eth1.etherChannelId = "1"
@@ -1033,9 +1033,9 @@ def test__subinterfaces():
     sz2.post()
     time.sleep(1)
 
-    sub1 = SubInterfaces(fmc=fmc1, device_name="device-name")
+    sub1 = SubInterfaces(fmc=fmc1, device_name="device_name")
     sub1.p_interface(p_interface="GigabitEthernet0/3",
-                     device_name="device-name")
+                     device_name="device_name")
     sub1.enabled = True
     sub1.ifname = "_sub1" + namer
     sub1.subIntfId = "300"
@@ -1057,6 +1057,19 @@ def test__subinterfaces():
     sub1.delete()
     sz1.delete()
     sz2.delete()
+
+
+def test__static_routes():
+    logging.info('# Testing StaticRoutes class. Requires a registered device')
+    obj1 = StaticRoutes(fmc=fmc1)
+    obj1.device(device_name="device_name")
+    print('All StaticRoutes -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
+    logging.info('# Testing StaticRoutes class done.\n')
+    del obj1
 
 
 def test__device_group():
@@ -1182,7 +1195,7 @@ def test__device_ha_failover_mac():
     logging.info(
         '# Test DeviceHAFailoverMAC. get, post, put, delete DeviceHAFailoverMAC Objects')
     obj1 = DeviceHAFailoverMAC(fmc=fmc1, ha_name="HaName")
-    obj1.p_interface(name="GigabitEthernet0/0", device_name="device-name")
+    obj1.p_interface(name="GigabitEthernet0/0", device_name="device_name")
     obj1.failoverActiveMac = "0050.5686.718f"
     obj1.failoverStandbyMac = "1050.5686.0c2e"
     print('DeviceHAFailoverMAC POST->')
@@ -1769,6 +1782,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__redundant_interfaces()
     test__etherchannel_interfaces()
     test__subinterfaces()
+    test__static_routes()
     test__device_group()
     test__device_ha_pair()
     test__device_ha_monitored_interfaces()
