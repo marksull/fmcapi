@@ -160,6 +160,22 @@ def test__application_category():
     logging.info('# Testing ApplicationCategory class done.\n')
 
 
+def test__cert_enrollment():
+    logging.info('# Testing CertEnrollment class. Requires a CertEnrollment')
+    obj1 = CertEnrollment(fmc=fmc1)
+    print('All CertEnrollments -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
+    del obj1
+    obj1 = CertEnrollment(fmc=fmc1, name='_tmp')
+    print('One CertEnrollment -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    logging.info('# Testing CertEnrollment class done.\n')
+
+
 def test__country():
     logging.info('# Testing Country class.')
     obj1 = Country(fmc=fmc1)
@@ -1677,6 +1693,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__application_filter()
     test__application_productivity()
     test__application_category()
+    #test__cert_enrollment()
     test__country()
     test__continent()
     test__dns_servers_group()
