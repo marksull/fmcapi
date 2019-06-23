@@ -457,6 +457,22 @@ def test__extended_acls():
     logging.info('# Testing ExtendedAccessList class done.\n')
 
 
+def test__geolocations():
+    logging.info('# Testing Geolocation class. Requires a configured Geolocation')
+    obj1 = Geolocation(fmc=fmc1)
+    print('All Geolocation -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
+    del obj1
+    obj1 = Geolocation(fmc=fmc1, name='_tmp')
+    print('One Geolocation -- >')
+    pp.pprint(obj1.get())
+    print('\n')
+    logging.info('# Testing Geolocation class done.\n')
+
+
 def test__icmpv4():
     logging.info(
     '# Test ICMPv4Object.  Post, get, put, delete ICMPv4Object Objects.')
@@ -1723,6 +1739,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__ip_network()
     test__ip_range()
     #test__extended_acls()
+    #test__geolocations()
     test__icmpv4()
     test__icmpv6()
     test__ikev1()
