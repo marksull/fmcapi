@@ -1751,6 +1751,14 @@ class Geolocation(APIClassTemplate):
             json_data['name'] = self.name
         if 'type' in self.__dict__:
             json_data['type'] = self.type
+        if 'continentId' in self.__dict__:
+            json_data['continentId'] = self.continentId
+        if 'continents' in self.__dict__:
+            json_data['continents'] = self.continents
+        if 'countries' in self.__dict__:
+            json_data['countries'] = self.countries
+        if 'continentUUID' in self.__dict__:
+            json_data['continentUUID'] = self.continentUUID
         return json_data
 
     def parse_kwargs(self, **kwargs):
