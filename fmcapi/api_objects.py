@@ -468,6 +468,48 @@ class NetworkGroup(APIClassTemplate):
                 logging.info('All unnamed_networks removed from this NetworkGroup.')
 
 
+class AnyProtocolPortObjects(APIClassTemplate):
+    """
+    The AnyProtocolPortObjects Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/anyprotocolportobjects'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for AnyProtocolPortObjects class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for AnyProtocolPortObjects class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'overrideTargetId' in self.__dict__:
+            json_data['overrideTargetId'] = self.overrideTargetId
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for AnyProtocolPortObjects class.")
+
+    def post(self):
+        logging.info('POST method for API for AnyProtocolPortObjects not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for AnyProtocolPortObjects not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for AnyProtocolPortObjects not supported.')
+        pass
+
+
 class ApplicationCategory(APIClassTemplate):
     """
     The ApplicationCategory Object in the FMC.
@@ -1346,70 +1388,6 @@ class ProtocolPort(APIClassTemplate):
         if 'protocol' in kwargs:
             self.protocol = kwargs['protocol']
 
-class InterfaceObject(APIClassTemplate):
-    """
-    The Interface Object Object in the FMC.
-    """
-
-    URL_SUFFIX = '/object/interfaceobjects'
-    REQUIRED_FOR_POST = ['name', 'interfaceMode']
-    FILTER_BY_NAME = True
-
-    def __init__(self, fmc, **kwargs):
-        super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for InterfaceObject class.")
-        self.parse_kwargs(**kwargs)
-
-    def post(self):
-        logging.info('POST method for API for InterfaceObject not supported.')
-        pass
-
-    def put(self):
-        logging.info('PUT method for API for InterfaceObject not supported.')
-        pass
-
-    def delete(self):
-        logging.info('DELETE method for API for InterfaceObject not supported.')
-        pass
-
-class SecurityZone(APIClassTemplate):
-    """
-    The Security Zone Object in the FMC.
-    """
-
-    URL_SUFFIX = '/object/securityzones'
-    REQUIRED_FOR_POST = ['name', 'interfaceMode']
-    FILTER_BY_NAME = True
-
-    def __init__(self, fmc, **kwargs):
-        super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for SecurityZone class.")
-        self.parse_kwargs(**kwargs)
-
-    def format_data(self):
-        logging.debug("In format_data() for SecurityZone class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'description' in self.__dict__:
-            json_data['description'] = self.description
-        if 'interfaceMode' in self.__dict__:
-            json_data['interfaceMode'] = self.interfaceMode
-        if 'interfaces' in self.__dict__:
-            json_data['interfaces'] = self.interfaces
-        return json_data
-
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for SecurityZone class.")
-        if 'interfaceMode' in kwargs:
-            self.interfaceMode = kwargs['interfaceMode']
-        else:
-            self.interfaceMode = 'ROUTED'
-        if 'interfaces' in kwargs:
-            self.interfaces = kwargs['interfaces']
 
 class InterfaceGroup(APIClassTemplate):
     """
@@ -1485,6 +1463,434 @@ class InterfaceGroup(APIClassTemplate):
             if 'interfaces' in self.__dict__:
                 del self.interfaces
                 logging.info('All PhysicalInterfaces removed from this InterfaceGroup.')
+
+
+class InterfaceObject(APIClassTemplate):
+    """
+    The Interface Object Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/interfaceobjects'
+    REQUIRED_FOR_POST = ['name', 'interfaceMode']
+    FILTER_BY_NAME = True
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for InterfaceObject class.")
+        self.parse_kwargs(**kwargs)
+
+    def post(self):
+        logging.info('POST method for API for InterfaceObject not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for InterfaceObject not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for InterfaceObject not supported.')
+        pass
+
+
+class ISESecurityGroupTags(APIClassTemplate):
+    """
+    The ISESecurityGroupTags Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/isesecuritygrouptags'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for ISESecurityGroupTags class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for ISESecurityGroupTags class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'tag' in self.__dict__:
+            json_data['tag'] = self.tag
+        if 'iseId' in self.__dict__:
+            json_data['iseId'] = self.iseId
+        if 'overrides' in self.__dict__:
+            json_data['overrides'] = self.overrides
+        if 'overridable' in self.__dict__:
+            json_data['overridable'] = self.overridable
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for ISESecurityGroupTags class.")
+
+    def post(self):
+        logging.info('POST method for API for ISESecurityGroupTags not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for ISESecurityGroupTags not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for ISESecurityGroupTags not supported.')
+        pass
+
+
+class Realms(APIClassTemplate):
+    """
+    The Realms Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/realms'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for Realms class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for Realms class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for Realms class.")
+
+    def post(self):
+        logging.info('POST method for API for Realms not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for Realms not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for Realms not supported.')
+        pass
+
+
+class RealmUserGroups(APIClassTemplate):
+    """
+    The RealmUserGroups Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/realmusergroups'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for RealmUserGroups class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for RealmUserGroups class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'realmUuid' in self.__dict__:
+            json_data['realmUuid'] = self.realmUuid
+        if 'realm' in self.__dict__:
+            json_data['realm'] = self.realm
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for RealmUserGroups class.")
+
+    def post(self):
+        logging.info('POST method for API for RealmUserGroups not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for RealmUserGroups not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for RealmUserGroups not supported.')
+        pass
+
+
+class RealmUsers(APIClassTemplate):
+    """
+    The RealmUsers Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/realmusers'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for RealmUsers class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for RealmUsers class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'realmUuid' in self.__dict__:
+            json_data['realmUuid'] = self.realmUuid
+        if 'realm' in self.__dict__:
+            json_data['realm'] = self.realm
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for RealmUsers class.")
+
+    def post(self):
+        logging.info('POST method for API for RealmUsers not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for RealmUsers not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for RealmUsers not supported.')
+        pass
+
+
+class SecurityGroupTags(APIClassTemplate):
+    """
+    The SecurityGroupTags Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/securitygrouptags'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for SecurityGroupTags class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for SecurityGroupTags class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'tag' in self.__dict__:
+            json_data['tag'] = self.tag
+        if 'overrides' in self.__dict__:
+            json_data['overrides'] = self.overrides
+        if 'overridable' in self.__dict__:
+            json_data['overridable'] = self.overridable
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for SecurityGroupTags class.")
+
+    def post(self):
+        logging.info('POST method for API for SecurityGroupTags not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for SecurityGroupTags not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for SecurityGroupTags not supported.')
+        pass
+
+
+class SecurityZone(APIClassTemplate):
+    """
+    The Security Zone Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/securityzones'
+    REQUIRED_FOR_POST = ['name', 'interfaceMode']
+    FILTER_BY_NAME = True
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for SecurityZone class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for SecurityZone class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'description' in self.__dict__:
+            json_data['description'] = self.description
+        if 'interfaceMode' in self.__dict__:
+            json_data['interfaceMode'] = self.interfaceMode
+        if 'interfaces' in self.__dict__:
+            json_data['interfaces'] = self.interfaces
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for SecurityZone class.")
+        if 'interfaceMode' in kwargs:
+            self.interfaceMode = kwargs['interfaceMode']
+        else:
+            self.interfaceMode = 'ROUTED'
+        if 'interfaces' in kwargs:
+            self.interfaces = kwargs['interfaces']
+
+
+class SIUrlFeeds(APIClassTemplate):
+    """
+    The SIUrlFeeds Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/siurlfeeds'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for SIUrlFeeds class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for SIUrlFeeds class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'checksumURL' in self.__dict__:
+            json_data['checksumURL'] = self.checksumURL
+        if 'feedURL' in self.__dict__:
+            json_data['feedURL'] = self.feedURL
+        if 'updateFrequency' in self.__dict__:
+            json_data['updateFrequency'] = self.updateFrequency
+        if 'overrides' in self.__dict__:
+            json_data['overrides'] = self.overrides
+        if 'overridable' in self.__dict__:
+            json_data['overridable'] = self.overridable
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for SIUrlFeeds class.")
+
+    def post(self):
+        logging.info('POST method for API for SIUrlFeeds not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for SIUrlFeeds not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for SIUrlFeeds not supported.')
+        pass
+
+
+class SIUrlLists(APIClassTemplate):
+    """
+    The SIUrlLists Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/siurllists'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for SIUrlLists class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for SIUrlLists class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'overrides' in self.__dict__:
+            json_data['overrides'] = self.overrides
+        if 'overridable' in self.__dict__:
+            json_data['overridable'] = self.overridable
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for SIUrlLists class.")
+
+    def post(self):
+        logging.info('POST method for API for SIUrlLists not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for SIUrlLists not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for SIUrlLists not supported.')
+        pass
+
+
+class TunnelTags(APIClassTemplate):
+    """
+    The TunnelTags Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/tunneltags'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for TunnelTags class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for TunnelTags class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'overrides' in self.__dict__:
+            json_data['overrides'] = self.overrides
+        if 'overridable' in self.__dict__:
+            json_data['overridable'] = self.overridable
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for TunnelTags class.")
+
+    def post(self):
+        logging.info('POST method for API for TunnelTags not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for TunnelTags not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for TunnelTags not supported.')
+        pass
+
 
 class Continent(APIClassTemplate):
     """
@@ -1643,6 +2049,54 @@ class DNSServerGroups(APIClassTemplate):
             if 'dnsservers' in self.__dict__:
                 del self.dnsservers
                 logging.info('All name-servers removed from this DNSServerGroups object.')
+
+
+class EndPointDeviceTypes(APIClassTemplate):
+    """
+    The EndPointDeviceTypes Object in the FMC.
+    """
+
+    URL_SUFFIX = '/object/endpointdevicetypes'
+
+    def __init__(self, fmc, **kwargs):
+        super().__init__(fmc, **kwargs)
+        logging.debug("In __init__() for EndPointDeviceTypes class.")
+        self.parse_kwargs(**kwargs)
+
+    def format_data(self):
+        logging.debug("In format_data() for EndPointDeviceTypes class.")
+        json_data = {}
+        if 'id' in self.__dict__:
+            json_data['id'] = self.id
+        if 'name' in self.__dict__:
+            json_data['name'] = self.name
+        if 'type' in self.__dict__:
+            json_data['type'] = self.type
+        if 'fqName' in self.__dict__:
+            json_data['fqName'] = self.fqName
+        if 'iseId' in self.__dict__:
+            json_data['iseId'] = self.iseId
+        if 'overrides' in self.__dict__:
+            json_data['overrides'] = self.overrides
+        if 'overridable' in self.__dict__:
+            json_data['overridable'] = self.overridable
+        return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for EndPointDeviceTypes class.")
+
+    def post(self):
+        logging.info('POST method for API for EndPointDeviceTypes not supported.')
+        pass
+
+    def put(self):
+        logging.info('PUT method for API for EndPointDeviceTypes not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for EndPointDeviceTypes not supported.')
+        pass
 
 
 class ExtendedAccessList(APIClassTemplate):
