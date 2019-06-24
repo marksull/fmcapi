@@ -15,22 +15,30 @@ of the token.
   * Network Objects
   * Range Objects
   * Port Objects
-  * Security Zones
-  * Interface Groups
+  * ICMPv4/ICMPv4 Objects
+  * Security Zones Objects
+  * Interface Group Objects
   * URL Objects
+  * FQDNS Objects
+  * IKEv1/IKEv1 IPsec Proposal and Policy Objects
+  * DNS Server Groups
   * Access Control Policy (ACP)
   * ACP Rules
   * VLAN Tags
-  * DeviceHA
-  * DeviceHA Monitored Interfaces
+  * Devices/Device Groups/Device HA
+  * FTD Device Interfaces
+  * IPv4/IPv6 Static Routes
   * NAT Policy
   
 * Other features:
   * GET Intrusion Policy
   * GET all Network Objects
+  * GET all Device Static Routes
+  * GET all Cert Enrollments
+  * GET all Extended Access Lists
+  * GET all Geolocations
   * GET VariableSet(s)
   * Register FTD Devices
-  * Deploy changes to FMC to affected managed devices.
   * Task Status checking.
 
 * This is now an installable Python package via pip!  I'm heavily developing this code so you might want to issue the 
@@ -50,9 +58,11 @@ Then either code away referencing the fmc variable to get to the internal method
 **Note #2:  You can directly send requests to the FMC via the send_to_api() method in the FMC class.  This allows you to access any of the API features of the FMC.**
 
 # ToDos
-* Modify FTD devices' interfaces.
-* Add Static Route functionality if/when it becomes available.
-* Add Device Groups functionality.
+* Site2Site VPN Policy.
+* ISE SGT.
+* Software Upgrade Deployments.
+* Version checking.
+* Modify NGIPS device interfaces.
 * Move the create_acp_rules FMC method into a class object in the api_objects module.
-* Build a complete system for all FMC API accessible objects (feature parity).  Currently just over 50% of the FMC's API objects are represented in the fmcapi.
+* Build a complete system for all FMC API accessible objects (feature parity).  Currently just over 70% of the FMC's version 6.3 API objects are represented in the fmcapi.
 * **Most importantly:** Write better how-to instructions.  (Anyone willing to help?) 
