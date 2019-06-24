@@ -40,6 +40,7 @@ of the token.
   * GET VariableSet(s)
   * Register FTD Devices
   * Task Status checking.
+  * Software Upgrade Deployments.
 
 * This is now an installable Python package via pip!  I'm heavily developing this code so you might want to issue the 
 command **pip3 install -U fmcapi** to update your installed version.
@@ -60,7 +61,6 @@ Then either code away referencing the fmc variable to get to the internal method
 # ToDos
 * Site2Site VPN Policy.
 * ISE SGT.
-* Software Upgrade Deployments.
 * Version checking.
 * Modify NGIPS device interfaces.
 * Move the create_acp_rules FMC method into a class object in the api_objects module.
