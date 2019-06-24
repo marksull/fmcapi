@@ -1759,7 +1759,6 @@ def test__upgrades():
     upgrades1 = Upgrades(fmc=fmc1)
     upgrades1.devices(devices=device_list)
     upgrades1.upgrade_package(package_name=package_name)
-    upgrades1.name = 'FTD63'
     upgrades1.pushUpgradeFileOnly = True
 
     response = upgrades1.post()

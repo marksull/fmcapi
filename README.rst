@@ -64,5 +64,5 @@ Then either code away referencing the fmc variable to get to the internal method
 * Version checking.
 * Modify NGIPS device interfaces.
 * Move the create_acp_rules FMC method into a class object in the api_objects module.
-* Build a complete system for all FMC API accessible objects (feature parity).  Currently just over 70% of the FMC's version 6.3 API objects are represented in the fmcapi.
+* Build a complete system for all FMC API accessible objects (feature parity).  Currently just over 76% of the FMC's version 6.3 API objects are represented in the fmcapi.
 * **Most importantly:** Write better how-to instructions.  (Anyone willing to help?) 
