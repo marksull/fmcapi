@@ -5853,8 +5853,8 @@ class Upgrades(APIClassTemplate):
         if 'id' in package1.__dict__:
             self.upgradePackage = {"id":package1.id, "type":package1.type}
         else:
-            logging.warning('UpgradePackage {} not found.  Cannot get list of '
-                            'ApplicableDevices.'.format(package_name))
+            logging.warning('UpgradePackage {} not found.  Cannot add package to '
+                            'Upgrades.'.format(package_name))
 
     def devices(self, devices):
         logging.debug("In devices() for Upgrades class.")
@@ -5866,7 +5866,7 @@ class Upgrades(APIClassTemplate):
             elif 'id' in device1.__dict__:
                 self.targets = [{"id":device1.id, "type":device1.type, "name":device1.name}]
             else:
-                logging.warning('Device {} not found.  Cannot set up device for '
+                logging.warning('Device {} not found.  Cannot prepare devices for '
                                 'Upgrades.'.format(device))
 
     def get(self):
