@@ -1731,12 +1731,51 @@ def test__manualnat():
     obj12.delete()
 
 
+def test__upgrades():
+    logging.info(
+        '# Test UpgradePackages/ApplicableDevices/Upgrades with Task.  This will copy the listed upgrade file to registered devices')
+
+    package_name = 'Cisco_FTD_Patch-6.3.0.3-77.sh.REL.tar'
+    device_list = []
+
+    print('All UpgradePackages -- >')
+    package1 = UpgradePackage(fmc=fmc1)
+    result = package1.get()
+    pp.pprint(result)
+    del package1
+
+    package1 = UpgradePackage(fmc=fmc1, name=package_name)
+    print('One UpgradePackage -- >')
+    pp.pprint(package1.get())
+
+    applicable1 = ApplicableDevices(fmc=fmc1)
+    applicable1.upgrade_package(package_name=package_name)
+    result = applicable1.get()
+    devices = result.get('items', [])
+
+    for device in devices:
+        device_list.append(device['name'])
+
+    upgrades1 = Upgrades(fmc=fmc1)
+    upgrades1.devices(devices=device_list)
+    upgrades1.upgrade_package(package_name=package_name)
+    upgrades1.name = 'FTD63'
+    upgrades1.pushUpgradeFileOnly = True
+
+    response = upgrades1.post()
+    pp.pprint(response)
+    wait_for_task(task=response["metadata"]["task"], wait_time=60)
+
+    logging.info(
+        '# Test UpgradePackages/ApplicableDevices/Upgrades Complete')
+
+
 def wait_for_task(task, wait_time=10):
+    TASK_COMPLETED_STATES = ['Success', 'SUCCESS', 'COMPLETED']
     try:
         status = TaskStatuses(
             fmc=fmc1,
-            id=task["id"],
-            name=task["name"])
+            id=task["id"])
         current_status = status.get()
         '''
         Task Status for new device registration behaves differently than other tasks
@@ -1748,13 +1787,20 @@ def wait_for_task(task, wait_time=10):
 
         OTOH, a device HA operation will update its status to "Success" on completion.  Hence the two different checks.
         '''
-        while current_status["status"] is not None and current_status["status"] != "Success":
-            print("Task: %s %s %s" % (
-                current_status["taskType"], current_status["status"], current_status["id"]))
-            time.sleep(wait_time)
-            current_status = status.get()
-        print("Task: %s %s %s %s" % (
-            current_status["taskType"], current_status["status"], current_status["id"]))
+        while current_status["status"] is not None and current_status["status"] not in TASK_COMPLETED_STATES:
+            # Lot of inconsistencies with the type of data a task can return
+            if 'taskType' in current_status.keys():
+                print("Task: %s %s %s" % (
+                    current_status["taskType"], current_status["status"], current_status["id"]))
+                time.sleep(wait_time)
+                current_status = status.get()
+            else:
+                print("Task: %s %s" % (
+                    current_status["status"], current_status["id"]))
+                time.sleep(wait_time)
+                current_status = status.get()
+        print("Task: %s %s" % (
+            current_status["status"], current_status["id"]))
     except Exception as e:
         print(type(e), e)
 
