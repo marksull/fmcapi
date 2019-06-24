@@ -15,7 +15,7 @@ of the token.
   * Network Objects
   * Range Objects
   * Port Objects
-  * ICMPv4/ICMPv4 Objects
+  * ICMPv4/ICMPv6 Objects
   * Security Zones Objects
   * Interface Group Objects
   * URL Objects
