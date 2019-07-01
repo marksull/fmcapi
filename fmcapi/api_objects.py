@@ -217,6 +217,7 @@ class IPHost(APIClassTemplate):
 
     URL_SUFFIX = '/object/hosts'
     REQUIRED_FOR_POST = ['name', 'value']
+    REQUIRED_FOR_PUT = ['id', 'name', 'value']
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
