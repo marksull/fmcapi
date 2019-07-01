@@ -170,6 +170,8 @@ class APIClassTemplate(object):
         if self.valid_for_delete():
             url = '{}/{}'.format(self.URL, self.id)
             response = self.fmc.send_to_api(method='delete', url=url, json_data=self.format_data())
+            if not response:
+                return None
             self.parse_kwargs(**response)
             if 'name' in self.name:
                 logging.info('DELETE success. Object with name: "{}" and id: "{}" deleted '
