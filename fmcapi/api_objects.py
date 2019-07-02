@@ -4539,6 +4539,8 @@ class ACPRule(APIClassTemplate):
             self.action = 'BLOCK'
         if 'acp_name' in kwargs:
             self.acp(name=kwargs['acp_name'])
+        if 'acp_id' in kwargs:
+            self.acp(id=kwargs['acp_id'])
         if 'enabled' in kwargs:
             self.enabled = kwargs['enabled']
         else:
@@ -4586,17 +4588,25 @@ class ACPRule(APIClassTemplate):
         if 'applications' in kwargs:
             self.applications = kwargs['applications']
 
-    def acp(self, name):
+    def acp(self, name='', id=''):
+        # either of name/id of the ACP should be given
         logging.debug("In acp() for ACPRule class.")
         acp1 = AccessControlPolicy(fmc=self.fmc)
-        acp1.get(name=name)
-        if 'id' in acp1.__dict__:
-            self.acp_id = acp1.id
+        if id != '':
+            self.acp_id = id
             self.URL = '{}{}/{}/accessrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.acp_id)
             self.acp_added_to_url = True
+        elif name != '':
+            acp1.get(name=name)
+            if 'id' in acp1.__dict__:
+                self.acp_id = acp1.id
+                self.URL = '{}{}/{}/accessrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.acp_id)
+                self.acp_added_to_url = True
+            else:
+                logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
+                                'ACPRule.'.format(name))
         else:
-            logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
-                            'ACPRule.'.format(name))
+            logging.error('No accessPolicy name or ID was provided.')
 
     def intrusion_policy(self, action, name=''):
         logging.debug("In intrusion_policy() for ACPRule class.")
