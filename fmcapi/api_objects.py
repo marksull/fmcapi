@@ -4470,7 +4470,6 @@ class ACPRule(APIClassTemplate):
     The ACP Rule Object in the FMC.
     """
 
-    PREFIX_URL = '/policy/accesspolicies'
     URL_SUFFIX = None
     REQUIRED_FOR_POST = ['name', 'acp_id']
     VALID_FOR_ACTION = ['ALLOW', 'TRUST', 'BLOCK', 'MONITOR', 'BLOCK_RESET', 'BLOCK_INTERACTIVE',
@@ -4482,6 +4481,24 @@ class ACPRule(APIClassTemplate):
         logging.debug("In __init__() for ACPRule class.")
         self.type = 'AccessRule'
         self.parse_kwargs(**kwargs)
+
+    @property
+    def PREFIX_URL(self):
+        """
+        Add the URL parameters
+        """
+        url = '/policy/accesspolicies?'
+
+        if 'category' in self.__dict__:
+            url = '{}category={}&'.format(url, self.category)
+        if 'insertBefore' in self.__dict__:
+            url = '{}insertBefore={}&'.format(url, self.insertBefore)
+        if 'insertAfter' in self.__dict__:
+            url = '{}insertAfter={}&'.format(url, self.insertAfter)
+        if 'insertBefore' in self.__dict__ and 'insertAfter' in self.__dict__:
+            logging.warning('ACP rule has both insertBefore and insertAfter params. Remove one before posting')
+
+        return url[:-1]
 
     def format_data(self):
         logging.debug("In format_data() for ACPRule class.")
@@ -4528,6 +4545,7 @@ class ACPRule(APIClassTemplate):
             json_data['destinationZones'] = self.destinationZones
         if 'applications' in self.__dict__:
             json_data['applications'] = self.applications
+
         return json_data
 
     def parse_kwargs(self, **kwargs):
@@ -4588,6 +4606,12 @@ class ACPRule(APIClassTemplate):
             self.urls = kwargs['urls']
         if 'applications' in kwargs:
             self.applications = kwargs['applications']
+        if 'category' in kwargs:
+            self.category = kwargs['category']
+        if 'insertBefore' in kwargs:
+            self.insertBefore = kwargs['insertBefore']
+        if 'insertAfter' in kwargs:
+            self.insertAfter = kwargs['insertAFter']
 
     def acp(self, name):
         logging.debug("In acp() for ACPRule class.")
