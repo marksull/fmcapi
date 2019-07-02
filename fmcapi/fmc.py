@@ -36,14 +36,28 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
     VERIFY_CERT = False
     MAX_PAGING_REQUESTS = 2000
 
-    def __init__(self, host='192.168.45.45', username='admin', password='Admin123', domain=None, autodeploy=True):
+    def __init__(self, host='192.168.45.45', username='admin', password='Admin123', domain=None, autodeploy=True,
+                 file_logging=None, debug=False):
         """
         Instantiate some variables prior to calling the __enter__() method.
         :param host:
         :param username:
         :param password:
         :param autodeploy:
+        :param file_logging (str): The filename (and optional path) of the output file if a file logger is required, None if no
+                                   file logger is required
+        :param debug (bool): True to enable debug logging, default is False
         """
+
+        root_logger = logging.getLogger('')
+        root_logger.setLevel(logging.DEBUG if debug else logging.INFO)
+
+        if file_logging:
+            formatter = logging.Formatter('%(asctime)s - %(levelname)s:%(filename)s:%(lineno)s - %(message)s', '%Y/%m/%d-%H:%M:%S')
+            file_logger = logging.FileHandler(file_logging)
+            file_logger.setFormatter(formatter)
+            root_logger.addHandler(file_logger)
+
         logging.debug("In the FMC __init__() class method.")
 
         self.host = host
