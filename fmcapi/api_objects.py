@@ -940,6 +940,7 @@ class SLAMonitor(APIClassTemplate):
         else:
             logging.warning('No valid Security Zones found: "{}".  Cannot add to SLAMonitor.'.format(names))
 
+
 class URL(APIClassTemplate):
     """
     The URL Object in the FMC.
@@ -2753,6 +2754,7 @@ class PortObjectGroup(APIClassTemplate):
                 del self.objects
                 logging.info('All named_ports removed from this PortObjectGroup.')
 
+
 # ################# API-Explorer Devices Category Things ################# #
 
 
@@ -4226,6 +4228,7 @@ class DeviceHAPairs(APIClassTemplate):
         self.fmc.autodeploy = False
         return super().put(**kwargs)
 
+
 class DeviceHAMonitoredInterfaces(APIClassTemplate):
     """
     The DeviceHAMonitoredInterfaces Object in the FMC.
@@ -4288,6 +4291,7 @@ class DeviceHAMonitoredInterfaces(APIClassTemplate):
     def post(self):
         logging.info('POST method for API for DeviceHAMonitoredInterfaces not supported.')
         pass
+
 
 class DeviceHAFailoverMAC(APIClassTemplate):
     """
@@ -4972,6 +4976,7 @@ class FTDNatPolicy(APIClassTemplate):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for FTDNatPolicy class.")
 
+
 class AutoNatRules(APIClassTemplate):
     """
     The AutoNatRules Object in the FMC.
@@ -5184,6 +5189,7 @@ class AutoNatRules(APIClassTemplate):
             self.patOptions["extendedPat"] = options.extendedPat if "extendedPat" in options.keys() else False
             self.patOptions["flatPortRange"] = options.flatPortRange if "flatPortRange" in options.keys() else False
             logging.info('Adding "{}" to patPool for this AutoNatRule.'.format(name))
+
 
 class ManualNatRules(APIClassTemplate):
     #Host,Network,NetworkGroup objects
@@ -5514,6 +5520,7 @@ class ManualNatRules(APIClassTemplate):
             self.patOptions["extendedPat"] = options.extendedPat if "extendedPat" in options.keys() else False
             self.patOptions["flatPortRange"] = options.flatPortRange if "flatPortRange" in options.keys() else False
             logging.info('Adding "{}" to patPool for this AutoNatRule.'.format(name))
+
 
 class NatRules(APIClassTemplate):
     """
