@@ -11,9 +11,9 @@ import pprint
 
 # ### Set these variables to match your environment. ### #
 
-host = 'fmclab.tor.afilias-int.info'
-username = 'apiscript'
-password = 'XXXXXXXX'
+host = '10.0.0.10'
+username = 'apiadmin'
+password = 'Admin123'
 autodeploy = False
 
 # ### These functions are the individual tests you can run to ensure functionality. ### #
@@ -118,13 +118,11 @@ def test__application_filter():
     print('All ApplicationFilters -- >')
     result = obj1.get()
     pp.pprint(result)
-    print("Total items: {}".format(len(result['items'])))
-    print('\n')
+    # There are no Application Filters by default so there is no items in the list.
+    if 'items' in result:
+        print("Total items: {}".format(len(result['items'])))
+        print('\n')
     del obj1
-    obj1 = ApplicationFilter(fmc=fmc1, name='_tmp')
-    print('One ApplicationFilter -- >')
-    pp.pprint(obj1.get())
-    print('\n')
     logging.info('# Testing ApplicationFilter class done.\n')
 
 
@@ -1818,7 +1816,8 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__ports()
     test__application_type()
     test__application_tag()
-    test__application()
+    ''' The test__application() test  takes a LONG time to complete.'''
+    #test__application()
     test__application_risk()
     test__application_filter()
     test__application_productivity()

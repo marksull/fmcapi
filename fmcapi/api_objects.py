@@ -182,6 +182,7 @@ class APIClassTemplate(object):
             logging.warning("delete() method failed due to failure to pass valid_for_delete() test.")
             return False
 
+
 # ################# API-Explorer Object Category Things ################# #
 
 
