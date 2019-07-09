@@ -117,13 +117,14 @@ class APIClassTemplate(object):
             else:
                 logging.info('GET success. Object with id: "{}" fetched from'
                              ' FMC.'.format(self.id))
-            return response
         elif 'name' in self.__dict__:
             if self.FILTER_BY_NAME:
                 url = '{}?name={}&expanded=true'.format(self.URL, self.name)
             else:
                 url = '{}?expanded=true'.format(self.URL)
             response = self.fmc.send_to_api(method='get', url=url)
+            if 'items' not in response:
+                response['items'] = []
             for item in response['items']:
                 if 'name' in item:
                     if item['name'] == self.name:
@@ -138,13 +139,14 @@ class APIClassTemplate(object):
             if 'id' not in self.__dict__:
                 logging.warning("\tGET query for {} is not found.\n\t\t"
                                 "Response: {}".format(self.name, json.dumps(response)))
-            return response
         else:
             logging.info("GET query for object with no name or id set.  Returning full list of these object types "
                          "instead.")
             url = '{}?expanded=true'.format(self.URL)
             response = self.fmc.send_to_api(method='get', url=url)
-            return response
+        if 'items' not in response:
+            response['items'] = []
+        return response
 
     def put(self, **kwargs):
         logging.debug("In put() for APIClassTemplate class.")
