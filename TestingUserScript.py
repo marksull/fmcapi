@@ -16,7 +16,11 @@ username = 'apiadmin'
 password = 'Admin123'
 autodeploy = False
 
-sleep_between_tests = 1
+sleep_time_between_tests = 1
+
+# Constants you can adjust
+GET_QUERY_LIMIT = 1000  # Default get query collects 25 elements at a time.
+
 # ### These functions are the individual tests you can run to ensure functionality. ### #
 
 
@@ -34,7 +38,7 @@ def test__url_category():
     pp.pprint(obj1.get())
     print('\n')
     logging.info('# Testing URLCategory class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__ports():
@@ -46,7 +50,7 @@ def test__ports():
     pp.pprint(result)
     print('\n')
     logging.info('# Test Ports done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__application_type():
@@ -63,7 +67,7 @@ def test__application_type():
     pp.pprint(obj1.get())
     print('\n')
     logging.info('# Testing ApplicationType class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__application_tag():
@@ -80,7 +84,7 @@ def test__application_tag():
     pp.pprint(obj1.get())
     print('\n')
     logging.info('# Testing ApplicationTag class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__application():
@@ -99,7 +103,7 @@ def test__application():
     pp.pprint(obj1.get())
     print('\n')
     logging.info('# Testing Application class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__application_risk():
@@ -116,7 +120,7 @@ def test__application_risk():
     pp.pprint(obj1.get())
     print('\n')
     logging.info('# Testing ApplicationRisk class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__application_filter():
@@ -133,7 +137,7 @@ def test__application_filter():
     pp.pprint(obj1.get())
     print('\n')
     logging.info('# Testing ApplicationFilter class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__application_productivity():
@@ -150,7 +154,7 @@ def test__application_productivity():
     pp.pprint(obj1.get())
     print('\n')
     logging.info('# Testing ApplicationProductivity class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__application_category():
@@ -167,7 +171,7 @@ def test__application_category():
     pp.pprint(obj1.get())
     print('\n')
     logging.info('# Testing ApplicationCategory class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__cert_enrollment():
@@ -184,7 +188,7 @@ def test__cert_enrollment():
     pp.pprint(obj1.get())
     print('\n')
     logging.info('# Testing CertEnrollment class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__country():
@@ -201,7 +205,7 @@ def test__country():
     pp.pprint(obj1.get())
     print('\n')
     logging.info('# Testing Country class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__continent():
@@ -218,7 +222,7 @@ def test__continent():
     pp.pprint(obj1.get())
     print('\n')
     logging.info('# Testing Continent class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__dns_servers_group():
@@ -237,7 +241,7 @@ def test__dns_servers_group():
 
     obj1.delete()
     logging.info('# Testing DNSServerGroups class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__fqdns():
@@ -255,7 +259,7 @@ def test__fqdns():
 
     obj1.delete()
     logging.info('# FQDNS DNSServerGroups class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__vlan_group_tag():
@@ -297,7 +301,7 @@ def test__vlan_group_tag():
     obj11.delete()
     obj12.delete()
     logging.info('# Testing VlanGroupTag class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__url_group():
@@ -336,7 +340,7 @@ def test__url_group():
     url2.delete()
     url3.delete()
     logging.info('# Testing URLGroup class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__network_group():
@@ -374,7 +378,7 @@ def test__network_group():
     obj11.delete()
     obj12.delete()
     logging.info('# Testing NetworkGroup class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__ip_addresses():
@@ -386,7 +390,7 @@ def test__ip_addresses():
     pp.pprint(result)
     print('\n')
     logging.info('# Test IPAddresses done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__fmc_version():
@@ -397,7 +401,7 @@ def test__fmc_version():
     pp.pprint(version_info)
     print('\n')
     logging.info('# Testing fmc.verson() done.')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__variable_set():
@@ -408,7 +412,7 @@ def test__variable_set():
     pp.pprint(obj1.format_data())
     print('\n')
     logging.info('# Test VariableSet done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__ip_host():
@@ -426,7 +430,7 @@ def test__ip_host():
     time.sleep(1)
     obj1.delete()
     logging.info('# Test IPHost done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__ip_network():
@@ -444,7 +448,7 @@ def test__ip_network():
     time.sleep(1)
     obj1.delete()
     logging.info('# Test IPNetwork done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__ip_range():
@@ -462,7 +466,7 @@ def test__ip_range():
     time.sleep(1)
     obj1.delete()
     logging.info('# Test IPRange done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__extended_acls():
@@ -480,7 +484,7 @@ def test__extended_acls():
     pp.pprint(obj1.get())
     print('\n')
     logging.info('# Testing ExtendedAccessList class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__geolocations():
@@ -498,7 +502,7 @@ def test__geolocations():
     pp.pprint(obj1.get())
     print('\n')
     logging.info('# Testing Geolocation class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__icmpv4():
@@ -516,7 +520,7 @@ def test__icmpv4():
 
     obj1.delete()
     logging.info('# FQDNS ICMPv4Object class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__icmpv6():
@@ -534,7 +538,7 @@ def test__icmpv6():
 
     obj1.delete()
     logging.info('# FQDNS ICMPv6Object class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__ikev1():
@@ -568,7 +572,7 @@ def test__ikev1():
     ipsec1.delete()
     pol1.delete()
     logging.info('# Test IKEv1Policies and IKEv1IpsecProposals classes done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__ikev2():
@@ -638,7 +642,7 @@ def test__ikev2():
     ipsec1.delete()
     pol1.delete()
     logging.info('# Test IKEv2Policies and IKEv2IpsecProposals classes done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__url():
@@ -656,7 +660,7 @@ def test__url():
     time.sleep(1)
     obj1.delete()
     logging.info('# Test URL done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__vlan_tag():
@@ -674,7 +678,7 @@ def test__vlan_tag():
     time.sleep(1)
     obj1.delete()
     logging.info('# Test VlanTag done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__protocol_port():
@@ -693,7 +697,7 @@ def test__protocol_port():
     time.sleep(1)
     obj1.delete()
     logging.info('# Test ProtocolPort done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__security_zone():
@@ -712,7 +716,7 @@ def test__security_zone():
     time.sleep(1)
     obj1.delete()
     logging.info('# Test SecurityZone done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__interface_group():
@@ -760,7 +764,7 @@ def test__interface_group():
     obj1.delete()
     del obj1
     logging.info('# Test InterfaceGroup done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__slamonitor():
@@ -803,7 +807,7 @@ def test__slamonitor():
     obj1.delete()
     sz1.delete()
     sz2.delete()
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__device():
@@ -824,7 +828,7 @@ def test__device():
     print('\n')
     acp1.delete()
     logging.info('# Test Device done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__device_with_task():
@@ -883,7 +887,7 @@ def test__device_with_task():
     obj2.delete()
     time.sleep(30)
     acp1.delete()
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__phys_interfaces():
@@ -947,7 +951,7 @@ def test__phys_interfaces():
     sz1.delete()
     intf2.put()
     sz2.delete()
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__bridge_group_interfaces():
@@ -984,7 +988,7 @@ def test__bridge_group_interfaces():
     br1.delete()
     sz1.delete()
     sz2.delete()
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__redundant_interfaces():
@@ -1023,7 +1027,7 @@ def test__redundant_interfaces():
     red1.delete()
     sz1.delete()
     sz2.delete()
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__etherchannel_interfaces():
@@ -1064,7 +1068,7 @@ def test__etherchannel_interfaces():
     eth1.delete()
     sz1.delete()
     sz2.delete()
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__subinterfaces():
@@ -1103,7 +1107,7 @@ def test__subinterfaces():
     sub1.delete()
     sz1.delete()
     sz2.delete()
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__static_routes():
@@ -1117,7 +1121,7 @@ def test__static_routes():
     print('\n')
     del obj1
     logging.info('# Testing StaticRoutes class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__ipv4_static_routes():
@@ -1154,7 +1158,7 @@ def test__ipv4_static_routes():
     ipnet2.delete()
     iphost1.delete()
     logging.info('# Testing IPv4StaticRoute class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__device_group():
@@ -1185,7 +1189,7 @@ def test__device_group():
     dg1.get()
     dg1.delete()
     logging.info('# Testing DeviceGroups class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__device_ha_pair():
@@ -1261,7 +1265,7 @@ def test__device_ha_pair():
     # obj1.get(name="FTDv-HA2")
     # Deleting the HAPair object will delete the HA configuration AND remove the devices from the FPMC
     # response = obj1.delete()
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__device_ha_monitored_interfaces():
@@ -1276,7 +1280,7 @@ def test__device_ha_monitored_interfaces():
     pp.pprint(obj1.format_data())
     print('\n')
     print(obj1.put())
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__device_ha_failover_mac():
@@ -1303,7 +1307,7 @@ def test__device_ha_failover_mac():
     obj1 = DeviceHAFailoverMAC(fmc=fmc1)
     obj1.edit(name="GigabitEthernet0/0", ha_name="HaName")
     obj1.delete()
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__intrusion_policy():
@@ -1315,7 +1319,7 @@ def test__intrusion_policy():
     pp.pprint(obj1.format_data())
     print('\n')
     logging.info('# Test IntrusionPolicy done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__access_control_policy():
@@ -1333,7 +1337,7 @@ def test__access_control_policy():
     time.sleep(1)
     obj1.delete()
     logging.info('# Test AccessControlPolicy done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__acp_rule():
@@ -1444,14 +1448,14 @@ def test__acp_rule():
     obj11.delete()
     obj12.delete()
     logging.info('# Cleanup of objects for ACPRule test done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__audit():
     logging.info('# Testing fmc.audit() method.')
     pp.pprint(fmc1.audit())
     logging.info('# Testing fmc.audit() method done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__port_object_group():
@@ -1492,7 +1496,7 @@ def test__port_object_group():
     obj11.delete()
     obj12.delete()
     logging.info('# Testing PortObjectGroup class done.\n')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__autonat():
@@ -1599,7 +1603,7 @@ def test__autonat():
     obj4.delete()
     obj5.delete()
     obj6.delete()
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__manualnat():
@@ -1784,7 +1788,7 @@ def test__manualnat():
     obj10.delete()
     obj11.delete()
     obj12.delete()
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def test__upgrades():
@@ -1823,7 +1827,7 @@ def test__upgrades():
     wait_for_task(task=response["metadata"]["task"], wait_time=60)
 
     logging.info('# Test UpgradePackages/ApplicableDevices/Upgrades Complete')
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 def wait_for_task(task, wait_time=10):
@@ -1859,7 +1863,7 @@ def wait_for_task(task, wait_time=10):
             current_status["status"], current_status["id"]))
     except Exception as e:
         print(type(e), e)
-    time.sleep(sleep_between_tests)
+    time.sleep(sleep_time_between_tests)
 
 
 # ### Main Program ### #
