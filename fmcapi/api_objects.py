@@ -4471,19 +4471,44 @@ class ACPRule(APIClassTemplate):
     """
     The ACP Rule Object in the FMC.
     """
-
     PREFIX_URL = '/policy/accesspolicies'
-    URL_SUFFIX = None
     REQUIRED_FOR_POST = ['name', 'acp_id']
     VALID_FOR_ACTION = ['ALLOW', 'TRUST', 'BLOCK', 'MONITOR', 'BLOCK_RESET', 'BLOCK_INTERACTIVE',
                         'BLOCK_RESET_INTERACTIVE']
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+
+    @property
+    def URL_SUFFIX(self):
+        """
+        Add the URL suffixes for categories, insertBefore and insertAfter
+        NOTE: You must specify these at the time the object is initialized (created) for this feature
+        to work correctly. Example:
+            This works:
+                new_rule = ACPRule(fmc=fmc, acp_name='acp1', insertBefore=2)
+
+            This does not:
+                new_rule = ACPRule(fmc=fmc, acp_name='acp1')
+                new_rule.insertBefore = 2
+        """
+        url = '?'
+
+        if 'category' in self.__dict__:
+            url = '{}category={}&'.format(url, self.category)
+        if 'insertBefore' in self.__dict__:
+            url = '{}insertBefore={}&'.format(url, self.insertBefore)
+        if 'insertAfter' in self.__dict__:
+            url = '{}insertAfter={}&'.format(url, self.insertAfter)
+        if 'insertBefore' in self.__dict__ and 'insertAfter' in self.__dict__:
+            logging.warning('ACP rule has both insertBefore and insertAfter params')
+
+        return url[:-1]
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for ACPRule class.")
         self.type = 'AccessRule'
         self.parse_kwargs(**kwargs)
+        self.URL = '{}{}'.format(self.URL, self.URL_SUFFIX)
 
     def format_data(self):
         logging.debug("In format_data() for ACPRule class.")
@@ -4530,6 +4555,7 @@ class ACPRule(APIClassTemplate):
             json_data['destinationZones'] = self.destinationZones
         if 'applications' in self.__dict__:
             json_data['applications'] = self.applications
+
         return json_data
 
     def parse_kwargs(self, **kwargs):
@@ -4590,6 +4616,15 @@ class ACPRule(APIClassTemplate):
             self.urls = kwargs['urls']
         if 'applications' in kwargs:
             self.applications = kwargs['applications']
+        if 'category' in kwargs:
+            self.category = kwargs['category']
+        if 'insertBefore' in kwargs:
+            self.insertBefore = kwargs['insertBefore']
+        if 'insertAfter' in kwargs:
+            self.insertAfter = kwargs['insertAfter']
+
+        # Check if suffix should be added to URL
+        # self.url_suffix()
 
     def acp(self, name):
         logging.debug("In acp() for ACPRule class.")
