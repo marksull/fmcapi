@@ -18,9 +18,6 @@ autodeploy = False
 
 sleep_time_between_tests = 1
 
-# Constants you can adjust
-GET_QUERY_LIMIT = 1000  # Default get query collects 25 elements at a time.
-
 # ### These functions are the individual tests you can run to ensure functionality. ### #
 
 
@@ -90,17 +87,17 @@ def test__application_tag():
 def test__application():
     logging.info('# Testing Application class.')
     obj1 = Application(fmc=fmc1)
-    print('### Warning, this query takes a LONG time to process.  Watch the output for regular updates. ###')
+    print("### Warning, this query takes a LONG time to process if you don't increase the limit of the query set. ###")
     print('All Application -- >')
-    result = obj1.get()
+    result = obj1.get(limit=1000)
     pp.pprint(result)
     print("Total items: {}".format(len(result['items'])))
     print('\n')
     del obj1
     obj1 = Application(fmc=fmc1, name='WD softwares Download/Update')
-    print('### Warning, this query takes a LONG time to process.  Watch the output for regular updates. ###')
+    print("### Warning, this query takes a LONG time to process if you don't increase the limit of the query set. ###")
     print('One Application -- >')
-    pp.pprint(obj1.get())
+    pp.pprint(obj1.get(limit=1000))
     print('\n')
     logging.info('# Testing Application class done.\n')
     time.sleep(sleep_time_between_tests)
@@ -1876,6 +1873,7 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     pp = pprint.PrettyPrinter(indent=4)
     time.sleep(1)
 
+    test__application()  # This test takes a lONG time to run.
     ''' 
     # Working Tests
     test__fmc_version()
@@ -1883,7 +1881,6 @@ with FMC(host=host, username=username, password=password, autodeploy=autodeploy)
     test__ports()
     test__application_type()
     test__application_tag()
-    test__application()  # This test takes a lONG time to run.
     test__application_risk()
     test__application_filter()
     test__application_productivity()

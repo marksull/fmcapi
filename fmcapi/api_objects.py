@@ -27,6 +27,10 @@ class APIClassTemplate(object):
 
     def parse_kwargs(self, **kwargs):
         logging.debug("In parse_kwargs() for APIClassTemplate class.")
+        if 'limit' in kwargs:
+            self.limit = kwargs['limit']
+        else:
+            self.limit = 25  # 25 is the default get query limit.
         if 'name' in kwargs:
             self.name = syntax_correcter(kwargs['name'], permitted_syntax=self.VALID_CHARACTERS_FOR_NAME)
             if self.name != kwargs['name']:
@@ -121,7 +125,7 @@ class APIClassTemplate(object):
             if self.FILTER_BY_NAME:
                 url = '{}?name={}&expanded=true'.format(self.URL, self.name)
             else:
-                url = '{}?expanded=true'.format(self.URL)
+                url = f'{self.URL}?expanded=true&limit={self.limit}'
             response = self.fmc.send_to_api(method='get', url=url)
             if 'items' not in response:
                 response['items'] = []
@@ -142,7 +146,7 @@ class APIClassTemplate(object):
         else:
             logging.info("GET query for object with no name or id set.  Returning full list of these object types "
                          "instead.")
-            url = '{}?expanded=true'.format(self.URL)
+            url = f'{self.URL}?expanded=true&limit={self.limit}'
             response = self.fmc.send_to_api(method='get', url=url)
         if 'items' not in response:
             response['items'] = []
