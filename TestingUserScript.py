@@ -1864,19 +1864,19 @@ def wait_for_task(task, wait_time=10):
 # ### Main Program ### #
 
 
-with FMC(host=host, username=username, password=password, autodeploy=autodeploy) as fmc1:
+with FMC(host=host, username=username, password=password, autodeploy=autodeploy, limit=10) as fmc1:
     logging.info('# ### Mega Test Start!!! ### #')
     starttime = str(int(time.time()))
     namer = '_fmcapi_test_{}'.format(starttime)
     pp = pprint.PrettyPrinter(indent=4)
     time.sleep(1)
 
-    test__application()  # This test takes a lONG time to run.
     ''' 
     # Working Tests
+    test__application()  # This test can take a lONG time to run.
+    test__ports()
     test__fmc_version()
     test__url_category()
-    test__ports()
     test__application_type()
     test__application_tag()
     test__application_risk()

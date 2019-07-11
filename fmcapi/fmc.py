@@ -37,7 +37,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
     MAX_PAGING_REQUESTS = 2000
 
     def __init__(self, host='192.168.45.45', username='admin', password='Admin123', domain=None, autodeploy=True,
-                 file_logging=None, debug=False):
+                 file_logging=None, debug=False, limit=25):
         """
         Instantiate some variables prior to calling the __enter__() method.
         :param host:
@@ -65,6 +65,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         self.password = password
         self.domain = domain
         self.autodeploy = autodeploy
+        self.limit = limit
 
     def __enter__(self):
         """

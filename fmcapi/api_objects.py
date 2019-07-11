@@ -30,7 +30,7 @@ class APIClassTemplate(object):
         if 'limit' in kwargs:
             self.limit = kwargs['limit']
         else:
-            self.limit = 25  # 25 is the default get query limit.
+            self.limit = self.fmc.limit
         if 'name' in kwargs:
             self.name = syntax_correcter(kwargs['name'], permitted_syntax=self.VALID_CHARACTERS_FOR_NAME)
             if self.name != kwargs['name']:
