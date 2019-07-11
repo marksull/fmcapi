@@ -4918,7 +4918,7 @@ class ACPRule(APIClassTemplate):
         """
         # using dict() as default value is dangerous here, any thoughts/workarounds on this?
         logging.debug("In source_network() for ACPRule class.")
-        if literal != '' and name != '':
+        if literal != dict() and name != '':
             raise ValueError('Only one of literals or name (object name) should be set while creating a source network')
 
         if action == 'add':
