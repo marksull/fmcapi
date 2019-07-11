@@ -190,6 +190,7 @@ class APIClassTemplate(object):
             logging.warning("delete() method failed due to failure to pass valid_for_delete() test.")
             return False
 
+
 # ################# API-Explorer Object Category Things ################# #
 
 
@@ -4576,6 +4577,8 @@ class ACPRule(APIClassTemplate):
                 logging.warning('Action {} is not a valid action.'.format(kwargs['action']))
         else:
             self.action = 'BLOCK'
+        if 'acp_id' in kwargs:
+            self.acp(id=kwargs['acp_id'])
         if 'acp_name' in kwargs:
             self.acp(name=kwargs['acp_name'])
         if 'enabled' in kwargs:
@@ -4634,17 +4637,25 @@ class ACPRule(APIClassTemplate):
         # Check if suffix should be added to URL
         # self.url_suffix()
 
-    def acp(self, name):
+    def acp(self, name='', id=''):
+        # either name or id of the ACP should be given
         logging.debug("In acp() for ACPRule class.")
-        acp1 = AccessControlPolicy(fmc=self.fmc)
-        acp1.get(name=name)
-        if 'id' in acp1.__dict__:
-            self.acp_id = acp1.id
+        if id != '':
+            self.acp_id = id
             self.URL = '{}{}/{}/accessrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.acp_id)
             self.acp_added_to_url = True
+        elif name != '':
+            acp1 = AccessControlPolicy(fmc=self.fmc)
+            acp1.get(name=name)
+            if 'id' in acp1.__dict__:
+                self.acp_id = acp1.id
+                self.URL = '{}{}/{}/accessrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.acp_id)
+                self.acp_added_to_url = True
+            else:
+                logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
+                                'ACPRule.'.format(name))
         else:
-            logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
-                            'ACPRule.'.format(name))
+            logging.error('No accessPolicy name or ID was provided.')
 
     def intrusion_policy(self, action, name=''):
         logging.debug("In intrusion_policy() for ACPRule class.")

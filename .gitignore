@@ -1,5 +1,5 @@
 .idea
-output.log
+*.log
 
 # Known Good
 *.kg

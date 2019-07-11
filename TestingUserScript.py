@@ -126,13 +126,11 @@ def test__application_filter():
     print('All ApplicationFilters -- >')
     result = obj1.get()
     pp.pprint(result)
-    print("Total items: {}".format(len(result['items'])))
-    print('\n')
+    # There are no Application Filters by default so there is no items in the list.
+    if 'items' in result:
+        print("Total items: {}".format(len(result['items'])))
+        print('\n')
     del obj1
-    obj1 = ApplicationFilter(fmc=fmc1, name='_tmp')
-    print('One ApplicationFilter -- >')
-    pp.pprint(obj1.get())
-    print('\n')
     logging.info('# Testing ApplicationFilter class done.\n')
     time.sleep(sleep_time_between_tests)
 
