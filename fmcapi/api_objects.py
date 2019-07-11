@@ -4916,13 +4916,17 @@ class ACPRule(APIClassTemplate):
             if literal != dict():
                 # some value of literal is present
                 if 'sourceNetworks' in self.__dict__:
-                    duplicate = False
-                    for litr in self.sourceNetworks['literals']:
-                        if litr['value'] == literal['value']:
-                            duplicate = True
-                            break
-                    if not duplicate:
-                        self.sourceNetworks['literals'].append(literal)
+                    if 'literals' in self.__dict__['sourceNetworks']:
+                        duplicate = False
+                        for litr in self.sourceNetworks['literals']:
+                            if litr['value'] == literal['value']:
+                                duplicate = True
+                                break
+                        if not duplicate:
+                            self.sourceNetworks['literals'].append(literal)
+                            logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(literal))
+                    else:
+                        self.sourceNetworks.update({'literals':[literal]})
                         logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(literal))
                 else:
                     self.sourceNetworks = {'literals': [literal]}
