@@ -4907,6 +4907,15 @@ class ACPRule(APIClassTemplate):
                 logging.info('All Destination Ports removed from this ACPRule object.')
 
     def source_network(self, action, name='', literal=dict()):
+        """
+        Adds Either objects with name
+        Args:
+            action:
+            name:
+            literal:
+        Returns:
+            None
+        """
         # using dict() as default value is dangerous here, any thoughts/workarounds on this?
         logging.debug("In source_network() for ACPRule class.")
         if literal != '' and name != '':
@@ -4984,12 +4993,22 @@ class ACPRule(APIClassTemplate):
 
         elif action == 'remove':
             if 'sourceNetworks' in self.__dict__:
-                objects = []
-                for obj in self.sourceNetworks['objects']:
-                    if obj['name'] != name:
-                        objects.append(obj)
-                self.sourceNetworks['objects'] = objects
-                logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(name))
+                if name != '':
+                    # an object's name has been provided to be removed
+                    objects = []
+                    for obj in self.sourceNetworks['objects']:
+                        if obj['name'] != name:
+                            objects.append(obj)
+                    self.sourceNetworks['objects'] = objects
+                    logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(name))
+                else:
+                    # a literal value has been provided to be removed
+                    literals = []
+                    for litr in self.sourceNetworks['literals']:
+                        if litr['value'] != literal['value']:
+                            literals.append(litr)
+                    self.sourceNetworks['literals'] = literals
+                    logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(literal['value']))
             else:
                 logging.info("sourceNetworks doesn't exist for this ACPRule.  Nothing to remove.")
         elif action == 'clear':
