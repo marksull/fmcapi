@@ -399,3 +399,20 @@ class TestApiObjects(unittest.TestCase):
         }
         rule_obj.source_network(action='remove', name='someExistingObjectName1')
         self.assertNotIn('sourceNetworks', self.__dict__)
+
+    @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
+    def test_ACPRule_source_network_remove_for_objects_with_multiple_objects_present(self, _):
+        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj.sourceNetworks = {'objects': [
+            {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'},
+            {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2', 'type': 'someExistingObjectType2'},
+            {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'}]
+        }
+        rule_obj.source_network(action='remove', name='someExistingObjectName3')
+        self.assertEqual(len(rule_obj.sourceNetworks['objects']), 2)
+        self.assertEqual(rule_obj.sourceNetworks['objects'][0],
+                         {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1',
+                          'type': 'someExistingObjectType1'})
+        self.assertEqual(rule_obj.sourceNetworks['objects'][1],
+                         {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2',
+                          'type': 'someExistingObjectType2'})
