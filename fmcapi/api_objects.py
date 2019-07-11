@@ -4990,7 +4990,6 @@ class ACPRule(APIClassTemplate):
                         # so initialize it with objects and update the provided object
                         self.sourceNetworks = {'objects': [new_net]}
                         logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
-
         elif action == 'remove':
             if 'sourceNetworks' in self.__dict__:
                 if name != '':
