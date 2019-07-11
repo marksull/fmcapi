@@ -425,5 +425,16 @@ class TestApiObjects(unittest.TestCase):
             {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2', 'type': 'someExistingObjectType2'},
             {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'}]
         }
-        rule_obj.source_network(action='clear', name='someExistingObjectName3')
+        rule_obj.source_network(action='clear')
+        self.assertNotIn('sourceNetworks', self.__dict__)
+
+    @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
+    def test_ACPRule_source_network_clear_for_literals(self, _):
+        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj.sourceNetworks = {'literals': [
+            {'type': 'someLiteralType', 'value': 'someLiteralValue2'},
+            {'type': 'someLiteralType', 'value': 'someLiteralValue3'},
+            {'type': 'someLiteralType', 'value': 'someLiteralValue4'}]
+        }
+        rule_obj.source_network(action='clear')
         self.assertNotIn('sourceNetworks', self.__dict__)
