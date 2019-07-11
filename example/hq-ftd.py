@@ -60,7 +60,6 @@ def main():
         nat.post()
 
         # Build NAT Rule
-        '''
         autonat = AutoNatRules(fmc=hq_fmc,
                                natType="DYNAMIC",
                                interfaceInTranslatedNetwork=True,
@@ -70,7 +69,6 @@ def main():
         autonat.destination_intf(name=sz_outside.name)
         autonat.nat_policy(name=nat.name)
         autonat.post()
-        '''
 
         # Add hq-ftd device to FMC
         hq_ftd = Device(fmc=hq_fmc)
@@ -86,7 +84,7 @@ def main():
         # Push to FMC to start device registration.
         hq_ftd.post()
         # At the moment fmcapi doesn't have good support for waiting for the device registration process to complete.
-        time.sleep(300)
+        #time.sleep(300)
 
         # Once registration is complete configure the interfaces of hq-ftd.
         hq_ftd_g00 = PhysicalInterface(fmc=hq_fmc, device_name=hq_ftd.name)
@@ -94,7 +92,7 @@ def main():
         hq_ftd_g00.enabled = True
         hq_ftd_g00.ifname = "IN"
         hq_ftd_g00.static(ipv4addr="10.0.0.1", ipv4mask=24)
-        hq_ftd_g00.securityZone(name="inside")
+        hq_ftd_g00.sz(name="inside")
         hq_ftd_g00.put()
 
         hq_ftd_g01 = PhysicalInterface(fmc=hq_fmc, device_name=hq_ftd.name)
@@ -102,11 +100,17 @@ def main():
         hq_ftd_g01.enabled = True
         hq_ftd_g01.ifname = "OUT"
         hq_ftd_g01.static(ipv4addr="100.64.0.200", ipv4mask=24)
-        hq_ftd_g01.securityZone(name="outside")
+        hq_ftd_g01.sz(name="outside")
         hq_ftd_g01.put()
 
         # Build static default route.
-        # hq_default_route = StaticRoutes(fmc=hq_fmc, name=hq_ftd.name)
+        hq_default_route = IPv4StaticRoute(fmc=hq_fmc, name='hq_default_route')
+        hq_default_route.device(device_name=hq_ftd.name)
+        hq_default_route.networks(action='add', networks=['any-ipv4'])
+        hq_default_route.gw(name=hq_dfgw_gateway.name)
+        hq_default_route.interfaceName = hq_ftd_g01.ifname
+        hq_default_route.metricValue = 1
+        hq_default_route.post()
 
 
 if __name__ == "__main__":

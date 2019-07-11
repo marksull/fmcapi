@@ -3851,7 +3851,10 @@ class IPv4StaticRoute(APIClassTemplate):
         device1.get(name=device_name)
         if 'id' in device1.__dict__:
             self.device_id = device1.id
-            self.URL = '{}{}/{}/routing/ipv4staticroutes'.format(self.fmc.configuration_url, self.PREFIX_URL, self.device_id)
+            self.URL = '{}{}/{}/routing/ipv4staticroutes'.format(self.fmc.configuration_url,
+                                                                 self.PREFIX_URL,
+                                                                 self.device_id,
+                                                                 )
             self.device_added_to_url = True
         else:
             logging.warning('Device {} not found.  Cannot set up device for '
@@ -3860,7 +3863,8 @@ class IPv4StaticRoute(APIClassTemplate):
     def networks(self, action, networks):
         logging.info("In networks() for IPv4StaticRoute class.")
         if action == 'add':
-            # Valid objects are IPHost, IPNetwork and NetworkGroup.  Create a dictionary to contain all three object type.
+            # Valid objects are IPHost, IPNetwork and NetworkGroup.
+            # Create a dictionary to contain all three object type.
             ipaddresses_json = IPAddresses(fmc=self.fmc).get()
             networkgroup_json = NetworkGroup(fmc=self.fmc).get()
             items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
@@ -3874,9 +3878,15 @@ class IPv4StaticRoute(APIClassTemplate):
                         if 'id' in exists:
                             logging.warning('Network {} already exists in selectedNetworks.'.format(network))
                         else:
-                            self.selectedNetworks.append({"type":net1[0]['type'],"id":net1[0]['id'],"name":net1[0]['name']})
+                            self.selectedNetworks.append({"type": net1[0]['type'],
+                                                          "id": net1[0]['id'],
+                                                          "name": net1[0]['name'],
+                                                          })
                     else:
-                        self.selectedNetworks = [{"type":net1[0]['type'],"id":net1[0]['id'],"name":net1[0]['name']}]
+                        self.selectedNetworks = [{"type": net1[0]['type'],
+                                                  "id": net1[0]['id'],
+                                                  "name": net1[0]['name'],
+                                                  }]
                 else:
                     logging.warning('Network {} not found.  Cannot set up device for '
                                     'IPv4StaticRoute.'.format(network))
