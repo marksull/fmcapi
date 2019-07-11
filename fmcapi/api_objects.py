@@ -5111,12 +5111,34 @@ class ACPRule(APIClassTemplate):
                         logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
         elif action == 'remove':
             if 'destinationNetworks' in self.__dict__:
-                objects = []
-                for obj in self.destinationNetworks['objects']:
-                    if obj['name'] != name:
-                        objects.append(obj)
-                self.destinationNetworks['objects'] = objects
-                logging.info('Removed "{}" from destinationNetworks for this ACPRule.'.format(name))
+                if name != '':
+                    # an object's name has been provided to be removed
+                    objects = []
+                    for obj in self.destinationNetworks['objects']:
+                        if obj['name'] != name:
+                            objects.append(obj)
+                    if len(objects) == 0:
+                        # it was the last object which was deleted now
+                        del self.destinationNetworks
+                        logging.info('Removed "{}" from destinationNetworks for this ACPRule'.format(name))
+                        logging.info('All Destination Networks removed from this ACPRule object.')
+                    else:
+                        self.destinationNetworks['objects'] = objects
+                        logging.info('Removed "{}" from destinationNetworks for this ACPRule.'.format(name))
+                else:
+                    # a literal value has been provided to be removed
+                    literals = []
+                    for litr in self.destinationNetworks['literals']:
+                        if litr['value'] != literal['value']:
+                            literals.append(litr)
+                    if len(literals) == 0:
+                        # it was the last literal which was deleted now
+                        del self.destinationNetworks
+                        logging.info('Removed "{}" from destinationNetworks for this ACPRule.'.format(literal['value']))
+                        logging.info('All Destination Networks removed from this ACPRule object.')
+                    else:
+                        self.destinationNetworks['literals'] = literals
+                        logging.info('Removed "{}" from destinationNetworks for this ACPRule.'.format(literal['value']))
             else:
                 logging.info("destinationNetworks doesn't exist for this ACPRule.  Nothing to remove.")
         elif action == 'clear':
