@@ -296,3 +296,22 @@ class TestApiObjects(unittest.TestCase):
                          {'type': 'someLiteralType', 'value': 'someLiteralValue4'})
         self.assertEqual(rule_obj.sourceNetworks['literals'][3],
                          {'type': 'someLiteralType', 'value': 'someLiteralValue1'})
+
+    @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
+    def test_ACPRule_source_network_for_literals_and_duplicate_literal_present(self, _):
+        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj.sourceNetworks = {'literals': [
+            {'type': 'someLiteralType', 'value':'someLiteralValue2'},
+            {'type': 'someLiteralType', 'value': 'someLiteralValue3'},
+            {'type': 'someLiteralType', 'value': 'someLiteralValue4'}
+        ]
+        }
+        rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
+        rule_obj.source_network(action='add', literal={'type': 'someLiteralType', 'value': 'someLiteralValue4'})
+        self.assertEqual(len(rule_obj.sourceNetworks['literals']), 3)
+        self.assertEqual(rule_obj.sourceNetworks['literals'][0],
+                         {'type': 'someLiteralType', 'value': 'someLiteralValue2'})
+        self.assertEqual(rule_obj.sourceNetworks['literals'][1],
+                         {'type': 'someLiteralType', 'value': 'someLiteralValue3'})
+        self.assertEqual(rule_obj.sourceNetworks['literals'][2],
+                         {'type': 'someLiteralType', 'value': 'someLiteralValue4'})
