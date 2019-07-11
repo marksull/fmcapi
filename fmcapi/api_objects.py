@@ -4906,16 +4906,27 @@ class ACPRule(APIClassTemplate):
                 del self.destinationPorts
                 logging.info('All Destination Ports removed from this ACPRule object.')
 
-    def source_network(self, action, name='', literals=tuple()):
+    def source_network(self, action, name='', literal=dict()):
+        # using dict() as default value is dangerous here, any thoughts/workarounds on this?
         logging.debug("In source_network() for ACPRule class.")
-
-        if literals != tuple() and name != '':
+        if literal != '' and name != '':
             raise ValueError('Only one of literals or name (object name) should be set while creating a source network')
 
         if action == 'add':
-
-            if len(literals) < 0:
-                pass
+            if literal != dict():
+                # some value of literal is present
+                if 'sourceNetworks' in self.__dict__:
+                    duplicate = False
+                    for litr in self.sourceNetworks['literals']:
+                        if litr['value'] == literal['value']:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.sourceNetworks['literals'].append(literal)
+                        logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(literal))
+                else:
+                    self.sourceNetworks = {'literals': [literal]}
+                    logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(literal))
             else:
                 ipaddresses_json = IPAddresses(fmc=self.fmc).get()
                 networkgroup_json = NetworkGroup(fmc=self.fmc).get()
