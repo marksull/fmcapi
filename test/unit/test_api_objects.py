@@ -172,3 +172,34 @@ class TestApiObjects(unittest.TestCase):
         rule_obj.source_network(action='add', name='someExistingObjectName2')
         self.assertEqual(len(rule_obj.sourceNetworks['objects']), 2)
         self.assertEqual(rule_obj.sourceNetworks['objects'][0], {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'})
+
+    @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
+    @mock.patch('fmcapi.api_objects.NetworkGroup')
+    @mock.patch('fmcapi.api_objects.FQDNS')
+    @mock.patch('fmcapi.api_objects.IPAddresses')
+    def test_ACPRule_source_network_for_objects_and_multiple_objects_present_initially(self, mock_ipaddress, mock_fqdns,
+                                                                              mock_nwgroup, _):
+        value2 = mock.Mock()
+        value = mock.Mock()
+        value.get.return_value = value2
+        dummyvalue3 = mock.Mock()
+        dummyvalue4 = mock.Mock()
+        dummyvalue4.get.return_value = []
+        dummyvalue3.get.return_value = dummyvalue4
+        value2.get.return_value = [
+            {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'},
+            {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2', 'type': 'someExistingObjectType2'},
+            {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'}]
+        mock_ipaddress.return_value = value
+        mock_nwgroup.return_value = dummyvalue3
+        mock_fqdns.return_value = dummyvalue3
+
+        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj.sourceNetworks = {'objects': [
+            {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'},
+            {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'}
+        ]}
+        rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
+        rule_obj.source_network(action='add', name='someExistingObjectName2')
+        self.assertEqual(len(rule_obj.sourceNetworks['objects']), 3)
+        self.assertEqual(rule_obj.sourceNetworks['objects'][0], {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'})
