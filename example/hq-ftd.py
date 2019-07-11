@@ -86,7 +86,7 @@ def main():
         # Push to FMC to start device registration.
         hq_ftd.post()
         # At the moment fmcapi doesn't have good support for waiting for the device registration process to complete.
-        #time.sleep(300)
+        time.sleep(300)
 
         # Once registration is complete configure the interfaces of hq-ftd.
         hq_ftd_g00 = PhysicalInterface(fmc=hq_fmc, device_name=hq_ftd.name)
