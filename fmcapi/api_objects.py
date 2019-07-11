@@ -5001,7 +5001,7 @@ class ACPRule(APIClassTemplate):
                     if len(objects) == 0:
                         # it was the last object which was deleted now
                         del self.sourceNetworks
-                        logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(name))
+                        logging.info('Removed "{}" from sourceNetworks for this ACPRule'.format(name))
                         logging.info('All Source Networks removed from this ACPRule object.')
                     else:
                         self.sourceNetworks['objects'] = objects
