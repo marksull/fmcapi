@@ -109,10 +109,7 @@ class TestApiObjects(unittest.TestCase):
             - insertBefore param
             - insertAfter param
         """
-        a = api_objects.ACPRule(fmc=mock_fmc,
-                                acp_name='something',
-                                category='something',
-                                insertBefore='something',
+        a = api_objects.ACPRule(fmc=mock_fmc, acp_name='something', category='something', insertBefore='something',
                                 insertAfter='something')
 
         self.assertTrue(a.URL.endswith('?category=something&insertBefore=something&insertAfter=something'))
@@ -122,8 +119,8 @@ class TestApiObjects(unittest.TestCase):
     @mock.patch('fmcapi.api_objects.NetworkGroup')
     @mock.patch('fmcapi.api_objects.FQDNS')
     @mock.patch('fmcapi.api_objects.IPAddresses')
-    def test_ACPRule_source_network_for_objects_and_no_objects_initially(self, mock_ipaddress, mock_fqdns,
-                                                                              mock_nwgroup, _):
+    def test_ACPRule_source_network_for_objects_and_no_objects_initially(self, mock_ipaddress, mock_fqdns, mock_nwgroup,
+                                                                         _):
         value2 = mock.Mock()
         value = mock.Mock()
         value.get.return_value = value2
@@ -151,7 +148,7 @@ class TestApiObjects(unittest.TestCase):
     @mock.patch('fmcapi.api_objects.FQDNS')
     @mock.patch('fmcapi.api_objects.IPAddresses')
     def test_ACPRule_source_network_for_objects_and_one_objects_present_initially(self, mock_ipaddress, mock_fqdns,
-                                                                                   mock_nwgroup, _):
+                                                                                  mock_nwgroup, _):
         value2 = mock.Mock()
         value = mock.Mock()
         value.get.return_value = value2
@@ -221,7 +218,7 @@ class TestApiObjects(unittest.TestCase):
     @mock.patch('fmcapi.api_objects.FQDNS')
     @mock.patch('fmcapi.api_objects.IPAddresses')
     def test_ACPRule_source_network_for_objects_and_duplicate_objects_present(self, mock_ipaddress, mock_fqdns,
-                                                                                       mock_nwgroup, _):
+                                                                              mock_nwgroup, _):
         value2 = mock.Mock()
         value = mock.Mock()
         value.get.return_value = value2
@@ -265,9 +262,7 @@ class TestApiObjects(unittest.TestCase):
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_source_network_for_literals_and_one_literal_present_initially(self, _):
         rule_obj = api_objects.ACPRule(fmc=mock.Mock())
-        rule_obj.sourceNetworks = {'literals': [
-            {'type': 'someLiteralType', 'value':'someLiteralValue2'}]
-        }
+        rule_obj.sourceNetworks = {'literals': [{'type': 'someLiteralType', 'value': 'someLiteralValue2'}]}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.source_network(action='add', literal={'type': 'someLiteralType', 'value': 'someLiteralValue1'})
         self.assertEqual(len(rule_obj.sourceNetworks['literals']), 2)
@@ -279,12 +274,9 @@ class TestApiObjects(unittest.TestCase):
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_source_network_for_literals_and_multiple_literal_present_initially(self, _):
         rule_obj = api_objects.ACPRule(fmc=mock.Mock())
-        rule_obj.sourceNetworks = {'literals': [
-            {'type': 'someLiteralType', 'value':'someLiteralValue2'},
+        rule_obj.sourceNetworks = {'literals': [{'type': 'someLiteralType', 'value': 'someLiteralValue2'},
             {'type': 'someLiteralType', 'value': 'someLiteralValue3'},
-            {'type': 'someLiteralType', 'value': 'someLiteralValue4'}
-        ]
-        }
+            {'type': 'someLiteralType', 'value': 'someLiteralValue4'}]}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.source_network(action='add', literal={'type': 'someLiteralType', 'value': 'someLiteralValue1'})
         self.assertEqual(len(rule_obj.sourceNetworks['literals']), 4)
@@ -300,12 +292,9 @@ class TestApiObjects(unittest.TestCase):
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_source_network_for_literals_and_duplicate_literal_present(self, _):
         rule_obj = api_objects.ACPRule(fmc=mock.Mock())
-        rule_obj.sourceNetworks = {'literals': [
-            {'type': 'someLiteralType', 'value':'someLiteralValue2'},
+        rule_obj.sourceNetworks = {'literals': [{'type': 'someLiteralType', 'value': 'someLiteralValue2'},
             {'type': 'someLiteralType', 'value': 'someLiteralValue3'},
-            {'type': 'someLiteralType', 'value': 'someLiteralValue4'}
-        ]
-        }
+            {'type': 'someLiteralType', 'value': 'someLiteralValue4'}]}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.source_network(action='add', literal={'type': 'someLiteralType', 'value': 'someLiteralValue4'})
         self.assertEqual(len(rule_obj.sourceNetworks['literals']), 3)
