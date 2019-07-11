@@ -390,3 +390,12 @@ class TestApiObjects(unittest.TestCase):
         }
         rule_obj.source_network(action='remove', literal={'value':'someLiteralValue2'})
         self.assertNotIn('sourceNetworks', self.__dict__)
+
+    @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
+    def test_ACPRule_source_network_remove_for_objects_with_only_one_object_present(self, _):
+        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj.sourceNetworks = {'objects': [
+            {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'}]
+        }
+        rule_obj.source_network(action='remove', name='someExistingObjectName1')
+        self.assertNotIn('sourceNetworks', self.__dict__)
