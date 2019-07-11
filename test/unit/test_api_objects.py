@@ -215,3 +215,15 @@ class TestApiObjects(unittest.TestCase):
         self.assertEqual(rule_obj.sourceNetworks['objects'][2],
                          {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2',
                           'type': 'someExistingObjectType2'})
+
+    @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
+    def test_ACPRule_source_network_for_literals_and_no_literal_present_initially(self, _):
+        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        # rule_obj.sourceNetworks = {'objects': [
+        #     {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'},
+        #     {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'}]}
+        rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
+        rule_obj.source_network(action='add', literal={'type': 'someLiteralType', 'value': 'someLiteralValue1'})
+        self.assertEqual(len(rule_obj.sourceNetworks['literals']), 1)
+        self.assertEqual(rule_obj.sourceNetworks['literals'][0],
+                         {'type': 'someLiteralType', 'value': 'someLiteralValue1'})
