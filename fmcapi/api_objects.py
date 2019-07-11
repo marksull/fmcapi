@@ -363,7 +363,7 @@ class NetworkGroup(APIClassTemplate):
     URL_SUFFIX = '/object/networkgroups'
 
     # Technically you can have objects OR literals but I'm not set up for "OR" logic, yet.
-    REQUIRED_FOR_POST = ['name', 'objects']
+    REQUIRED_FOR_POST = ['name']
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
