@@ -21,7 +21,6 @@ def main():
     10.0.0.10 cisco123' has already been manually typed on the FTD's CLI.
     '''
     with FMC(host=host, username=username, password=password, autodeploy=autodeploy) as hq_fmc:
-        """
         # Create Security Zones
         sz_inside = SecurityZone(fmc=hq_fmc, name='inside', interfaceMode='ROUTED')
         sz_inside.post()
@@ -72,9 +71,27 @@ def main():
     
         # At the moment fmcapi doesn't have good support for waiting for the device registration process to complete.
         time.sleep(300)
-        """
 
         # Once registration is complete configure the interfaces of hq-ftd.
+        hq_ftd_g00 = PhysicalInterface(fmc=hq_fmc, device_name=hq_ftd.name)
+        hq_ftd_g00.get(name="GigabitEthernet0/0")
+        hq_ftd_g00.enabled = True
+        hq_ftd_g00.ifname = "IN"
+        hq_ftd_g00.static(ipv4addr="10.0.0.1", ipv4mask=24)
+        hq_ftd_g00.securityZone(name="inside")
+        hq_ftd_g00.put()
+
+        hq_ftd_g01 = PhysicalInterface(fmc=hq_fmc, device_name=hq_ftd.name)
+        hq_ftd_g01.get(name="GigabitEthernet0/1")
+        hq_ftd_g01.enabled = True
+        hq_ftd_g01.ifname = "OUT"
+        hq_ftd_g01.static(ipv4addr="10.0.0.1", ipv4mask=24)
+        hq_ftd_g01.securityZone(name="outside")
+        hq_ftd_g01.put()
+
+        # Build static default route.
+        #hq_default_route = StaticRoutes(fmc=hq_fmc, name=hq_ftd.name)
+
 
 
 

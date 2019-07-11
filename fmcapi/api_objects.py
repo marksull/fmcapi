@@ -2892,7 +2892,7 @@ class PhysicalInterface(APIClassTemplate):
     REQUIRED_FOR_PUT = ['id', 'device_id']
     VALID_FOR_IPV4 = ['static', 'dhcp', 'pppoe']
     VALID_FOR_MODE = ['INLINE', 'PASSIVE', 'TAP', 'ERSPAN', 'NONE']
-    VALID_FOR_MTU = range(64,9000)
+    VALID_FOR_MTU = range(64, 9000)
     VALID_FOR_HARDWARE_SPEED = ['AUTO', 'TEN', 'HUNDRED', 'THOUSAND', 'TEN_THOUSAND', 'FORTY_THOUSAND', 'LAKH']
     VALID_FOR_HARDWARE_DUPLEX = ['AUTO', 'FULL', 'HALF']
     
@@ -3768,7 +3768,10 @@ class StaticRoutes(APIClassTemplate):
         device1.get(name=device_name)
         if 'id' in device1.__dict__:
             self.device_id = device1.id
-            self.URL = '{}{}/{}/routing/staticroutes'.format(self.fmc.configuration_url, self.PREFIX_URL, self.device_id)
+            self.URL = '{}{}/{}/routing/staticroutes'.format(self.fmc.configuration_url,
+                                                             self.PREFIX_URL,
+                                                             self.device_id,
+                                                             )
             self.device_added_to_url = True
         else:
             logging.warning('Device {} not found.  Cannot set up device for '
