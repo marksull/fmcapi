@@ -4913,11 +4913,15 @@ class ACPRule(APIClassTemplate):
             raise ValueError('Only one of literals or name (object name) should be set while creating a source network')
 
         if action == 'add':
-            if literal != dict():
-                # some value of literal is present
+            if literal != dict():  # This means some value of literal is provided
                 if 'sourceNetworks' in self.__dict__:
+                    # thus either some literals are already present in sourceNetworks,
+                    # or only objects are present in sourceNetworks
                     if 'literals' in self.__dict__['sourceNetworks']:
+                        # some literals are already present
                         duplicate = False
+                        # see if its a duplicate or not. If not, append to the list of
+                        # existing literals in sourceNetworks
                         for litr in self.sourceNetworks['literals']:
                             if litr['value'] == literal['value']:
                                 duplicate = True
@@ -4926,9 +4930,15 @@ class ACPRule(APIClassTemplate):
                             self.sourceNetworks['literals'].append(literal)
                             logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(literal))
                     else:
+                        # this means no literals were present in sourceNetworks,
+                        # and sourceNetworks contains objects only
                         self.sourceNetworks.update({'literals':[literal]})
+                        # So update the sourceNetworks dict which contained 'objects' key initially
+                        # to have a 'literals' key as well
                         logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(literal))
                 else:
+                    # None of literals or objects are present in sourceNetworks,
+                    # so initialize it to literals and update the provided literal
                     self.sourceNetworks = {'literals': [literal]}
                     logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(literal))
             else:
