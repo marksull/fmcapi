@@ -389,4 +389,4 @@ class TestApiObjects(unittest.TestCase):
             {'type': 'someLiteralType', 'value': 'someLiteralValue2'}]
         }
         rule_obj.source_network(action='remove', literal={'value':'someLiteralValue2'})
-        self.assertEqual(len(rule_obj.sourceNetworks['literals']), 0)
+        self.assertNotIn('sourceNetworks', self.__dict__)
