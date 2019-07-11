@@ -4999,6 +4999,7 @@ class ACPRule(APIClassTemplate):
                         if obj['name'] != name:
                             objects.append(obj)
                     if len(objects) == 0:
+                        # it was the last object which was deleted now
                         del self.sourceNetworks
                         logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(literal['value']))
                         logging.info('All Source Networks removed from this ACPRule object.')
@@ -5012,6 +5013,7 @@ class ACPRule(APIClassTemplate):
                         if litr['value'] != literal['value']:
                             literals.append(litr)
                     if len(literals) == 0:
+                        # it was the last literal which was deleted now
                         del self.sourceNetworks
                         logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(literal['value']))
                         logging.info('All Source Networks removed from this ACPRule object.')
