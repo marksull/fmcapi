@@ -416,3 +416,14 @@ class TestApiObjects(unittest.TestCase):
         self.assertEqual(rule_obj.sourceNetworks['objects'][1],
                          {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2',
                           'type': 'someExistingObjectType2'})
+
+    @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
+    def test_ACPRule_source_network_clear_for_objects(self, _):
+        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj.sourceNetworks = {'objects': [
+            {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'},
+            {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2', 'type': 'someExistingObjectType2'},
+            {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'}]
+        }
+        rule_obj.source_network(action='clear', name='someExistingObjectName3')
+        self.assertNotIn('sourceNetworks', self.__dict__)
