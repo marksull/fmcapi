@@ -175,6 +175,9 @@ class TestApiObjects(unittest.TestCase):
         self.assertEqual(rule_obj.sourceNetworks['objects'][0],
                          {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3',
                           'type': 'someExistingObjectType3'})
+        self.assertEqual(rule_obj.sourceNetworks['objects'][1],
+                         {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2',
+                          'type': 'someExistingObjectType2'})
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     @mock.patch('fmcapi.api_objects.NetworkGroup')
