@@ -4,7 +4,7 @@ Unit testing, of a sort, all the created methods/classes.
 
 from fmcapi.fmc import *
 from fmcapi.api_objects import *
-from fmcapi.helper_functions import *
+# from fmcapi.helper_functions import *
 import logging
 import time
 import pprint
@@ -1338,8 +1338,7 @@ def test__access_control_policy():
 
 
 def test__acp_rule():
-    logging.info(
-        '# In preparation for testing ACPRule methods, set up some known objects in the FMC.')
+    logging.info('# In preparation for testing ACPRule methods, set up some known objects in the FMC.')
     # Build an IP host object
     iphost1 = IPHost(fmc=fmc1, name='_iphost1', value='7.7.7.7')
     iphost1.post()
