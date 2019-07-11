@@ -367,3 +367,18 @@ class TestApiObjects(unittest.TestCase):
         rule_obj = api_objects.ACPRule(fmc=mock.Mock())
         with self.assertRaises(ValueError):
             rule_obj.source_network(action='add', name='someObjectName', literal={'type':'someType', 'value':'someValue'})
+
+    @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
+    def test_ACPRule_source_network_remove_for_literals_with_multiple_literals_present(self, _):
+        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj.sourceNetworks = {'literals': [
+            {'type': 'someLiteralType', 'value': 'someLiteralValue2'},
+            {'type': 'someLiteralType', 'value': 'someLiteralValue3'},
+            {'type': 'someLiteralType', 'value': 'someLiteralValue4'}]
+        }
+        rule_obj.source_network(action='remove', literal={'value':'someLiteralValue3'})
+        self.assertEqual(len(rule_obj.sourceNetworks['literals']), 2)
+        self.assertEqual(rule_obj.sourceNetworks['literals'][0],
+                         {'type': 'someLiteralType', 'value': 'someLiteralValue2'})
+        self.assertEqual(rule_obj.sourceNetworks['literals'][1],
+                         {'type': 'someLiteralType', 'value': 'someLiteralValue4'})
