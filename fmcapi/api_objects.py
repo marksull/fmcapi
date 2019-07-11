@@ -5006,8 +5006,13 @@ class ACPRule(APIClassTemplate):
                     for litr in self.sourceNetworks['literals']:
                         if litr['value'] != literal['value']:
                             literals.append(litr)
-                    self.sourceNetworks['literals'] = literals
-                    logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(literal['value']))
+                    if len(literals) == 0:
+                        del self.sourceNetworks
+                        logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(literal['value']))
+                        logging.info('All Source Networks removed from this ACPRule object.')
+                    else:
+                        self.sourceNetworks['literals'] = literals
+                        logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(literal['value']))
             else:
                 logging.info("sourceNetworks doesn't exist for this ACPRule.  Nothing to remove.")
         elif action == 'clear':
