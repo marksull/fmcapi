@@ -4908,11 +4908,12 @@ class ACPRule(APIClassTemplate):
 
     def source_network(self, action, name='', literal=dict()):
         """
-        Adds Either objects with name
+        Adds Either object having name=name or literal with {value:<>, type:<>} to the sourceNetworks
+        field of acprule object
         Args:
-            action:
-            name:
-            literal:
+            action: the action to be done
+            name: name of the object in question
+            literal: the literal in question
         Returns:
             None
         """
