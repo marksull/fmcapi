@@ -4938,7 +4938,7 @@ class ACPRule(APIClassTemplate):
                         logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(literal))
                 else:
                     # None of literals or objects are present in sourceNetworks,
-                    # so initialize it to literals and update the provided literal
+                    # so initialize it with literals and update the provided literal
                     self.sourceNetworks = {'literals': [literal]}
                     logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(literal))
             else:
