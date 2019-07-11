@@ -4998,8 +4998,13 @@ class ACPRule(APIClassTemplate):
                     for obj in self.sourceNetworks['objects']:
                         if obj['name'] != name:
                             objects.append(obj)
-                    self.sourceNetworks['objects'] = objects
-                    logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(name))
+                    if len(objects) == 0:
+                        del self.sourceNetworks
+                        logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(literal['value']))
+                        logging.info('All Source Networks removed from this ACPRule object.')
+                    else:
+                        self.sourceNetworks['objects'] = objects
+                        logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(name))
                 else:
                     # a literal value has been provided to be removed
                     literals = []

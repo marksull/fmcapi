@@ -323,7 +323,6 @@ class TestApiObjects(unittest.TestCase):
                          {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1',
                           'type': 'someExistingObjectType1'})
 
-
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     @mock.patch('fmcapi.api_objects.NetworkGroup')
     @mock.patch('fmcapi.api_objects.FQDNS')
