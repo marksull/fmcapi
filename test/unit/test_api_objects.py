@@ -133,8 +133,7 @@ class TestApiObjects(unittest.TestCase):
         value2.get.return_value = [
             {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'},
             {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2', 'type': 'someExistingObjectType2'},
-            {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'}
-        ]
+            {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'}]
         mock_ipaddress.return_value = value
         mock_nwgroup.return_value = dummyvalue3
         mock_fqdns.return_value = dummyvalue3
@@ -143,8 +142,4 @@ class TestApiObjects(unittest.TestCase):
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.source_network(action='add', name='someExistingObjectName2')
         self.assertEqual(rule_obj.sourceNetworks, {'objects': [
-            {'name': 'someExistingObjectName2',
-             'id': 'someExistingObjectId2',
-             'type': 'someExistingObjectType2'}]
-            }
-        )
+            {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2', 'type': 'someExistingObjectType2'}]})
