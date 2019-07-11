@@ -4958,8 +4958,10 @@ class ACPRule(APIClassTemplate):
                         # thus either some objects are already present in sourceNetworks,
                         # or only literals are present in sourceNetworks
                         if 'objects' in self.__dict__['sourceNetworks']:
-
+                            # some objects are already present
                             duplicate = False
+                            # see if its a duplicate or not. If not, append to the list of
+                            # existing objects in sourceNetworks
                             for obj in self.sourceNetworks['objects']:
                                 if obj['name'] == new_net['name']:
                                     duplicate = True
@@ -4968,9 +4970,15 @@ class ACPRule(APIClassTemplate):
                                 self.sourceNetworks['objects'].append(new_net)
                                 logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
                         else:
+                            # this means no objects were present in sourceNetworks,
+                            # and sourceNetworks contains literals only
                             self.sourceNetworks.update({'objects': [new_net]})
+                            # So update the sourceNetworks dict which contained 'literals' key initially
+                            # to have a 'objects' key as well
                             logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
                     else:
+                        # None of literals or objects are present in sourceNetworks,
+                        # so initialize it with objects and update the provided object
                         self.sourceNetworks = {'objects': [new_net]}
                         logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
 
