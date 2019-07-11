@@ -60,6 +60,7 @@ def main():
         nat.post()
 
         # Build NAT Rule
+        '''
         autonat = AutoNatRules(fmc=hq_fmc,
                                natType="DYNAMIC",
                                interfaceInTranslatedNetwork=True,
@@ -69,6 +70,7 @@ def main():
         autonat.destination_intf(name=sz_outside.name)
         autonat.nat_policy(name=nat.name)
         autonat.post()
+        '''
 
         # Add hq-ftd device to FMC
         hq_ftd = Device(fmc=hq_fmc)
