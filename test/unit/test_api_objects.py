@@ -142,6 +142,7 @@ class TestApiObjects(unittest.TestCase):
         rule_obj = api_objects.ACPRule(fmc=mock.Mock())
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.source_network(action='add', name='someExistingObjectName2')
+        self.assertEqual(len(rule_obj.sourceNetworks['objects']), 1)
         self.assertEqual(rule_obj.sourceNetworks, {'objects': [
             {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2', 'type': 'someExistingObjectType2'}]})
 
