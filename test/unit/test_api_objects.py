@@ -150,7 +150,7 @@ class TestApiObjects(unittest.TestCase):
     @mock.patch('fmcapi.api_objects.NetworkGroup')
     @mock.patch('fmcapi.api_objects.FQDNS')
     @mock.patch('fmcapi.api_objects.IPAddresses')
-    def test_ACPRule_source_network_for_objects_and_some_objects_present_initially(self, mock_ipaddress, mock_fqdns,
+    def test_ACPRule_source_network_for_objects_and_one_objects_present_initially(self, mock_ipaddress, mock_fqdns,
                                                                                    mock_nwgroup, _):
         value2 = mock.Mock()
         value = mock.Mock()
