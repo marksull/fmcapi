@@ -362,3 +362,8 @@ class TestApiObjects(unittest.TestCase):
         self.assertEqual(rule_obj.sourceNetworks['literals'][2],
                          {'type': 'someLiteralType', 'value': 'someLiteralValue4'})
 
+    @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
+    def test_ACPRule_source_network_with_both_name_and_literals_given(self, _):
+        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        with self.assertRaises(ValueError):
+            rule_obj.source_network(action='add', name='someObjectName', literal={'type':'someType', 'value':'someValue'})
