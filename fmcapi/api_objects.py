@@ -4955,17 +4955,25 @@ class ACPRule(APIClassTemplate):
                     logging.warning('Network "{}" is not found in FMC.  Cannot add to sourceNetworks.'.format(name))
                 else:
                     if 'sourceNetworks' in self.__dict__:
-                        duplicate = False
-                        for obj in self.sourceNetworks['objects']:
-                            if obj['name'] == new_net['name']:
-                                duplicate = True
-                                break
-                        if not duplicate:
-                            self.sourceNetworks['objects'].append(new_net)
+                        # thus either some objects are already present in sourceNetworks,
+                        # or only literals are present in sourceNetworks
+                        if 'objects' in self.__dict__['sourceNetworks']:
+
+                            duplicate = False
+                            for obj in self.sourceNetworks['objects']:
+                                if obj['name'] == new_net['name']:
+                                    duplicate = True
+                                    break
+                            if not duplicate:
+                                self.sourceNetworks['objects'].append(new_net)
+                                logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
+                        else:
+                            self.sourceNetworks.update({'objects': [new_net]})
                             logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
                     else:
                         self.sourceNetworks = {'objects': [new_net]}
                         logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
+
         elif action == 'remove':
             if 'sourceNetworks' in self.__dict__:
                 objects = []
