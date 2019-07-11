@@ -382,3 +382,12 @@ class TestApiObjects(unittest.TestCase):
                          {'type': 'someLiteralType', 'value': 'someLiteralValue2'})
         self.assertEqual(rule_obj.sourceNetworks['literals'][1],
                          {'type': 'someLiteralType', 'value': 'someLiteralValue4'})
+
+    @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
+    def test_ACPRule_source_network_remove_for_literals_with_only_one_literal_present(self, _):
+        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj.sourceNetworks = {'literals': [
+            {'type': 'someLiteralType', 'value': 'someLiteralValue2'}]
+        }
+        rule_obj.source_network(action='remove', literal={'value':'someLiteralValue2'})
+        self.assertEqual(len(rule_obj.sourceNetworks['literals']), 0)
