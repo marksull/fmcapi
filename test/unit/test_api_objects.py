@@ -209,3 +209,9 @@ class TestApiObjects(unittest.TestCase):
         self.assertEqual(rule_obj.sourceNetworks['objects'][0],
                          {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3',
                           'type': 'someExistingObjectType3'})
+        self.assertEqual(rule_obj.sourceNetworks['objects'][1],
+                         {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1',
+                          'type': 'someExistingObjectType1'})
+        self.assertEqual(rule_obj.sourceNetworks['objects'][2],
+                         {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2',
+                          'type': 'someExistingObjectType2'})
