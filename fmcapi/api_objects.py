@@ -5102,7 +5102,11 @@ class ACPRule(APIClassTemplate):
                                 self.destinationNetworks['objects'].append(new_net)
                                 logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
                         else:
-                            self.destinationNetworks = {'objects': [new_net]}
+                            # this means no objects were present in destinationNetworks,
+                            # and destinationNetworks contains literals only
+                            self.destinationNetworks.update({'objects': [new_net]})
+                            # So update the destinationNetworks dict which contained 'literals' key initially
+                            # to have a 'objects' key as well
                             logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
                     else:
                         # None of literals or objects are present in destinationNetworks,
