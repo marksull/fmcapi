@@ -4948,7 +4948,7 @@ class ACPRule(APIClassTemplate):
             if literal:
                 type_ = get_networkaddress_type(literal)
                 self.sourceNetworks['literals'][literal] = type_
-                logging.info('Adding literal "{}" of type "{}" to sourceNetworks for this ACPRule.', literal, type_)
+                logging.info('Adding literal "{}" of type "{}" to sourceNetworks for this ACPRule.'.format(literal, type_))
 
             else:
                 ipaddresses_json = IPAddresses(fmc=self.fmc).get()
@@ -5011,9 +5011,9 @@ class ACPRule(APIClassTemplate):
                     type_ = self.sourceNetworks['literals'].get(literal)
                     if type_:
                         self.sourceNetworks['literals'].pop(literal)
-                        logging.info('Removed literal "{}" of type "{}" from sourceNetworks for this ACPRule.', literal, type_)
+                        logging.info('Removed literal "{}" of type "{}" from sourceNetworks for this ACPRule.'.format(literal, type_))
                     else:
-                        logging.info('Unable to removed literal "{}" from sourceNetworks as it was not found', literal)
+                        logging.info('Unable to removed literal "{}" from sourceNetworks as it was not found'.format(literal))
             else:
                 logging.info("sourceNetworks doesn't exist for this ACPRule.  Nothing to remove.")
         elif action == 'clear':
@@ -5046,7 +5046,7 @@ class ACPRule(APIClassTemplate):
             if literal:
                 type_ = get_networkaddress_type(literal)
                 self.destinationNetworks['literals'][literal] = type_
-                logging.info('Adding literal "{}" of type "{}" to destinationNetworks for this ACPRule.', literal, type_)
+                logging.info('Adding literal "{}" of type "{}" to destinationNetworks for this ACPRule.'.format(literal, type_))
 
             else:
                 ipaddresses_json = IPAddresses(fmc=self.fmc).get()
@@ -5108,9 +5108,9 @@ class ACPRule(APIClassTemplate):
                     type_ = self.destinationNetworks['literals'].get(literal)
                     if type_:
                         self.destinationNetworks['literals'].pop(literal)
-                        logging.info('Removed literal "{}" of type "{}" from destinationNetworks for this ACPRule.', literal, type_)
+                        logging.info('Removed literal "{}" of type "{}" from destinationNetworks for this ACPRule.'.format(literal, type_))
                     else:
-                        logging.info('Unable to removed literal "{}" from destinationNetworks as it was not found', literal)
+                        logging.info('Unable to removed literal "{}" from destinationNetworks as it was not found'.format(literal))
             else:
                 logging.info("destinationNetworks doesn't exist for this ACPRule.  Nothing to remove.")
         elif action == 'clear':
