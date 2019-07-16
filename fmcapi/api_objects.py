@@ -4550,8 +4550,8 @@ class ACPRule(APIClassTemplate):
             json_data['sourceNetworks'] = {'objects': self.sourceNetworks['objects']}
             json_data['sourceNetworks']['literals'] = [{'type': k, 'value': v} for k, v in enumerate(self.sourceNetworks['literals'])]
         if 'destinationNetworks' in self.__dict__:
-            json_data['sourceNetworks'] = {'objects': self.destinationNetworks['objects']}
-            json_data['sourceNetworks']['literals'] = [{'type': k, 'value': v} for k, v in enumerate(self.destintationNetworks['literals'])]
+            json_data['destinationNetworks'] = {'objects': self.destinationNetworks['objects']}
+            json_data['destinationNetworks']['literals'] = [{'type': k, 'value': v} for k, v in enumerate(self.destinationNetworks['literals'])]
         if 'sourcePorts' in self.__dict__:
             json_data['sourcePorts'] = self.sourcePorts
         if 'destinationPorts' in self.__dict__:
