@@ -492,8 +492,9 @@ class TestApiObjects(unittest.TestCase):
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.destination_network(action='add', name='someExistingObjectName2')
         self.assertEqual(len(rule_obj.destinationNetworks['objects']), 1)
-        self.assertEqual(rule_obj.destinationNetworks, {'objects': [
-            {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2', 'type': 'someExistingObjectType2'}]})
+        self.assertEqual(rule_obj.destinationNetworks['objects'], [{'name': 'someExistingObjectName2',
+                                                                    'id'  : 'someExistingObjectId2',
+                                                                    'type': 'someExistingObjectType2'}])
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     @mock.patch('fmcapi.api_objects.NetworkGroup')
@@ -602,72 +603,52 @@ class TestApiObjects(unittest.TestCase):
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_add_for_literals_and_no_literal_present_initially(self, _):
         rule_obj = api_objects.ACPRule(fmc=mock.Mock())
-        # rule_obj.destinationNetworks = {'objects': [
-        #     {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'},
-        #     {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'}]}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
-        rule_obj.destination_network(action='add', literal={'type': 'someLiteralType', 'value': 'someLiteralValue1'})
+        rule_obj.destination_network(action='add', literal='10.0.0.1')
         self.assertEqual(len(rule_obj.destinationNetworks['literals']), 1)
-        self.assertEqual(rule_obj.destinationNetworks['literals'][0],
-                         {'type': 'someLiteralType', 'value': 'someLiteralValue1'})
+        self.assertEqual(rule_obj.destinationNetworks['literals']['10.0.0.1'], 'host')
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_add_for_literals_and_one_literal_present_initially(self, _):
         rule_obj = api_objects.ACPRule(fmc=mock.Mock())
-        rule_obj.destinationNetworks = {'literals': [{'type': 'someLiteralType', 'value': 'someLiteralValue2'}]}
+        rule_obj.destinationNetworks = {'literals': {'10.0.0.1': 'host'}}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
-        rule_obj.destination_network(action='add', literal={'type': 'someLiteralType', 'value': 'someLiteralValue1'})
+        rule_obj.destination_network(action='add', literal='10.0.0.2')
         self.assertEqual(len(rule_obj.destinationNetworks['literals']), 2)
-        self.assertEqual(rule_obj.destinationNetworks['literals'][0],
-                         {'type': 'someLiteralType', 'value': 'someLiteralValue2'})
-        self.assertEqual(rule_obj.destinationNetworks['literals'][1],
-                         {'type': 'someLiteralType', 'value': 'someLiteralValue1'})
+        self.assertEqual(rule_obj.destinationNetworks['literals']['10.0.0.1'], 'host')
+        self.assertEqual(rule_obj.destinationNetworks['literals']['10.0.0.2'], 'host')
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_add_for_literals_and_multiple_literal_present_initially(self, _):
         rule_obj = api_objects.ACPRule(fmc=mock.Mock())
-        rule_obj.destinationNetworks = {'literals': [{'type': 'someLiteralType', 'value': 'someLiteralValue2'},
-            {'type': 'someLiteralType', 'value': 'someLiteralValue3'},
-            {'type': 'someLiteralType', 'value': 'someLiteralValue4'}]}
+        rule_obj.destinationNetworks = {'literals': {'10.0.0.1': 'host', '10.0.0.2': 'host', '10.0.0.3': 'host'}}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
-        rule_obj.destination_network(action='add', literal={'type': 'someLiteralType', 'value': 'someLiteralValue1'})
+        rule_obj.destination_network(action='add', literal='10.0.0.4')
         self.assertEqual(len(rule_obj.destinationNetworks['literals']), 4)
-        self.assertEqual(rule_obj.destinationNetworks['literals'][0],
-                         {'type': 'someLiteralType', 'value': 'someLiteralValue2'})
-        self.assertEqual(rule_obj.destinationNetworks['literals'][1],
-                         {'type': 'someLiteralType', 'value': 'someLiteralValue3'})
-        self.assertEqual(rule_obj.destinationNetworks['literals'][2],
-                         {'type': 'someLiteralType', 'value': 'someLiteralValue4'})
-        self.assertEqual(rule_obj.destinationNetworks['literals'][3],
-                         {'type': 'someLiteralType', 'value': 'someLiteralValue1'})
+        self.assertEqual(rule_obj.destinationNetworks['literals']['10.0.0.1'], 'host')
+        self.assertEqual(rule_obj.destinationNetworks['literals']['10.0.0.2'], 'host')
+        self.assertEqual(rule_obj.destinationNetworks['literals']['10.0.0.3'], 'host')
+        self.assertEqual(rule_obj.destinationNetworks['literals']['10.0.0.4'], 'host')
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_add_for_literals_and_duplicate_literal_present(self, _):
         rule_obj = api_objects.ACPRule(fmc=mock.Mock())
-        rule_obj.destinationNetworks = {'literals': [{'type': 'someLiteralType', 'value': 'someLiteralValue2'},
-            {'type': 'someLiteralType', 'value': 'someLiteralValue3'},
-            {'type': 'someLiteralType', 'value': 'someLiteralValue4'}]}
+        rule_obj.destinationNetworks = {'literals': {'10.0.0.1': 'host'}}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
-        rule_obj.destination_network(action='add', literal={'type': 'someLiteralType', 'value': 'someLiteralValue4'})
-        self.assertEqual(len(rule_obj.destinationNetworks['literals']), 3)
-        self.assertEqual(rule_obj.destinationNetworks['literals'][0],
-                         {'type': 'someLiteralType', 'value': 'someLiteralValue2'})
-        self.assertEqual(rule_obj.destinationNetworks['literals'][1],
-                         {'type': 'someLiteralType', 'value': 'someLiteralValue3'})
-        self.assertEqual(rule_obj.destinationNetworks['literals'][2],
-                         {'type': 'someLiteralType', 'value': 'someLiteralValue4'})
+        rule_obj.destination_network(action='add', literal='10.0.0.1')
+        self.assertEqual(len(rule_obj.destinationNetworks['literals']), 1)
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_add_for_literals_and_objects_present_initially(self, _):
         rule_obj = api_objects.ACPRule(fmc=mock.Mock())
         rule_obj.destinationNetworks = {'objects': [
             {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'},
-            {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'}]}
+            {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'}],
+            'literals': {}}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
-        rule_obj.destination_network(action='add', literal={'type': 'someLiteralType', 'value': 'someLiteralValue4'})
+        rule_obj.destination_network(action='add', literal="10.0.0.1")
         self.assertEqual(len(rule_obj.destinationNetworks['literals']), 1)
-        self.assertEqual(rule_obj.destinationNetworks['literals'][0],
-                         {'type': 'someLiteralType', 'value': 'someLiteralValue4'})
+        self.assertEqual(rule_obj.destinationNetworks['literals']['10.0.0.1'], 'host')
         self.assertEqual(rule_obj.destinationNetworks['objects'][0],
                          {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3',
                           'type': 'someExistingObjectType3'})
@@ -696,52 +677,37 @@ class TestApiObjects(unittest.TestCase):
         mock_nwgroup.return_value = dummyvalue3
         mock_fqdns.return_value = dummyvalue3
         rule_obj = api_objects.ACPRule(fmc=mock.Mock())
-        rule_obj.destinationNetworks = {'literals': [{'type': 'someLiteralType', 'value': 'someLiteralValue2'},
-            {'type': 'someLiteralType', 'value': 'someLiteralValue3'},
-            {'type': 'someLiteralType', 'value': 'someLiteralValue4'}]}
+        rule_obj.destinationNetworks = {'literals': {'10.0.0.1': 'host'}}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.destination_network(action='add', name='someExistingObjectName3')
         self.assertEqual(len(rule_obj.destinationNetworks['objects']), 1)
         self.assertEqual(rule_obj.destinationNetworks['objects'][0],
                          {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3',
                           'type': 'someExistingObjectType3'})
-        self.assertEqual(len(rule_obj.destinationNetworks['literals']), 3)
-        self.assertEqual(rule_obj.destinationNetworks['literals'][0],
-                         {'type': 'someLiteralType', 'value': 'someLiteralValue2'})
-        self.assertEqual(rule_obj.destinationNetworks['literals'][1],
-                         {'type': 'someLiteralType', 'value': 'someLiteralValue3'})
-        self.assertEqual(rule_obj.destinationNetworks['literals'][2],
-                         {'type': 'someLiteralType', 'value': 'someLiteralValue4'})
+        self.assertEqual(len(rule_obj.destinationNetworks['literals']), 1)
+        self.assertEqual(rule_obj.destinationNetworks['literals']['10.0.0.1'], 'host')
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_with_both_name_and_literals_given(self, _):
         rule_obj = api_objects.ACPRule(fmc=mock.Mock())
         with self.assertRaises(ValueError):
-            rule_obj.destination_network(action='add', name='someObjectName', literal={'type':'someType', 'value':'someValue'})
+            rule_obj.destination_network(action='add', name='someObjectName', literal='10.0.0.1')
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_remove_for_literals_with_multiple_literals_present(self, _):
         rule_obj = api_objects.ACPRule(fmc=mock.Mock())
-        rule_obj.destinationNetworks = {'literals': [
-            {'type': 'someLiteralType', 'value': 'someLiteralValue2'},
-            {'type': 'someLiteralType', 'value': 'someLiteralValue3'},
-            {'type': 'someLiteralType', 'value': 'someLiteralValue4'}]
-        }
-        rule_obj.destination_network(action='remove', literal={'value':'someLiteralValue3'})
+        rule_obj.destinationNetworks = {'literals': {'10.0.0.1': 'host', '10.0.0.2': 'host', '10.0.0.3': 'host'}}
+        rule_obj.destination_network(action='remove', literal='10.0.0.1')
         self.assertEqual(len(rule_obj.destinationNetworks['literals']), 2)
-        self.assertEqual(rule_obj.destinationNetworks['literals'][0],
-                         {'type': 'someLiteralType', 'value': 'someLiteralValue2'})
-        self.assertEqual(rule_obj.destinationNetworks['literals'][1],
-                         {'type': 'someLiteralType', 'value': 'someLiteralValue4'})
+        self.assertIsNotNone(rule_obj.destinationNetworks['literals']['10.0.0.2'])
+        self.assertIsNotNone(rule_obj.destinationNetworks['literals']['10.0.0.3'])
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_remove_for_literals_with_only_one_literal_present(self, _):
         rule_obj = api_objects.ACPRule(fmc=mock.Mock())
-        rule_obj.destinationNetworks = {'literals': [
-            {'type': 'someLiteralType', 'value': 'someLiteralValue2'}]
-        }
-        rule_obj.destination_network(action='remove', literal={'value':'someLiteralValue2'})
-        self.assertNotIn('destinationNetworks', self.__dict__)
+        rule_obj.destinationNetworks = {'literals': {'10.0.0.1': 'host'}}
+        rule_obj.destination_network(action='remove', literal='10.0.0.1')
+        self.assertEqual(len(rule_obj.destinationNetworks['literals']), 0)
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_remove_for_objects_with_only_one_object_present(self, _):
@@ -783,10 +749,6 @@ class TestApiObjects(unittest.TestCase):
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_clear_for_literals(self, _):
         rule_obj = api_objects.ACPRule(fmc=mock.Mock())
-        rule_obj.destinationNetworks = {'literals': [
-            {'type': 'someLiteralType', 'value': 'someLiteralValue2'},
-            {'type': 'someLiteralType', 'value': 'someLiteralValue3'},
-            {'type': 'someLiteralType', 'value': 'someLiteralValue4'}]
-        }
+        rule_obj.destinationNetworks = {'literals': {'10.0.0.1': 'host'}}
         rule_obj.destination_network(action='clear')
         self.assertNotIn('destinationNetworks', self.__dict__)
