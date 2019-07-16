@@ -4548,10 +4548,10 @@ class ACPRule(APIClassTemplate):
             json_data['vlanTags'] = self.vlanTags
         if 'sourceNetworks' in self.__dict__:
             json_data['sourceNetworks'] = {'objects': self.sourceNetworks['objects']}
-            json_data['sourceNetworks']['literals'] = [{'name': k, 'value': v} for k, v in enumerate(self.sourceNetworks['literals'])]
+            json_data['sourceNetworks']['literals'] = [{'type': k, 'value': v} for k, v in enumerate(self.sourceNetworks['literals'])]
         if 'destinationNetworks' in self.__dict__:
             json_data['sourceNetworks'] = {'objects': self.destinationNetworks['objects']}
-            json_data['sourceNetworks']['literals'] = [{'name': k, 'value': v} for k, v in enumerate(self.destintationNetworks['literals'])]
+            json_data['sourceNetworks']['literals'] = [{'type': k, 'value': v} for k, v in enumerate(self.destintationNetworks['literals'])]
         if 'sourcePorts' in self.__dict__:
             json_data['sourcePorts'] = self.sourcePorts
         if 'destinationPorts' in self.__dict__:
@@ -4629,7 +4629,7 @@ class ACPRule(APIClassTemplate):
 
             if kwargs['sourceNetworks'].get('literals'):
                 for literal in kwargs['sourceNetworks']['literals']:
-                    self.sourceNetworks['literals'][literal['name']] = literal['value']
+                    self.sourceNetworks['literals'][literal['value']] = literal['type']
 
         if 'destinationNetworks' in kwargs:
             self.destinationNetworks = {'objects': [], 'literals': {}}
@@ -4639,7 +4639,7 @@ class ACPRule(APIClassTemplate):
 
             if kwargs['destinationNetworks'].get('literals'):
                 for literal in kwargs['destinationNetworks']['literals']:
-                    self.sourceNetworks['literals'][literal['name']] = literal['value']
+                    self.destinationNetworks['literals'][literal['value']] = literal['type']
 
         if 'urls' in kwargs:
             self.urls = kwargs['urls']
