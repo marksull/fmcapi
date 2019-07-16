@@ -742,3 +742,19 @@ class TestApiObjects(unittest.TestCase):
         rule_obj.destinationNetworks = {'literals': {'10.0.0.1': 'host'}}
         rule_obj.destination_network(action='clear')
         self.assertNotIn('destinationNetworks', self.__dict__)
+
+    @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
+    def test_ACPRule_parse_kwargs_with_source_networks(self, _):
+        rule_obj = api_objects.ACPRule(fmc=mock.Mock(), sourceNetworks={'objects' : [{'name': 'someExistingObjectName1'}],
+                                                                        'literals': [{'type': 'host', 'value': '10.0.0.1'}]
+                                                                        })
+        self.assertEqual([{'name': 'someExistingObjectName1'}], rule_obj.sourceNetworks['objects'])
+        self.assertEqual({'10.0.0.1': 'host'}, rule_obj.sourceNetworks['literals'])
+
+    @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
+    def test_ACPRule_parse_kwargs_with_destination_networks(self, _):
+        rule_obj = api_objects.ACPRule(fmc=mock.Mock(), destinationNetworks={'objects' : [{'name': 'someExistingObjectName1'}],
+                                                                             'literals': [{'type': 'host', 'value': '10.0.0.1'}]
+                                                                             })
+        self.assertEqual([{'name': 'someExistingObjectName1'}], rule_obj.destinationNetworks['objects'])
+        self.assertEqual({'10.0.0.1': 'host'}, rule_obj.destinationNetworks['literals'])
