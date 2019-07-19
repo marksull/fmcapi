@@ -4547,9 +4547,11 @@ class ACPRule(APIClassTemplate):
         if 'vlanTags' in self.__dict__:
             json_data['vlanTags'] = self.vlanTags
         if 'sourceNetworks' in self.__dict__:
-            json_data['sourceNetworks'] = self.sourceNetworks
+            json_data['sourceNetworks'] = {'objects': self.sourceNetworks['objects']}
+            json_data['sourceNetworks']['literals'] = [{'type': v, 'value': k} for k, v in self.sourceNetworks['literals'].items()]
         if 'destinationNetworks' in self.__dict__:
-            json_data['destinationNetworks'] = self.destinationNetworks
+            json_data['destinationNetworks'] = {'objects': self.destinationNetworks['objects']}
+            json_data['destinationNetworks']['literals'] = [{'type': v, 'value': k} for k, v in self.destinationNetworks['literals'].items()]
         if 'sourcePorts' in self.__dict__:
             json_data['sourcePorts'] = self.sourcePorts
         if 'destinationPorts' in self.__dict__:
@@ -4620,9 +4622,25 @@ class ACPRule(APIClassTemplate):
         if 'destinationPorts' in kwargs:
             self.destinationPorts = kwargs['destinationPorts']
         if 'sourceNetworks' in kwargs:
-            self.sourceNetworks = kwargs['sourceNetworks']
+            self.sourceNetworks = {'objects': [], 'literals': {}}
+
+            if kwargs['sourceNetworks'].get('objects'):
+                self.sourceNetworks['objects'] = kwargs['sourceNetworks']['objects']
+
+            if kwargs['sourceNetworks'].get('literals'):
+                for literal in kwargs['sourceNetworks']['literals']:
+                    self.sourceNetworks['literals'][literal['value']] = literal['type']
+
         if 'destinationNetworks' in kwargs:
-            self.destinationNetworks = kwargs['destinationNetworks']
+            self.destinationNetworks = {'objects': [], 'literals': {}}
+
+            if kwargs['destinationNetworks'].get('objects'):
+                self.destinationNetworks['objects'] = kwargs['destinationNetworks']['objects']
+
+            if kwargs['destinationNetworks'].get('literals'):
+                for literal in kwargs['destinationNetworks']['literals']:
+                    self.destinationNetworks['literals'][literal['value']] = literal['type']
+
         if 'urls' in kwargs:
             self.urls = kwargs['urls']
         if 'applications' in kwargs:
@@ -4906,41 +4924,96 @@ class ACPRule(APIClassTemplate):
                 del self.destinationPorts
                 logging.info('All Destination Ports removed from this ACPRule object.')
 
-    def source_network(self, action, name=''):
+    def source_network(self, action, name='', literal=None):
+        """
+        Adds Either object having name=name or literal with {value:<>, type:<>} to the sourceNetworks
+        field of acprule object
+        Args:
+            action: the action to be done
+            name: name of the object in question
+            literal: the literal in question
+        Returns:
+            None
+        """
+        # using dict() as default value is dangerous here, any thoughts/workarounds on this?
         logging.debug("In source_network() for ACPRule class.")
+        if literal and name != '':
+            raise ValueError('Only one of literals or name (object name) should be set while creating a source network')
+
+        if not hasattr(self, 'sourceNetworks'):
+            self.sourceNetworks = {'objects': [], 'literals': {}}
+
         if action == 'add':
-            ipaddresses_json = IPAddresses(fmc=self.fmc).get()
-            networkgroup_json = NetworkGroup(fmc=self.fmc).get()
-            fqdns_json = FQDNS(fmc=self.fmc).get()
-            items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', []) + fqdns_json.get('items', [])
-            new_net = None
-            for item in items:
-                if item['name'] == name:
-                    new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
-                    break
-            if new_net is None:
-                logging.warning('Network "{}" is not found in FMC.  Cannot add to sourceNetworks.'.format(name))
+
+            if literal:
+                type_ = get_networkaddress_type(literal)
+                self.sourceNetworks['literals'][literal] = type_
+                logging.info('Adding literal "{}" of type "{}" to sourceNetworks for this ACPRule.'.format(literal, type_))
+
             else:
-                if 'sourceNetworks' in self.__dict__:
-                    duplicate = False
-                    for obj in self.sourceNetworks['objects']:
-                        if obj['name'] == new_net['name']:
-                            duplicate = True
-                            break
-                    if not duplicate:
-                        self.sourceNetworks['objects'].append(new_net)
-                        logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
+                ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+                networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+                fqdns_json = FQDNS(fmc=self.fmc).get()
+                items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', []) + fqdns_json.get('items', [])
+                new_net = None
+                for item in items:
+                    if item['name'] == name:
+                        new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
+                        break
+                if new_net is None:
+                    logging.warning('Network "{}" is not found in FMC.  Cannot add to sourceNetworks.'.format(name))
                 else:
-                    self.sourceNetworks = {'objects': [new_net]}
-                    logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
+                    if 'sourceNetworks' in self.__dict__:
+                        # thus either some objects are already present in sourceNetworks,
+                        # or only literals are present in sourceNetworks
+                        if 'objects' in self.__dict__['sourceNetworks']:
+                            # some objects are already present
+                            duplicate = False
+                            # see if its a duplicate or not. If not, append to the list of
+                            # existing objects in sourceNetworks
+                            for obj in self.sourceNetworks['objects']:
+                                if obj['name'] == new_net['name']:
+                                    duplicate = True
+                                    break
+                            if not duplicate:
+                                self.sourceNetworks['objects'].append(new_net)
+                                logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
+                        else:
+                            # this means no objects were present in sourceNetworks,
+                            # and sourceNetworks contains literals only
+                            self.sourceNetworks.update({'objects': [new_net]})
+                            # So update the sourceNetworks dict which contained 'literals' key initially
+                            # to have a 'objects' key as well
+                            logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
+                    else:
+                        # None of literals or objects are present in sourceNetworks,
+                        # so initialize it with objects and update the provided object
+                        self.sourceNetworks = {'objects': [new_net]}
+                        logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
         elif action == 'remove':
             if 'sourceNetworks' in self.__dict__:
-                objects = []
-                for obj in self.sourceNetworks['objects']:
-                    if obj['name'] != name:
-                        objects.append(obj)
-                self.sourceNetworks['objects'] = objects
-                logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(name))
+                if name != '':
+                    # an object's name has been provided to be removed
+                    objects = []
+                    for obj in self.sourceNetworks['objects']:
+                        if obj['name'] != name:
+                            objects.append(obj)
+                    if len(objects) == 0:
+                        # it was the last object which was deleted now
+                        del self.sourceNetworks
+                        logging.info('Removed "{}" from sourceNetworks for this ACPRule'.format(name))
+                        logging.info('All Source Networks removed from this ACPRule object.')
+                    else:
+                        self.sourceNetworks['objects'] = objects
+                        logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(name))
+                else:
+                    # a literal value has been provided to be removed
+                    type_ = self.sourceNetworks['literals'].get(literal)
+                    if type_:
+                        self.sourceNetworks['literals'].pop(literal)
+                        logging.info('Removed literal "{}" of type "{}" from sourceNetworks for this ACPRule.'.format(literal, type_))
+                    else:
+                        logging.info('Unable to removed literal "{}" from sourceNetworks as it was not found'.format(literal))
             else:
                 logging.info("sourceNetworks doesn't exist for this ACPRule.  Nothing to remove.")
         elif action == 'clear':
@@ -4948,42 +5021,96 @@ class ACPRule(APIClassTemplate):
                 del self.sourceNetworks
                 logging.info('All Source Networks removed from this ACPRule object.')
 
-    def destination_network(self, action, name=''):
+    def destination_network(self, action, name='', literal=None):
+        """
+        Adds Either object having name=name or literal with {value:<>, type:<>} to the sourceNetworks
+        field of acprule object
+        Args:
+            action: the action to be done
+            name: name of the object in question
+            literal: the literal in question
+        Returns:
+            None
+        """
+        # using dict() as default value is dangerous here, any thoughts/workarounds on this?
+
         logging.debug("In destination_network() for ACPRule class.")
+        if literal and name != '':
+            raise ValueError('Only one of literals or name (object name) should be set while creating a source network')
+
+        if not hasattr(self, 'destinationNetworks'):
+            self.destinationNetworks = {'objects': [], 'literals': {}}
+
         if action == 'add':
-            ipaddresses_json = IPAddresses(fmc=self.fmc).get()
-            networkgroup_json = NetworkGroup(fmc=self.fmc).get()
-            fqdns_json = FQDNS(fmc=self.fmc).get()
-            items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', []) + fqdns_json.get('items', [])
-            new_net = None
-            for item in items:
-                if item['name'] == name:
-                    new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
-                    break
-            if new_net is None:
-                logging.warning('Network "{}" is not found in FMC.  Cannot add to '
-                                'destinationNetworks.'.format(name))
+
+            if literal:
+                type_ = get_networkaddress_type(literal)
+                self.destinationNetworks['literals'][literal] = type_
+                logging.info('Adding literal "{}" of type "{}" to destinationNetworks for this ACPRule.'.format(literal, type_))
+
             else:
-                if 'destinationNetworks' in self.__dict__:
-                    duplicate = False
-                    for obj in self.destinationNetworks['objects']:
-                        if obj['name'] == new_net['name']:
-                            duplicate = True
-                            break
-                    if not duplicate:
-                        self.destinationNetworks['objects'].append(new_net)
-                        logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
+                ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+                networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+                fqdns_json = FQDNS(fmc=self.fmc).get()
+                items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', []) + fqdns_json.get('items', [])
+                new_net = None
+                for item in items:
+                    if item['name'] == name:
+                        new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
+                        break
+                if new_net is None:
+                    logging.warning('Network "{}" is not found in FMC.  Cannot add to '
+                                    'destinationNetworks.'.format(name))
                 else:
-                    self.destinationNetworks = {'objects': [new_net]}
-                    logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
+                    if 'destinationNetworks' in self.__dict__:
+                        # thus either some objects are already present in destinationNetworks,
+                        # or only literals are present in destinationNetworks
+                        if 'objects' in self.__dict__['destinationNetworks']:
+                            # some objects are already present
+                            duplicate = False
+                            for obj in self.destinationNetworks['objects']:
+                                if obj['name'] == new_net['name']:
+                                    duplicate = True
+                                    break
+                            if not duplicate:
+                                self.destinationNetworks['objects'].append(new_net)
+                                logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
+                        else:
+                            # this means no objects were present in destinationNetworks,
+                            # and destinationNetworks contains literals only
+                            self.destinationNetworks.update({'objects': [new_net]})
+                            # So update the destinationNetworks dict which contained 'literals' key initially
+                            # to have a 'objects' key as well
+                            logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
+                    else:
+                        # None of literals or objects are present in destinationNetworks,
+                        # so initialize it with objects and update the provided object
+                        self.destinationNetworks = {'objects': [new_net]}
+                        logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
         elif action == 'remove':
             if 'destinationNetworks' in self.__dict__:
-                objects = []
-                for obj in self.destinationNetworks['objects']:
-                    if obj['name'] != name:
-                        objects.append(obj)
-                self.destinationNetworks['objects'] = objects
-                logging.info('Removed "{}" from destinationNetworks for this ACPRule.'.format(name))
+                if name != '':
+                    # an object's name has been provided to be removed
+                    objects = []
+                    for obj in self.destinationNetworks['objects']:
+                        if obj['name'] != name:
+                            objects.append(obj)
+                    if len(objects) == 0:
+                        # it was the last object which was deleted now
+                        del self.destinationNetworks
+                        logging.info('Removed "{}" from destinationNetworks for this ACPRule'.format(name))
+                        logging.info('All Destination Networks removed from this ACPRule object.')
+                    else:
+                        self.destinationNetworks['objects'] = objects
+                        logging.info('Removed "{}" from destinationNetworks for this ACPRule.'.format(name))
+                else:
+                    # a literal value has been provided to be removed
+                    type_ = self.destinationNetworks['literals'].get(literal)
+                    if type_:
+                        self.destinationNetworks['literals'].pop(literal)
+                        logging.info('Removed literal "{}" of type "{}" from destinationNetworks for this ACPRule.'.format(literal, type_))
+                    else:
+                        logging.info('Unable to removed literal "{}" from destinationNetworks as it was not found'.format(literal))
             else:
                 logging.info("destinationNetworks doesn't exist for this ACPRule.  Nothing to remove.")
         elif action == 'clear':
