@@ -4530,6 +4530,8 @@ class ACPRule(APIClassTemplate):
             json_data['destinationZones'] = self.destinationZones
         if 'applications' in self.__dict__:
             json_data['applications'] = self.applications
+        if 'section' in self.__dict__:
+            json_data['section'] = self.section
         return json_data
 
     def parse_kwargs(self, **kwargs):
@@ -4592,6 +4594,10 @@ class ACPRule(APIClassTemplate):
             self.urls = kwargs['urls']
         if 'applications' in kwargs:
             self.applications = kwargs['applications']
+        if 'section' in kwargs:
+            self.section = kwargs['section']
+        else:
+            self.section = 'Mandatory'
 
     def acp(self, name='', id=''):
         # either name or id of the ACP should be given
