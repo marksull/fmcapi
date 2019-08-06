@@ -4596,8 +4596,6 @@ class ACPRule(APIClassTemplate):
             self.applications = kwargs['applications']
         if 'section' in kwargs:
             self.section = kwargs['section']
-        else:
-            self.section = 'Mandatory'
 
     def acp(self, name='', id=''):
         # either name or id of the ACP should be given
