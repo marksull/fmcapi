@@ -4566,6 +4566,8 @@ class ACPRule(APIClassTemplate):
             json_data['destinationZones'] = self.destinationZones
         if 'applications' in self.__dict__:
             json_data['applications'] = self.applications
+        if 'section' in self.__dict__:
+            json_data['section'] = self.section
 
         return json_data
 
@@ -4651,6 +4653,8 @@ class ACPRule(APIClassTemplate):
             self.insertBefore = kwargs['insertBefore']
         if 'insertAfter' in kwargs:
             self.insertAfter = kwargs['insertAfter']
+        if 'section' in kwargs:
+            self.section = kwargs['section']
 
         # Check if suffix should be added to URL
         # self.url_suffix()
