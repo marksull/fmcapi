@@ -4613,8 +4613,6 @@ class ACPRule(APIClassTemplate):
             self.destinationZones = kwargs['destinationZones']
         if 'variableSet' in kwargs:
             self.variableSet = kwargs['variableSet']
-        else:
-            self.variable_set(action='set')
         if 'ipsPolicy' in kwargs:
             self.ipsPolicy = kwargs['ipsPolicy']
         if 'vlanTags' in kwargs:
