@@ -4509,6 +4509,8 @@ class ACPRule(APIClassTemplate):
             url = '{}insertAfter={}&'.format(url, self.insertAfter)
         if 'insertBefore' in self.__dict__ and 'insertAfter' in self.__dict__:
             logging.warning('ACP rule has both insertBefore and insertAfter params')
+        if 'section' in self.__dict__:
+            url = '{}section={}&'.format(url, self.section)
 
         return url[:-1]
 
@@ -4566,8 +4568,6 @@ class ACPRule(APIClassTemplate):
             json_data['destinationZones'] = self.destinationZones
         if 'applications' in self.__dict__:
             json_data['applications'] = self.applications
-        if 'section' in self.__dict__:
-            json_data['section'] = self.section
 
         return json_data
 
