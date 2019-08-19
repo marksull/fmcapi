@@ -420,6 +420,30 @@ class NetworkGroup(APIClassTemplate):
                     else:
                         self.objects = [new_net]
                         logging.info('Adding "{}" to NetworkGroup.'.format(name))
+        if action == 'addgroup':
+            netg1 = NetworkGroup(fmc=self.fmc)
+            response = netg1.get()
+            if 'items' in response:
+                new_net = None
+                for item in response['items']:
+                    if item['name'] == name:
+                        new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
+                        break
+                if new_net is None:
+                    logging.warning('Network "{}" is not found in FMC.  Cannot add to NetworkGroup.'.format(name))
+                else:
+                    if 'objects' in self.__dict__:
+                        duplicate = False
+                        for obj in self.objects:
+                            if obj['name'] == new_net['name']:
+                                duplicate = True
+                                break
+                        if not duplicate:
+                            self.objects.append(new_net)
+                            logging.info('Adding "{}" to NetworkGroup.'.format(name))
+                    else:
+                        self.objects = [new_net]
+                        logging.info('Adding "{}" to NetworkGroup.'.format(name))		
         elif action == 'remove':
             if 'objects' in self.__dict__:
                 objects_list = []
