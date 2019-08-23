@@ -156,7 +156,7 @@ class AutoNatRules(APIClassTemplate):
         if new_intf is None:
             logging.warning('Interface Object "{}" is not found in FMC.  Cannot add to sourceInterface.'.format(name))
         else:
-            if new_intf.type == "InterfaceGroup" and len(new_intf.interfaces) > 1:
+            if new_intf['type'] == "InterfaceGroup" and len(new_intf.interfaces) > 1:
                 logging.warning('Interface Object "{}" contains more than one physical interface.  '
                                 'Cannot add to sourceInterface.'.format(name))
             else:
@@ -176,7 +176,7 @@ class AutoNatRules(APIClassTemplate):
             logging.warning('Interface Object "{}" is not found in FMC.  Cannot add to destinationInterface.'
                             .format(name))
         else:
-            if new_intf.type == "InterfaceGroup" and len(new_intf.interfaces) > 1:
+            if new_intf['type'] == "InterfaceGroup" and len(new_intf.interfaces) > 1:
                 logging.warning('Interface Object "{}" contains more than one physical interface.  '
                                 'Cannot add to destinationInterface.'.format(name))
             else:
