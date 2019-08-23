@@ -1,7 +1,7 @@
 **ATTENTION:** From version 20190824.0 on there is a "breaking" change 
-from previous versions.  Now use ```import fmcapi``` to import the 
-package.  Add ```fmcapi.``` in front of all your API class object calls, 
-for example, use ```fmcapi.ACPRule``` instead of just ```ACPRule```.
+from previous versions.  Now use `import fmcapi` to import the 
+package.  Add `fmcapi.` in front of all your API class object calls, 
+for example, use `fmcapi.ACPRule` instead of just `ACPRule`.
 
 # fmcapi
 Provide an "easier to use" way of interacting with the Cisco FMC's API.
@@ -10,7 +10,7 @@ have "feature parity" with all that can be done with the FMC's API.
 That said, what is here works!
 
 The fmcapi is published to PyPI.  This means you can install it via pip 
-(**pip3 install fmcapi**)
+(`pip3 install fmcapi`)
 
 ## Features
 * Creation and maintenance of the connection with the FMC.  This 
@@ -51,7 +51,7 @@ basically is care and feeding of the token.
 
 * This is now an installable Python package via pip!  I'm heavily 
 developing this code so you might want to issue the  command 
-**pip3 install -U fmcapi** to update your installed version.
+```pip3 install -U fmcapi``` to update your installed version.
 
 ## Quickstart on how to use this package
 First install it with: **pip3 install fmcapi**
