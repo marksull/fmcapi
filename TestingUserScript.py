@@ -1900,10 +1900,6 @@ with fmcapi.FMC(host=host, username=username, password=password, autodeploy=auto
     test__port_object_group()
     test__intrusion_policy()
     test__audit()
-    '''
-
-    ''' 
-    # Not Working Tests
     test__url_group()
     test__network_group()
     test__acp_rule()
@@ -1911,8 +1907,8 @@ with fmcapi.FMC(host=host, username=username, password=password, autodeploy=auto
     test__manualnat()
     '''
 
-    ''' 
-    # Untested Tests
+    '''
+    # Untested Tests (These require an FTD device to interact with.)
     test__device()  # This test require registered devices
     test__device_with_task()  # This test require registered devices
     test__phys_interfaces()  # This test require registered devices

@@ -1,5 +1,6 @@
 from .apiclasstemplate import APIClassTemplate
 from .vlantag import VlanTag
+from .helper_functions import validate_vlans
 import logging
 
 

@@ -1,4 +1,5 @@
 from .apiclasstemplate import APIClassTemplate
+from .helper_functions import validate_vlans
 import logging
 
 

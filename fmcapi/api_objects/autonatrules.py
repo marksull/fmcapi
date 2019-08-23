@@ -2,6 +2,7 @@ from .apiclasstemplate import APIClassTemplate
 from .ftdnatpolicy import FTDNatPolicy
 from .ipaddresses import IPAddresses
 from .interfaceobject import InterfaceObject
+from .networkgroup import NetworkGroup
 import logging
 
 
