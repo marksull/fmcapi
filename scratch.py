@@ -1,10 +1,7 @@
 from fmcapi.fmc import *
-from fmcapi.api_objects import *
-from fmcapi.helper_functions import *
-import time
-from pprint import pprint as pp
+from fmcapi.api_objects.helper_functions import *
 import json
-import sys
+
 # ### Set these variables to match your environment. ### #
 
 host = 'fmclab.tor.afilias-int.info'

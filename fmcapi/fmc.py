@@ -9,9 +9,9 @@ Note: There exists a "Quick Start Guide" for the Cisco FMC API too.  Just Google
 import datetime
 import requests
 import time
+import json
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-
-from .api_objects import *
+import logging
 
 # Disable annoying HTTP warnings
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)

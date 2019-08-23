@@ -3,7 +3,6 @@ Unit testing, of a sort, all the created methods/classes.
 """
 
 from fmcapi.fmc import *
-from fmcapi.api_objects import *
 # from fmcapi.helper_functions import *
 import logging
 import time
