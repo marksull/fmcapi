@@ -2,7 +2,8 @@
 The fmcapi __init__.py file is called whenever someone imports the package into their program.
 """
 
-from .fmc import *
+import logging
+from .fmc import FMC
 from .api_objects import *
 
 logging.debug("In the fmcapi __init__.py file.")

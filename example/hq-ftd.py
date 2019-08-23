@@ -87,7 +87,7 @@ def main():
         # At the moment fmcapi doesn't have good support for waiting for the device registration process to complete.
         time.sleep(300)
         # The Device Class disables the fmc.autodeploy.  We are waiting for the registration, we can re-enable.
-        hq_fmc.autodeploy = True
+        # hq_fmc.autodeploy = True
 
         # Once registration is complete configure the interfaces of hq-ftd.
         hq_ftd_g00 = fmcapi.PhysicalInterface(fmc=hq_fmc, device_name=hq_ftd.name)
