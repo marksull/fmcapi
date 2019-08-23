@@ -1,10 +1,9 @@
------------------------------ **ATTENTION** -----------------------------
+**ATTENTION:**
 
 **From version 20190824.0 on there is a "breaking" change from previous 
 versions.  Now use `import fmcapi` to import the package.  Add `fmcapi.` 
 in front of all your API class object calls, for example, use 
 `fmcapi.ACPRule` instead of just `ACPRule`.**
----------------------------------------------------------------------
 
 # fmcapi
 Provide an "easier to use" way of interacting with the Cisco FMC's API.
