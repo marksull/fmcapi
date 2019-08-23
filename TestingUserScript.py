@@ -4,7 +4,7 @@ Unit testing, of a sort, all the created methods/classes.
 
 from fmcapi.fmc import *
 from fmcapi.api_objects import *
-from fmcapi.helper_functions import *
+# from fmcapi.helper_functions import *
 import logging
 import time
 import pprint
@@ -904,7 +904,7 @@ def test__phys_interfaces():
     intf1.activeMACAddress = "0050.5686.718f"
     intf1.standbyMACAddress = "0050.5686.0c2e"
     intf1.static(ipv4addr="10.254.0.3", ipv4mask=24)
-    intf1.sz(name="SZ-OUTSIDE1")
+    intf1.sz(name=sz1.name)
     intf2 = PhysicalInterface(fmc=fmc1, device_name="device_name")
     intf2.get(name="GigabitEthernet0/1")
     intf2.enabled = True
@@ -912,7 +912,7 @@ def test__phys_interfaces():
     intf2.activeMACAddress = "0050.5686.821d"
     intf2.standbyMACAddress = "0050.5686.11cb"
     intf2.dhcp()
-    intf2.sz(name="SZ-OUTSIDE2")
+    intf2.sz(name=sz2.name)
     intf1.put()
     time.sleep(1)
     intf2.put()
@@ -1126,8 +1126,7 @@ def test__ipv4_static_routes():
     iphost1 = IPHost(fmc=fmc1, name='_iphost1' + namer, value='10.254.0.1')
     iphost1.post()
     ipnet1 = IPNetwork(fmc=fmc1, name='_ipnet1' + namer, value='192.0.2.0/25')
-    ipnet2 = IPNetwork(fmc=fmc1, name='_ipnet2' +
-                       namer, value='192.0.2.128/25')
+    ipnet2 = IPNetwork(fmc=fmc1, name='_ipnet2' + namer, value='192.0.2.128/25')
     ipnet1.post()
     ipnet2.post()
 
@@ -1336,8 +1335,7 @@ def test__access_control_policy():
 
 
 def test__acp_rule():
-    logging.info(
-        '# In preparation for testing ACPRule methods, set up some known objects in the FMC.')
+    logging.info('# In preparation for testing ACPRule methods, set up some known objects in the FMC.')
     # Build an IP host object
     iphost1 = IPHost(fmc=fmc1, name='_iphost1', value='7.7.7.7')
     iphost1.post()
