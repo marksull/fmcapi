@@ -17,7 +17,6 @@ class Device(APIClassTemplate):
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for Device class.")
-        self.post_wait_time = 300
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
@@ -70,8 +69,6 @@ class Device(APIClassTemplate):
             self.keepLocalEvents = kwargs['keepLocalEvents']
         if 'prohibitPacketTransfer' in kwargs:
             self.prohibitPacketTransfer = kwargs['prohibitPacketTransfer']
-        if 'post_wait_time' in kwargs:
-            self.post_wait_time = kwargs['post_wait_time']
 
     def licensing(self, action, name='BASE'):
         logging.debug("In licensing() for Device class.")
@@ -120,6 +117,8 @@ class Device(APIClassTemplate):
         response = super().post(**kwargs)
         if 'post_wait_time' in kwargs:
             self.post_wait_time = kwargs['post_wait_time']
+        else:
+            self.post_wait_time = 300
         logging.info(f'Device registration task submitted.  Waiting {self.post_wait_time} seconds for it to complete.')
         time.sleep(self.post_wait_time)
         return response

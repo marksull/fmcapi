@@ -96,7 +96,7 @@ def main():
         hq_ftd.licensing(action='add', name='VPN')
         hq_ftd.licensing(action='add', name='BASE')
         # Push to FMC to start device registration.
-        hq_ftd.post(post_wait_time=240)
+        hq_ftd.post(post_wait_time=300)
 
         # Once registration is complete configure the interfaces of hq-ftd.
         hq_ftd_g00 = fmcapi.PhysicalInterface(fmc=fmc1, device_name=hq_ftd.name)
