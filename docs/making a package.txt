@@ -2,6 +2,7 @@ Install:
 python3-pip, twine
 
 Steps:
+Update Version number in setup.py (today's date with ".serial" appended, starting with 0)
 python3 setup.py bdist_wheel
 python3 setup.py sdist
 twine upload dist/*
