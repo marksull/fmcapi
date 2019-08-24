@@ -2,7 +2,7 @@
 Unit testing, of a sort, all the created methods/classes.
 """
 
-import fmcapi
+import fmcapi  # You can use 'from fmcapi import *' but it is best practices to keep the namespaces seperate.
 import time
 
 # ### Set these variables to match your environment. ### #
@@ -31,20 +31,24 @@ def main():
         sz_dmz.post()
         sz_dmz.get()
 
-        # Create Network Objects for HQ uses
+        # Create Network Objects
         hq_dfgw_gateway = fmcapi.IPHost(fmc=fmc1, name='hq-default-gateway', value='100.64.0.1')
         hq_dfgw_gateway.post()
-        hq_dfgw_gateway.get()
+        # hq_dfgw_gateway.get()
         hq_lan = fmcapi.IPNetwork(fmc=fmc1, name='hq-lan', value='10.0.0.0/24')
         hq_lan.post()
         all_lans = fmcapi.IPNetwork(fmc=fmc1, name='all-lans', value='10.0.0.0/8')
         all_lans.post()
+        hq_fmc = fmcapi.IPHost(fmc=fmc1, name='hq_fmc', value='10.0.0.10')
+        hq_fmc.post()
+        fmc_public = fmcapi.IPHost(fmc=fmc1, name='fmc_public_ip', value='100.64.0.10')
+        fmc_public.post()
 
-        # Create an ACP for HQ device.
-        acp = fmcapi.AccessControlPolicy(fmc=fmc1, name='HQ')
+        # Create an ACP
+        acp = fmcapi.AccessControlPolicy(fmc=fmc1, name='ACP Policy')
         acp.post()
 
-        # Create ACP Rule for HQ ACP to permit hq_lan traffic.
+        # Create ACP Rule to permit hq_lan traffic inside to outside.
         hq_acprule = fmcapi.ACPRule(fmc=fmc1,
                                     acp_name=acp.name,
                                     name='Permit HQ LAN',
@@ -61,16 +65,25 @@ def main():
         nat = fmcapi.FTDNatPolicy(fmc=fmc1, name='NAT Policy')
         nat.post()
 
-        # Build NAT Rule
-        autonat = fmcapi.AutoNatRules(fmc=fmc1,
-                               natType="DYNAMIC",
-                               interfaceInTranslatedNetwork=True,
-                               )
+        # Build NAT Rule to NAT all_lans to interface outside
+        autonat = fmcapi.AutoNatRules(fmc=fmc1)
+        autonat.natType = "DYNAMIC"
+        autonat.interfaceInTranslatedNetwork = True
         autonat.original_network(all_lans.name)
         autonat.source_intf(name=sz_inside.name)
         autonat.destination_intf(name=sz_outside.name)
         autonat.nat_policy(name=nat.name)
         autonat.post()
+
+        # Build NAT Rule to allow inbound traffic to FMC (Branches need to register to FMC.)
+        fmc_nat = fmcapi.ManualNatRules(fmc=fmc1)
+        fmc_nat.natType = "STATIC"
+        fmc_nat.original_source(hq_fmc.name)
+        fmc_nat.translated_source(fmc_public.name)
+        fmc_nat.source_intf(name=sz_inside.name)
+        fmc_nat.destination_intf(name=sz_outside.name)
+        fmc_nat.nat_policy(name=nat.name)
+        fmc_nat.post()
 
         # Add hq-ftd device to FMC
         hq_ftd = fmcapi.Device(fmc=fmc1)
@@ -85,7 +98,7 @@ def main():
         hq_ftd.licensing(action='add', name='BASE')
         # Push to FMC to start device registration.
         hq_ftd.post()
-        # At the moment fmcapi doesn't have good support for waiting for the device registration process to complete.
+        # At the moment doesn't have good support for waiting for the device registration process to complete.
         wait_time = 300
         print(f'Waiting {wait_time} seconds for device discovery.')
         time.sleep(wait_time)
@@ -103,13 +116,13 @@ def main():
 
         hq_ftd_g01 = fmcapi.PhysicalInterface(fmc=fmc1, device_name=hq_ftd.name)
         hq_ftd_g01.get(name="GigabitEthernet0/1")
-        hq_ftd_g01.enabled = True  # This doesn't work yet for some reason.
+        hq_ftd_g01.enabled = False  # This doesn't work yet for some reason.
         hq_ftd_g01.ifname = "OUT"
         hq_ftd_g01.static(ipv4addr="100.64.0.200", ipv4mask=24)
         hq_ftd_g01.sz(name="outside")
         hq_ftd_g01.put()
 
-        # Build static default route.
+        # Build static default route for HQ FTD
         hq_default_route = fmcapi.IPv4StaticRoute(fmc=fmc1, name='hq_default_route')
         hq_default_route.device(device_name=hq_ftd.name)
         hq_default_route.networks(action='add', networks=['any-ipv4'])
@@ -118,7 +131,7 @@ def main():
         hq_default_route.metricValue = 1
         hq_default_route.post()
 
-        # Associate NAT policy with device.
+        # Associate NAT policy with HQ FTD device.
         devices = [{'name': hq_ftd.name, 'type': 'device'}]
         assign_nat_policy = fmcapi.PolicyAssignments(fmc=fmc1)
         assign_nat_policy.ftd_natpolicy(name=nat.name, devices=devices)

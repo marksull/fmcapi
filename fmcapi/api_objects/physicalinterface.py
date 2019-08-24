@@ -76,8 +76,7 @@ class PhysicalInterface(APIClassTemplate):
         if 'securityZone' in kwargs:
             self.securityZone = kwargs['securityZone']
         if 'enabled' in kwargs:
-            # This doesn't seem to be working
-            self.enabled = kwargs['enabled']
+            self.enabled = kwargs['enabled']  # This doesn't seem to be working
         else:
             self.enabled = False
         if 'MTU' in kwargs:
