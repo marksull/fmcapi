@@ -866,7 +866,7 @@ def test__device_with_task():
     pp.pprint(obj2.format_data())
     print('\n')
     response = obj2.post()
-    wait_for_task(response["metadata"]["task"], 30)
+    # wait_for_task(response["metadata"]["task"], 30)
 
     # Wait some additional time to complete device registration before deletion
     time.sleep(180)
@@ -1817,7 +1817,7 @@ def test__upgrades():
 
 
 def wait_for_task(task, wait_time=10):
-    TASK_COMPLETED_STATES = ['Success', 'SUCCESS', 'COMPLETED']
+    task_completed_states = ['Success', 'SUCCESS', 'COMPLETED']
     try:
         status = fmcapi.TaskStatuses(fmc=fmc1, id=task["id"])
         current_status = status.get()
@@ -1831,7 +1831,7 @@ def wait_for_task(task, wait_time=10):
 
         OTOH, a device HA operation will update its status to "Success" on completion.  Hence the two different checks.
         '''
-        while current_status["status"] is not None and current_status["status"] not in TASK_COMPLETED_STATES:
+        while current_status["status"] is not None and current_status["status"] not in task_completed_states:
             # Lot of inconsistencies with the type of data a task can return
             if 'taskType' in current_status.keys():
                 print("Task: %s %s %s" % (

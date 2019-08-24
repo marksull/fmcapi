@@ -236,7 +236,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             if not item['canBeDeployed']:
                 pass
             else:
-                uuids.append(item['device']['id'])
+                uuids.append(item)
         return uuids
 
     def deploy_changes(self):
@@ -252,17 +252,21 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         if not devices:
             logging.info("No devices need deployed.\n\n")
             return
-        nowtime = int(1000000 * datetime.datetime.now().timestamp())
         json_data = {
             'type': 'DeploymentRequest',
             'forceDeploy': True,
             'ignoreWarning': True,
-            'version': nowtime,
+            'version': str(int(1000000 * datetime.datetime.utcnow().timestamp())),
             'deviceList': []
         }
         for device in devices:
             logging.info("Adding device {} to deployment queue.".format(device))
-            json_data['deviceList'].append(device)
+            json_data['deviceList'].append(device['device']['id'])
+            # From the list of deployable devices get the version value that is smallest.
+            if int(json_data['version']) > int(device['version']):
+                logging.info(f"Updating version to {device['version']}")
+                json_data['version'] = device['version']
+
         logging.info("Deploying changes to devices.")
         response = self.send_to_api(method='post', url=url, json_data=json_data)
         return response['deviceList']

@@ -142,8 +142,8 @@ class APIClassTemplate(object):
                 logging.warning("\tGET query for {} is not found.\n\t\t"
                                 "Response: {}".format(self.name, json.dumps(response)))
         else:
-            logging.info("GET query for object with no name or id set.  Returning full list of these object types "
-                         "instead.")
+            logging.info("GET query for object with no name or id set.  "
+                         "Returning full list of these object types instead.")
             url = f'{self.URL}?expanded=true&limit={self.limit}'
             response = self.fmc.send_to_api(method='get', url=url)
         if 'items' not in response:

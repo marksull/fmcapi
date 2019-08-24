@@ -2,8 +2,7 @@
 Unit testing, of a sort, all the created methods/classes.
 """
 
-import fmcapi  # You can use 'from fmcapi import *' but it is best practices to keep the namespaces seperate.
-import time
+import fmcapi  # You can use 'from fmcapi import *' but it is best practices to keep the namespaces separate.
 
 # ### Set these variables to match your environment. ### #
 host = '10.0.0.10'
@@ -20,21 +19,25 @@ def main():
     10.0.0.10 cisco123' has already been manually typed on the FTD's CLI.
     """
     with fmcapi.FMC(host=host, username=username, password=password, autodeploy=autodeploy) as fmc1:
+        # Create an ACP
+        acp = fmcapi.AccessControlPolicy(fmc=fmc1, name='ACP Policy')
+        # I intentially put a "space" in the ACP name to show that fmcapi will "fix" that for you.
+        acp.post()
+
         # Create Security Zones
         sz_inside = fmcapi.SecurityZone(fmc=fmc1, name='inside', interfaceMode='ROUTED')
         sz_inside.post()
-        sz_inside.get()
+        # sz_inside.get()
         sz_outside = fmcapi.SecurityZone(fmc=fmc1, name='outside', interfaceMode='ROUTED')
         sz_outside.post()
-        sz_outside.get()
+        # sz_outside.get()
         sz_dmz = fmcapi.SecurityZone(fmc=fmc1, name='dmz', interfaceMode='ROUTED')
         sz_dmz.post()
-        sz_dmz.get()
+        # sz_dmz.get()
 
         # Create Network Objects
         hq_dfgw_gateway = fmcapi.IPHost(fmc=fmc1, name='hq-default-gateway', value='100.64.0.1')
         hq_dfgw_gateway.post()
-        # hq_dfgw_gateway.get()
         hq_lan = fmcapi.IPNetwork(fmc=fmc1, name='hq-lan', value='10.0.0.0/24')
         hq_lan.post()
         all_lans = fmcapi.IPNetwork(fmc=fmc1, name='all-lans', value='10.0.0.0/8')
@@ -43,10 +46,6 @@ def main():
         hq_fmc.post()
         fmc_public = fmcapi.IPHost(fmc=fmc1, name='fmc_public_ip', value='100.64.0.10')
         fmc_public.post()
-
-        # Create an ACP
-        acp = fmcapi.AccessControlPolicy(fmc=fmc1, name='ACP Policy')
-        acp.post()
 
         # Create ACP Rule to permit hq_lan traffic inside to outside.
         hq_acprule = fmcapi.ACPRule(fmc=fmc1,
@@ -97,13 +96,7 @@ def main():
         hq_ftd.licensing(action='add', name='VPN')
         hq_ftd.licensing(action='add', name='BASE')
         # Push to FMC to start device registration.
-        hq_ftd.post()
-        # At the moment doesn't have good support for waiting for the device registration process to complete.
-        wait_time = 300
-        print(f'Waiting {wait_time} seconds for device discovery.')
-        time.sleep(wait_time)
-        # The Device Class disables the fmc.autodeploy.  We are waiting for the registration, we can re-enable.
-        # hq_fmc.autodeploy = True
+        hq_ftd.post(post_wait_time=240)
 
         # Once registration is complete configure the interfaces of hq-ftd.
         hq_ftd_g00 = fmcapi.PhysicalInterface(fmc=fmc1, device_name=hq_ftd.name)
