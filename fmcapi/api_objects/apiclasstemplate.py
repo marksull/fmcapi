@@ -29,6 +29,8 @@ class APIClassTemplate(object):
             self.limit = kwargs['limit']
         else:
             self.limit = self.fmc.limit
+        if 'offset' in kwargs:
+            self.offset = kwargs['offset']
         if 'name' in kwargs:
             self.name = syntax_correcter(kwargs['name'], permitted_syntax=self.VALID_CHARACTERS_FOR_NAME)
             if self.name != kwargs['name']:
@@ -123,7 +125,7 @@ class APIClassTemplate(object):
             if self.FILTER_BY_NAME:
                 url = '{}?name={}&expanded=true'.format(self.URL, self.name)
             else:
-                url = f'{self.URL}?expanded=true&limit={self.limit}'
+                url = f'{self.URL}?expanded=true&limit={self.limit}&offset={self.offset}'
             response = self.fmc.send_to_api(method='get', url=url)
             if 'items' not in response:
                 response['items'] = []
