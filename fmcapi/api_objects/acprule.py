@@ -502,7 +502,7 @@ class ACPRule(APIClassTemplate):
                 if self.fmc.serverVersion >= '6.4':
                     fqdns_json = FQDNS(fmc=self.fmc).get()
                 else:
-                    fqdns_json = {'items': ''}
+                    fqdns_json = {'items': []}
                 items = ipaddresses_json.get('items', []) + \
                     networkgroup_json.get('items', []) + fqdns_json.get('items', [])
                 new_net = None
@@ -607,7 +607,7 @@ class ACPRule(APIClassTemplate):
                 if self.fmc.serverVersion >= '6.4':
                     fqdns_json = FQDNS(fmc=self.fmc).get()
                 else:
-                    fqdns_json = {'items': ''}
+                    fqdns_json = {'items': []}
                 items = ipaddresses_json.get('items', []) + \
                     networkgroup_json.get('items', []) + fqdns_json.get('items', [])
                 new_net = None
