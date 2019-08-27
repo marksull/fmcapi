@@ -138,8 +138,7 @@ class SubInterfaces(APIClassTemplate):
             self.URL = '{}{}/{}/subinterfaces'.format(self.fmc.configuration_url, self.PREFIX_URL, self.device_id)
             self.device_added_to_url = True
         else:
-            logging.warning('Device {} not found.  Cannot set up device for '
-                            'SubInterfaces.'.format(device_name))
+            logging.warning('Device {} not found.  Cannot set up device for SubInterfaces.'.format(device_name))
 
     def sz(self, name):
         logging.debug("In sz() for SubInterfaces class.")

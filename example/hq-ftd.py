@@ -3,14 +3,24 @@ Unit testing, of a sort, all the created methods/classes.
 """
 
 import fmcapi  # You can use 'from fmcapi import *' but it is best practices to keep the namespaces separate.
+import logging
 
-# ### Set these variables to match your environment. ### #
-host = '10.0.0.10'
-username = 'apiadmin'
-password = 'Admin123'
-autodeploy = True
+logging.getLogger(__name__).addHandler(logging.NullHandler())
 
-DEVICE_REGISTRATION_PSK = 'cisco123'
+# Its always good to set up a log file.
+logging_format = '%(asctime)s - %(levelname)s:%(filename)s:%(lineno)s - %(message)s'
+logging_dateformat = '%Y/%m/%d-%H:%M:%S'
+# Logging level options are logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR, logging.CRITICAL
+logging_level = logging.INFO
+# logging_level = logging.DEBUG
+logging_filename = 'output.log'
+logging.basicConfig(format=logging_format,
+                    datefmt=logging_dateformat,
+                    filename=logging_filename,
+                    filemode='w',
+                    level=logging_level)
+
+logging.debug("In the fmcapi __init__.py file.")
 
 
 def main():
@@ -18,7 +28,12 @@ def main():
     The hq-ftd device already has 10.0.0.254 on its manage interface and the command 'configure network manager
     10.0.0.10 cisco123' has already been manually typed on the FTD's CLI.
     """
-    with fmcapi.FMC(host=host, username=username, password=password, autodeploy=autodeploy) as fmc1:
+    # ### Set these variables to match your environment. ### #
+    host = '10.0.0.10'
+    username = 'apiadmin'
+    password = 'Admin123'
+
+    with fmcapi.FMC(host=host, username=username, password=password, autodeploy=True) as fmc1:
         # Create an ACP
         acp = fmcapi.AccessControlPolicy(fmc=fmc1, name='ACP Policy')
         # I intentially put a "space" in the ACP name to show that fmcapi will "fix" that for you.
@@ -88,7 +103,7 @@ def main():
         hq_ftd = fmcapi.Device(fmc=fmc1)
         # Minimum things set.
         hq_ftd.hostName = '10.0.0.254'
-        hq_ftd.regKey = DEVICE_REGISTRATION_PSK
+        hq_ftd.regKey = 'cisco123'
         hq_ftd.acp(name=acp.name)
         # Other stuff I want set.
         hq_ftd.name = 'hq-ftd'
