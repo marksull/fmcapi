@@ -240,6 +240,18 @@ class ACPRule(APIClassTemplate):
             self.variableSet = {'name': vs.name, 'id': vs.id, 'type': vs.type}
             logging.info('VariableSet set to "{}" for this ACPRule object.'.format(name))
 
+    def file_policy(self, action, name='None'):
+        logging.debug("In file_policy() for ACPRule class.")
+        if action == 'clear':
+            if 'file_policy' in self.__dict__:
+                del self.file_policy
+                logging.info('file_policy removed from this ACPRule object.')
+        elif action == 'set':
+            fp = file_policy(fmc=self.fmc)
+            fp.get(name=name)
+            self.file_policy = {'name': fp.name, 'id': fp.id, 'type': fp.type}
+            logging.info('file_policy set to "{}" for this ACPRule object.'.format(name))
+
     def source_zone(self, action, name=''):
         logging.debug("In source_zone() for ACPRule class.")
         if action == 'add':
