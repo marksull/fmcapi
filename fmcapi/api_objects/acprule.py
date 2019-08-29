@@ -249,7 +249,7 @@ class ACPRule(APIClassTemplate):
         logging.debug("In file_policy() for ACPRule class.")
         if action == 'clear':
             if 'file_policy' in self.__dict__:
-                del self.fp
+                del self.filePolicy
                 logging.info('file_policy removed from this ACPRule object.')
         elif action == 'set':
             fp = FilePolicies(fmc=self.fmc)
