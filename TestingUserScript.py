@@ -1373,6 +1373,7 @@ def test__acp_rule():
     # Build a URL object
     url1 = fmcapi.URL(fmc=fmc1, name='_url1', url='asdf.org')
     url1.post()
+    url1.get()
     lists = [{"type": url1.type, "id": url1.id, "name": url1.name}]
     # Build a VLAN Tag object
     vlantag1 = fmcapi.VlanTag(fmc=fmc1, name='_vlantag1', data={
@@ -1399,6 +1400,8 @@ def test__acp_rule():
     # Build an ACP Object
     acp1 = fmcapi.AccessControlPolicy(fmc=fmc1, name=namer)
     acp1.post()
+    # Get a file_policy
+    fp = fmcapi.FilePolicies(fmc=fmc1, name='daxm_test')
     time.sleep(1)
     logging.info('# Setup of objects for ACPRule test done.\n')
 
@@ -1426,7 +1429,8 @@ def test__acp_rule():
     acprule1.destination_network(action='add', name=ipnet1.name)
     acprule1.destination_network(action='add', name=iprange1.name)
     acprule1.destination_network(action='add', name=fqdns1.name)
-    acprule1.urls = {"objects": lists}
+    # acprule1.urls(name=url1.name)
+    acprule1.file_policy(action='set', name=fp.name)
     acprule1.post()
 
     logging.info('# Test ACPRule done.\n')
@@ -1451,7 +1455,6 @@ def test__acp_rule():
     obj12.delete()
     logging.info('# Cleanup of objects for ACPRule test done.\n')
     time.sleep(sleep_time_between_tests)
-
 
 def test__audit():
     logging.info('# Testing fmc.audit() method.')
@@ -1873,12 +1876,12 @@ with fmcapi.FMC(host=host, username=username, password=password, autodeploy=auto
     pp = pprint.PrettyPrinter(indent=4)
     time.sleep(1)
 
-    test__filepolicies()
     ''' 
     # Working Tests
     test__application()  # This test can take a lONG time to run.
     test__ports()
     test__fmc_version()
+    test__filepolicies()
     test__url_category()
     test__application_type()
     test__application_tag()
@@ -1916,9 +1919,9 @@ with fmcapi.FMC(host=host, username=username, password=password, autodeploy=auto
     test__audit()
     test__url_group()
     test__network_group()
-    test__acp_rule()
     test__autonat()
     test__manualnat()
+    test__acp_rule()
     '''
 
     '''

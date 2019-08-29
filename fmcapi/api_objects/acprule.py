@@ -9,7 +9,10 @@ from .protocolport import ProtocolPort
 from .fqdns import FQDNS
 from .networkgroup import NetworkGroup
 from .ipaddresses import IPAddresses
+from .filepolicies import FilePolicies
+
 from .helper_functions import get_networkaddress_type
+
 import logging
 
 
@@ -107,6 +110,8 @@ class ACPRule(APIClassTemplate):
             json_data['destinationZones'] = self.destinationZones
         if 'applications' in self.__dict__:
             json_data['applications'] = self.applications
+        if 'filePolicy' in self.__dict__:
+            json_data['filePolicy'] = self.filePolicy
 
         return json_data
 
@@ -118,8 +123,6 @@ class ACPRule(APIClassTemplate):
                 self.action = kwargs['action']
             else:
                 logging.warning('Action {} is not a valid action.'.format(kwargs['action']))
-        # else:
-        #    self.action = 'BLOCK'
         if 'acp_id' in kwargs:
             self.acp(acp_id=kwargs['acp_id'])
         if 'acp_name' in kwargs:
@@ -192,6 +195,8 @@ class ACPRule(APIClassTemplate):
             self.insertAfter = kwargs['insertAfter']
         if 'section' in kwargs:
             self.section = kwargs['section']
+        if 'file_policy' in kwargs:
+            self.filePolicy = kwargs['file_policy']
 
         # Check if suffix should be added to URL
         # self.url_suffix()
@@ -244,12 +249,12 @@ class ACPRule(APIClassTemplate):
         logging.debug("In file_policy() for ACPRule class.")
         if action == 'clear':
             if 'file_policy' in self.__dict__:
-                del self.file_policy
+                del self.fp
                 logging.info('file_policy removed from this ACPRule object.')
         elif action == 'set':
-            fp = file_policy(fmc=self.fmc)
+            fp = FilePolicies(fmc=self.fmc)
             fp.get(name=name)
-            self.file_policy = {'name': fp.name, 'id': fp.id, 'type': fp.type}
+            self.filePolicy = {'name': fp.name, 'id': fp.id, 'type': fp.type}
             logging.info('file_policy set to "{}" for this ACPRule object.'.format(name))
 
     def source_zone(self, action, name=''):
