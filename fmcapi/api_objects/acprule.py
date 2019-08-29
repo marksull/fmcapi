@@ -393,7 +393,7 @@ class ACPRule(APIClassTemplate):
                 if 'sourcePorts' in self.__dict__:
                     new_port = {'name': item.name, 'id': item.id, 'type': item.type}
                     duplicate = False
-                    if not 'objects' in self.sourcePorts:
+                    if 'objects' not in self.sourcePorts:
                         self.__dict__['sourcePorts']['objects'] = []
                     for obj in self.sourcePorts['objects']:
                         if obj['name'] == new_port['name']:
@@ -446,7 +446,7 @@ class ACPRule(APIClassTemplate):
                 if 'destinationPorts' in self.__dict__:
                     new_port = {'name': item.name, 'id': item.id, 'type': item.type}
                     duplicate = False
-                    if not 'objects' in self.destinationPorts:
+                    if 'objects' not in self.destinationPorts:
                         self.__dict__['destinationPorts']['objects'] = []
                     for obj in self.destinationPorts['objects']:
                         if obj['name'] == new_port['name']:
@@ -517,7 +517,8 @@ class ACPRule(APIClassTemplate):
                 else:
                     fqdns_json = {'items': []}
                 items = ipaddresses_json.get('items', []) + \
-                    networkgroup_json.get('items', []) + fqdns_json.get('items', [])
+                    networkgroup_json.get('items', []) + \
+                    fqdns_json.get('items', [])
                 new_net = None
                 for item in items:
                     if item['name'] == name:
@@ -618,7 +619,8 @@ class ACPRule(APIClassTemplate):
                 else:
                     fqdns_json = {'items': []}
                 items = ipaddresses_json.get('items', []) + \
-                    networkgroup_json.get('items', []) + fqdns_json.get('items', [])
+                    networkgroup_json.get('items', []) + \
+                    fqdns_json.get('items', [])
                 new_net = None
                 for item in items:
                     if item['name'] == name:
