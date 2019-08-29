@@ -42,15 +42,15 @@ class ACPRule(APIClassTemplate):
         url = '?'
 
         if 'category' in self.__dict__:
-            url = '{}category={}&'.format(url, self.category)
+            url = f'{url}category={self.category}&'
         if 'insertBefore' in self.__dict__:
-            url = '{}insertBefore={}&'.format(url, self.insertBefore)
+            url = f'{url}insertBefore={self.insertBefore}&'
         if 'insertAfter' in self.__dict__:
-            url = '{}insertAfter={}&'.format(url, self.insertAfter)
+            url = f'{url}insertAfter={self.insertAfter}&'
         if 'insertBefore' in self.__dict__ and 'insertAfter' in self.__dict__:
             logging.warning('ACP rule has both insertBefore and insertAfter params')
         if 'section' in self.__dict__:
-            url = '{}section={}&'.format(url, self.section)
+            url = f'{url}section={self.section}&'
 
         return url[:-1]
 
@@ -59,7 +59,7 @@ class ACPRule(APIClassTemplate):
         logging.debug("In __init__() for ACPRule class.")
         self.type = 'AccessRule'
         self.parse_kwargs(**kwargs)
-        self.URL = '{}{}'.format(self.URL, self.URL_SUFFIX)
+        self.URL = f'{self.URL}{self.URL_SUFFIX}'
 
     def format_data(self):
         logging.debug("In format_data() for ACPRule class.")
@@ -122,7 +122,7 @@ class ACPRule(APIClassTemplate):
             if kwargs['action'] in self.VALID_FOR_ACTION:
                 self.action = kwargs['action']
             else:
-                logging.warning('Action {} is not a valid action.'.format(kwargs['action']))
+                logging.warning(f"Action {kwargs['action']} is not a valid action.")
         if 'acp_id' in kwargs:
             self.acp(acp_id=kwargs['acp_id'])
         if 'acp_name' in kwargs:
@@ -206,18 +206,17 @@ class ACPRule(APIClassTemplate):
         logging.debug("In acp() for ACPRule class.")
         if acp_id != '':
             self.acp_id = acp_id
-            self.URL = '{}{}/{}/accessrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.acp_id)
+            self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.acp_id}/accessrules'
             self.acp_added_to_url = True
         elif name != '':
             acp1 = AccessControlPolicy(fmc=self.fmc)
             acp1.get(name=name)
             if 'id' in acp1.__dict__:
                 self.acp_id = acp1.id
-                self.URL = '{}{}/{}/accessrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.acp_id)
+                self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.acp_id}/accessrules'
                 self.acp_added_to_url = True
             else:
-                logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
-                                'ACPRule.'.format(name))
+                logging.warning(f'Access Control Policy {name} not found.  Cannot set up accessPolicy for ACPRule.')
         else:
             logging.error('No accessPolicy name or ID was provided.')
 
@@ -231,7 +230,7 @@ class ACPRule(APIClassTemplate):
             ips = IntrusionPolicy(fmc=self.fmc, name=name)
             ips.get()
             self.ipsPolicy = {'name': ips.name, 'id': ips.id, 'type': ips.type}
-            logging.info('Intrusion Policy set to "{}" for this ACPRule object.'.format(name))
+            logging.info(f'Intrusion Policy set to "{name}" for this ACPRule object.')
 
     def variable_set(self, action, name='Default-Set'):
         logging.debug("In variable_set() for ACPRule class.")
@@ -243,7 +242,7 @@ class ACPRule(APIClassTemplate):
             vs = VariableSet(fmc=self.fmc)
             vs.get(name=name)
             self.variableSet = {'name': vs.name, 'id': vs.id, 'type': vs.type}
-            logging.info('VariableSet set to "{}" for this ACPRule object.'.format(name))
+            logging.info(f'VariableSet set to "{name}" for this ACPRule object.')
 
     def file_policy(self, action, name='None'):
         logging.debug("In file_policy() for ACPRule class.")
@@ -255,7 +254,7 @@ class ACPRule(APIClassTemplate):
             fp = FilePolicies(fmc=self.fmc)
             fp.get(name=name)
             self.filePolicy = {'name': fp.name, 'id': fp.id, 'type': fp.type}
-            logging.info('file_policy set to "{}" for this ACPRule object.'.format(name))
+            logging.info(f'file_policy set to "{name}" for this ACPRule object.')
 
     def source_zone(self, action, name=''):
         logging.debug("In source_zone() for ACPRule class.")
@@ -272,12 +271,12 @@ class ACPRule(APIClassTemplate):
                             break
                     if not duplicate:
                         self.sourceZones['objects'].append(new_zone)
-                        logging.info('Adding "{}" to sourceZones for this ACPRule.'.format(name))
+                        logging.info(f'Adding "{name}" to sourceZones for this ACPRule.')
                 else:
                     self.sourceZones = {'objects': [{'name': sz.name, 'id': sz.id, 'type': sz.type}]}
-                    logging.info('Adding "{}" to sourceZones for this ACPRule.'.format(name))
+                    logging.info(f'Adding "{name}" to sourceZones for this ACPRule.')
             else:
-                logging.warning('Security Zone, "{}", not found.  Cannot add to ACPRule.'.format(name))
+                logging.warning('Security Zone, "{name}", not found.  Cannot add to ACPRule.')
         elif action == 'remove':
             sz = SecurityZone(fmc=self.fmc)
             sz.get(name=name)
@@ -288,11 +287,11 @@ class ACPRule(APIClassTemplate):
                         if obj['name'] != name:
                             objects.append(obj)
                     self.sourceZones['objects'] = objects
-                    logging.info('Removed "{}" from sourceZones for this ACPRule.'.format(name))
+                    logging.info(f'Removed "{name}" from sourceZones for this ACPRule.')
                 else:
                     logging.info("sourceZones doesn't exist for this ACPRule.  Nothing to remove.")
             else:
-                logging.warning('Security Zone, "{}", not found.  Cannot remove from ACPRule.'.format(name))
+                logging.warning(f'Security Zone, "{name}", not found.  Cannot remove from ACPRule.')
         elif action == 'clear':
             if 'sourceZones' in self.__dict__:
                 del self.sourceZones
@@ -313,12 +312,12 @@ class ACPRule(APIClassTemplate):
                             break
                     if not duplicate:
                         self.destinationZones['objects'].append(new_zone)
-                        logging.info('Adding "{}" to destinationZones for this ACPRule.'.format(name))
+                        logging.info(f'Adding "{name}" to destinationZones for this ACPRule.')
                 else:
                     self.destinationZones = {'objects': [{'name': sz.name, 'id': sz.id, 'type': sz.type}]}
-                    logging.info('Adding "{}" to destinationZones for this ACPRule.'.format(name))
+                    logging.info(f'Adding "{name}" to destinationZones for this ACPRule.')
             else:
-                logging.warning('Security Zone, "{}", not found.  Cannot add to ACPRule.'.format(name))
+                logging.warning(f'Security Zone, "{name}", not found.  Cannot add to ACPRule.')
         elif action == 'remove':
             sz = SecurityZone(fmc=self.fmc)
             sz.get(name=name)
@@ -329,11 +328,11 @@ class ACPRule(APIClassTemplate):
                         if obj['name'] != name:
                             objects.append(obj)
                     self.destinationZones['objects'] = objects
-                    logging.info('Removed "{}" from destinationZones for this ACPRule.'.format(name))
+                    logging.info('Removed "{name}" from destinationZones for this ACPRule.')
                 else:
                     logging.info("destinationZones doesn't exist for this ACPRule.  Nothing to remove.")
             else:
-                logging.warning('Security Zone, {}, not found.  Cannot remove from ACPRule.'.format(name))
+                logging.warning(f'Security Zone, {name}, not found.  Cannot remove from ACPRule.')
         elif action == 'clear':
             if 'destinationZones' in self.__dict__:
                 del self.destinationZones
@@ -354,12 +353,12 @@ class ACPRule(APIClassTemplate):
                             break
                     if not duplicate:
                         self.vlanTags['objects'].append(new_vlan)
-                        logging.info('Adding "{}" to vlanTags for this ACPRule.'.format(name))
+                        logging.info(f'Adding "{name}" to vlanTags for this ACPRule.')
                 else:
                     self.vlanTags = {'objects': [{'name': vlantag.name, 'id': vlantag.id, 'type': vlantag.type}]}
-                    logging.info('Adding "{}" to vlanTags for this ACPRule.'.format(name))
+                    logging.info(f'Adding "{name}" to vlanTags for this ACPRule.')
             else:
-                logging.warning('VLAN Tag, "{}", not found.  Cannot add to ACPRule.'.format(name))
+                logging.warning(f'VLAN Tag, "{name}", not found.  Cannot add to ACPRule.')
         elif action == 'remove':
             vlantag = VlanTag(fmc=self.fmc)
             vlantag.get(name=name)
@@ -370,11 +369,11 @@ class ACPRule(APIClassTemplate):
                         if obj['name'] != name:
                             objects.append(obj)
                     self.vlanTags['objects'] = objects
-                    logging.info('Removed "{}" from vlanTags for this ACPRule.'.format(name))
+                    logging.info(f'Removed "{name}" from vlanTags for this ACPRule.')
                 else:
                     logging.info("vlanTags doesn't exist for this ACPRule.  Nothing to remove.")
             else:
-                logging.warning('VLAN Tag, {}, not found.  Cannot remove from ACPRule.'.format(name))
+                logging.warning(f'VLAN Tag, {name}, not found.  Cannot remove from ACPRule.')
         elif action == 'clear':
             if 'vlanTags' in self.__dict__:
                 del self.vlanTags
@@ -402,13 +401,12 @@ class ACPRule(APIClassTemplate):
                             break
                     if not duplicate:
                         self.sourcePorts['objects'].append(new_port)
-                        logging.info('Adding "{}" to sourcePorts for this ACPRule.'.format(name))
+                        logging.info(f'Adding "{name}" to sourcePorts for this ACPRule.')
                 else:
                     self.sourcePorts = {'objects': [{'name': item.name, 'id': item.id, 'type': item.type}]}
-                    logging.info('Adding "{}" to sourcePorts for this ACPRule.'.format(name))
+                    logging.info(f'Adding "{name}" to sourcePorts for this ACPRule.')
             else:
-                logging.warning('Protocol Port or Protocol Port Group: "{}", not found.  Cannot add to ACPRule.'
-                                .format(name))
+                logging.warning(f'Protocol Port or Protocol Port Group: "{name}", not found.  Cannot add to ACPRule.')
         elif action == 'remove':
             pport_json = ProtocolPort(fmc=self.fmc)
             pport_json.get(name=name)
@@ -424,12 +422,11 @@ class ACPRule(APIClassTemplate):
                         if obj['name'] != name:
                             objects.append(obj)
                     self.sourcePorts['objects'] = objects
-                    logging.info('Removed "{}" from sourcePorts for this ACPRule.'.format(name))
+                    logging.info(f'Removed "{name}" from sourcePorts for this ACPRule.')
                 else:
                     logging.info("sourcePorts doesn't exist for this ACPRule.  Nothing to remove.")
             else:
-                logging.warning('Protocol Port or Protocol Port Group: "{}", not found.  Cannot add to ACPRule.'
-                                .format(name))
+                logging.warning(f'Protocol Port or Protocol Port Group: "{name}", not found.  Cannot add to ACPRule.')
         elif action == 'clear':
             if 'sourcePorts' in self.__dict__:
                 del self.sourcePorts
@@ -457,13 +454,12 @@ class ACPRule(APIClassTemplate):
                             break
                     if not duplicate:
                         self.destinationPorts['objects'].append(new_port)
-                        logging.info('Adding "{}" to destinationPorts for this ACPRule.'.format(name))
+                        logging.info(f'Adding "{name}" to destinationPorts for this ACPRule.')
                 else:
                     self.destinationPorts = {'objects': [{'name': item.name, 'id': item.id, 'type': item.type}]}
-                    logging.info('Adding "{}" to destinationPorts for this ACPRule.'.format(name))
+                    logging.info(f'Adding "{name}" to destinationPorts for this ACPRule.')
             else:
-                logging.warning('Protocol Port or Protocol Port Group: "{}", not found.  Cannot add to ACPRule.'
-                                .format(name))
+                logging.warning(f'Protocol Port or Protocol Port Group: "{name}", not found.  Cannot add to ACPRule.')
         elif action == 'remove':
             pport_json = ProtocolPort(fmc=self.fmc)
             pport_json.get(name=name)
@@ -479,12 +475,11 @@ class ACPRule(APIClassTemplate):
                         if obj['name'] != name:
                             objects.append(obj)
                     self.destinationPorts['objects'] = objects
-                    logging.info('Removed "{}" from destinationPorts for this ACPRule.'.format(name))
+                    logging.info(f'Removed "{name}" from destinationPorts for this ACPRule.')
                 else:
                     logging.info("destinationPorts doesn't exist for this ACPRule.  Nothing to remove.")
             else:
-                logging.warning('Protocol Port or Protocol Port Group: "{}", not found.  Cannot add to ACPRule.'
-                                .format(name))
+                logging.warning(f'Protocol Port or Protocol Port Group: "{name}", not found.  Cannot add to ACPRule.')
         elif action == 'clear':
             if 'destinationPorts' in self.__dict__:
                 del self.destinationPorts
@@ -510,13 +505,10 @@ class ACPRule(APIClassTemplate):
             self.sourceNetworks = {'objects': [], 'literals': {}}
 
         if action == 'add':
-
             if literal:
                 type_ = get_networkaddress_type(literal)
                 self.sourceNetworks['literals'][literal] = type_
-                logging.info('Adding literal "{}" of type "{}" to sourceNetworks for this ACPRule.'
-                             .format(literal, type_))
-
+                logging.info(f'Adding literal "{literal}" of type "{type_}" to sourceNetworks for this ACPRule.')
             else:
                 ipaddresses_json = IPAddresses(fmc=self.fmc).get()
                 networkgroup_json = NetworkGroup(fmc=self.fmc).get()
@@ -532,7 +524,7 @@ class ACPRule(APIClassTemplate):
                         new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
                         break
                 if new_net is None:
-                    logging.warning('Network "{}" is not found in FMC.  Cannot add to sourceNetworks.'.format(name))
+                    logging.warning(f'Network "{name}" is not found in FMC.  Cannot add to sourceNetworks.')
                 else:
                     if 'sourceNetworks' in self.__dict__:
                         # thus either some objects are already present in sourceNetworks,
@@ -548,19 +540,19 @@ class ACPRule(APIClassTemplate):
                                     break
                             if not duplicate:
                                 self.sourceNetworks['objects'].append(new_net)
-                                logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
+                                logging.info(f'Adding "{name}" to sourceNetworks for this ACPRule.')
                         else:
                             # this means no objects were present in sourceNetworks,
                             # and sourceNetworks contains literals only
                             self.sourceNetworks.update({'objects': [new_net]})
                             # So update the sourceNetworks dict which contained 'literals' key initially
                             # to have a 'objects' key as well
-                            logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
+                            logging.info(f'Adding "{name}" to sourceNetworks for this ACPRule.')
                     else:
                         # None of literals or objects are present in sourceNetworks,
                         # so initialize it with objects and update the provided object
                         self.sourceNetworks = {'objects': [new_net]}
-                        logging.info('Adding "{}" to sourceNetworks for this ACPRule.'.format(name))
+                        logging.info(f'Adding "{name}" to sourceNetworks for this ACPRule.')
         elif action == 'remove':
             if 'sourceNetworks' in self.__dict__:
                 if name != '':
@@ -572,21 +564,20 @@ class ACPRule(APIClassTemplate):
                     if len(objects) == 0:
                         # it was the last object which was deleted now
                         del self.sourceNetworks
-                        logging.info('Removed "{}" from sourceNetworks for this ACPRule'.format(name))
+                        logging.info(f'Removed "{name}" from sourceNetworks for this ACPRule')
                         logging.info('All Source Networks removed from this ACPRule object.')
                     else:
                         self.sourceNetworks['objects'] = objects
-                        logging.info('Removed "{}" from sourceNetworks for this ACPRule.'.format(name))
+                        logging.info(f'Removed "{name}" from sourceNetworks for this ACPRule.')
                 else:
                     # a literal value has been provided to be removed
                     type_ = self.sourceNetworks['literals'].get(literal)
                     if type_:
                         self.sourceNetworks['literals'].pop(literal)
-                        logging.info('Removed literal "{}" of type "{}" from sourceNetworks for this ACPRule.'
-                                     .format(literal, type_))
+                        logging.info(f'Removed literal "{literal}" of type '
+                                     f'"{type_}" from sourceNetworks for this ACPRule.')
                     else:
-                        logging.info('Unable to removed literal "{}" from sourceNetworks as it was not found'
-                                     .format(literal))
+                        logging.info(f'Unable to removed literal "{literal}" from sourceNetworks as it was not found')
             else:
                 logging.info("sourceNetworks doesn't exist for this ACPRule.  Nothing to remove.")
         elif action == 'clear':
@@ -615,13 +606,10 @@ class ACPRule(APIClassTemplate):
             self.destinationNetworks = {'objects': [], 'literals': {}}
 
         if action == 'add':
-
             if literal:
                 type_ = get_networkaddress_type(literal)
                 self.destinationNetworks['literals'][literal] = type_
-                logging.info('Adding literal "{}" of type "{}" to destinationNetworks for this ACPRule.'
-                             .format(literal, type_))
-
+                logging.info(f'Adding literal "{literal}" of type "{type_}" to destinationNetworks for this ACPRule.')
             else:
                 ipaddresses_json = IPAddresses(fmc=self.fmc).get()
                 networkgroup_json = NetworkGroup(fmc=self.fmc).get()
@@ -637,8 +625,7 @@ class ACPRule(APIClassTemplate):
                         new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
                         break
                 if new_net is None:
-                    logging.warning('Network "{}" is not found in FMC.  Cannot add to '
-                                    'destinationNetworks.'.format(name))
+                    logging.warning(f'Network "{name}" is not found in FMC.  Cannot add to destinationNetworks.')
                 else:
                     if 'destinationNetworks' in self.__dict__:
                         # thus either some objects are already present in destinationNetworks,
@@ -652,19 +639,19 @@ class ACPRule(APIClassTemplate):
                                     break
                             if not duplicate:
                                 self.destinationNetworks['objects'].append(new_net)
-                                logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
+                                logging.info(f'Adding "{name}" to destinationNetworks for this ACPRule.')
                         else:
                             # this means no objects were present in destinationNetworks,
                             # and destinationNetworks contains literals only
                             self.destinationNetworks.update({'objects': [new_net]})
                             # So update the destinationNetworks dict which contained 'literals' key initially
                             # to have a 'objects' key as well
-                            logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
+                            logging.info(f'Adding "{name}" to destinationNetworks for this ACPRule.')
                     else:
                         # None of literals or objects are present in destinationNetworks,
                         # so initialize it with objects and update the provided object
                         self.destinationNetworks = {'objects': [new_net]}
-                        logging.info('Adding "{}" to destinationNetworks for this ACPRule.'.format(name))
+                        logging.info(f'Adding "{name}" to destinationNetworks for this ACPRule.')
         elif action == 'remove':
             if 'destinationNetworks' in self.__dict__:
                 if name != '':
@@ -676,21 +663,21 @@ class ACPRule(APIClassTemplate):
                     if len(objects) == 0:
                         # it was the last object which was deleted now
                         del self.destinationNetworks
-                        logging.info('Removed "{}" from destinationNetworks for this ACPRule'.format(name))
+                        logging.info(f'Removed "{name}" from destinationNetworks for this ACPRule')
                         logging.info('All Destination Networks removed from this ACPRule object.')
                     else:
                         self.destinationNetworks['objects'] = objects
-                        logging.info('Removed "{}" from destinationNetworks for this ACPRule.'.format(name))
+                        logging.info(f'Removed "{name}" from destinationNetworks for this ACPRule.')
                 else:
                     # a literal value has been provided to be removed
                     type_ = self.destinationNetworks['literals'].get(literal)
                     if type_:
                         self.destinationNetworks['literals'].pop(literal)
-                        logging.info('Removed literal "{}" of type "{}" from destinationNetworks for this ACPRule.'
-                                     .format(literal, type_))
+                        logging.info(f'Removed literal "{literal}" of '
+                                     f'type "{type_}" from destinationNetworks for this ACPRule.')
                     else:
-                        logging.info('Unable to removed literal "{}" from destinationNetworks as it was not found'
-                                     .format(literal))
+                        logging.info(f'Unable to removed literal "{literal}" '
+                                     f'from destinationNetworks as it was not found')
             else:
                 logging.info("destinationNetworks doesn't exist for this ACPRule.  Nothing to remove.")
         elif action == 'clear':
