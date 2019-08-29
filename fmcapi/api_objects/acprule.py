@@ -256,48 +256,82 @@ class ACPRule(APIClassTemplate):
             self.filePolicy = {'name': fp.name, 'id': fp.id, 'type': fp.type}
             logging.info(f'file_policy set to "{name}" for this ACPRule object.')
 
-    def source_zone(self, action, name=''):
-        logging.debug("In source_zone() for ACPRule class.")
+    def _zone(self, direction, action, name=''):
+        logging.debug("In _zone() for ACPRule class.")
+
+        # Determine which variable we need to reference.
+        zone_name = 'sourceZones'
+        if direction is 'destination':
+            zone_name = 'destinationZones'
+
         if action == 'add':
             sz = SecurityZone(fmc=self.fmc)
             sz.get(name=name)
             if 'id' in sz.__dict__:
-                if 'sourceZones' in self.__dict__:
+                if zone_name in self.__dict__:
                     new_zone = {'name': sz.name, 'id': sz.id, 'type': sz.type}
                     duplicate = False
-                    for obj in self.sourceZones['objects']:
-                        if obj['name'] == new_zone['name']:
-                            duplicate = True
-                            break
-                    if not duplicate:
-                        self.sourceZones['objects'].append(new_zone)
-                        logging.info(f'Adding "{name}" to sourceZones for this ACPRule.')
+                    if direction is 'source':
+                        for obj in self.sourceZones['objects']:
+                            if obj['name'] == new_zone['name']:
+                                duplicate = True
+                                break
+                        if not duplicate:
+                            self.sourceZones['objects'].append(new_zone)
+                            logging.info(f'Adding "{name}" to {zone_name} for this ACPRule.')
+                    if direction is 'destination':
+                        for obj in self.destinationZones['objects']:
+                            if obj['name'] == new_zone['name']:
+                                duplicate = True
+                                break
+                        if not duplicate:
+                            self.destinationZones['objects'].append(new_zone)
+                            logging.info(f'Adding "{name}" to {zone_name} for this ACPRule.')
                 else:
-                    self.sourceZones = {'objects': [{'name': sz.name, 'id': sz.id, 'type': sz.type}]}
-                    logging.info(f'Adding "{name}" to sourceZones for this ACPRule.')
+                    if direction is 'source':
+                        self.sourceZones = {'objects': [{'name': sz.name, 'id': sz.id, 'type': sz.type}]}
+                        logging.info(f'Adding "{name}" to sourceZones for this ACPRule.')
+                    if direction is 'destination':
+                        self.destinationZones = {'objects': [{'name': sz.name, 'id': sz.id, 'type': sz.type}]}
+                        logging.info(f'Adding "{name}" to {zone_name} for this ACPRule.')
             else:
                 logging.warning('Security Zone, "{name}", not found.  Cannot add to ACPRule.')
         elif action == 'remove':
             sz = SecurityZone(fmc=self.fmc)
             sz.get(name=name)
             if 'id' in sz.__dict__:
-                if 'sourceZones' in self.__dict__:
+                if zone_name in self.__dict__:
                     objects = []
-                    for obj in self.sourceZones['objects']:
-                        if obj['name'] != name:
-                            objects.append(obj)
-                    self.sourceZones['objects'] = objects
-                    logging.info(f'Removed "{name}" from sourceZones for this ACPRule.')
+                    if direction is 'source':
+                        for obj in self.sourceZones['objects']:
+                            if obj['name'] != name:
+                                objects.append(obj)
+                        self.sourceZones['objects'] = objects
+                        logging.info(f'Removed "{name}" from sourceZones for this ACPRule.')
+                    if direction is 'destination':
+                        for obj in self.destinationZones['objects']:
+                            if obj['name'] != name:
+                                objects.append(obj)
+                        self.destinationZones['objects'] = objects
+                        logging.info(f'Removed "{name}" from {zone_name} for this ACPRule.')
                 else:
-                    logging.info("sourceZones doesn't exist for this ACPRule.  Nothing to remove.")
+                    logging.info(f"{zone_name}s doesn't exist for this ACPRule.  Nothing to remove.")
             else:
                 logging.warning(f'Security Zone, "{name}", not found.  Cannot remove from ACPRule.')
         elif action == 'clear':
-            if 'sourceZones' in self.__dict__:
-                del self.sourceZones
-                logging.info('All Source Zones removed from this ACPRule object.')
+            if zone_name in self.__dict__:
+                if direction is 'source':
+                    del self.sourceZones
+                if direction is 'destination':
+                    del self.destinationZones
+                logging.info(f'All {zone_name} are removed from this ACPRule object.')
+
+    def source_zone(self, action, name=''):
+        self._zone(direction='source', action=action, name=name)
 
     def destination_zone(self, action, name=''):
+        self._zone(direction='destination', action=action, name=name)
+        """
         logging.debug("In destination_zone() for ACPRule class.")
         if action == 'add':
             sz = SecurityZone(fmc=self.fmc)
@@ -337,6 +371,7 @@ class ACPRule(APIClassTemplate):
             if 'destinationZones' in self.__dict__:
                 del self.destinationZones
                 logging.info('All Destination Zones removed from this ACPRule object.')
+        """
 
     def vlan_tags(self, action, name=''):
         logging.debug("In vlan_tags() for ACPRule class.")
