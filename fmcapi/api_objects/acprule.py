@@ -10,9 +10,7 @@ from .fqdns import FQDNS
 from .networkgroup import NetworkGroup
 from .ipaddresses import IPAddresses
 from .filepolicies import FilePolicies
-
 from .helper_functions import get_networkaddress_type
-
 import logging
 
 
