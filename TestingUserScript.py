@@ -1435,6 +1435,7 @@ def test__acp_rule():
 
     logging.info('# Test ACPRule done.\n')
 
+    """
     logging.info('# Cleanup of testing ACPRule methods.')
     acprule1.delete()
     time.sleep(1)
@@ -1455,6 +1456,7 @@ def test__acp_rule():
     obj12.delete()
     logging.info('# Cleanup of objects for ACPRule test done.\n')
     time.sleep(sleep_time_between_tests)
+    """
 
 def test__audit():
     logging.info('# Testing fmc.audit() method.')
