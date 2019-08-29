@@ -9,9 +9,9 @@ import pprint
 
 # ### Set these variables to match your environment. ### #
 
-host = '10.0.0.10'
+host = '100.64.0.166'
 username = 'apiadmin'
-password = 'Admin123'
+password = 'C1sco12345'
 autodeploy = False
 
 sleep_time_between_tests = 1
@@ -198,6 +198,19 @@ def test__country():
     pp.pprint(obj1.get())
     print('\n')
     logging.info('# Testing Country class done.\n')
+    time.sleep(sleep_time_between_tests)
+
+
+def test__filepolicies():
+    logging.info('# Testing FilePolicies class.')
+    obj1 = fmcapi.FilePolicies(fmc=fmc1)
+    print('All FilePolicies -- >')
+    result = obj1.get()
+    pp.pprint(result)
+    print("Total items: {}".format(len(result['items'])))
+    print('\n')
+    del obj1
+    logging.info('# Testing FilePolicies class done.\n')
     time.sleep(sleep_time_between_tests)
 
 
@@ -1860,6 +1873,7 @@ with fmcapi.FMC(host=host, username=username, password=password, autodeploy=auto
     pp = pprint.PrettyPrinter(indent=4)
     time.sleep(1)
 
+    test__filepolicies()
     ''' 
     # Working Tests
     test__application()  # This test can take a lONG time to run.

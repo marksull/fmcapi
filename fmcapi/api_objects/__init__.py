@@ -24,6 +24,7 @@ from .dnsservergroups import DNSServerGroups
 from .endpointdevicetypes import EndPointDeviceTypes
 from .etherchannelinterfaces import EtherchannelInterfaces
 from .extendedaccesslist import ExtendedAccessList
+from .filepolicies import FilePolicies
 from .fqdns import FQDNS
 from .ftdnatpolicy import FTDNatPolicy
 from .geolocation import Geolocation
@@ -101,6 +102,7 @@ __all__ = ['AccessControlPolicy',
            'EndPointDeviceTypes',
            'EtherchannelInterfaces',
            'ExtendedAccessList',
+           'FilePolicies',
            'FQDNS',
            'FTDNatPolicy',
            'Geolocation',
