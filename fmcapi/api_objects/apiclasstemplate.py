@@ -18,6 +18,10 @@ class APIClassTemplate(object):
     URL_SUFFIX = ''
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-]"""
 
+    @property
+    def show_json(self):
+        return self.format_data()
+
     def __init__(self, fmc, **kwargs):
         logging.debug("In __init__() for APIClassTemplate class.")
         self.fmc = fmc
@@ -195,16 +199,3 @@ class APIClassTemplate(object):
         else:
             logging.warning("delete() method failed due to failure to pass valid_for_delete() test.")
             return False
-
-    def export_json(self, method=''):
-        if method is 'get':
-            return self.format_data()
-        if method is 'post':
-            if self.valid_for_post():
-                return self.format_data()
-        if method is 'put':
-            if self.valid_for_put():
-                return self.format_data()
-        if method is 'delete':
-            if self.valid_for_delete():
-                return self.format_data()
