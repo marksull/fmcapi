@@ -91,7 +91,7 @@ __all__ = ['AccessControlPolicy',
            'ApplicationType',
            'AutoNatRules',
            'BridgeGroupInterfaces',
-           'Bulk'
+           'Bulk',
            'CertEnrollment',
            'Continent',
            'Country',
