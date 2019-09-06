@@ -195,3 +195,16 @@ class APIClassTemplate(object):
         else:
             logging.warning("delete() method failed due to failure to pass valid_for_delete() test.")
             return False
+
+    def export_json(self, method=''):
+        if method is 'get':
+            return self.format_data()
+        if method is 'post':
+            if self.valid_for_post():
+                return self.format_data()
+        if method is 'put':
+            if self.valid_for_put():
+                return self.format_data()
+        if method is 'delete':
+            if self.valid_for_delete():
+                return self.format_data()

@@ -7,28 +7,17 @@ from .acprule import ACPRule
 class Bulk(object):
     """Bulk Class"""
     MAX_BULK_POST_SIZE = 1000
+    REQUIRED_FOR_POST = []
 
-    def __init__(self, fmc, class_type='ACPRule', url_suffix=''):
+    def __init__(self, fmc, url=''):
         logging.debug("In __init__() for Bulk class.")
         self.fmc = fmc
         self.items = []
-        self.class_type = class_type  # ACPRule is the only class that supports bulk but let's not assume that forever.
-        self.URL = ''
-        if self.class_type is 'ACPRule':
-            self.URL = f'{ACPRule.URL}?{url_suffix}&bulk=true'
+        self.URL = f'{url}?&bulk=true'
 
     def add(self, item):
-        valid = False
-        if self.class_type is 'ACPRule':
-            logging.info(f"Validating {item} to add to bulk items list.")
-            if ACPRule.valid_for_post(item):
-                valid = True
-
-        if valid:
-            self.items.append(item)
-            logging.info(f"Adding {item} to bulk items list.")
-        else:
-            logging.info(f"Unable to add {item}.  Didn't pass valid_for_post().")
+        self.items.append(item)
+        logging.info(f"Adding {item} to bulk items list.")
 
     def post(self):
         # Break up the items into MAX_BULK_POST_SIZE chunks.
