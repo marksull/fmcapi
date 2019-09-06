@@ -25,6 +25,8 @@ class APIClassTemplate(object):
 
     def parse_kwargs(self, **kwargs):
         logging.debug("In parse_kwargs() for APIClassTemplate class.")
+        if 'bulk' in kwargs:
+            self.bulk = kwargs['bulk']
         if 'limit' in kwargs:
             self.limit = kwargs['limit']
         else:
