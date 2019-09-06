@@ -19,18 +19,16 @@ class Bulk(object):
 
     def add(self, item):
         valid = False
-        formatted_item = None
         if self.class_type is 'ACPRule':
             logging.info(f"Validating {item} to add to bulk items list.")
             if ACPRule.valid_for_post(item):
                 valid = True
-                formatted_item = ACPRule.format_data(item)
 
         if valid:
-            self.items.append(formatted_item)
-            logging.info(f"Adding {formatted_item} to bulk items list.")
+            self.items.append(item)
+            logging.info(f"Adding {item} to bulk items list.")
         else:
-            logging.info(f"Unable to add {formatted_item}.  Didn't pass valid_for_post().")
+            logging.info(f"Unable to add {item}.  Didn't pass valid_for_post().")
 
     def post(self):
         # Break up the items into MAX_BULK_POST_SIZE chunks.
