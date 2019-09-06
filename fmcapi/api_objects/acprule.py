@@ -49,8 +49,6 @@ class ACPRule(APIClassTemplate):
             logging.warning('ACP rule has both insertBefore and insertAfter params')
         if 'section' in self.__dict__:
             url = f'{url}section={self.section}&'
-        if 'bulk' in self.__dict__:
-            url = f'{url}bulk={self.bulk}&'
 
         return url[:-1]
 
@@ -64,8 +62,6 @@ class ACPRule(APIClassTemplate):
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for ACPRule class.")
-        if 'bulk' in kwargs:
-            self.bulk = kwargs['bulk']
         if 'action' in kwargs:
             if kwargs['action'] in self.VALID_FOR_ACTION:
                 self.action = kwargs['action']
