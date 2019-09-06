@@ -116,6 +116,8 @@ class ACPRule(APIClassTemplate):
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for ACPRule class.")
+        if 'bulk' in kwargs:
+            self.bulk = kwargs['bulk']
         if 'action' in kwargs:
             if kwargs['action'] in self.VALID_FOR_ACTION:
                 self.action = kwargs['action']

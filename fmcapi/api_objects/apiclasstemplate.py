@@ -57,49 +57,6 @@ class APIClassTemplate(object):
         if 'items' in kwargs:
             self.items = kwargs['items']
 
-    def valid_for_post(self):
-        logging.debug("In valid_for_post() for APIClassTemplate class.")
-        for item in self.REQUIRED_FOR_POST:
-            if item not in self.__dict__:
-                return False
-        return True
-
-    def valid_for_put(self):
-        logging.debug("In valid_for_put() for APIClassTemplate class.")
-        for item in self.REQUIRED_FOR_PUT:
-            if item not in self.__dict__:
-                return False
-        return True
-
-    def valid_for_delete(self):
-        logging.debug("In valid_for_delete() for APIClassTemplate class.")
-        for item in self.REQUIRED_FOR_DELETE:
-            if item not in self.__dict__:
-                return False
-        return True
-
-    def post(self, **kwargs):
-        logging.debug("In post() for APIClassTemplate class.")
-        if 'id' in self.__dict__:
-            logging.info("ID value exists for this object.  Redirecting to put() method.")
-            self.put()
-        else:
-            if self.valid_for_post():
-                response = self.fmc.send_to_api(method='post', url=self.URL, json_data=self.format_data())
-                if response:
-                    self.parse_kwargs(**response)
-                    if 'name' in self.__dict__ and 'id' in self.__dict__:
-                        logging.info('POST success. Object with name: "{}" and id: "{}" created '
-                                     'in FMC.'.format(self.name, self.id))
-                    else:
-                        logging.info('POST success but no "id" or "name" values in API response.')
-                else:
-                    logging.warning('POST failure.  No data in API response.')
-                return response
-            else:
-                logging.warning("post() method failed due to failure to pass valid_for_post() test.")
-                return False
-
     def format_data(self):
         logging.debug("In format_data() for APIClassTemplate class.")
 
@@ -156,6 +113,42 @@ class APIClassTemplate(object):
             response['items'] = []
         return response
 
+    def valid_for_post(self):
+        logging.debug("In valid_for_post() for APIClassTemplate class.")
+        for item in self.REQUIRED_FOR_POST:
+            if item not in self.__dict__:
+                return False
+        return True
+
+    def post(self, **kwargs):
+        logging.debug("In post() for APIClassTemplate class.")
+        if 'id' in self.__dict__:
+            logging.info("ID value exists for this object.  Redirecting to put() method.")
+            self.put()
+        else:
+            if self.valid_for_post():
+                response = self.fmc.send_to_api(method='post', url=self.URL, json_data=self.format_data())
+                if response:
+                    self.parse_kwargs(**response)
+                    if 'name' in self.__dict__ and 'id' in self.__dict__:
+                        logging.info('POST success. Object with name: "{}" and id: "{}" created '
+                                     'in FMC.'.format(self.name, self.id))
+                    else:
+                        logging.info('POST success but no "id" or "name" values in API response.')
+                else:
+                    logging.warning('POST failure.  No data in API response.')
+                return response
+            else:
+                logging.warning("post() method failed due to failure to pass valid_for_post() test.")
+                return False
+
+    def valid_for_put(self):
+        logging.debug("In valid_for_put() for APIClassTemplate class.")
+        for item in self.REQUIRED_FOR_PUT:
+            if item not in self.__dict__:
+                return False
+        return True
+
     def put(self, **kwargs):
         logging.debug("In put() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
@@ -173,6 +166,13 @@ class APIClassTemplate(object):
         else:
             logging.warning("put() method failed due to failure to pass valid_for_put() test.")
             return False
+
+    def valid_for_delete(self):
+        logging.debug("In valid_for_delete() for APIClassTemplate class.")
+        for item in self.REQUIRED_FOR_DELETE:
+            if item not in self.__dict__:
+                return False
+        return True
 
     def delete(self, **kwargs):
         logging.debug("In delete() for APIClassTemplate class.")
