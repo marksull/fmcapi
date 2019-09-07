@@ -1,12 +1,13 @@
 """Class object to handle the bulk POST feature of FMC's API."""
 
 import logging
-from .acprule import ACPRule
+import sys
 
 
 class Bulk(object):
     """Bulk Class"""
-    MAX_BULK_POST_SIZE = 1000
+    MAX_SIZE_QTY = 1000
+    MAX_SIZE_IN_BYTES = 2048000
     REQUIRED_FOR_POST = []
 
     def __init__(self, fmc, url=''):
@@ -21,11 +22,14 @@ class Bulk(object):
 
     def post(self):
         # Break up the items into MAX_BULK_POST_SIZE chunks.
-        chunks = [self.items[i * self.MAX_BULK_POST_SIZE:(i + 1) * self.MAX_BULK_POST_SIZE]
-                  for i in range((len(self.items) + self.MAX_BULK_POST_SIZE - 1) // self.MAX_BULK_POST_SIZE)]
+        chunks = [self.items[i * self.MAX_SIZE_QTY:(i + 1) * self.MAX_SIZE_QTY]
+                  for i in range((len(self.items) + self.MAX_SIZE_QTY - 1) // self.MAX_SIZE_QTY)]
 
         # Post the chunks
         for item in chunks:
+            # I'm not sure what to do about the max bytes right now so I'll just throw a warning message.
+            if sys.getsizeof(item, 0) > self.MAX_SIZE_IN_BYTES:
+                logging.warning(f"This chunk of the post is too large.  Please submit less items to be bulk posted.")
             response = self.fmc.send_to_api(method='post', url=self.URL, json_data=item)
             logging.info(f"Posting to bulk items.")
             return response
