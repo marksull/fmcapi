@@ -2,7 +2,7 @@
 from .helper_functions import *
 import logging
 
-logging.debug("In the {} module.".format(__name__))
+logging.debug(f"In the {__name__} module.")
 
 
 class APIClassTemplate(object):
@@ -21,7 +21,7 @@ class APIClassTemplate(object):
     def __init__(self, fmc, **kwargs):
         logging.debug("In __init__() for APIClassTemplate class.")
         self.fmc = fmc
-        self.URL = '{}{}'.format(self.fmc.configuration_url, self.URL_SUFFIX)
+        self.URL = f'{self.fmc.configuration_url}{self.URL_SUFFIX}'
 
     def parse_kwargs(self, **kwargs):
         logging.debug("In parse_kwargs() for APIClassTemplate class.")
@@ -34,8 +34,7 @@ class APIClassTemplate(object):
         if 'name' in kwargs:
             self.name = syntax_correcter(kwargs['name'], permitted_syntax=self.VALID_CHARACTERS_FOR_NAME)
             if self.name != kwargs['name']:
-                logging.info("""Adjusting name "{}" to "{}" due to containing invalid characters."""
-                             .format(kwargs['name'], self.name))
+                logging.info(f"Adjusting name '{kwargs['name']}' to '{self.name}' due to invalid characters.")
         if 'description' in kwargs:
             self.description = kwargs['description']
         else:
@@ -89,8 +88,7 @@ class APIClassTemplate(object):
                 if response:
                     self.parse_kwargs(**response)
                     if 'name' in self.__dict__ and 'id' in self.__dict__:
-                        logging.info('POST success. Object with name: "{}" and id: "{}" created '
-                                     'in FMC.'.format(self.name, self.id))
+                        logging.info(f'POST success. Object with name: "{self.name}" and id: "{id}" created in FMC.')
                     else:
                         logging.info('POST success but no "id" or "name" values in API response.')
                 else:
@@ -112,18 +110,16 @@ class APIClassTemplate(object):
         logging.debug("In get() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
         if 'id' in self.__dict__:
-            url = '{}/{}'.format(self.URL, self.id)
+            url = f'{self.URL}/{self.id}'
             response = self.fmc.send_to_api(method='get', url=url)
             self.parse_kwargs(**response)
             if 'name' in self.__dict__:
-                logging.info('GET success. Object with name: "{}" and id: "{}" fetched from'
-                             ' FMC.'.format(self.name, self.id))
+                logging.info(f'GET success. Object with name: "{self.name}" and id: "{self.id}" fetched from FMC.')
             else:
-                logging.info('GET success. Object with id: "{}" fetched from'
-                             ' FMC.'.format(self.id))
+                logging.info(f'GET success. Object with id: "{self.id}" fetched from FMC.')
         elif 'name' in self.__dict__:
             if self.FILTER_BY_NAME:
-                url = '{}?name={}&expanded=true'.format(self.URL, self.name)
+                url = f'{self.URL}?name={self.name}&expanded=true'
             else:
                 url = f'{self.URL}?expanded=true'
                 if 'limit' in self.__dict__:
@@ -138,15 +134,13 @@ class APIClassTemplate(object):
                     if item['name'] == self.name:
                         self.id = item['id']
                         self.parse_kwargs(**item)
-                        logging.info('GET success. Object with name: "{}" and id: "{}" fetched from'
-                                     ' FMC.'.format(self.name, self.id))
+                        logging.info(f'GET success. Object with name: "{self.name}" and id: "{self.id}" '
+                                     f'fetched from FMC.')
                         return item
                 else:
-                    logging.warning('No "name" attribute associated with '
-                                    'this item to check against {}.'.format(self.name))
+                    logging.warning(f'No "name" attribute associated with this item to check against {self.name}.')
             if 'id' not in self.__dict__:
-                logging.warning("\tGET query for {} is not found.\n\t\t"
-                                "Response: {}".format(self.name, json.dumps(response)))
+                logging.warning(f"\tGET query for {self.name} is not found.\n\t\tResponse: {json.dumps(response)}")
         else:
             logging.info("GET query for object with no name or id set.  "
                          "Returning full list of these object types instead.")
@@ -160,15 +154,13 @@ class APIClassTemplate(object):
         logging.debug("In put() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
         if self.valid_for_put():
-            url = '{}/{}'.format(self.URL, self.id)
+            url = f'{self.URL}/{self.id}'
             response = self.fmc.send_to_api(method='put', url=url, json_data=self.format_data())
             self.parse_kwargs(**response)
             if 'name' in self.__dict__:
-                logging.info('PUT success. Object with name: "{}" and id: "{}" updated '
-                             'in FMC.'.format(self.name, self.id))
+                logging.info(f'PUT success. Object with name: "{self.name}" and id: "{self.id}" updated in FMC.')
             else:
-                logging.info('PUT success. Object with id: "{}" updated '
-                             'in FMC.'.format(self.id))
+                logging.info(f'PUT success. Object with id: "{self.id}" updated in FMC.')
             return response
         else:
             logging.warning("put() method failed due to failure to pass valid_for_put() test.")
@@ -178,17 +170,15 @@ class APIClassTemplate(object):
         logging.debug("In delete() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
         if self.valid_for_delete():
-            url = '{}/{}'.format(self.URL, self.id)
+            url = f'{self.URL}/{self.id}'
             response = self.fmc.send_to_api(method='delete', url=url, json_data=self.format_data())
             if not response:
                 return None
             self.parse_kwargs(**response)
             if 'name' in self.name:
-                logging.info('DELETE success. Object with name: "{}" and id: "{}" deleted '
-                             'in FMC.'.format(self.name, self.id))
+                logging.info(f'DELETE success. Object with name: "{self.name}" and id: "{self.id}" deleted in FMC.')
             else:
-                logging.info('DELETE success. Object id: "{}" deleted '
-                             'in FMC.'.format(self.id))
+                logging.info(f'DELETE success. Object id: "{self.id}" deleted in FMC.')
             return response
         else:
             logging.warning("delete() method failed due to failure to pass valid_for_delete() test.")

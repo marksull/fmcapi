@@ -58,11 +58,10 @@ class ApplicableDevices(APIClassTemplate):
         package1.get(name=package_name)
         if 'id' in package1.__dict__:
             self.package_id = package1.id
-            self.URL = '{}{}/{}/applicabledevices'.format(self.fmc.platform_url, self.URL_SUFFIX, self.package_id)
+            self.URL = f'{self.fmc.platform_url}{self.URL_SUFFIX}/{self.package_id}/applicabledevices'
             self.package_added_to_url = True
         else:
-            logging.warning('UpgradePackage {} not found.  Cannot get list of '
-                            'ApplicableDevices.'.format(package_name))
+            logging.warning(f'UpgradePackage {package_name} not found.  Cannot get list of ApplicableDevices.')
 
     def post(self):
         logging.info('POST method for API for ApplicableDevices not supported.')
