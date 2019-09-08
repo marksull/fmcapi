@@ -12,6 +12,7 @@ from .applicationtag import ApplicationTag
 from .applicationtype import ApplicationType
 from .autonatrules import AutoNatRules
 from .bridgegroupinterfaces import BridgeGroupInterfaces
+from .bulk import Bulk
 from .certenrollment import CertEnrollment
 from .continent import Continent
 from .country import Country
@@ -90,6 +91,7 @@ __all__ = ['AccessControlPolicy',
            'ApplicationType',
            'AutoNatRules',
            'BridgeGroupInterfaces',
+           'Bulk',
            'CertEnrollment',
            'Continent',
            'Country',

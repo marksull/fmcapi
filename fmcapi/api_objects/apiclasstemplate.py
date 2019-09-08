@@ -18,6 +18,10 @@ class APIClassTemplate(object):
     URL_SUFFIX = ''
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-]"""
 
+    @property
+    def show_json(self):
+        return self.format_data()
+
     def __init__(self, fmc, **kwargs):
         logging.debug("In __init__() for APIClassTemplate class.")
         self.fmc = fmc
@@ -25,6 +29,8 @@ class APIClassTemplate(object):
 
     def parse_kwargs(self, **kwargs):
         logging.debug("In parse_kwargs() for APIClassTemplate class.")
+        if 'bulk' in kwargs:
+            self.bulk = kwargs['bulk']
         if 'limit' in kwargs:
             self.limit = kwargs['limit']
         else:
