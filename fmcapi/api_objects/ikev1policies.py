@@ -37,12 +37,12 @@ class IKEv1Policies(APIClassTemplate):
             if self.encryption in self.VALID_FOR_ENCRYPTION:
                 json_data['encryption'] = self.encryption
             else:
-                logging.warning('encryption {} not a valid type".'.format(self.encryption))
+                logging.warning(f'encryption "{self.encryption}" not a valid type.')
         if 'hash' in self.__dict__:
             if self.hash in self.VALID_FOR_HASH:
                 json_data['hash'] = self.hash
             else:
-                logging.warning('hash {} not a valid type".'.format(self.hash))
+                logging.warning(f'hash "{self.hash}" not a valid type.')
         if 'priority' in self.__dict__:
             json_data['priority'] = self.priority
         if 'diffieHellmanGroup' in self.__dict__:
