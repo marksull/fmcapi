@@ -1401,7 +1401,7 @@ def test__acp_rule():
     acp1 = fmcapi.AccessControlPolicy(fmc=fmc1, name=namer)
     acp1.post()
     # Get a file_policy
-    fp = fmcapi.FilePolicies(fmc=fmc1, name='daxm_test')
+    # fp = fmcapi.FilePolicies(fmc=fmc1, name='daxm_test')
     time.sleep(1)
     logging.info('# Setup of objects for ACPRule test done.\n')
 
@@ -1430,7 +1430,7 @@ def test__acp_rule():
     acprule1.destination_network(action='add', name=iprange1.name)
     acprule1.destination_network(action='add', name=fqdns1.name)
     # acprule1.urls(name=url1.name)
-    acprule1.file_policy(action='set', name=fp.name)
+    # acprule1.file_policy(action='set', name=fp.name)
     acprule1.post()
 
     logging.info('# Test ACPRule done.\n')
@@ -1457,6 +1457,7 @@ def test__acp_rule():
     logging.info('# Cleanup of objects for ACPRule test done.\n')
     time.sleep(sleep_time_between_tests)
     """
+
 
 def test__audit():
     logging.info('# Testing fmc.audit() method.')
