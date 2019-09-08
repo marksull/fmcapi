@@ -63,12 +63,10 @@ class IPv6StaticRoute(APIClassTemplate):
         device1.get(name=device_name)
         if 'id' in device1.__dict__:
             self.device_id = device1.id
-            self.URL = '{}{}/{}/routing/ipv6staticroutes'.format(self.fmc.configuration_url, self.PREFIX_URL,
-                                                                 self.device_id)
+            self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.device_id}/routing/ipv6staticroutes'
             self.device_added_to_url = True
         else:
-            logging.warning('Device {} not found.  Cannot set up device for '
-                            'IPv6StaticRoute.'.format(device_name))
+            logging.warning(f'Device {device_name} not found.  Cannot set up device for IPv6StaticRoute.')
 
     def networks(self, action, networks):
         logging.info("In networks() for IPv6StaticRoute class.")
@@ -86,7 +84,7 @@ class IPv6StaticRoute(APIClassTemplate):
                         # Check to see if network already exists
                         exists = list(filter(lambda i: i['id'] == net1[0]['id'], self.selectedNetworks))
                         if 'id' in exists:
-                            logging.warning('Network {} already exists in selectedNetworks.'.format(network))
+                            logging.warning(f'Network "{network}" already exists in selectedNetworks.')
                         else:
                             self.selectedNetworks.append(
                                 {"type": net1[0]['type'], "id": net1[0]['id'], "name": net1[0]['name']})
@@ -94,8 +92,7 @@ class IPv6StaticRoute(APIClassTemplate):
                         self.selectedNetworks = [
                             {"type": net1[0]['type'], "id": net1[0]['id'], "name": net1[0]['name']}]
                 else:
-                    logging.warning('Network {} not found.  Cannot set up device for '
-                                    'IPv6StaticRoute.'.format(network))
+                    logging.warning(f'Network "{network}" not found.  Cannot set up device for IPv6StaticRoute.')
         elif action == 'remove':
             ipaddresses_json = IPAddresses(fmc=self.fmc).get()
             networkgroup_json = NetworkGroup(fmc=self.fmc).get()
@@ -106,11 +103,9 @@ class IPv6StaticRoute(APIClassTemplate):
                     if 'selectedNetworks' in self.__dict__:
                         new_net1 = list(filter(lambda i: i['id'] != net1[0]['id'], self.selectedNetworks))
                     else:
-                        logging.warning('No selectedNetworks found for this Device '
-                                        'IPv6StaticRoute.'.format(network))
+                        logging.warning("No selectedNetworks found for this Device's IPv6StaticRoute.")
                 else:
-                    logging.warning('Network {} not found.  Cannot set up device for '
-                                    'IPv6StaticRoute.'.format(network))
+                    logging.warning(f'Network "{network}" not found.  Cannot set up device for IPv6StaticRoute.')
         elif action == 'clear':
             if 'selectedNetworks' in self.__dict__:
                 del self.selectedNetworks
@@ -127,5 +122,4 @@ class IPv6StaticRoute(APIClassTemplate):
                     "id": gw1.id,
                     "name": gw1.name}}
         else:
-            logging.warning('Network {} not found.  Cannot set up device for '
-                            'IPv6StaticRoute.'.format(name))
+            logging.warning(f'Network "{name}" not found.  Cannot set up device for IPv6StaticRoute.')
