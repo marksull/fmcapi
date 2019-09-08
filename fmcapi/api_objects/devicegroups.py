@@ -49,9 +49,9 @@ class DeviceGroups(APIClassTemplate):
                         self.members.append({"id": dev1.id, "type": dev1.type, "name": dev1.name})
                     else:
                         self.members = [{"id": dev1.id, "type": dev1.type, "name": dev1.name}]
-                    logging.info('Device "{}" added to this DeviceGroup object.'.format(dev1.name))
+                    logging.info(f'Device "{dev1.name}" added to this DeviceGroup object.')
                 else:
-                    logging.warning('{} not found.  Cannot add Device to DeviceGroup.'.format(member))
+                    logging.warning(f'{member} not found.  Cannot add Device to DeviceGroup.')
         elif action == 'remove':
             if 'members' in self.__dict__:
                 for member in members:
@@ -70,8 +70,7 @@ class DeviceGroups(APIClassTemplate):
                             self.members = list(filter(lambda i: i['id'] != devHA1.primary["id"], self.members))
                             self.members = list(filter(lambda i: i['id'] != devHA1.secondary["id"], self.members))
                     else:
-                        logging.warning('Device {} not registered.  Cannot remove Device from DeviceGroup.'
-                                        .format(member))
+                        logging.warning(f'Device {member} not registered.  Cannot remove Device from DeviceGroup.')
             else:
                 logging.warning('DeviceGroup has no members.  Cannot remove Device.')
         elif action == 'clear':
