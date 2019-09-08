@@ -18,6 +18,7 @@ class EtherchannelInterfaces(APIClassTemplate):
     VALID_FOR_MODE = ['INLINE', 'PASSIVE', 'TAP', 'ERSPAN', 'NONE']
     VALID_FOR_LACP_MODE = ['ACTIVE', 'PASSIVE', 'ON']
     VALID_FOR_MTU = range(64, 9000)
+    VALID_FOR_LOAD_BALANCING = []  # Not sure what to put here but it was an unresolved variable later in this code.
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
@@ -95,14 +96,14 @@ class EtherchannelInterfaces(APIClassTemplate):
             if list(kwargs['ipv4'].keys())[0] in self.VALID_FOR_IPV4:
                 self.ipv4 = kwargs['ipv4']
             else:
-                logging.warning('Method {} is not a valid ipv4 type.'.format(kwargs['ipv4']))
+                logging.warning(f"Method {kwargs['ipv4']} is not a valid ipv4 type.")
         if 'device_name' in kwargs:
             self.device(device_name=kwargs['device_name'])
         if 'mode' in kwargs:
             if kwargs['mode'] in self.VALID_FOR_MODE:
                 self.mode = kwargs['mode']
             else:
-                logging.warning('Mode {} is not a valid mode.'.format(kwargs['mode']))
+                logging.warning(f"Mode {kwargs['mode']} is not a valid mode.")
         if 'securityZone' in kwargs:
             self.securityZone = kwargs['securityZone']
         if 'enabled' in kwargs:
@@ -111,7 +112,7 @@ class EtherchannelInterfaces(APIClassTemplate):
             if kwargs['MTU'] in self.VALID_FOR_MTU:
                 self.MTU = kwargs['MTU']
             else:
-                logging.warning('MTU {} should be in the range 64-9000".'.format(kwargs['MTU']))
+                logging.warning(f"MTU {kwargs['MTU']} should be in the range 64-9000.")
                 self.MTU = 1500
         if 'managementOnly' in kwargs:
             self.managementOnly = kwargs['managementOnly']
@@ -125,7 +126,7 @@ class EtherchannelInterfaces(APIClassTemplate):
             if kwargs['lacpMode'] in self.VALID_FOR_LACP_MODE:
                 self.lacpMode = kwargs['lacpMode']
             else:
-                logging.warning('LACP Mode {} is not a valid mode".'.format(kwargs['lacpMode']))
+                logging.warning(f"LACP Mode {kwargs['lacpMode']} is not a valid mode.")
         if 'maxActivePhysicalInterface' in kwargs:
             self.maxActivePhysicalInterface = kwargs['maxActivePhysicalInterface']
         if 'minActivePhysicalInterface' in kwargs:
@@ -140,7 +141,7 @@ class EtherchannelInterfaces(APIClassTemplate):
             if kwargs['loadBalancing'] in self.VALID_FOR_LOAD_BALANCING:
                 self.loadBalancing = kwargs['loadBalancing']
             else:
-                logging.warning('Load balancing method {} is not a valid method".'.format(kwargs['loadBalancing']))
+                logging.warning(f"Load balancing method {kwargs['loadBalancing']} is not a valid method.")
         if 'macLearn' in kwargs:
             self.macLearn = kwargs['macLearn']
         if 'ifname' in kwargs:
@@ -168,12 +169,10 @@ class EtherchannelInterfaces(APIClassTemplate):
         device1.get(name=device_name)
         if 'id' in device1.__dict__:
             self.device_id = device1.id
-            self.URL = '{}{}/{}/etherchannelinterfaces'.format(self.fmc.configuration_url, self.PREFIX_URL,
-                                                               self.device_id)
+            self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.device_id}/etherchannelinterfaces'
             self.device_added_to_url = True
         else:
-            logging.warning('Device {} not found.  Cannot set up device for '
-                            'EtherchannelInterfaces.'.format(device1.device_name))
+            logging.warning(f'Device {device_name} not found.  Cannot set up device for EtherchannelInterfaces.')
 
     def sz(self, name):
         logging.debug("In sz() for EtherchannelInterfaces class.")
@@ -183,7 +182,7 @@ class EtherchannelInterfaces(APIClassTemplate):
             new_zone = {'name': sz.name, 'id': sz.id, 'type': sz.type}
             self.securityZone = new_zone
         else:
-            logging.warning('Security Zone, "{}", not found.  Cannot add to RedundantInterfaces.'.format(name))
+            logging.warning(f'Security Zone, "{name}", not found.  Cannot add to RedundantInterfaces.')
 
     def static(self, ipv4addr, ipv4mask):
         logging.debug("In static() for EtherchannelInterfaces class.")
@@ -202,6 +201,5 @@ class EtherchannelInterfaces(APIClassTemplate):
             if 'id' in intf1.__dict__:
                 list1.append({'name': intf1.name, 'id': intf1.id, 'type': intf1.type})
             else:
-                logging.warning(
-                    'PhysicalInterface, "{}", not found.  Cannot add to EtherchannelInterfaces.'.format(intf1.name))
+                logging.warning(f'PhysicalInterface, "{intf1.name}", not found.  Cannot add to EtherchannelInterfaces.')
         self.selectedInterfaces = list1
