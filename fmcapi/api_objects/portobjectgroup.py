@@ -54,7 +54,7 @@ class PortObjectGroup(APIClassTemplate):
                         new_port = {'name': item['name'], 'id': item['id'], 'type': item['type']}
                         break
                 if new_port is None:
-                    logging.warning('Port "{}" is not found in FMC.  Cannot add to PortObjectGroup.'.format(name))
+                    logging.warning(f'Port "{name}" is not found in FMC.  Cannot add to PortObjectGroup.')
                 else:
                     if 'objects' in self.__dict__:
                         duplicate = False
@@ -64,10 +64,10 @@ class PortObjectGroup(APIClassTemplate):
                                 break
                         if not duplicate:
                             self.objects.append(new_port)
-                            logging.info('Adding "{}" to PortObjectGroup.'.format(name))
+                            logging.info(f'Adding "{name}" to PortObjectGroup.')
                     else:
                         self.objects = [new_port]
-                        logging.info('Adding "{}" to PortObjectGroup.'.format(name))
+                        logging.info(f'Adding "{name}" to PortObjectGroup.')
         elif action == 'remove':
             if 'objects' in self.__dict__:
                 objects_list = []
@@ -75,7 +75,7 @@ class PortObjectGroup(APIClassTemplate):
                     if obj['name'] != name:
                         objects_list.append(obj)
                 self.objects = objects_list
-                logging.info('Removed "{}" from PortObjectGroup.'.format(name))
+                logging.info(f'Removed "{name}" from PortObjectGroup.')
             else:
                 logging.info("This PortObjectGroup has no named_ports.  Nothing to remove.")
         elif action == 'clear':
