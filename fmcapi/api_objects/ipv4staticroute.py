@@ -68,14 +68,10 @@ class IPv4StaticRoute(APIClassTemplate):
         device1.get(name=device_name)
         if 'id' in device1.__dict__:
             self.device_id = device1.id
-            self.URL = '{}{}/{}/routing/ipv4staticroutes'.format(self.fmc.configuration_url,
-                                                                 self.PREFIX_URL,
-                                                                 self.device_id,
-                                                                 )
+            self.URL = f'{slef.fmc.configuration_url}{self.PREFIX_URL}/{self.device_id}/routing/ipv4staticroutes'
             self.device_added_to_url = True
         else:
-            logging.warning('Device {} not found.  Cannot set up device for '
-                            'IPv4StaticRoute.'.format(device_name))
+            logging.warning(f'Device {device_name} not found.  Cannot set up device for IPv4StaticRoute.')
 
     def networks(self, action, networks):
         logging.info("In networks() for IPv4StaticRoute class.")
@@ -93,7 +89,7 @@ class IPv4StaticRoute(APIClassTemplate):
                         # Check to see if network already exists
                         exists = list(filter(lambda i: i['id'] == net1[0]['id'], self.selectedNetworks))
                         if 'id' in exists:
-                            logging.warning('Network {} already exists in selectedNetworks.'.format(network))
+                            logging.warning(f'Network "{network}" already exists in selectedNetworks.')
                         else:
                             self.selectedNetworks.append({"type": net1[0]['type'],
                                                           "id": net1[0]['id'],
@@ -105,8 +101,7 @@ class IPv4StaticRoute(APIClassTemplate):
                                                   "name": net1[0]['name'],
                                                   }]
                 else:
-                    logging.warning('Network {} not found.  Cannot set up device for '
-                                    'IPv4StaticRoute.'.format(network))
+                    logging.warning(f'Network "{network}" not found.  Cannot set up device for IPv4StaticRoute.')
         elif action == 'remove':
             ipaddresses_json = IPAddresses(fmc=self.fmc).get()
             networkgroup_json = NetworkGroup(fmc=self.fmc).get()
@@ -117,11 +112,9 @@ class IPv4StaticRoute(APIClassTemplate):
                     if 'selectedNetworks' in self.__dict__:
                         new_net1 = list(filter(lambda i: i['id'] != net1[0]['id'], self.selectedNetworks))
                     else:
-                        logging.warning('No selectedNetworks found for this Device '
-                                        'IPv4StaticRoute.'.format(network))
+                        logging.warning("No selectedNetworks found for this Device's IPv4StaticRoute.")
                 else:
-                    logging.warning('Network {} not found.  Cannot set up device for '
-                                    'IPv4StaticRoute.'.format(network))
+                    logging.warning(f'Network "{network}" not found.  Cannot set up device for IPv4StaticRoute.')
         elif action == 'clear':
             if 'selectedNetworks' in self.__dict__:
                 del self.selectedNetworks
@@ -138,8 +131,7 @@ class IPv4StaticRoute(APIClassTemplate):
                     "id": gw1.id,
                     "name": gw1.name}}
         else:
-            logging.warning('Network {} not found.  Cannot set up device for '
-                            'IPv4StaticRoute.'.format(name))
+            logging.warning(f'Network {name} not found.  Cannot set up device for IPv4StaticRoute.')
 
     def ipsla(self, name):
         logging.info("In ipsla() for IPv4StaticRoute class.")
@@ -151,5 +143,4 @@ class IPv4StaticRoute(APIClassTemplate):
                 "id": ipsla1.id,
                 "name": ipsla1.name}
         else:
-            logging.warning('Object {} not found.  Cannot set up device for '
-                            'IPv4StaticRoute.'.format(name))
+            logging.warning(f'Object {name} not found.  Cannot set up device for IPv4StaticRoute.')
