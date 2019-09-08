@@ -167,7 +167,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                 logging.info(f"Paging:  Offset:{json_response['paging']['offset']}, "
                              f"Limit:{json_response['paging']['limit']}, "
                              f"Count:{json_response['paging']['count']}, "
-                             f"Gathered_Items:{len(self.more_items)}'.")
+                             f"Gathered_Items:{len(self.more_items)}.")
                 self.page_counter += 1
                 return self.send_to_api(method=method,
                                         url=json_response['paging']['next'][0],
