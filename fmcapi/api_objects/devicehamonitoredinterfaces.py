@@ -49,12 +49,10 @@ class DeviceHAMonitoredInterfaces(APIClassTemplate):
         deviceha1.get()
         if 'id' in deviceha1.__dict__:
             self.deviceha_id = deviceha1.id
-            self.URL = '{}{}/{}/monitoredinterfaces'\
-                .format(self.fmc.configuration_url, self.PREFIX_URL, self.deviceha_id)
+            self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.deviceha_id}/monitoredinterfaces'
             self.deviceha_added_to_url = True
         else:
-            logging.warning('Device HA {} not found.  Cannot set up device for '
-                            'DeviceHAMonitoredInterfaces.'.format(ha_name))
+            logging.warning(f'Device HA {ha_name} not found.  Cannot set up device for DeviceHAMonitoredInterfaces.')
 
     def ipv4(self, ipv4addr, ipv4mask, ipv4standbyaddr):
         logging.debug("In ipv4() for DeviceHAMonitoredInterfaces class.")
