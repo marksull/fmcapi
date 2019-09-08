@@ -134,11 +134,10 @@ class ManualNatRules(APIClassTemplate):
         ftd_nat.get(name=name)
         if 'id' in ftd_nat.__dict__:
             self.nat_id = ftd_nat.id
-            self.URL = '{}{}/{}/manualnatrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.nat_id)
+            self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.nat_id}/manualnatrules'
             self.nat_added_to_url = True
         else:
-            logging.warning('FTD NAT Policy {} not found.  Cannot set up ManualNatRule for '
-                            'NAT Policy.'.format(name))
+            logging.warning(f'FTD NAT Policy "{name}" not found.  Cannot set up ManualNatRule for NAT Policy.')
 
     def original_source(self, name):
         logging.debug("In original_source() for ManualNatRules class.")
@@ -151,10 +150,10 @@ class ManualNatRules(APIClassTemplate):
                 new_net = {'id': item['id'], 'type': item['type']}
                 break
         if new_net is None:
-            logging.warning('Network "{}" is not found in FMC.  Cannot add to original_source.'.format(name))
+            logging.warning(f'Network "{name}" is not found in FMC.  Cannot add to original_source.')
         else:
             self.originalSource = new_net
-            logging.info('Adding "{}" to original_source for this ManualNatRule.'.format(name))
+            logging.info(f'Adding "{name}" to original_source for this ManualNatRule.')
 
     def translated_source(self, name):
         logging.debug("In translated_source() for ManualNatRules class.")
@@ -167,10 +166,10 @@ class ManualNatRules(APIClassTemplate):
                 new_net = {'id': item['id'], 'type': item['type']}
                 break
         if new_net is None:
-            logging.warning('Network "{}" is not found in FMC.  Cannot add to translated_source.'.format(name))
+            logging.warning(f'Network "{name}" is not found in FMC.  Cannot add to translated_source.')
         else:
             self.translatedSource = new_net
-            logging.info('Adding "{}" to translated_source for this ManualNatRule.'.format(name))
+            logging.info(f'Adding "{name}" to translated_source for this ManualNatRule.')
 
     def original_destination(self, name):
         logging.debug("In original_destination() for ManualNatRules class.")
@@ -183,10 +182,10 @@ class ManualNatRules(APIClassTemplate):
                 new_net = {'id': item['id'], 'type': item['type']}
                 break
         if new_net is None:
-            logging.warning('Network "{}" is not found in FMC.  Cannot add to original_destination.'.format(name))
+            logging.warning(f'Network "{name}" is not found in FMC.  Cannot add to original_destination.')
         else:
             self.originalDestination = new_net
-            logging.info('Adding "{}" to original_destination for this ManualNatRule.'.format(name))
+            logging.info(f'Adding "{name}" to original_destination for this ManualNatRule.')
 
     def translated_destination(self, name):
         logging.debug("In translated_destination() for ManualNatRules class.")
@@ -199,10 +198,10 @@ class ManualNatRules(APIClassTemplate):
                 new_net = {'id': item['id'], 'type': item['type']}
                 break
         if new_net is None:
-            logging.warning('Network "{}" is not found in FMC.  Cannot add to translated_destination.'.format(name))
+            logging.warning(f'Network "{name}" is not found in FMC.  Cannot add to translated_destination.')
         else:
             self.translatedDestination = new_net
-            logging.info('Adding "{}" to translated_destination for this ManualNatRule.'.format(name))
+            logging.info(f'Adding "{name}" to translated_destination for this ManualNatRule.')
 
     def original_source_port(self, name):
         logging.debug("In original_source_port() for ManualNatRules class.")
@@ -215,10 +214,10 @@ class ManualNatRules(APIClassTemplate):
                 new_port = {'id': item['id'], 'type': item['type']}
                 break
         if new_port is None:
-            logging.warning('Port "{}" is not found in FMC.  Cannot add to original_source_port.'.format(name))
+            logging.warning(f'Port "{name}" is not found in FMC.  Cannot add to original_source_port.')
         else:
             self.originalSourcePort = new_port
-            logging.info('Adding "{}" to original_source_port for this ManualNatRule.'.format(name))
+            logging.info(f'Adding "{name}" to original_source_port for this ManualNatRule.')
 
     def translated_source_port(self, name):
         logging.debug("In translated_source_port() for ManualNatRules class.")
@@ -231,10 +230,10 @@ class ManualNatRules(APIClassTemplate):
                 new_port = {'id': item['id'], 'type': item['type']}
                 break
         if new_port is None:
-            logging.warning('Port "{}" is not found in FMC.  Cannot add to translated_source_port.'.format(name))
+            logging.warning(f'Port "{name}" is not found in FMC.  Cannot add to translated_source_port.')
         else:
             self.translatedSourcePort = new_port
-            logging.info('Adding "{}" to translated_source_port for this ManualNatRule.'.format(name))
+            logging.info(f'Adding "{name}" to translated_source_port for this ManualNatRule.')
 
     def original_destination_port(self, name):
         logging.debug("In original_destination_port() for ManualNatRules class.")
@@ -247,10 +246,10 @@ class ManualNatRules(APIClassTemplate):
                 new_port = {'id': item['id'], 'type': item['type']}
                 break
         if new_port is None:
-            logging.warning('Port "{}" is not found in FMC.  Cannot add to original_destination_port.'.format(name))
+            logging.warning(f'Port "{name}" is not found in FMC.  Cannot add to original_destination_port.')
         else:
             self.originalDestinationPort = new_port
-            logging.info('Adding "{}" to original_destination_port for this ManualNatRule.'.format(name))
+            logging.info(f'Adding "{name}" to original_destination_port for this ManualNatRule.')
 
     def translated_destination_port(self, name):
         logging.debug("In translated_destination_port() for ManualNatRules class.")
@@ -263,10 +262,10 @@ class ManualNatRules(APIClassTemplate):
                 new_port = {'id': item['id'], 'type': item['type']}
                 break
         if new_port is None:
-            logging.warning('Port "{}" is not found in FMC.  Cannot add to translated_destination_port.'.format(name))
+            logging.warning(f'Port "{name}" is not found in FMC.  Cannot add to translated_destination_port.')
         else:
             self.translatedDestinationPort = new_port
-            logging.info('Adding "{}" to translated_destination_port for this ManualNatRule.'.format(name))
+            logging.info(f'Adding "{name}" to translated_destination_port for this ManualNatRule.')
 
     def source_intf(self, name):
         logging.debug("In source_intf() for ManualNatRules class.")
@@ -278,10 +277,10 @@ class ManualNatRules(APIClassTemplate):
                 new_intf = {'id': item['id'], 'type': item['type']}
                 break
         if new_intf is None:
-            logging.warning('Interface Object "{}" is not found in FMC.  Cannot add to sourceInterface.'.format(name))
+            logging.warning(f'Interface Object "{name}" is not found in FMC.  Cannot add to sourceInterface.')
         else:
             self.sourceInterface = new_intf
-            logging.info('Interface Object "{}" added to NAT Policy.'.format(name))
+            logging.info(f'Interface Object "{name}" added to NAT Policy.')
 
     def destination_intf(self, name):
         logging.debug("In destination_intf() for ManualNatRules class.")
@@ -293,11 +292,10 @@ class ManualNatRules(APIClassTemplate):
                 new_intf = {'id': item['id'], 'type': item['type']}
                 break
         if new_intf is None:
-            logging.warning('Interface Object "{}" is not found in FMC.  Cannot add to destinationInterface.'
-                            .format(name))
+            logging.warning(f'Interface Object "{name}" is not found in FMC.  Cannot add to destinationInterface.')
         else:
             self.destinationInterface = new_intf
-            logging.info('Interface Object "{}" added to NAT Policy.'.format(name))
+            logging.info(f'Interface Object "{name}" added to NAT Policy.')
 
     def identity_nat(self, name):
         logging.debug("In identity_nat() for ManualNatRules class.")
@@ -310,12 +308,12 @@ class ManualNatRules(APIClassTemplate):
                 new_net = {'id': item['id'], 'type': item['type']}
                 break
         if new_net is None:
-            logging.warning('Network "{}" is not found in FMC.  Cannot add to this ManualNatRules.'.format(name))
+            logging.warning(f'Network "{name}" is not found in FMC.  Cannot add to this ManualNatRules.')
         else:
             self.natType = "STATIC"
             self.originalSource = new_net
             self.translatedSource = new_net
-            logging.info('Adding "{}" to ManualNatRules.'.format(name))
+            logging.info(f'Adding "{name}" to ManualNatRules.')
 
     def patPool(self, name, options={}):
         ipaddresses_json = IPAddresses(fmc=self.fmc).get()
@@ -327,7 +325,7 @@ class ManualNatRules(APIClassTemplate):
                 new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
                 break
         if new_net is None:
-            logging.warning('Network "{}" is not found in FMC.  Cannot add to patPool.'.format(name))
+            logging.warning(f'Network "{name}" is not found in FMC.  Cannot add to patPool.')
         else:
             self.natType = "DYNAMIC"
             self.unidirectional = True
@@ -337,4 +335,4 @@ class ManualNatRules(APIClassTemplate):
             self.patOptions["roundRobin"] = options.roundRobin if "roundRobin" in options.keys() else True
             self.patOptions["extendedPat"] = options.extendedPat if "extendedPat" in options.keys() else False
             self.patOptions["flatPortRange"] = options.flatPortRange if "flatPortRange" in options.keys() else False
-            logging.info('Adding "{}" to patPool for this AutoNatRule.'.format(name))
+            logging.info(f'Adding "{name}" to patPool for this ManualNatRule.')
