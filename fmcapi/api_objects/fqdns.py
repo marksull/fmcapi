@@ -34,7 +34,7 @@ class FQDNS(APIClassTemplate):
             if self.dnsResolution in self.VALID_FOR_DNS_RESOLUTION:
                 json_data['dnsResolution'] = self.dnsResolution
             else:
-                logging.warning('dnsResolution {} not a valid type".'.format(self.dnsResolution))
+                logging.warning(f'dnsResolution {self.dnsResolution} not a valid type.')
         if 'overrides' in self.__dict__:
             json_data['overrides'] = self.overrides
         if 'overridable' in self.__dict__:
@@ -52,7 +52,7 @@ class FQDNS(APIClassTemplate):
             if kwargs['dnsResolution'] in self.VALID_FOR_DNS_RESOLUTION:
                 self.dnsResolution = kwargs['dnsResolution']
             else:
-                logging.warning('dnsResolution {} not a valid type".'.format(kwargs['dnsResolution']))
+                logging.warning(f"dnsResolution {kwargs['dnsResolution']} not a valid type.")
         if 'overrides' in kwargs:
             self.overrides = kwargs['overrides']
         if 'overridable' in kwargs:
