@@ -82,9 +82,9 @@ class SLAMonitor(APIClassTemplate):
             if 'id' in sz.__dict__:
                 zones.append({'name': sz.name, 'id': sz.id, 'type': sz.type})
             else:
-                logging.warning('Security Zone, "{}", not found.  Cannot add to SLAMonitor.'.format(name))
+                logging.warning(f'Security Zone, "{name}", not found.  Cannot add to SLAMonitor.')
         if len(zones) != 0:
             # Make sure we found at least one zone
             self.interfaceObjects = zones
         else:
-            logging.warning('No valid Security Zones found: "{}".  Cannot add to SLAMonitor.'.format(names))
+            logging.warning(f'No valid Security Zones found: "{names}".  Cannot add to SLAMonitor.')
