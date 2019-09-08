@@ -63,14 +63,14 @@ class PhysicalInterface(APIClassTemplate):
             if list(kwargs['ipv4'].keys())[0] in self.VALID_FOR_IPV4:
                 self.ipv4 = kwargs['ipv4']
             else:
-                logging.warning('Method {} is not a valid ipv4 type.'.format(kwargs['ipv4']))
+                logging.warning(f"Method {kwargs['ipv4']} is not a valid ipv4 type.")
         if 'device_name' in kwargs:
             self.device(device_name=kwargs['device_name'])
         if 'mode' in kwargs:
             if kwargs['mode'] in self.VALID_FOR_MODE:
                 self.mode = kwargs['mode']
             else:
-                logging.warning('Mode {} is not a valid mode.'.format(kwargs['mode']))
+                logging.warning(f"Mode {kwargs['mode']} is not a valid mode.")
         if 'hardware' in kwargs:
             self.hardware = kwargs['hardware']
         if 'securityZone' in kwargs:
@@ -83,7 +83,7 @@ class PhysicalInterface(APIClassTemplate):
             if kwargs['MTU'] in self.VALID_FOR_MTU:
                 self.MTU = kwargs['MTU']
             else:
-                logging.warning('MTU {} should be in the range 64-9000".'.format(kwargs['MTU']))
+                logging.warning(f"MTU {kwargs['MTU']} should be in the range 64-9000.")
                 self.MTU = 1500
         if 'managementOnly' in kwargs:
             self.managementOnly = kwargs['managementOnly']
@@ -102,10 +102,10 @@ class PhysicalInterface(APIClassTemplate):
         device1.get(name=device_name)
         if 'id' in device1.__dict__:
             self.device_id = device1.id
-            self.URL = '{}{}/{}/physicalinterfaces'.format(self.fmc.configuration_url, self.PREFIX_URL, self.device_id)
+            self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.device_id}/physicalinterfaces'
             self.device_added_to_url = True
         else:
-            logging.warning('Device {} not found.  Cannot set up device for physicalInterface.'.format(device_name))
+            logging.warning(f'Device {device_name} not found.  Cannot set up device for physicalInterface.')
 
     def sz(self, name):
         logging.debug("In sz() for PhysicalInterface class.")
@@ -115,7 +115,7 @@ class PhysicalInterface(APIClassTemplate):
             new_zone = {'name': sz.name, 'id': sz.id, 'type': sz.type}
             self.securityZone = new_zone
         else:
-            logging.warning('Security Zone, "{}", not found.  Cannot add to PhysicalInterface.'.format(name))
+            logging.warning(f'Security Zone, "{name}", not found.  Cannot add to PhysicalInterface.')
 
     def static(self, ipv4addr, ipv4mask):
         logging.debug("In static() for PhysicalInterface class.")
@@ -130,7 +130,7 @@ class PhysicalInterface(APIClassTemplate):
         if mode in self.VALID_FOR_MODE:
             self.mode = mode
         else:
-            logging.warning('Mode {} is not a valid mode.'.format(mode))
+            logging.warning(f'Mode {mode} is not a valid mode.')
 
     def hardware(self, speed, duplex="FULL"):
         # There are probably some incompatibilities that need to be accounted for
@@ -138,4 +138,4 @@ class PhysicalInterface(APIClassTemplate):
         if speed in self.VALID_FOR_HARDWARE_SPEED and duplex in self.VALID_FOR_HARDWARE_DUPLEX:
             self.hardware = {"duplex": duplex, "speed": speed}
         else:
-            logging.warning('Speed {} or Duplex {} is not a valid mode.'.format(speed, duplex))
+            logging.warning(f'Speed {speed} or Duplex {duplex} is not a valid mode.')
