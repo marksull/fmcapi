@@ -52,21 +52,19 @@ class PolicyAssignments(APIClassTemplate):
         if 'id' in pol1.__dict__:
             self.policy = {"type": pol1.type, "name": pol1.name, "id": pol1.id}
         else:
-            logging.warning('FTD NAT Policy {} not found.  Cannot set up'
-                            'PolicyAssignment.'.format(name))
+            logging.warning(f'FTD NAT Policy {name} not found.  Cannot set up PolicyAssignment.')
         for device in devices:
             if device["type"] == 'device':
                 dev1 = Device(fmc=self.fmc)
-                dev1.get(name=device["name"])
+                dev1.get(name=device['name'])
             elif device["type"] == 'deviceHAPair':
                 dev1 = DeviceHAPairs(fmc=self.fmc)
-                dev1.get(name=device["name"])
+                dev1.get(name=device['name'])
             if 'id' in dev1.__dict__:
-                logging.info('Adding "{}" to targets for this FTDNat PolicyAssignment.'.format(dev1.name))
+                logging.info(f'Adding "{dev1.name}" to targets for this FTDNat PolicyAssignment.')
                 targets.append({"type": dev1.type, "id": dev1.id, "name": dev1.name})
             else:
-                logging.warning('Device/DeviceHA {} not found.  Cannot add to '
-                                'PolicyAssignment.'.format(dev1.name))
+                logging.warning(f"Device/DeviceHA {device['name']} not found.  Cannot add to PolicyAssignment.")
         self.targets = targets
 
     def accesspolicy(self, name, devices):
@@ -77,22 +75,19 @@ class PolicyAssignments(APIClassTemplate):
         if 'id' in pol1.__dict__:
             self.policy = {"type": pol1.type, "name": pol1.name, "id": pol1.id}
         else:
-            logging.warning('Access Control Policy {} not found.  Cannot set up'
-                            'PolicyAssignment.'.format(name))
+            logging.warning(f'Access Control Policy {name} not found.  Cannot set up PolicyAssignment.')
         for device in devices:
             if device["type"] == 'device':
                 dev1 = Device(fmc=self.fmc)
-                dev1.get(name=device["name"])
+                dev1.get(name=device['name'])
             elif device["type"] == 'deviceHAPair':
                 dev1 = DeviceHAPairs(fmc=self.fmc)
-                dev1.get(name=device["name"])
+                dev1.get(name=device['name'])
             if 'id' in dev1.__dict__:
-                logging.info('Adding "{}" to targets for this Access Control Policy PolicyAssignment.'
-                             .format(dev1.name))
+                logging.info(f'Adding "{dev1.name}" to targets for this Access Control Policy PolicyAssignment.')
                 targets.append({"type": dev1.type, "id": dev1.id, "name": dev1.name})
             else:
-                logging.warning('Device/DeviceHA {} not found.  Cannot add to '
-                                'PolicyAssignment.'.format(dev1.name))
+                logging.warning(f"Device/DeviceHA {device['name']} not found.  Cannot add to PolicyAssignment.")
         self.targets = targets
 
     def delete(self):
