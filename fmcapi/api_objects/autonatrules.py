@@ -107,11 +107,10 @@ class AutoNatRules(APIClassTemplate):
         ftd_nat.get(name=name)
         if 'id' in ftd_nat.__dict__:
             self.nat_id = ftd_nat.id
-            self.URL = '{}{}/{}/autonatrules'.format(self.fmc.configuration_url, self.PREFIX_URL, self.nat_id)
+            self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.nat_id}/autonatrules'
             self.nat_added_to_url = True
         else:
-            logging.warning('FTD NAT Policy {} not found.  Cannot set up AutoNatRule for '
-                            'NAT Policy.'.format(name))
+            logging.warning(f'FTD NAT Policy {name} not found.  Cannot set up AutoNatRule for NAT Policy.')
 
     def original_network(self, name):
         logging.debug("In original_network() for AutoNatRules class.")
@@ -123,10 +122,10 @@ class AutoNatRules(APIClassTemplate):
                 new_net = {'id': item['id'], 'type': item['type']}
                 break
         if new_net is None:
-            logging.warning('Network "{}" is not found in FMC.  Cannot add to originalNetwork.'.format(name))
+            logging.warning(f'Network "{name}" is not found in FMC.  Cannot add to originalNetwork.')
         else:
             self.originalNetwork = new_net
-            logging.info('Adding "{}" to sourceNetworks for this AutoNatRule.'.format(name))
+            logging.info(f'Adding "{name}" to sourceNetworks for this AutoNatRule.')
 
     def translated_network(self, name):
         # Auto Nat rules can't use network group objects
@@ -139,10 +138,10 @@ class AutoNatRules(APIClassTemplate):
                 new_net = {'id': item['id'], 'type': item['type']}
                 break
         if new_net is None:
-            logging.warning('Network "{}" is not found in FMC.  Cannot add to translatedNetwork.'.format(name))
+            logging.warning(f'Network "{name}" is not found in FMC.  Cannot add to translatedNetwork.')
         else:
             self.translatedNetwork = new_net
-            logging.info('Adding "{}" to destinationNetworks for this AutoNatRule.'.format(name))
+            logging.info(f'Adding "{name}" to destinationNetworks for this AutoNatRule.')
 
     def source_intf(self, name):
         logging.debug("In source_intf() for AutoNatRules class.")
@@ -154,14 +153,14 @@ class AutoNatRules(APIClassTemplate):
                 new_intf = {'id': item['id'], 'type': item['type']}
                 break
         if new_intf is None:
-            logging.warning('Interface Object "{}" is not found in FMC.  Cannot add to sourceInterface.'.format(name))
+            logging.warning(f'Interface Object "{name}" is not found in FMC.  Cannot add to sourceInterface.')
         else:
             if new_intf['type'] == "InterfaceGroup" and len(new_intf.interfaces) > 1:
-                logging.warning('Interface Object "{}" contains more than one physical interface.  '
-                                'Cannot add to sourceInterface.'.format(name))
+                logging.warning(f'Interface Object "{name}" contains more than one physical interface. Cannot add to '
+                                f'sourceInterface.')
             else:
                 self.sourceInterface = new_intf
-                logging.info('Interface Object "{}" added to NAT Policy.'.format(name))
+                logging.info(f'Interface Object "{name}" added to NAT Policy.')
 
     def destination_intf(self, name):
         logging.debug("In destination_intf() for AutoNatRules class.")
@@ -173,15 +172,14 @@ class AutoNatRules(APIClassTemplate):
                 new_intf = {'id': item['id'], 'type': item['type']}
                 break
         if new_intf is None:
-            logging.warning('Interface Object "{}" is not found in FMC.  Cannot add to destinationInterface.'
-                            .format(name))
+            logging.warning(f'Interface Object "{name}" is not found in FMC.  Cannot add to destinationInterface.')
         else:
             if new_intf['type'] == "InterfaceGroup" and len(new_intf.interfaces) > 1:
-                logging.warning('Interface Object "{}" contains more than one physical interface.  '
-                                'Cannot add to destinationInterface.'.format(name))
+                logging.warning(f'Interface Object "{name}" contains more than one physical interface. Cannot add to '
+                                f'destinationInterface.')
             else:
                 self.destinationInterface = new_intf
-                logging.info('Interface Object "{}" added to NAT Policy.'.format(name))
+                logging.info(f'Interface Object "{name}" added to NAT Policy.')
 
     def identity_nat(self, name):
         logging.debug("In identity_nat() for AutoNatRules class.")
@@ -193,12 +191,12 @@ class AutoNatRules(APIClassTemplate):
                 new_net = {'id': item['id'], 'type': item['type']}
                 break
         if new_net is None:
-            logging.warning('Network "{}" is not found in FMC.  Cannot add to this AutoNatRule.'.format(name))
+            logging.warning(f'Network "{name}" is not found in FMC.  Cannot add to this AutoNatRule.')
         else:
             self.natType = "STATIC"
             self.originalNetwork = new_net
             self.translatedNetwork = new_net
-            logging.info('Adding "{}" to AutoNatRule.'.format(name))
+            logging.info(f'Adding "{name}" to AutoNatRule.')
 
     def patPool(self, name, options={}):
         # Network Group Object permitted for patPool
@@ -211,7 +209,7 @@ class AutoNatRules(APIClassTemplate):
                 new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
                 break
         if new_net is None:
-            logging.warning('Network "{}" is not found in FMC.  Cannot add to patPool.'.format(name))
+            logging.warning(f'Network "{name}" is not found in FMC.  Cannot add to patPool.')
         else:
             self.natType = "DYNAMIC"
             self.patOptions = {"patPoolAddress": new_net}
@@ -220,4 +218,4 @@ class AutoNatRules(APIClassTemplate):
             self.patOptions["roundRobin"] = options.roundRobin if "roundRobin" in options.keys() else True
             self.patOptions["extendedPat"] = options.extendedPat if "extendedPat" in options.keys() else False
             self.patOptions["flatPortRange"] = options.flatPortRange if "flatPortRange" in options.keys() else False
-            logging.info('Adding "{}" to patPool for this AutoNatRule.'.format(name))
+            logging.info(f'Adding "{name}" to patPool for this AutoNatRule.')
