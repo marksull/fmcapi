@@ -7,7 +7,7 @@ import ipaddress
 import json
 import logging
 
-logging.debug("In the {} module.".format(__name__))
+logging.debug(f"In the {__name__} module.")
 
 
 def syntax_correcter(value, permitted_syntax="""[.\w\d_\-]""", replacer='_'):
