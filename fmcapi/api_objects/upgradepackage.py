@@ -13,7 +13,7 @@ class UpgradePackage(APIClassTemplate):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for UpgradePackage class.")
         self.type = 'UpgradePackage'
-        self.URL = '{}{}'.format(self.fmc.platform_url, self.URL_SUFFIX)
+        self.URL = f'{self.fmc.platform_url}{self.URL_SUFFIX}'
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
