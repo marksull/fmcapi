@@ -56,7 +56,7 @@ class DNSServerGroups(APIClassTemplate):
                     self.dnsservers.append({"name-server":name_server})
                 else:
                     self.dnsservers = [{"name-server":name_server}]
-                logging.info('Name-server "{}" added to this DNSServerGroups object.'.format(name_server))
+                logging.info(f'Name-server "{name_server}" added to this DNSServerGroups object.')
         elif action == 'remove':
             if 'dnsservers' in self.__dict__:
                 for name_server in name_servers:
