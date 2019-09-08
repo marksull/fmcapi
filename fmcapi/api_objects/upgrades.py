@@ -15,7 +15,7 @@ class Upgrades(APIClassTemplate):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for Upgrades class.")
         self.type = 'Upgrade'
-        self.URL = '{}{}'.format(self.fmc.platform_url, self.URL_SUFFIX)
+        self.URL = f'{self.fmc.platform_url}{self.URL_SUFFIX}'
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
@@ -52,8 +52,7 @@ class Upgrades(APIClassTemplate):
         if 'id' in package1.__dict__:
             self.upgradePackage = {"id": package1.id, "type": package1.type}
         else:
-            logging.warning('UpgradePackage {} not found.  Cannot add package to '
-                            'Upgrades.'.format(package_name))
+            logging.warning(f'UpgradePackage "{package_name}" not found.  Cannot add package to Upgrades.')
 
     def devices(self, devices):
         logging.debug("In devices() for Upgrades class.")
@@ -65,8 +64,7 @@ class Upgrades(APIClassTemplate):
             elif 'id' in device1.__dict__:
                 self.targets = [{"id": device1.id, "type": device1.type, "name": device1.name}]
             else:
-                logging.warning('Device {} not found.  Cannot prepare devices for '
-                                'Upgrades.'.format(device))
+                logging.warning(f'Device "{device}" not found.  Cannot prepare devices for Upgrades.')
 
     def get(self):
         logging.info('GET method for API for Upgrades not supported.')
