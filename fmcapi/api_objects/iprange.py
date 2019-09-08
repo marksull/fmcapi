@@ -17,16 +17,13 @@ class IPRange(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         if 'value' in kwargs:
             value_type = get_networkaddress_type(kwargs['value'])
-            if value_type == 'host':
-                logging.warning("value, {}, is of type {}.  Limited functionality for this object due to it being "
-                                "created via the IPRange function.".format(kwargs['value'], value_type))
-            if value_type == 'network':
-                logging.warning("value, {}, is of type {}.  Limited functionality for this object due to it being "
-                                "created via the IPRange function.".format(kwargs['value'], value_type))
+            if value_type is 'host' or value_type is 'network':
+                logging.warning(f"value, {kwargs['value']}, is of type {value_type}.  Limited functionality for this "
+                                f"object due to it being created via the IPRange function.")
             if validate_ip_bitmask_range(value=kwargs['value'], value_type=value_type):
                 self.value = kwargs['value']
             else:
-                logging.error("Provided value, {}, has an error with the IP address(es).".format(kwargs['value']))
+                logging.error(f"Provided value, {kwargs['value']}, has an error with the IP address(es).")
 
     def format_data(self):
         logging.debug("In format_data() for IPRange class.")
