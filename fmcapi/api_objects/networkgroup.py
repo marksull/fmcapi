@@ -55,7 +55,7 @@ class NetworkGroup(APIClassTemplate):
                         new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
                         break
                 if new_net is None:
-                    logging.warning('Network "{}" is not found in FMC.  Cannot add to NetworkGroup.'.format(name))
+                    logging.warning(f'Network "{name}" is not found in FMC.  Cannot add to NetworkGroup.')
                 else:
                     if 'objects' in self.__dict__:
                         duplicate = False
@@ -65,10 +65,10 @@ class NetworkGroup(APIClassTemplate):
                                 break
                         if not duplicate:
                             self.objects.append(new_net)
-                            logging.info('Adding "{}" to NetworkGroup.'.format(name))
+                            logging.info(f'Adding "{name}" to NetworkGroup.')
                     else:
                         self.objects = [new_net]
-                        logging.info('Adding "{}" to NetworkGroup.'.format(name))
+                        logging.info(f'Adding "{name}" to NetworkGroup.')
         if action == 'addgroup':
             netg1 = NetworkGroup(fmc=self.fmc)
             response = netg1.get()
@@ -79,7 +79,7 @@ class NetworkGroup(APIClassTemplate):
                         new_net = {'name': item['name'], 'id': item['id'], 'type': item['type']}
                         break
                 if new_net is None:
-                    logging.warning('Network "{}" is not found in FMC.  Cannot add to NetworkGroup.'.format(name))
+                    logging.warning(f'Network "{name}" is not found in FMC.  Cannot add to NetworkGroup.')
                 else:
                     if 'objects' in self.__dict__:
                         duplicate = False
@@ -89,10 +89,10 @@ class NetworkGroup(APIClassTemplate):
                                 break
                         if not duplicate:
                             self.objects.append(new_net)
-                            logging.info('Adding "{}" to NetworkGroup.'.format(name))
+                            logging.info(f'Adding "{name}" to NetworkGroup.')
                     else:
                         self.objects = [new_net]
-                        logging.info('Adding "{}" to NetworkGroup.'.format(name))
+                        logging.info(f'Adding "{name}" to NetworkGroup.')
         elif action == 'remove':
             if 'objects' in self.__dict__:
                 objects_list = []
@@ -100,7 +100,7 @@ class NetworkGroup(APIClassTemplate):
                     if obj['name'] != name:
                         objects_list.append(obj)
                 self.objects = objects_list
-                logging.info('Removed "{}" from NetworkGroup.'.format(name))
+                logging.info(f'Removed "{name}" from NetworkGroup.')
             else:
                 logging.info("This NetworkGroup has no named_networks.  Nothing to remove.")
         elif action == 'clear':
@@ -121,7 +121,7 @@ class NetworkGroup(APIClassTemplate):
             elif literal_type == 'range':
                 logging.error('Ranges are not supported as unnamed_networks in a NetworkGroup.')
             else:
-                logging.error('Value "{}" provided is not in a recognizable format.'.format(value))
+                logging.error(f'Value "{value}" provided is not in a recognizable format.')
                 return
             if 'literals' in self.__dict__:
                 duplicate = False
@@ -131,10 +131,10 @@ class NetworkGroup(APIClassTemplate):
                         break
                 if not duplicate:
                     self.literals.append(new_literal)
-                    logging.info('Adding "{}" to NetworkGroup.'.format(value))
+                    logging.info(f'Adding "{value}" to NetworkGroup.')
             else:
                 self.literals = [new_literal]
-                logging.info('Adding "{}" to NetworkGroup.'.format(value))
+                logging.info(f'Adding "{value}" to NetworkGroup.')
         elif action == 'remove':
             if 'literals' in self.__dict__:
                 literals_list = []
@@ -142,7 +142,7 @@ class NetworkGroup(APIClassTemplate):
                     if obj['value'] != value:
                         literals_list.append(obj)
                 self.literals = literals_list
-                logging.info('Removed "{}" from NetworkGroup.'.format(value))
+                logging.info(f'Removed "{value}" from NetworkGroup.')
             else:
                 logging.info("This NetworkGroup has no unnamed_networks.  Nothing to remove.")
         elif action == 'clear':
