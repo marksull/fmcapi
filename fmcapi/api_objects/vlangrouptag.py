@@ -57,7 +57,7 @@ class VlanGroupTag(APIClassTemplate):
                         new_vlan = {'name': item['name'], 'id': item['id'], 'type': item['type']}
                         break
                 if new_vlan is None:
-                    logging.warning('VlanTag "{}" is not found in FMC.  Cannot add to VlanGroupTag.'.format(name))
+                    logging.warning(f'VlanTag "{name}" is not found in FMC.  Cannot add to VlanGroupTag.')
                 else:
                     if 'objects' in self.__dict__:
                         duplicate = False
@@ -67,10 +67,10 @@ class VlanGroupTag(APIClassTemplate):
                                 break
                         if not duplicate:
                             self.objects.append(new_vlan)
-                            logging.info('Adding "{}" to VlanGroupTag.'.format(name))
+                            logging.info(f'Adding "{name}" to VlanGroupTag.')
                     else:
                         self.objects = [new_vlan]
-                        logging.info('Adding "{}" to VlanGroupTag.'.format(name))
+                        logging.info(f'Adding "{name}" to VlanGroupTag.')
         elif action == 'remove':
             if 'objects' in self.__dict__:
                 objects_list = []
@@ -78,7 +78,7 @@ class VlanGroupTag(APIClassTemplate):
                     if obj['name'] != name:
                         objects_list.append(obj)
                 self.objects = objects_list
-                logging.info('Removed "{}" from VlanGroupTag.'.format(name))
+                logging.info(f'Removed "{name}" from VlanGroupTag.')
             else:
                 logging.info("This VlanGroupTag has no named_vlantags.  Nothing to remove.")
         elif action == 'clear':
@@ -99,10 +99,10 @@ class VlanGroupTag(APIClassTemplate):
                         break
                 if not duplicate:
                     self.literals.append(new_literal)
-                    logging.info('Adding "{}/{}" to VlanGroupTag.'.format(startvlan, endvlan))
+                    logging.info(f'Adding "{startvlan}/{endvlan}" to VlanGroupTag.')
             else:
                 self.literals = [new_literal]
-                logging.info('Adding "{}/{}" to VlanGroupTag.'.format(startvlan, endvlan))
+                logging.info(f'Adding "{startvlan}/{endvlan}" to VlanGroupTag.')
         elif action == 'remove':
             startvlan, endvlan = validate_vlans(start_vlan=startvlan, end_vlan=endvlan)
             if 'literals' in self.__dict__:
@@ -111,7 +111,7 @@ class VlanGroupTag(APIClassTemplate):
                     if obj['startTag'] != startvlan and obj['endTag'] != endvlan:
                         literals_list.append(obj)
                 self.literals = literals_list
-                logging.info('Removed "{}/{}" from VlanGroupTag.'.format(startvlan, endvlan))
+                logging.info(f'Removed "{startvlan}/{endvlan}" from VlanGroupTag.')
             else:
                 logging.info("This VlanGroupTag has no unnamed_vlantags.  Nothing to remove.")
         elif action == 'clear':
