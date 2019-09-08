@@ -45,14 +45,10 @@ class StaticRoutes(APIClassTemplate):
         device1.get(name=device_name)
         if 'id' in device1.__dict__:
             self.device_id = device1.id
-            self.URL = '{}{}/{}/routing/staticroutes'.format(self.fmc.configuration_url,
-                                                             self.PREFIX_URL,
-                                                             self.device_id,
-                                                             )
+            self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.device_id}/routing/staticroutes'
             self.device_added_to_url = True
         else:
-            logging.warning('Device {} not found.  Cannot set up device for '
-                            'physicalInterface.'.format(device_name))
+            logging.warning(f'Device "{device_name}" not found.  Cannot set up device for physicalInterface.')
 
     def post(self):
         logging.info('POST method for API for StaticRoutes not supported.')
