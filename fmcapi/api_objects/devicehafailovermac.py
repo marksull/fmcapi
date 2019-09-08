@@ -51,12 +51,11 @@ class DeviceHAFailoverMAC(APIClassTemplate):
         deviceha1.get()
         if 'id' in deviceha1.__dict__:
             self.deviceha_id = deviceha1.id
-            self.URL = '{}{}/{}/failoverinterfacemacaddressconfigs'\
-                .format(self.fmc.configuration_url, self.PREFIX_URL, self.deviceha_id)
+            self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/' \
+                       f'{self.deviceha_id}/failoverinterfacemacaddressconfigs'
             self.deviceha_added_to_url = True
         else:
-            logging.warning('Device HA {} not found.  Cannot set up device for '
-                            'DeviceHAFailoverMAC.'.format(ha_name))
+            logging.warning(f'Device HA {ha_name} not found.  Cannot set up device for DeviceHAFailoverMAC.')
 
     def p_interface(self, name, device_name):
         logging.debug("In p_interface() for DeviceHAFailoverMAC class.")
@@ -65,7 +64,7 @@ class DeviceHAFailoverMAC(APIClassTemplate):
         if 'id' in intf1.__dict__:
             self.physicalInterface = {'name': intf1.name, 'id': intf1.id, 'type': intf1.type}
         else:
-            logging.warning('PhysicalInterface, "{}", not found.  Cannot add to DeviceHAFailoverMAC.'.format(name))
+            logging.warning(f'PhysicalInterface, "{name}", not found.  Cannot add to DeviceHAFailoverMAC.')
 
     def edit(self, name, ha_name):
         logging.debug("In edit() for DeviceHAFailoverMAC class.")
@@ -84,8 +83,8 @@ class DeviceHAFailoverMAC(APIClassTemplate):
                 self.failoverActiveMac = item['failoverActiveMac']
                 self.failoverStandbyMac = item['failoverStandbyMac']
                 self.deviceha_id = deviceha1.id
-                self.URL = '{}{}/{}/failoverinterfacemacaddressconfigs'\
-                    .format(self.fmc.configuration_url, self.PREFIX_URL, self.deviceha_id)
+                self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/' \
+                           f'{self.deviceha_id}/failoverinterfacemacaddressconfigs'
                 break
         if found is False:
-            logging.warning('PhysicalInterface, "{}", not found.  Cannot add to DeviceHAFailoverMAC.'.format(name))
+            logging.warning(f'PhysicalInterface, "{name}", not found.  Cannot add to DeviceHAFailoverMAC.')
