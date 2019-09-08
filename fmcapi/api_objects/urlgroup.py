@@ -54,7 +54,7 @@ class URLGroup(APIClassTemplate):
                         new_url = {'name': item['name'], 'id': item['id'], 'type': item['type']}
                         break
                 if new_url is None:
-                    logging.warning('URL "{}" is not found in FMC.  Cannot add to URLGroup.'.format(name))
+                    logging.warning(f'URL "{name}" is not found in FMC.  Cannot add to URLGroup.')
                 else:
                     if 'objects' in self.__dict__:
                         duplicate = False
@@ -64,10 +64,10 @@ class URLGroup(APIClassTemplate):
                                 break
                         if not duplicate:
                             self.objects.append(new_url)
-                            logging.info('Adding "{}" to URLGroup.'.format(name))
+                            logging.info(f'Adding "{name}" to URLGroup.')
                     else:
                         self.objects = [new_url]
-                        logging.info('Adding "{}" to URLGroup.'.format(name))
+                        logging.info(f'Adding "{name}" to URLGroup.')
         elif action == 'remove':
             if 'objects' in self.__dict__:
                 objects_list = []
@@ -75,7 +75,7 @@ class URLGroup(APIClassTemplate):
                     if obj['name'] != name:
                         objects_list.append(obj)
                 self.objects = objects_list
-                logging.info('Removed "{}" from URLGroup.'.format(name))
+                logging.info(f'Removed "{name}" from URLGroup.')
             else:
                 logging.info("This URLGroup has no named_urls.  Nothing to remove.")
         elif action == 'clear':
@@ -99,10 +99,10 @@ class URLGroup(APIClassTemplate):
                         break
                 if not duplicate:
                     self.literals.append(new_literal)
-                    logging.info('Adding "{}" to URLGroup.'.format(value))
+                    logging.info(f'Adding "{value}" to URLGroup.')
             else:
                 self.literals = [new_literal]
-                logging.info('Adding "{}" to URLGroup.'.format(value))
+                logging.info(f'Adding "{value}" to URLGroup.')
         elif action == 'remove':
             if 'literals' in self.__dict__:
                 literals_list = []
@@ -110,7 +110,7 @@ class URLGroup(APIClassTemplate):
                     if obj['url'] != value:
                         literals_list.append(obj)
                 self.literals = literals_list
-                logging.info('Removed "{}" from URLGroup.'.format(value))
+                logging.info(f'Removed "{value}" from URLGroup.')
             else:
                 logging.info("This URLGroup has no unnamed_urls.  Nothing to remove.")
         elif action == 'clear':
