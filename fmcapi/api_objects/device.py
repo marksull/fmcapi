@@ -79,24 +79,23 @@ class Device(APIClassTemplate):
                     self.license_caps = list(set(self.license_caps))
                 else:
                     self.license_caps = [name]
-                logging.info('License "{}" added to this Device object.'.format(name))
+                logging.info(f'License "{name}" added to this Device object.')
 
             else:
-                logging.warning('{} not found in {}.  Cannot add license to Device.'.format(name, self.LICENSES))
+                logging.warning(f'{name} not found in {self.LICENSES}.  Cannot add license to Device.')
         elif action == 'remove':
             if name in self.LICENSES:
                 if 'license_caps' in self.__dict__:
                     try:
                         self.license_caps.remove(name)
                     except ValueError:
-                        logging.warning('{} is not assigned to this device thus cannot be removed.'.format(name))
-                    logging.info('License "{}" removed from this Device object.'.format(name))
+                        logging.warning(f'{name} is not assigned to this device thus cannot be removed.')
+                    logging.info(f'License "{name}" removed from this Device object.')
                 else:
-                    logging.warning('{} is not assigned to this device thus cannot be removed.'.format(name))
+                    logging.warning(f'{name} is not assigned to this device thus cannot be removed.')
 
             else:
-                logging.warning('{} not found in {}.  Cannot remove license from '
-                                'Device.'.format(name, self.LICENSES))
+                logging.warning(f'{name} not found in {self.LICENSES}.  Cannot remove license from Device.')
         elif action == 'clear':
             if 'license_caps' in self.__dict__:
                 del self.license_caps
@@ -109,8 +108,7 @@ class Device(APIClassTemplate):
         if 'id' in acp.__dict__:
             self.accessPolicy = {'id': acp.id, 'type': acp.type}
         else:
-            logging.warning('Access Control Policy {} not found.  Cannot set up accessPolicy for '
-                            'Device.'.format(name))
+            logging.warning(f'Access Control Policy {name} not found.  Cannot set up accessPolicy for Device.')
 
     def post(self, **kwargs):
         logging.debug("In post() for Device class.")
