@@ -25,7 +25,7 @@ def test__url_category():
     print('All URLCategories -- >')
     result = obj1.get()
     pp.pprint(result)
-    print("Total items: {}".format(len(result['items'])))
+    print(f"Total items: {len(result['items'])}")
     print('\n')
     del obj1
     obj1 = fmcapi.URLCategory(fmc=fmc1, name='SPAM URLs')
@@ -54,7 +54,7 @@ def test__application_type():
     print('All ApplicationType -- >')
     result = obj1.get()
     pp.pprint(result)
-    print("Total items: {}".format(len(result['items'])))
+    print(f"Total items: {len(result['items'])}")
     print('\n')
     del obj1
     obj1 = fmcapi.ApplicationType(fmc=fmc1, name='Server')
@@ -71,7 +71,7 @@ def test__application_tag():
     print('All ApplicationTag -- >')
     result = obj1.get()
     pp.pprint(result)
-    print("Total items: {}".format(len(result['items'])))
+    print(f"Total items: {len(result['items'])}")
     print('\n')
     del obj1
     obj1 = fmcapi.ApplicationTag(fmc=fmc1, name='file sharing/transfer')
@@ -89,7 +89,7 @@ def test__application():
     print('All Application -- >')
     result = obj1.get(limit=1000)
     pp.pprint(result)
-    print("Total items: {}".format(len(result['items'])))
+    print(f"Total items: {len(result['items'])}")
     print('\n')
     del obj1
     obj1 = fmcapi.Application(fmc=fmc1, name='WD softwares Download/Update')
@@ -107,7 +107,7 @@ def test__application_risk():
     print('All ApplicationRisks -- >')
     result = obj1.get()
     pp.pprint(result)
-    print("Total items: {}".format(len(result['items'])))
+    print(f"Total items: {len(result['items'])}")
     print('\n')
     del obj1
     obj1 = fmcapi.ApplicationRisk(fmc=fmc1, name='Very High')
@@ -126,7 +126,7 @@ def test__application_filter():
     pp.pprint(result)
     # There are no Application Filters by default so there is no items in the list.
     if 'items' in result:
-        print("Total items: {}".format(len(result['items'])))
+        print(f"Total items: {len(result['items'])}")
         print('\n')
     del obj1
     logging.info('# Testing ApplicationFilter class done.\n')
@@ -139,7 +139,7 @@ def test__application_productivity():
     print('All ApplicationProductivities -- >')
     result = obj1.get()
     pp.pprint(result)
-    print("Total items: {}".format(len(result['items'])))
+    print(f"Total items: {len(result['items'])}")
     print('\n')
     del obj1
     obj1 = fmcapi.ApplicationProductivity(fmc=fmc1, name='Very Low')
@@ -156,7 +156,7 @@ def test__application_category():
     print('All ApplicationCategories -- >')
     result = obj1.get()
     pp.pprint(result)
-    print("Total items: {}".format(len(result['items'])))
+    print(f"Total items: {len(result['items'])}")
     print('\n')
     del obj1
     obj1 = fmcapi.ApplicationCategory(fmc=fmc1, name='SMS tools')
@@ -173,7 +173,7 @@ def test__cert_enrollment():
     print('All CertEnrollments -- >')
     result = obj1.get()
     pp.pprint(result)
-    print("Total items: {}".format(len(result['items'])))
+    print(f"Total items: {len(result['items'])}")
     print('\n')
     del obj1
     obj1 = fmcapi.CertEnrollment(fmc=fmc1, name='_tmp')
@@ -190,7 +190,7 @@ def test__country():
     print('All Countries -- >')
     result = obj1.get()
     pp.pprint(result)
-    print("Total items: {}".format(len(result['items'])))
+    print(f"Total items: {len(result['items'])}")
     print('\n')
     del obj1
     obj1 = fmcapi.Country(fmc=fmc1, name='Isle Of Man')
@@ -207,7 +207,7 @@ def test__filepolicies():
     print('All FilePolicies -- >')
     result = obj1.get()
     pp.pprint(result)
-    print("Total items: {}".format(len(result['items'])))
+    print(f"Total items: {len(result['items'])}")
     print('\n')
     del obj1
     logging.info('# Testing FilePolicies class done.\n')
@@ -220,7 +220,7 @@ def test__continent():
     print('All Continents -- >')
     result = obj1.get()
     pp.pprint(result)
-    print("Total items: {}".format(len(result['items'])))
+    print(f"Total items: {len(result['items'])}")
     print('\n')
     del obj1
     obj1 = fmcapi.Continent(fmc=fmc1, name='North America')
@@ -482,7 +482,7 @@ def test__extended_acls():
     print('All ExtendedAccessList -- >')
     result = obj1.get()
     pp.pprint(result)
-    print("Total items: {}".format(len(result['items'])))
+    print(f"Total items: {len(result['items'])}")
     print('\n')
     del obj1
     obj1 = fmcapi.ExtendedAccessList(fmc=fmc1, name='_tmp')
@@ -500,7 +500,7 @@ def test__geolocations():
     print('All Geolocation -- >')
     result = obj1.get()
     pp.pprint(result)
-    print("Total items: {}".format(len(result['items'])))
+    print(f"Total items: {len(result['items'])}")
     print('\n')
     del obj1
     obj1 = fmcapi.Geolocation(fmc=fmc1, name='_tmp')
@@ -844,7 +844,7 @@ def test__device_with_task():
     acp1.post()
 
     starttime = str(int(time.time()))
-    obj1_namer = '_fmcapi_test_{}'.format(starttime)
+    obj1_namer = f'_fmcapi_test_{starttime}'
 
     obj1 = fmcapi.Device(fmc=fmc1)
     obj1.hostName = "10.255.0.43"
@@ -864,7 +864,7 @@ def test__device_with_task():
                  'statement enabled.')
 
     starttime = str(int(time.time()))
-    obj2_namer = '_fmcapi_test_{}'.format(starttime)
+    obj2_namer = f'_fmcapi_test_{starttime}'
 
     obj2 = fmcapi.Device(fmc=fmc1)
     obj2.hostName = "10.255.0.44"
@@ -1125,7 +1125,7 @@ def test__static_routes():
     print('All StaticRoutes -- >')
     result = obj1.get()
     pp.pprint(result)
-    print("Total items: {}".format(len(result['items'])))
+    print(f"Total items: {len(result['items'])}")
     print('\n')
     del obj1
     logging.info('# Testing StaticRoutes class done.\n')
@@ -1874,7 +1874,7 @@ def wait_for_task(task, wait_time=10):
 with fmcapi.FMC(host=host, username=username, password=password, autodeploy=autodeploy, limit=10) as fmc1:
     logging.info('# ### Mega Test Start!!! ### #')
     starttime = str(int(time.time()))
-    namer = '_fmcapi_test_{}'.format(starttime)
+    namer = f'_fmcapi_test_{starttime}'
     pp = pprint.PrettyPrinter(indent=4)
     time.sleep(1)
 

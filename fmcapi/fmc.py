@@ -106,8 +106,8 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         """
         logging.debug("In the FMC build_urls() class method.")
         logging.info('Building base to URLs.')
-        self.configuration_url = "https://{}/{}/domain/{}".format(self.host, self.API_CONFIG_VERSION, self.uuid)
-        self.platform_url = "https://{}/{}".format(self.host, self.API_PLATFORM_VERSION)
+        self.configuration_url = f"https://{self.host}/{self.API_CONFIG_VERSION}/domain/{self.uuid}"
+        self.platform_url = f"https://{self.host}/{self.API_PLATFORM_VERSION}"
 
     def send_to_api(self, method='', url='', headers='', json_data=None, more_items=[]):
         """
@@ -154,8 +154,8 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             if status_code > 301 or 'error' in json_response:
                 response.raise_for_status()
         except requests.exceptions.HTTPError as err:
-            logging.error("Error in POST operation --> {}".format(str(err)))
-            logging.error("json_response -->\t{}".format(json_response))
+            logging.error(f"Error in POST operation --> {str(err)}")
+            logging.error(f"json_response -->\t{json_response}")
             if response:
                 response.close()
             return None
@@ -164,11 +164,10 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         try:
             if 'next' in json_response['paging'] and self.page_counter <= self.MAX_PAGING_REQUESTS:
                 self.more_items += json_response['items']
-                logging.info('Paging:  Offset:{}, Limit:{}, Count:{}, Gathered_Items:{}'.
-                             format(json_response['paging']['offset'],
-                                    json_response['paging']['limit'],
-                                    json_response['paging']['count'],
-                                    len(self.more_items)))
+                logging.info(f"Paging:  Offset:{json_response['paging']['offset']}, "
+                             f"Limit:{json_response['paging']['limit']}, "
+                             f"Count:{json_response['paging']['count']}, "
+                             f"Gathered_Items:{len(self.more_items)}'.")
                 self.page_counter += 1
                 return self.send_to_api(method=method,
                                         url=json_response['paging']['next'][0],
@@ -192,7 +191,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         logging.info('Collecting version information from FMC.')
 
         url_suffix = '/info/serverversion'
-        url = '{}{}'.format(self.platform_url, url_suffix)
+        url = f'{self.platform_url}{url_suffix}'
 
         response = self.send_to_api(method='get', url=url)
         if 'items' in response:
@@ -211,7 +210,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         """
         url_parameters = 'expanded=true'
         url_suffix = '/audit/auditrecords'
-        url = '{}/domain/{}{}?{}'.format(self.platform_url, self.uuid, url_suffix, url_parameters)
+        url = f'{self.platform_url}/domain/{self.uuid}{url_suffix}?{url_parameters}'
 
         response = self.send_to_api(method='get', url=url)
         return response
@@ -224,11 +223,11 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         logging.debug("In the FMC get_deployable_devices() class method.")
 
         waittime = 15
-        logging.info("Waiting {} seconds to allow the FMC to update the list of deployable devices.".format(waittime))
+        logging.info(f"Waiting {waittime} seconds to allow the FMC to update the list of deployable devices.")
         time.sleep(waittime)
         logging.info("Getting a list of deployable devices.")
         url_suffix = "/deployment/deployabledevices?expanded=true"
-        url = '{}{}'.format(self.configuration_url, url_suffix)
+        url = f'{self.configuration_url}{url_suffix}'
         response = self.send_to_api(method='get', url=url)
         # Now to parse the response list to get the UUIDs of each device.
         if 'items' not in response:
@@ -249,7 +248,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         logging.debug("In the deploy_changes() class method.")
 
         url_suffix = "/deployment/deploymentrequests"
-        url = '{}{}'.format(self.configuration_url, url_suffix)
+        url = f'{self.configuration_url}{url_suffix}'
         devices = self.get_deployable_devices()
         if not devices:
             logging.info("No devices need deployed.\n\n")
@@ -262,7 +261,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             'deviceList': []
         }
         for device in devices:
-            logging.info("Adding device {} to deployment queue.".format(device))
+            logging.info(f"Adding device {device} to deployment queue.")
             json_data['deviceList'].append(device['device']['id'])
             # From the list of deployable devices get the version value that is smallest.
             if int(json_data['version']) > int(device['version']):
@@ -317,15 +316,15 @@ class Token(object):
         if self.token_refreshes <= self.MAX_REFRESHES and self.access_token is not None:
             headers = {'Content-Type': 'application/json', 'X-auth-access-token': self.access_token,
                        'X-auth-refresh-token': self.refresh_token}
-            url = 'https://{}/{}/auth/refreshtoken'.format(self.__host, self.API_PLATFORM_VERSION)
-            logging.info("Refreshing tokens, {} out of {} refreshes, from {}.".format(self.token_refreshes,
-                                                                                      self.MAX_REFRESHES, url))
+            url = f'https://{self.__host}/{self.API_PLATFORM_VERSION}/auth/refreshtoken'
+            logging.info(f"Refreshing tokens, {self.token_refreshes} out of {self.MAX_REFRESHES} refreshes, "
+                         f"from {url}.")
             response = requests.post(url, headers=headers, verify=self.verify_cert)
             self.token_refreshes += 1
         else:
             headers = {'Content-Type': 'application/json'}
-            url = 'https://{}/{}/auth/generatetoken'.format(self.__host, self.API_PLATFORM_VERSION)
-            logging.info("Requesting new tokens from {}.".format(url))
+            url = f'https://{self.__host}/{self.API_PLATFORM_VERSION}/auth/generatetoken'
+            logging.info(f"Requesting new tokens from {url}.")
             response = requests.post(url, headers=headers,
                                      auth=requests.auth.HTTPBasicAuth(self.__username, self.__password),
                                      verify=self.verify_cert)
