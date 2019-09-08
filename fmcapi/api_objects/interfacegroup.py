@@ -54,18 +54,15 @@ class InterfaceGroup(APIClassTemplate):
                 if 'id' in intf.__dict__ and 'ifname' in intf.__dict__:
                     intfs.append({'name': intf.name, 'id': intf.id, 'type': intf.type})
                 elif 'id' in intf.__dict__:
-                    logging.warning(
-                        'PhysicalInterface, "{}", found without logical ifname.  Cannot add to InterfaceGroup.'
-                        .format(name))
+                    logging.warning(f'PhysicalInterface, "{name}", found without logical ifname.  '
+                                    f'Cannot add to InterfaceGroup.')
                 else:
-                    logging.warning(
-                        'PhysicalInterface, "{}", not found.  Cannot add to InterfaceGroup.'.format(name))
+                    logging.warning(f'PhysicalInterface, "{name}", not found.  Cannot add to InterfaceGroup.')
             if len(intfs) != 0:
                 # Make sure we found at least one intf
                 self.interfaces = intfs
             else:
-                logging.warning(
-                    'No valid PhysicalInterface found: "{}".  Cannot remove from InterfaceGroup.'.format(names))
+                logging.warning(f'No valid PhysicalInterface found: "{names}".  Cannot remove from InterfaceGroup.')
         elif action == 'remove':
             if 'interfaces' in self.__dict__:
                 intfs = []
@@ -73,7 +70,7 @@ class InterfaceGroup(APIClassTemplate):
                     if interface["name"] not in names:
                         intfs.append(interface)
                     else:
-                        logging.info('Removed "{}" from InterfaceGroup.'.format(interface["name"]))
+                        logging.info(f"""Removed "{interface['name']}" from InterfaceGroup.""")
                 self.interfaces = intfs
             else:
                 logging.warning("This InterfaceObject has no interfaces.  Nothing to remove.")
