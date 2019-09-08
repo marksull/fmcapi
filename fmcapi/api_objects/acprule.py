@@ -67,6 +67,7 @@ class ACPRule(APIClassTemplate):
                 self.action = kwargs['action']
             else:
                 logging.warning(f"Action {kwargs['action']} is not a valid action.")
+                logging.warning(f"\tValid actions are: {self.VALID_FOR_ACTION}.")
         if 'acp_id' in kwargs:
             self.acp(acp_id=kwargs['acp_id'])
         if 'acp_name' in kwargs:
