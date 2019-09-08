@@ -49,11 +49,11 @@ class IKEv2IpsecProposals(APIClassTemplate):
             for algorithm in algorithms:
                 if 'encryptionAlgorithms' in self.__dict__:
                     if algorithm in self.encryptionAlgorithms:
-                        logging.warning('encryptionAlgorithms {} already exists".'.format(algorithm))
+                        logging.warning(f'encryptionAlgorithms "{algorithm}" already exists.')
                     elif algorithm in self.VALID_FOR_ENCRYPTION:
                         self.encryptionAlgorithms.append(algorithm)
                     else:
-                        logging.warning('encryptionAlgorithms {} not a valid type".'.format(algorithm))
+                        logging.warning(f'encryptionAlgorithms "{algorithm}" not a valid type.')
                 else:
                     self.encryptionAlgorithms = [algorithm]
         elif action == 'remove':
@@ -73,11 +73,11 @@ class IKEv2IpsecProposals(APIClassTemplate):
             for algorithm in algorithms:
                 if 'integrityAlgorithms' in self.__dict__:
                     if algorithm in self.integrityAlgorithms:
-                        logging.warning('integrityAlgorithms {} already exists".'.format(algorithm))
+                        logging.warning(f'integrityAlgorithms "{algorithm}" already exists.')
                     elif algorithm in self.VALID_FOR_HASH:
                         self.integrityAlgorithms.append(algorithm)
                     else:
-                        logging.warning('integrityAlgorithms {} not a valid type".'.format(algorithm))
+                        logging.warning(f'integrityAlgorithms "{algorithm}" not a valid type.')
                 else:
                     self.integrityAlgorithms = [algorithm]
         elif action == 'remove':
