@@ -17,13 +17,13 @@ class IPNetwork(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         if 'value' in kwargs:
             value_type = get_networkaddress_type(kwargs['value'])
-            if value_type == 'range' or value_type == 'host':
+            if value_type is 'range' or value_type is 'host':
                 logging.warning(f"value, {kwargs['value']}, is of type {value_type}.  Limited functionality for this "
                                 f"object due to it being created via the IPNetwork function.")
             if validate_ip_bitmask_range(value=kwargs['value'], value_type=value_type):
                 self.value = kwargs['value']
             else:
-                logging.error("Provided value, {}, has an error with the IP address(es).".format(kwargs['value']))
+                logging.error(f"Provided value, {kwargs['value']}, has an error with the IP address(es).")
 
     def format_data(self):
         logging.debug("In format_data() for IPNetwork class.")
