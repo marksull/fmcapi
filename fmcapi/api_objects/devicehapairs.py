@@ -59,13 +59,11 @@ class DeviceHAPairs(APIClassTemplate):
         if 'id' in primary.__dict__:
             self.primary_id = primary.id
         else:
-            logging.warning('Device {} not found.  Cannot set up device for '
-                            'DeviceHAPairs.'.format(primary_name))
+            logging.warning(f'Device {primary_name} not found.  Cannot set up device for DeviceHAPairs.')
         if 'id' in secondary.__dict__:
             self.secondary_id = secondary.id
         else:
-            logging.warning('Device {} not found.  Cannot set up device for '
-                            'DeviceHAPairs.'.format(secondary_name))
+            logging.warning(f'Device {secondary_name} not found.  Cannot set up device for DeviceHAPairs.')
 
     def primary(self, name):
         logging.debug("In primary() for DeviceHAPairs class.")
@@ -74,8 +72,7 @@ class DeviceHAPairs(APIClassTemplate):
         if 'id' in primary.__dict__:
             self.primary = {"id": primary.id}
         else:
-            logging.warning('Device {} not found.  Cannot set up device for '
-                            'DeviceHAPairs.'.format(primary.name))
+            logging.warning(f'Device {primary.name} not found.  Cannot set up device for DeviceHAPairs.')
 
     def secondary(self, name):
         logging.debug("In secondary() for DeviceHAPairs class.")
@@ -84,8 +81,7 @@ class DeviceHAPairs(APIClassTemplate):
         if 'id' in secondary.__dict__:
             self.secondary = {"id": secondary.id}
         else:
-            logging.warning('Device {} not found.  Cannot set up device for '
-                            'DeviceHAPairs.'.format(secondary.name))
+            logging.warning(f'Device {secondary.name} not found.  Cannot set up device for DeviceHAPairs.')
 
     def switch_ha(self):
         logging.debug("In switch_ha() for DeviceHAPairs class.")
@@ -95,7 +91,7 @@ class DeviceHAPairs(APIClassTemplate):
             self.id = ha1.id
             self.action = "SWITCH"
         else:
-            logging.warning('DeviceHAPair {} not found.  Cannot set up HA for SWITCH.'.format(self.name))
+            logging.warning(f'DeviceHAPair {self.name} not found.  Cannot set up HA for SWITCH.')
 
     def break_ha(self):
         logging.debug("In break_ha() for DeviceHAPairs class.")
@@ -106,7 +102,7 @@ class DeviceHAPairs(APIClassTemplate):
             self.action = "HABREAK"
             self.forceBreak = True
         else:
-            logging.warning('DeviceHAPair {} not found.  Cannot set up HA for BREAK.'.format(self.name))
+            logging.warning(f'DeviceHAPair {self.name} not found.  Cannot set up HA for BREAK.')
 
     def post(self, **kwargs):
         logging.debug("In post() for DeviceHAPairs class.")
