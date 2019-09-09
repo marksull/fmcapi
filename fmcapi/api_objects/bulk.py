@@ -13,15 +13,7 @@ class Bulk(object):
     @property
     def URL_SUFFIX(self):
         """
-        Add the URL suffixes for categories, insertBefore and insertAfter
-        NOTE: You must specify these at the time the object is initialized (created) for this feature
-        to work correctly. Example:
-            This works:
-                new_rule = ACPRule(fmc=fmc, acp_name='acp1', insertBefore=2)
-
-            This does not:
-                new_rule = ACPRule(fmc=fmc, acp_name='acp1')
-                new_rule.insertBefore = 2
+        Add the URL suffixes for section, categories, insertBefore and insertAfter.
         """
         url = '?'
 
