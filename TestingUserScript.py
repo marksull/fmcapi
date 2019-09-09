@@ -15,6 +15,8 @@ host = '10.0.0.10'
 username = 'apiadmin'
 password = 'Admin123'
 autodeploy = False
+logname = 'unit_testing.log'
+pagelimit = 500
 
 sleep_time_between_tests = 1
 
@@ -123,133 +125,31 @@ def test__application_productivity():
     time.sleep(sleep_time_between_tests)
 
 
-def test__application_category():
-    logging.info('# Testing ApplicationCategory class.')
-    obj1 = fmcapi.ApplicationCategory(fmc=fmc1)
-    print('All ApplicationCategories -- >')
-    result = obj1.get()
-    pp.pprint(result)
-    print(f"Total items: {len(result['items'])}")
-    print('\n')
-    del obj1
-    obj1 = fmcapi.ApplicationCategory(fmc=fmc1, name='SMS tools')
-    print('One ApplicationCategory -- >')
-    pp.pprint(obj1.get())
-    print('\n')
-    logging.info('# Testing ApplicationCategory class done.\n')
-    time.sleep(sleep_time_between_tests)
 
 
-def test__cert_enrollment():
-    logging.info('# Testing CertEnrollment class. Requires a CertEnrollment')
-    obj1 = fmcapi.CertEnrollment(fmc=fmc1)
-    print('All CertEnrollments -- >')
-    result = obj1.get()
-    pp.pprint(result)
-    print(f"Total items: {len(result['items'])}")
-    print('\n')
-    del obj1
-    obj1 = fmcapi.CertEnrollment(fmc=fmc1, name='_tmp')
-    print('One CertEnrollment -- >')
-    pp.pprint(obj1.get())
-    print('\n')
-    logging.info('# Testing CertEnrollment class done.\n')
-    time.sleep(sleep_time_between_tests)
-
-
-def test__country():
-    logging.info('# Testing Country class.')
-    obj1 = fmcapi.Country(fmc=fmc1)
-    print('All Countries -- >')
-    result = obj1.get()
-    pp.pprint(result)
-    print(f"Total items: {len(result['items'])}")
-    print('\n')
-    del obj1
-    obj1 = fmcapi.Country(fmc=fmc1, name='Isle Of Man')
-    print('One Country -- >')
-    pp.pprint(obj1.get())
-    print('\n')
-    logging.info('# Testing Country class done.\n')
-    time.sleep(sleep_time_between_tests)
-
-
-def test__filepolicies():
-    logging.info('# Testing FilePolicies class.')
-    obj1 = fmcapi.FilePolicies(fmc=fmc1)
-    print('All FilePolicies -- >')
-    result = obj1.get()
-    pp.pprint(result)
-    print(f"Total items: {len(result['items'])}")
-    print('\n')
-    del obj1
-    logging.info('# Testing FilePolicies class done.\n')
-    time.sleep(sleep_time_between_tests)
-
-
-def test__continent():
-    logging.info('# Testing Continent class.')
-    obj1 = fmcapi.Continent(fmc=fmc1)
-    print('All Continents -- >')
-    result = obj1.get()
-    pp.pprint(result)
-    print(f"Total items: {len(result['items'])}")
-    print('\n')
-    del obj1
-    obj1 = fmcapi.Continent(fmc=fmc1, name='North America')
-    print('One Continent -- >')
-    pp.pprint(obj1.get())
-    print('\n')
-    logging.info('# Testing Continent class done.\n')
-    time.sleep(sleep_time_between_tests)
-
-
-def test__dns_servers_group():
-    logging.info(
-        '# Test DNSServerGroups.  Post, get, put, delete DNSServerGroups Objects.')
-    server_list = ["192.0.2.1", "192.0.2.2"]
-    obj1 = fmcapi.DNSServerGroups(fmc=fmc1)
-    obj1.name = "_dns1" + namer
-    obj1.timeout = "3"
-    obj1.defaultdomain = "cisco.com"
-    obj1.post()
-
-    obj1.get()
-    obj1.servers(action='add', name_servers=server_list)
-    obj1.put()
-
-    obj1.delete()
-    logging.info('# Testing DNSServerGroups class done.\n')
-    time.sleep(sleep_time_between_tests)
-
-
-def test__fqdns():
-    logging.info(
-        '# Test FQDNS.  Post, get, put, delete FQDNS Objects.')
-    obj1 = fmcapi.FQDNS(fmc=fmc1)
-    obj1.name = "_fqdns1" + namer
-    obj1.value = "www.cisco.com"
-    obj1.dnsResolution = "IPV4_ONLY"
-    obj1.post()
-
-    obj1.get()
-    obj1.dnsResolution = "IPV4_AND_IPV6"
-    obj1.put()
-
-    obj1.delete()
-    logging.info('# FQDNS DNSServerGroups class done.\n')
-    time.sleep(sleep_time_between_tests)
-
-
-with fmcapi.FMC(host=host, username=username, password=password, autodeploy=autodeploy, limit=10) as fmc1:
+with fmcapi.FMC(host=host,
+                username=username,
+                password=password,
+                autodeploy=autodeploy,
+                limit=pagelimit,
+                file_logging=logname,
+                ) as fmc1:
     logging.info('# ### Mega Test Start!!! ### #')
+
     starttime = str(int(time.time()))
     namer = f'_fmcapi_test_{starttime}'
+
     pp = pprint.PrettyPrinter(indent=4)
     print('')
 
     ''' 
     # Working Tests
+    unit_tests.test__application_category(fmc=fmc1)
+    unit_tests.test__cert_enrollment(fmc=fmc1)
+    unit_tests.test__country(fmc=fmc1)
+    unit_tests.test__filepolicies(fmc=fmc1)
+    unit_tests.test__continent(fmc=fmc1)
+    unit_tests.test__dns_servers_group(fmc=fmc1)
     unit_tests.test__vlan_group_tag(fmc=fmc1)
     unit_tests.test__url_group(fmc=fmc1)
     unit_tests.test__network_group(fmc=fmc1)

@@ -44,10 +44,22 @@ from .ip_addresses import test__ip_addresses
 from .network_group import test__network_group
 from .url_group import test__url_group
 from .vlan_group_tag import test__vlan_group_tag
+from .dns_servers_group import test__dns_servers_group
+from .continent import test__continent
+from .file_policies import test__filepolicies
+from .country import test__country
+from .certificate_enrollment import test__cert_enrollment
+from .application_category import test__application_category
 
 logging.debug("In the unit-tests __init__.py file.")
 
 __all__ = ['test__url_category',
+           'test__application_category',
+           'test__cert_enrollment',
+           'test__country',
+           'test__filepolicies',
+           'test__continent',
+           'test__dns_servers_group',
            'test__vlan_group_tag',
            'test__url_group',
            'test__network_group',
