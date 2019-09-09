@@ -51,14 +51,14 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         :param limit (int): Sets up max page of data to gather per "page".
         """
 
-        root_logger = logging.getLogger('Rotating Log')
+        root_logger = logging.getLogger('')
         root_logger.setLevel(logging.DEBUG if debug else logging.INFO)
 
         if file_logging:
             print(f'Logging is enabled.  Look for file "{file_logging}" for output.')
             formatter = logging.Formatter('%(asctime)s - %(levelname)s:%(filename)s:%(lineno)s - %(message)s',
                                           '%Y/%m/%d-%H:%M:%S')
-            file_logger = RotatingFileHandler(file_logging, maxBytes=1024, backupCount=10, mode='a')
+            file_logger = RotatingFileHandler(file_logging, maxBytes=1024000, backupCount=10, mode='w')
             file_logger.setFormatter(formatter)
             root_logger.addHandler(file_logger)
 
