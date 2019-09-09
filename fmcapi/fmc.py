@@ -12,6 +12,7 @@ import time
 import json
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import logging
+from logging.handlers import RotatingFileHandler
 
 # Disable annoying HTTP warnings
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -54,9 +55,10 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         root_logger.setLevel(logging.DEBUG if debug else logging.INFO)
 
         if file_logging:
+            print(f'Logging is enabled.  Look for file "{file_logging}" for output.')
             formatter = logging.Formatter('%(asctime)s - %(levelname)s:%(filename)s:%(lineno)s - %(message)s',
                                           '%Y/%m/%d-%H:%M:%S')
-            file_logger = logging.FileHandler(file_logging)
+            file_logger = RotatingFileHandler(file_logging, maxBytes=1024000, backupCount=10, mode='w')
             file_logger.setFormatter(formatter)
             root_logger.addHandler(file_logger)
 
