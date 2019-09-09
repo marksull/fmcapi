@@ -1,8 +1,6 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__ip_range(fmc):
@@ -17,6 +15,7 @@ def test__ip_range(fmc):
     obj1.post()
     time.sleep(1)
     del obj1
+
     obj1 = fmcapi.IPRange(fmc=fmc, name=namer)
     obj1.get()
     obj1.value = '3.3.3.3-4.4.4.4'
@@ -24,4 +23,4 @@ def test__ip_range(fmc):
     time.sleep(1)
     obj1.delete()
 
-    logging.info('# Test IPRange done.\n')
+    logging.info('Test IPRange done.\n')

@@ -1,13 +1,11 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__redundant_interfaces(fmc):
     logging.info(
-        '# Test RedundantInterfaces.  get, post, put, delete RedundantInterfaces Objects. Requires registered device')
+        'Test RedundantInterfaces.  get, post, put, delete RedundantInterfaces Objects. Requires registered device')
 
     starttime = str(int(time.time()))
     namer = f'_fmcapi_test_{starttime}'
@@ -33,15 +31,16 @@ def test__redundant_interfaces(fmc):
     time.sleep(2)
 
     red1.get()
-    pp.pprint(red1.format_data())
+    logging.info(red1.format_data())
     red1.enabled = False
     red1.sz(name=sz2.name)
     red1.put()
     time.sleep(1)
 
-    logging.info('# Testing RedundantInterfaces class done.\n')
     red1.get()
-    pp.pprint(red1.format_data())
+    logging.info(red1.format_data())
     red1.delete()
     sz1.delete()
     sz2.delete()
+
+    logging.info('Testing RedundantInterfaces class done.\n')

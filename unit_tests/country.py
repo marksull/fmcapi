@@ -1,7 +1,5 @@
 import logging
 import fmcapi
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__country(fmc):

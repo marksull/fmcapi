@@ -1,7 +1,5 @@
 import logging
 import fmcapi
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__variable_set(fmc):
@@ -9,8 +7,7 @@ def test__variable_set(fmc):
 
     obj1 = fmcapi.VariableSet(fmc=fmc)
     obj1.get(name='Default-Set')
-    print('VariableSet -->')
-    pp.pprint(obj1.format_data())
-    print('\n')
+    logging.info('VariableSet -->')
+    logging.info(obj1.format_data())
 
-    logging.info('# Test VariableSet done.\n')
+    logging.info('Test VariableSet done.\n')

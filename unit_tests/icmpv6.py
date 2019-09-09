@@ -1,8 +1,6 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__icmpv6(fmc):
@@ -23,4 +21,4 @@ def test__icmpv6(fmc):
 
     obj1.delete()
 
-    logging.info('# FQDNS ICMPv6Object class done.\n')
+    logging.info('ICMPv6Object class done.\n')

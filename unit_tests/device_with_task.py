@@ -2,12 +2,10 @@ import logging
 import fmcapi
 import time
 from unit_tests import wait_for_task
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__device_with_task(fmc):
-    logging.info('# Test Device1 with Task.  This requires having an actual device with the "configure manager add" '
+    logging.info('Test Device1 with Task.  This requires having an actual device with the "configure manager add" '
                  'statement enabled.')
 
     starttime = str(int(time.time()))
@@ -28,12 +26,12 @@ def test__device_with_task(fmc):
     obj1.licensing(action='add', name='BASE')
     obj1.licensing(action='add', name='THREAT')
     obj1.licensing(action='add', name='MALWARE')
-    print('Device -->')
-    pp.pprint(obj1.format_data())
-    print('\n')
+    logging.info('Device -->')
+    logging.info(obj1.format_data())
+
     response = obj1.post()
     wait_for_task(response["metadata"]["task"], 30)
-    logging.info('# Test Device2 with Task.  This requires having an actual device with the "configure manager add" '
+    logging.info('Test Device2 with Task.  This requires having an actual device with the "configure manager add" '
                  'statement enabled.')
 
     starttime = str(int(time.time()))
@@ -48,9 +46,9 @@ def test__device_with_task(fmc):
     obj2.licensing(action='add', name='BASE')
     obj2.licensing(action='add', name='THREAT')
     obj2.licensing(action='add', name='MALWARE')
-    print('Device -->')
-    pp.pprint(obj2.format_data())
-    print('\n')
+    logging.info('Device -->')
+    logging.info(obj2.format_data())
+    logging.info('\n')
     obj2.post()
     # wait_for_task(response["metadata"]["task"], 30)
 

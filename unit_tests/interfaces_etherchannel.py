@@ -1,8 +1,6 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__etherchannel_interfaces(fmc):
@@ -42,8 +40,9 @@ def test__etherchannel_interfaces(fmc):
     eth1.put()
     time.sleep(1)
 
-    logging.info('# Testing EtherchannelInterfaces class done.\n')
     eth1.get()
     eth1.delete()
     sz1.delete()
     sz2.delete()
+
+    logging.info('Testing EtherchannelInterfaces class done.\n')

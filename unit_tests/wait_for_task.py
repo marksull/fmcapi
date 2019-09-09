@@ -20,16 +20,16 @@ def wait_for_task(fmc, task, wait_time=10):
         while current_status["status"] is not None and current_status["status"] not in task_completed_states:
             # Lot of inconsistencies with the type of data a task can return
             if 'taskType' in current_status.keys():
-                print("Task: %s %s %s" % (
+                logging.info("Task: %s %s %s" % (
                     current_status["taskType"], current_status["status"], current_status["id"]))
                 time.sleep(wait_time)
                 current_status = status.get()
             else:
-                print("Task: %s %s" % (
+                logging.info("Task: %s %s" % (
                     current_status["status"], current_status["id"]))
                 time.sleep(wait_time)
                 current_status = status.get()
-        print("Task: %s %s" % (
+        logging.info("Task: %s %s" % (
             current_status["status"], current_status["id"]))
     except Exception as e:
-        print(type(e), e)
+        logging.info(type(e), e)

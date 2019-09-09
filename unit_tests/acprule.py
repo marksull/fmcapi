@@ -1,12 +1,10 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__acp_rule(fmc):
-    logging.info('# In preparation for testing ACPRule methods, set up some known objects in the FMC.')
+    logging.info('In preparation for testing ACPRule methods, set up some known objects in the FMC.')
 
     starttime = str(int(time.time()))
     namer = f'_fmcapi_test_{starttime}'
@@ -65,10 +63,10 @@ def test__acp_rule(fmc):
     # Get a file_policy
     # fp = fmcapi.FilePolicies(fmc=fmc1, name='daxm_test')
     time.sleep(1)
-    logging.info('# Setup of objects for ACPRule test done.\n')
+    logging.info('Setup of objects for ACPRule test done.\n')
 
     logging.info(
-        '# Test ACPRule.  Try to test all features of all methods of the ACPRule class.')
+        'Test ACPRule.  Try to test all features of all methods of the ACPRule class.')
     acprule1 = fmcapi.ACPRule(fmc=fmc, acp_name=acp1.name)
     acprule1.name = namer
     acprule1.action = 'ALLOW'
@@ -95,9 +93,9 @@ def test__acp_rule(fmc):
     # acprule1.file_policy(action='set', name=fp.name)
     acprule1.post()
 
-    logging.info('# Test ACPRule done.\n')
+    logging.info('Test ACPRule done.\n')
 
-    logging.info('# Cleanup of testing ACPRule methods.')
+    logging.info('Cleanup of testing ACPRule methods.')
     acprule1.delete()
     time.sleep(1)
     acp1.delete()
@@ -115,4 +113,4 @@ def test__acp_rule(fmc):
     obj10.delete()
     obj11.delete()
     obj12.delete()
-    logging.info('# Cleanup of objects for ACPRule test done.\n')
+    logging.info('Cleanup of objects for ACPRule test done.\n')

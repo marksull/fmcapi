@@ -1,8 +1,6 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__vlan_tag(fmc):
@@ -24,4 +22,4 @@ def test__vlan_tag(fmc):
     time.sleep(1)
     obj1.delete()
 
-    logging.info('# Test VlanTag done.\n')
+    logging.info('Test VlanTag done.\n')

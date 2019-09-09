@@ -1,9 +1,7 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
-
+a
 
 def test__ipv4_static_routes(fmc):
     logging.info(
@@ -40,4 +38,4 @@ def test__ipv4_static_routes(fmc):
     ipnet1.delete()
     ipnet2.delete()
     iphost1.delete()
-    logging.info('# Testing IPv4StaticRoute class done.\n')
+    logging.info('Testing IPv4StaticRoute class done.\n')

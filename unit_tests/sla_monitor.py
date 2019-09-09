@@ -1,8 +1,6 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__slamonitor(fmc):
@@ -35,15 +33,15 @@ def test__slamonitor(fmc):
     obj1.tos = 1
     obj1.interfaces(names=["SZ-OUTSIDE1", "SZ-OUTSIDE2"])
     obj1.post()
-    print('SLAMonitor Post -->')
-    pp.pprint(obj1.format_data())
-    print('\n')
+    logging.info('SLAMonitor Post -->')
+    logging.info(obj1.format_data())
+    logging.info('\n')
     obj1.get(name=namer)
     obj1.monitorAddress = "8.8.8.8"
     obj1.put()
-    print('SLAMonitor Put -->')
-    pp.pprint(obj1.format_data())
-    print('\n')
+    logging.info('SLAMonitor Put -->')
+    logging.info(obj1.format_data())
+    logging.info('\n')
     time.sleep(1)
     obj1.delete()
     sz1.delete()

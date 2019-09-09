@@ -1,12 +1,10 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__port_object_group(fmc):
-    logging.info('# Testing PortObjectGroup class.')
+    logging.info('Testing PortObjectGroup class.')
 
     starttime = str(int(time.time()))
     namer = f'_fmcapi_test_{starttime}'
@@ -29,6 +27,7 @@ def test__port_object_group(fmc):
     obj1.post()
     time.sleep(1)
     del obj1
+
     obj1 = fmcapi.PortObjectGroup(fmc=fmc, name=namer)
     obj1.get()
     obj1.named_ports(action='add', name='HTTP')
@@ -38,9 +37,11 @@ def test__port_object_group(fmc):
     obj1.named_ports(action='add', name='HTTP')
     obj1.named_ports(action='add', name='HTTPS')
     obj1.put()
+
     time.sleep(1)
     obj1.delete()
     obj10.delete()
     obj11.delete()
     obj12.delete()
-    logging.info('# Testing PortObjectGroup class done.\n')
+
+    logging.info('Testing PortObjectGroup class done.\n')

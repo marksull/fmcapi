@@ -1,12 +1,10 @@
 import logging
 import fmcapi
-import pprint
 import time
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__autonat(fmc):
-    logging.info('# Testing AutoNatPolicy class.')
+    logging.info('Testing AutoNatPolicy class.')
 
     starttime = str(int(time.time()))
     namer = f'_fmcapi_test_{starttime}'

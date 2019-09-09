@@ -1,8 +1,6 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__ikev1(fmc):
@@ -40,4 +38,4 @@ def test__ikev1(fmc):
     ipsec1.delete()
     pol1.delete()
 
-    logging.info('# Test IKEv1Policies and IKEv1IpsecProposals classes done.\n')
+    logging.info('Test IKEv1Policies and IKEv1IpsecProposals classes done.\n')

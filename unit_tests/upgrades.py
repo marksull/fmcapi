@@ -2,27 +2,25 @@ import logging
 import fmcapi
 import time
 from unit_tests import wait_for_task
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__upgrades(fmc):
     logging.info(
-        '# Test UpgradePackages/ApplicableDevices/Upgrades with Task.'
+        'Test UpgradePackages/ApplicableDevices/Upgrades with Task.'
         '  This will copy the listed upgrade file to registered devices')
 
     package_name = 'Cisco_FTD_Patch-6.3.0.3-77.sh.REL.tar'
     device_list = []
 
-    print('All UpgradePackages -- >')
+    logging.info('All UpgradePackages -- >')
     package1 = fmcapi.UpgradePackage(fmc=fmc)
     result = package1.get()
-    pp.pprint(result)
+    logging.info(result)
     del package1
 
     package1 = fmcapi.UpgradePackage(fmc=fmc, name=package_name)
-    print('One UpgradePackage -- >')
-    pp.pprint(package1.get())
+    logging.info('One UpgradePackage -- >')
+    logging.info(package1.get())
 
     applicable1 = fmcapi.ApplicableDevices(fmc=fmc)
     applicable1.upgrade_package(package_name=package_name)
@@ -39,7 +37,7 @@ def test__upgrades(fmc):
     upgrades1.pushUpgradeFileOnly = True
 
     response = upgrades1.post()
-    pp.pprint(response)
+    logging.info(response)
     wait_for_task(fmc=fmc, task=response["metadata"]["task"], wait_time=60)
 
-    logging.info('# Test UpgradePackages/ApplicableDevices/Upgrades Complete')
+    logging.info('Test UpgradePackages/ApplicableDevices/Upgrades Complete')

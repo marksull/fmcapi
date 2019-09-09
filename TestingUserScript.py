@@ -15,7 +15,7 @@ host = '10.0.0.10'
 username = 'apiadmin'
 password = 'Admin123'
 autodeploy = False
-logname = 'unit_testing.log'
+logname = 'TestingUserScript.log'
 pagelimit = 500
 
 
@@ -31,6 +31,7 @@ def main():
 
         ''' 
         # Working Tests
+        '''
         unit_tests.test__application_type(fmc=fmc1)
         unit_tests.test__application_tag(fmc=fmc1)
         unit_tests.test__application(fmc=fmc1)
@@ -65,7 +66,6 @@ def main():
         unit_tests.test__slamonitor(fmc=fmc1)
         unit_tests.test__intrusion_policy(fmc=fmc1)
         unit_tests.test__access_control_policy(fmc=fmc1)
-        '''
         unit_tests.test__acp_rule(fmc=fmc1)
         unit_tests.test__audit(fmc=fmc1)
         unit_tests.test__port_object_group(fmc=fmc1)

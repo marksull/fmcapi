@@ -1,8 +1,6 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__protocol_port(fmc):
@@ -24,4 +22,4 @@ def test__protocol_port(fmc):
     obj1.put()
     time.sleep(1)
     obj1.delete()
-    logging.info('# Test ProtocolPort done.\n')
+    logging.info('Test ProtocolPort done.\n')

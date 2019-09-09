@@ -1,19 +1,17 @@
 import logging
 import fmcapi
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__static_routes(fmc):
-    logging.info('# Testing StaticRoutes class. Requires a registered device')
+    logging.info('Testing StaticRoutes class. Requires a registered device')
 
     obj1 = fmcapi.StaticRoutes(fmc=fmc)
     obj1.device(device_name="device_name")
-    print('All StaticRoutes -- >')
+    logging.info('All StaticRoutes -- >')
     result = obj1.get()
-    pp.pprint(result)
-    print(f"Total items: {len(result['items'])}")
-    print('\n')
+    logging.info(result)
+    logging.info(f"Total items: {len(result['items'])}")
+
     del obj1
 
-    logging.info('# Testing StaticRoutes class done.\n')
+    logging.info('Testing StaticRoutes class done.\n')

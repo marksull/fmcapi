@@ -1,8 +1,6 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__network_group(fmc):
@@ -18,6 +16,7 @@ def test__network_group(fmc):
     obj12 = fmcapi.IPRange(fmc=fmc, name='_iprange1', value='3.3.3.3-33.33.33.33')
     obj12.post()
     time.sleep(1)
+
     obj1 = fmcapi.NetworkGroup(fmc=fmc, name=namer)
     obj1.named_networks(action='add', name=obj10.name)
     obj1.named_networks(action='add', name=obj10.name)
@@ -29,6 +28,7 @@ def test__network_group(fmc):
     obj1.post()
     time.sleep(1)
     del obj1
+
     obj1 = fmcapi.NetworkGroup(fmc=fmc, name=namer)
     obj1.get()
     obj1.unnamed_networks(action='add', value='1.2.3.4')
@@ -38,10 +38,11 @@ def test__network_group(fmc):
     obj1.unnamed_networks(action='add', value='6.7.8.9')
     obj1.unnamed_networks(action='add', value='1.2.3.0/24')
     obj1.post()
+
     time.sleep(1)
     obj1.delete()
     obj10.delete()
     obj11.delete()
     obj12.delete()
 
-    logging.info('# Testing NetworkGroup class done.\n')
+    logging.info('Testing NetworkGroup class done.\n')

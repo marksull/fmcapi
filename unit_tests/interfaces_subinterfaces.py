@@ -1,8 +1,6 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__subinterfaces(fmc):
@@ -30,7 +28,7 @@ def test__subinterfaces(fmc):
     sub1.static(ipv4addr="192.0.2.1", ipv4mask=24)
     sub1.sz(name=sz1.name)
     sub1.post()
-    pp.pprint(sub1.format_data())
+    logging.info(sub1.format_data())
     time.sleep(2)
 
     sub1.get()
@@ -39,8 +37,9 @@ def test__subinterfaces(fmc):
     sub1.put()
     time.sleep(1)
 
-    logging.info('# Testing SubInterfaces class done.\n')
     sub1.get()
     sub1.delete()
     sz1.delete()
     sz2.delete()
+
+    logging.info('Testing SubInterfaces class done.\n')

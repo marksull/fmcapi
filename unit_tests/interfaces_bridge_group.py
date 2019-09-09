@@ -1,8 +1,6 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__bridge_group_interfaces(fmc):
@@ -38,8 +36,9 @@ def test__bridge_group_interfaces(fmc):
     br1.put()
     time.sleep(1)
 
-    logging.info('# Testing BridgeGroupInterfaces class done.\n')
     br1.get()
     br1.delete()
     sz1.delete()
     sz2.delete()
+
+    logging.info('Testing BridgeGroupInterfaces class done.\n')

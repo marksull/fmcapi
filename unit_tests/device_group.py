@@ -33,4 +33,4 @@ def test__device_group(fmc):
 
     dg1.get()
     dg1.delete()
-    logging.info('# Testing DeviceGroups class done.\n')
+    logging.info('Testing DeviceGroups class done.\n')

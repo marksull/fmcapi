@@ -1,8 +1,6 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__security_zone(fmc):
@@ -23,4 +21,4 @@ def test__security_zone(fmc):
     obj1.put()
     time.sleep(1)
     obj1.delete()
-    logging.info('# Test SecurityZone done.\n')
+    logging.info('Test SecurityZone done.\n')

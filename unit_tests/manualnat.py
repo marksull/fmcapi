@@ -1,12 +1,10 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__manualnat(fmc):
-    logging.info('# Testing ManualNatRules class.')
+    logging.info('Testing ManualNatRules class.')
 
     starttime = str(int(time.time()))
     namer = f'_fmcapi_test_{starttime}'
@@ -176,7 +174,7 @@ def test__manualnat(fmc):
     assign1.put()
     '''
 
-    logging.info('# Cleanup of testing ManualNatRule methods.')
+    logging.info('Cleanup of testing ManualNatRule methods.')
 
     natpol1.delete()
     obj1.delete()

@@ -1,8 +1,6 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__ip_network(fmc):
@@ -17,6 +15,7 @@ def test__ip_network(fmc):
     obj1.post()
     time.sleep(1)
     del obj1
+
     obj1 = fmcapi.IPNetwork(fmc=fmc, name=namer)
     obj1.get()
     obj1.value = '9.9.9.0/24'
@@ -24,4 +23,4 @@ def test__ip_network(fmc):
     time.sleep(1)
     obj1.delete()
 
-    logging.info('# Test IPNetwork done.\n')
+    logging.info('Test IPNetwork done.\n')

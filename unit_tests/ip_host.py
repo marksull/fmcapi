@@ -1,8 +1,6 @@
 import logging
 import fmcapi
 import time
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
 def test__ip_host(fmc):
@@ -24,4 +22,4 @@ def test__ip_host(fmc):
     time.sleep(1)
     obj1.delete()
 
-    logging.info('# Test IPHost done.\n')
+    logging.info('Test IPHost done.\n')
