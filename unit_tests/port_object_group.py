@@ -5,7 +5,7 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 
-def test__protocolport(fmc):
+def test__port_object_group(fmc):
     logging.info('# Testing PortObjectGroup class.')
 
     starttime = str(int(time.time()))
