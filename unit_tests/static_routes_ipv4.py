@@ -1,7 +1,7 @@
 import logging
 import fmcapi
 import time
-a
+
 
 def test__ipv4_static_routes(fmc):
     logging.info(

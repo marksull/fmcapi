@@ -8,7 +8,7 @@ def test__filepolicies(fmc):
     obj1 = fmcapi.FilePolicies(fmc=fmc)
     logging.info('All FilePolicies -- >')
     result = obj1.get()
-    pp.plogging.info(result)
+    logging.info(result)
     logging.info(f"Total items: {len(result['items'])}")
 
     del obj1

@@ -8,7 +8,7 @@ def test__geolocations(fmc):
     obj1 = fmcapi.Geolocation(fmc=fmc)
     logging.info('All Geolocation -- >')
     result = obj1.get()
-    pp.plogging.info(result)
+    logging.info(result)
     logging.info(f"Total items: {len(result['items'])}")
     del obj1
 
