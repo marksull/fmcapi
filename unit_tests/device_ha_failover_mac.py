@@ -10,7 +10,7 @@ def test__device_ha_failover_mac(fmc):
     obj1.failoverActiveMac = "0050.5686.718f"
     obj1.failoverStandbyMac = "1050.5686.0c2e"
     logging.info('DeviceHAFailoverMAC POST->')
-    pp.plogging.info(obj1.format_data())
+    logging.info(obj1.format_data())
 
     obj1.post()
     del obj1
@@ -20,7 +20,7 @@ def test__device_ha_failover_mac(fmc):
     obj1.failoverStandbyMac = "0050.5686.0c2e"
     logging.info('DeviceHAFailoverMAC PUT->')
 
-    pp.plogging.info(obj1.format_data())
+    logging.info(obj1.format_data())
     del obj1
 
     obj1 = fmcapi.DeviceHAFailoverMAC(fmc=fmc)

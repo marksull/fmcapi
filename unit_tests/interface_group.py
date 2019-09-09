@@ -10,7 +10,7 @@ def test__interface_group(fmc):
     obj1.name = "_ig_outside_all"
     obj1.interfaceMode = 'ROUTED'
     logging.info('InterfaceGroup POST-->')
-    pp.plogging.info(obj1.format_data())
+    logging.info(obj1.format_data())
     logging.info('\n')
     obj1.post()
     time.sleep(1)
@@ -22,7 +22,7 @@ def test__interface_group(fmc):
                      action="add",
                      names=["GigabitEthernet0/0", "GigabitEthernet0/1", "GigabitEthernet0/2"])
     logging.info('InterfaceGroup PUT-->')
-    pp.plogging.info(obj1.format_data())
+    logging.info(obj1.format_data())
     logging.info('\n')
     obj1.put()
     time.sleep(1)
@@ -34,7 +34,7 @@ def test__interface_group(fmc):
                      action="remove",
                      names=["GigabitEthernet0/1"])
     logging.info('InterfaceGroup PUT-->')
-    pp.plogging.info(obj1.format_data())
+    logging.info(obj1.format_data())
     logging.info('\n')
     obj1.put()
     time.sleep(1)
@@ -45,7 +45,7 @@ def test__interface_group(fmc):
     obj1.p_interface(action="clear-all")
     obj1.put()
     logging.info('InterfaceGroup DELETE-->')
-    pp.plogging.info(obj1.format_data())
+    logging.info(obj1.format_data())
     logging.info('\n')
     obj1.delete()
     del obj1

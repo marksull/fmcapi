@@ -14,6 +14,6 @@ def test__geolocations(fmc):
 
     obj1 = fmcapi.Geolocation(fmc=fmc, name='_tmp')
     logging.info('One Geolocation -- >')
-    pp.plogging.info(obj1.get())
+    logging.info(obj1.get())
 
     logging.info('Testing Geolocation class done.\n')

@@ -1,6 +1,5 @@
 .idea
-*.log
-log.*
+*.log*
 
 # Known Good
 *.kg
