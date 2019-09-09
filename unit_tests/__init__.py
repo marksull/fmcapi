@@ -27,10 +27,44 @@ from .sla_monitor import test__slamonitor
 from .interface_group import test__interface_group
 from .security_zone import test__security_zone
 from .protocol_port import test__protocol_port
+from .vlan_tag import test__vlan_tag
+from .url import test__url
+from .ikev2 import test__ikev2
+from .ikev1 import test__ikev1
+from .icmpv6 import test__icmpv6
+from .icmpv4 import test__icmpv4
+from .geolocations import test__geolocations
+from .acls_extended import test__extended_acls
+from .ip_range import test__ip_range
+from .ip_network import test__ip_network
+from .ip_host import test__ip_host
+from .variable_set import test__variable_set
+from .fmc_version import test__fmc_version
+from .ip_addresses import test__ip_addresses
+from .network_group import test__network_group
+from .url_group import test__url_group
+from .vlan_group_tag import test__vlan_group_tag
 
 logging.debug("In the unit-tests __init__.py file.")
 
 __all__ = ['test__url_category',
+           'test__vlan_group_tag',
+           'test__url_group',
+           'test__network_group',
+           'test__ip_addresses',
+           'test__fmc_version',
+           'test__variable_set',
+           'test__ip_host',
+           'test__ip_network',
+           'test__ip_range',
+           'test__extended_acls',
+           'test__geolocations',
+           'test__icmpv6',
+           'test__icmpv4',
+           'test__ikev2',
+           'test__ikev1',
+           'test__vlan_tag',
+           'test__url',
            'test__protocol_port',
            'test__security_zone',
            'test__interface_group',
