@@ -37,7 +37,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
     MAX_PAGING_REQUESTS = 2000
 
     def __init__(self, host='192.168.45.45', username='admin', password='Admin123', domain=None, autodeploy=True,
-                 file_logging=None, debug=False, limit=25):
+                 file_logging=None, debug=False, limit=1000):
         """
         Instantiate some variables prior to calling the __enter__() method.
         :param host:
@@ -47,6 +47,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         :param file_logging (str): The filename (and optional path) of the output file if a file logger is required,
         None if no file logger is required
         :param debug (bool): True to enable debug logging, default is False
+        :param limit (int): Sets up max page of data to gather per "page".
         """
 
         root_logger = logging.getLogger('')
