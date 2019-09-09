@@ -50,10 +50,22 @@ from .file_policies import test__filepolicies
 from .country import test__country
 from .certificate_enrollment import test__cert_enrollment
 from .application_category import test__application_category
+from .application_productivity import test__application_productivity
+from .application_filter import test__application_filter
+from .application_risk import test__application_risk
+from .application import test__application
+from .application_tag import test__application_tag
+from .application_type import test__application_type
 
 logging.debug("In the unit-tests __init__.py file.")
 
 __all__ = ['test__url_category',
+           'test__application_type',
+           'test__application_tag',
+           'test__application',
+           'test__application_risk',
+           'test__application_filter',
+           'test__application_productivity',
            'test__application_category',
            'test__cert_enrollment',
            'test__country',
