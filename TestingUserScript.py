@@ -6,34 +6,19 @@ import fmcapi
 import logging
 import time
 import pprint
+import unit_tests
+
 
 # ### Set these variables to match your environment. ### #
 
-host = '100.64.0.166'
+host = '10.0.0.10'
 username = 'apiadmin'
-password = 'C1sco12345'
+password = 'Admin123'
 autodeploy = False
 
 sleep_time_between_tests = 1
 
 # ### These functions are the individual tests you can run to ensure functionality. ### #
-
-
-def test__url_category():
-    logging.info('# Testing URLCategory class.')
-    obj1 = fmcapi.URLCategory(fmc=fmc1)
-    print('All URLCategories -- >')
-    result = obj1.get()
-    pp.pprint(result)
-    print(f"Total items: {len(result['items'])}")
-    print('\n')
-    del obj1
-    obj1 = fmcapi.URLCategory(fmc=fmc1, name='SPAM URLs')
-    print('One URLCategory -- >')
-    pp.pprint(obj1.get())
-    print('\n')
-    logging.info('# Testing URLCategory class done.\n')
-    time.sleep(sleep_time_between_tests)
 
 
 def test__ports():
@@ -1881,6 +1866,13 @@ with fmcapi.FMC(host=host, username=username, password=password, autodeploy=auto
 
     ''' 
     # Working Tests
+    unit_tests.test__url_category(fmc=fmc1)
+    unit_tests.test__ports(fmc=fmc1)
+
+
+
+
+
     test__application()  # This test can take a lONG time to run.
     test__ports()
     test__fmc_version()
