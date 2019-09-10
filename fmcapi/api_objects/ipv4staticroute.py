@@ -68,7 +68,7 @@ class IPv4StaticRoute(APIClassTemplate):
         device1.get(name=device_name)
         if 'id' in device1.__dict__:
             self.device_id = device1.id
-            self.URL = f'{slef.fmc.configuration_url}{self.PREFIX_URL}/{self.device_id}/routing/ipv4staticroutes'
+            self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.device_id}/routing/ipv4staticroutes'
             self.device_added_to_url = True
         else:
             logging.warning(f'Device {device_name} not found.  Cannot set up device for IPv4StaticRoute.')
