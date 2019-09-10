@@ -11,6 +11,10 @@ We need to configure the FTD device at HQ prior to doing the branches because it
 branch devices.
 
 Using the hq-ftd.py script we will accomplish the following:
-* Create ACP (for HQ location).
-* Add the hq-ftd device to the FMC.
-* 
+* Creates ACP and associated ACP Rule.
+* Creates Security Zones.
+* Creates Network Objects.
+* Builds a NAT Policy and NAT rules.
+* Registers the hq-ftd device to the FMC.
+* Updates hq-ftd interfaces with IP addresses.
+* Creates static default route.

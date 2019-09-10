@@ -3,24 +3,6 @@ Unit testing, of a sort, all the created methods/classes.
 """
 
 import fmcapi  # You can use 'from fmcapi import *' but it is best practices to keep the namespaces separate.
-import logging
-
-logging.getLogger(__name__).addHandler(logging.NullHandler())
-
-# Its always good to set up a log file.
-logging_format = '%(asctime)s - %(levelname)s:%(filename)s:%(lineno)s - %(message)s'
-logging_dateformat = '%Y/%m/%d-%H:%M:%S'
-# Logging level options are logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR, logging.CRITICAL
-logging_level = logging.INFO
-# logging_level = logging.DEBUG
-logging_filename = 'output.log'
-logging.basicConfig(format=logging_format,
-                    datefmt=logging_dateformat,
-                    filename=logging_filename,
-                    filemode='w',
-                    level=logging_level)
-
-logging.debug("In the fmcapi __init__.py file.")
 
 
 def main():
@@ -33,7 +15,12 @@ def main():
     username = 'apiadmin'
     password = 'Admin123'
 
-    with fmcapi.FMC(host=host, username=username, password=password, autodeploy=True) as fmc1:
+    with fmcapi.FMC(host=host,
+                    username=username,
+                    password=password,
+                    autodeploy=True,
+                    file_logging='hq-ftd.log') as fmc1:
+
         # Create an ACP
         acp = fmcapi.AccessControlPolicy(fmc=fmc1, name='ACP Policy')
         # I intentially put a "space" in the ACP name to show that fmcapi will "fix" that for you.
@@ -124,7 +111,7 @@ def main():
 
         hq_ftd_g01 = fmcapi.PhysicalInterface(fmc=fmc1, device_name=hq_ftd.name)
         hq_ftd_g01.get(name="GigabitEthernet0/1")
-        hq_ftd_g01.enabled = False  # This doesn't work yet for some reason.
+        hq_ftd_g01.enabled = True  # This doesn't work yet for some reason.
         hq_ftd_g01.ifname = "OUT"
         hq_ftd_g01.static(ipv4addr="100.64.0.200", ipv4mask=24)
         hq_ftd_g01.sz(name="outside")
