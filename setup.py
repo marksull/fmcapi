@@ -6,7 +6,7 @@ __license__ = "BSD"
 
 setup(
     name='fmcapi',
-    version='20190908.0',
+    version='20190910.0',
     description="Easier interface to Cisco's FMC API than writing your own way.",
     long_description="""With the removal to configure a Cisco NGFW via the command line your only option is to
      do so via a manager.  Some things are better when automated so using the manager's API gives us that power. 
@@ -38,7 +38,7 @@ setup(
         'Topic :: System :: Systems Administration',
         'Topic :: Utilities',
     ],
-    keywords='fmcapi fmc ftd security cisco ngfw api',
+    keywords='fmcapi fmc ftd security cisco ngfw api firepower',
     packages=find_packages(exclude=['docs', 'tests*']),
     install_requires=['requests', 'datetime', 'ipaddress'],
     python_requires='>=3',
