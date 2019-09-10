@@ -334,7 +334,9 @@ class Token(object):
             self.token_refreshes = 0
         self.access_token = response.headers.get('X-auth-access-token')
         self.refresh_token = response.headers.get('X-auth-refresh-token')
-        self.token_expiry = datetime.datetime.now() + datetime.timedelta(seconds=self.TOKEN_LIFETIME)
+        # Expire the current token when it is 75% of the Max TOKEN_LIFETIME.
+        refresh_token_time = int(self.TOKEN_LIFETIME * .75)
+        self.token_expiry = datetime.datetime.now() + datetime.timedelta(seconds=refresh_token_time)
         self.uuid = response.headers.get('DOMAIN_UUID')
         all_domain = json.loads(response.headers.get('DOMAINS'))
         if self.__domain is not None:
