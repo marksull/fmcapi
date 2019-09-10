@@ -285,6 +285,7 @@ class Token(object):
 
     MAX_REFRESHES = 3
     TOKEN_LIFETIME = 60 * 30
+    TOKEN_REFRESH_TIME = int(TOKEN_LIFETIME * .75)  # Refresh token at 75% refresh time.
     API_PLATFORM_VERSION = 'api/fmc_platform/v1'
 
     def __init__(self, host='192.168.45.45', username='admin', password='Admin123', domain=None, verify_cert=False):
@@ -334,9 +335,7 @@ class Token(object):
             self.token_refreshes = 0
         self.access_token = response.headers.get('X-auth-access-token')
         self.refresh_token = response.headers.get('X-auth-refresh-token')
-        # Expire the current token when it is 75% of the Max TOKEN_LIFETIME.
-        refresh_token_time = int(self.TOKEN_LIFETIME * .75)
-        self.token_expiry = datetime.datetime.now() + datetime.timedelta(seconds=refresh_token_time)
+        self.token_expiry = datetime.datetime.now() + datetime.timedelta(seconds=self.TOKEN_REFRESH_TIME)
         self.uuid = response.headers.get('DOMAIN_UUID')
         all_domain = json.loads(response.headers.get('DOMAINS'))
         if self.__domain is not None:
