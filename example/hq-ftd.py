@@ -84,6 +84,7 @@ def main():
         fmc_nat.source_intf(name=sz_inside.name)
         fmc_nat.destination_intf(name=sz_outside.name)
         fmc_nat.nat_policy(name=nat.name)
+        fmc_nat.enabled = True
         fmc_nat.post()
 
         # Add hq-ftd device to FMC
