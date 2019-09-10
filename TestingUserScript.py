@@ -27,8 +27,9 @@ def main():
                     ) as fmc1:
         logging.info('# ### Mega Test Start!!! ### #')
 
-        ''' 
+        '''
         # Working Tests
+        unit_tests.test__fmc_version(fmc=fmc1)
         unit_tests.test__application_type(fmc=fmc1)
         unit_tests.test__application_tag(fmc=fmc1)
         unit_tests.test__application(fmc=fmc1)
@@ -45,7 +46,6 @@ def main():
         unit_tests.test__url_group(fmc=fmc1)
         unit_tests.test__network_group(fmc=fmc1)
         unit_tests.test__ip_addresses(fmc=fmc1)
-        unit_tests.test__fmc_version(fmc=fmc1)
         unit_tests.test__variable_set(fmc=fmc1)
         unit_tests.test__ip_host(fmc=fmc1)
         unit_tests.test__ip_network(fmc=fmc1)
@@ -68,17 +68,15 @@ def main():
         unit_tests.test__port_object_group(fmc=fmc1)
         unit_tests.test__url_category(fmc=fmc1)
         unit_tests.test__ports(fmc=fmc1)
+        unit_tests.test__autonat(fmc=fmc1)  # Security Zones need to be created.
+        unit_tests.test__manualnat(fmc=fmc1)  # Security Zones need to be created.
         '''
 
         '''
-        # Not working tests
-        unit_tests.test__static_routes(fmc=fmc1)
-        unit_tests.test__ipv4_static_routes(fmc=fmc1)
-        unit_tests.test__autonat(fmc=fmc1)  # Security Zones need to be created.
-        unit_tests.test__manualnat(fmc=fmc1)  # Security Zones need to be created.
-        unit_tests.test__upgrades(fmc=fmc1)
-    
         # Need FTD device to test
+        unit_tests.test__upgrades(fmc=fmc1)
+        unit_tests.test__ipv4_static_routes(fmc=fmc1)
+        unit_tests.test__static_routes(fmc=fmc1)
         unit_tests.test__interface_group(fmc=fmc1)
         unit_tests.test__device(fmc=fmc1)
         unit_tests.test__device_with_task(fmc=fmc1)

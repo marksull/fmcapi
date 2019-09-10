@@ -94,6 +94,12 @@ def test__manualnat(fmc):
     obj12.post()
     time.sleep(1)
 
+    # Create Security Zones
+    sz1 = fmcapi.SecurityZone(fmc=fmc, name='IG-INSIDE')
+    sz1.post()
+    sz2 = fmcapi.SecurityZone(fmc=fmc, name='SZ-OUTSIDE1')
+    sz2.post()
+
     # Manualnat a network object to a host
     manualnat1 = fmcapi.ManualNatRules(fmc=fmc)
     manualnat1.original_source(name="_net_original")
@@ -189,3 +195,5 @@ def test__manualnat(fmc):
     obj10.delete()
     obj11.delete()
     obj12.delete()
+    sz1.delete()
+    sz2.delete()

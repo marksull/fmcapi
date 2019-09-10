@@ -55,6 +55,12 @@ def test__autonat(fmc):
     obj6.post()
     time.sleep(1)
 
+    # Create Security Zones
+    sz1 = fmcapi.SecurityZone(fmc=fmc, name='IG-INSIDE')
+    sz1.post()
+    sz2 = fmcapi.SecurityZone(fmc=fmc, name='SZ-OUTSIDE1')
+    sz2.post()
+
     # Autonat a network object to a host
     autonat1 = fmcapi.AutoNatRules(fmc=fmc)
     autonat1.original_network(name="_net_original")
@@ -94,6 +100,7 @@ def test__autonat(fmc):
     autonat3.post()
     autonat4.post()
 
+    '''
     # Associate a nat policy to a device
     # Do not uncomment if you do not have a device registered to FMC
     # Use name of device or deviceHAPair as applicable
@@ -101,9 +108,10 @@ def test__autonat(fmc):
     assign1 = fmcapi.PolicyAssignments(fmc=fmc)
     assign1.ftd_natpolicy(name=namer, devices=pol_devices)
     assign1.post()
-
     assign1.ftd_natpolicy(name=namer, devices=[])
     assign1.put()
+    '''
+
     natpol1.delete()
     obj1.delete()
     obj2.delete()
@@ -111,3 +119,6 @@ def test__autonat(fmc):
     obj4.delete()
     obj5.delete()
     obj6.delete()
+    sz1.delete()
+    sz2.delete()
+
