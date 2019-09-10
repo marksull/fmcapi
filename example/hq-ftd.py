@@ -1,5 +1,5 @@
 """
-Unit testing, of a sort, all the created methods/classes.
+Configure FMC for hq-ftd, register hq-ftd and push changes to it.
 """
 
 import fmcapi  # You can use 'from fmcapi import *' but it is best practices to keep the namespaces separate.

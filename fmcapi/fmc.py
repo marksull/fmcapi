@@ -347,12 +347,10 @@ class Token(object):
 
     def get_token(self):
         """
-        Check validity of current token.  If needed make a new or resfresh.  Then return access_token.
+        Check validity of current token.  If needed make a new or refresh.  Then return access_token.
         :return:
         """
         logging.debug("In the Token get_token() class method.")
+        self.generate_tokens()
 
-        if datetime.datetime.now() > self.token_expiry:
-            logging.info("Token Expired.")
-            self.generate_tokens()
         return self.access_token
