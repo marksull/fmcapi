@@ -104,7 +104,7 @@ def main():
         # Once registration is complete configure the interfaces of hq-ftd.
         hq_ftd_g00 = fmcapi.PhysicalInterface(fmc=fmc1, device_name=hq_ftd.name)
         hq_ftd_g00.get(name="GigabitEthernet0/0")
-        hq_ftd_g00.enabled = True  # This doesn't work yet for some reason.
+        hq_ftd_g00.enabled = True
         hq_ftd_g00.ifname = "IN"
         hq_ftd_g00.static(ipv4addr="10.0.0.1", ipv4mask=24)
         hq_ftd_g00.sz(name="inside")
@@ -112,7 +112,7 @@ def main():
 
         hq_ftd_g01 = fmcapi.PhysicalInterface(fmc=fmc1, device_name=hq_ftd.name)
         hq_ftd_g01.get(name="GigabitEthernet0/1")
-        hq_ftd_g01.enabled = True  # This doesn't work yet for some reason.
+        hq_ftd_g01.enabled = True
         hq_ftd_g01.ifname = "OUT"
         hq_ftd_g01.static(ipv4addr="100.64.0.200", ipv4mask=24)
         hq_ftd_g01.sz(name="outside")

@@ -285,7 +285,7 @@ class Token(object):
 
     MAX_REFRESHES = 3
     TOKEN_LIFETIME = 60 * 30
-    TOKEN_REFRESH_TIME = int(TOKEN_LIFETIME * .75)  # Refresh token at 75% refresh time.
+    TOKEN_REFRESH_TIME = int(TOKEN_LIFETIME * .95)  # Refresh token at 95% refresh time.
     API_PLATFORM_VERSION = 'api/fmc_platform/v1'
 
     def __init__(self, host='192.168.45.45', username='admin', password='Admin123', domain=None, verify_cert=False):
@@ -309,6 +309,7 @@ class Token(object):
         self.uuid = None
         self.refresh_token = None
         self.generate_tokens()
+        self.token_creation_time = datetime.datetime.now()
 
     def generate_tokens(self):
         """
@@ -351,6 +352,8 @@ class Token(object):
         :return:
         """
         logging.debug("In the Token get_token() class method.")
-        self.generate_tokens()
+        if datetime.datetime.now() > (self.token_creation_time + datetime.timedelta(seconds=self.TOKEN_REFRESH_TIME)):
+            logging.info("Token expired.  Generating a new token.")
+            self.generate_tokens()
 
         return self.access_token

@@ -76,14 +76,12 @@ class PhysicalInterface(APIClassTemplate):
         if 'securityZone' in kwargs:
             self.securityZone = kwargs['securityZone']
         if 'enabled' in kwargs:
-            self.enabled = kwargs['enabled']  # This doesn't seem to be working
-        else:
-            self.enabled = False
+            self.enabled = kwargs['enabled']
         if 'MTU' in kwargs:
             if kwargs['MTU'] in self.VALID_FOR_MTU:
                 self.MTU = kwargs['MTU']
             else:
-                logging.warning(f"MTU {kwargs['MTU']} should be in the range 64-9000.")
+                logging.warning(f"MTU {kwargs['MTU']} should be in the range 64-9000, setting to 1500.")
                 self.MTU = 1500
         if 'managementOnly' in kwargs:
             self.managementOnly = kwargs['managementOnly']
