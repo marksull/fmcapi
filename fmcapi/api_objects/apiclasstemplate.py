@@ -81,7 +81,6 @@ class APIClassTemplate(object):
                 logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
                 logging.info('\tMethod = GET')
                 logging.info(f'\tURL = {self.URL}')
-                logging.info(f'\tJSON = {self.format_data()}')
                 return False
             response = self.fmc.send_to_api(method='get', url=url)
             self.parse_kwargs(**response)
@@ -121,7 +120,6 @@ class APIClassTemplate(object):
                 logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
                 logging.info('\tMethod = GET')
                 logging.info(f'\tURL = {self.URL}')
-                logging.info(f'\tJSON = {self.format_data()}')
                 return False
             response = self.fmc.send_to_api(method='get', url=url)
         if 'items' not in response:
@@ -203,6 +201,12 @@ class APIClassTemplate(object):
         self.parse_kwargs(**kwargs)
         if self.valid_for_delete():
             url = f'{self.URL}/{self.id}'
+            if self.dry_run:
+                logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
+                logging.info('\tMethod = DELETE')
+                logging.info(f'\tURL = {self.URL}')
+                logging.info(f'\tJSON = {self.format_data()}')
+                return False
             response = self.fmc.send_to_api(method='delete', url=url, json_data=self.format_data())
             if not response:
                 return None
