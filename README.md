@@ -53,8 +53,7 @@ an idea of what is possible.
 I recorded a quick "howto" video which can be accessed via:  (This is outdated and I need to make new videos.) 
 https://www.youtube.com/watch?v=4NIe3T-HjDw
  
-**Note #1:  Check out the TestingUsersScript.py file for ideas on how 
-to use fmcapi (until I get around to writing documentation).**
+**Note #1:  Check out the example directory's scripts for ideas on how to use fmcapi.**
 
 **Note #2:  You can directly send requests to the FMC via the send_to_api() method in the FMC class.  This allows you 
 to access any of the API features of the FMC.**
