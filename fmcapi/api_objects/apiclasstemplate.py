@@ -59,6 +59,10 @@ class APIClassTemplate(object):
             self.id = kwargs['id']
         if 'items' in kwargs:
             self.items = kwargs['items']
+        if 'dry_run' in kwargs:
+            self.dry_run = kwargs['dry_run']
+        else:
+            self.dry_run = False
 
     def format_data(self):
         logging.debug("In format_data() for APIClassTemplate class.")
@@ -73,6 +77,12 @@ class APIClassTemplate(object):
         self.parse_kwargs(**kwargs)
         if 'id' in self.__dict__:
             url = f'{self.URL}/{self.id}'
+            if self.dry_run:
+                logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
+                logging.info('\tMethod = GET')
+                logging.info(f'\tURL = {self.URL}')
+                logging.info(f'\tJSON = {self.format_data()}')
+                return False
             response = self.fmc.send_to_api(method='get', url=url)
             self.parse_kwargs(**response)
             if 'name' in self.__dict__:
@@ -107,6 +117,12 @@ class APIClassTemplate(object):
             logging.info("GET query for object with no name or id set.  "
                          "Returning full list of these object types instead.")
             url = f'{self.URL}?expanded=true&limit={self.limit}'
+            if self.dry_run:
+                logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
+                logging.info('\tMethod = GET')
+                logging.info(f'\tURL = {self.URL}')
+                logging.info(f'\tJSON = {self.format_data()}')
+                return False
             response = self.fmc.send_to_api(method='get', url=url)
         if 'items' not in response:
             response['items'] = []
@@ -126,6 +142,12 @@ class APIClassTemplate(object):
             self.put()
         else:
             if self.valid_for_post():
+                if self.dry_run:
+                    logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
+                    logging.info('\tMethod = POST')
+                    logging.info(f'\tURL = {self.URL}')
+                    logging.info(f'\tJSON = {self.format_data()}')
+                    return False
                 response = self.fmc.send_to_api(method='post', url=self.URL, json_data=self.format_data())
                 if response:
                     self.parse_kwargs(**response)
@@ -152,6 +174,12 @@ class APIClassTemplate(object):
         self.parse_kwargs(**kwargs)
         if self.valid_for_put():
             url = f'{self.URL}/{self.id}'
+            if self.dry_run:
+                logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
+                logging.info('\tMethod = PUT')
+                logging.info(f'\tURL = {self.URL}')
+                logging.info(f'\tJSON = {self.format_data()}')
+                return False
             response = self.fmc.send_to_api(method='put', url=url, json_data=self.format_data())
             self.parse_kwargs(**response)
             if 'name' in self.__dict__:
