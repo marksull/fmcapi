@@ -309,7 +309,7 @@ class Token(object):
         self.uuid = None
         self.refresh_token = None
         self.generate_tokens()
-        self.token_creation_time = datetime.datetime.now()
+        self.token_creation_time = datetime.datetime.now()  # Can't trust that your clock is in sync with FMC's.
 
     def generate_tokens(self):
         """
