@@ -13,6 +13,7 @@ class APIClassTemplate(object):
     REQUIRED_FOR_POST = ['name']
     REQUIRED_FOR_PUT = ['id']
     REQUIRED_FOR_DELETE = ['id']
+    REQUIRED_FOR_GET = ['']
     FILTER_BY_NAME = False
     URL = ''
     URL_SUFFIX = ''
@@ -68,6 +69,15 @@ class APIClassTemplate(object):
     def format_data(self):
         logging.debug("In format_data() for APIClassTemplate class.")
 
+    def valid_for_get(self):
+        logging.debug("In valid_for_get() for APIClassTemplate class.")
+        if self.REQUIRED_FOR_GET == ['']:
+            return True
+        for item in self.REQUIRED_FOR_GET:
+            if item not in self.__dict__:
+                return False
+        return True
+
     def get(self, **kwargs):
         """
         If no self.name or self.id exists then return a full listing of all objects of this type.
@@ -79,56 +89,60 @@ class APIClassTemplate(object):
         if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
             logging.error(f'Your FMC version, {self.fmc.serverVersion} does not support GET of this feature.')
             return {'items': []}
-        if 'id' in self.__dict__:
-            url = f'{self.URL}/{self.id}'
-            if self.dry_run:
-                logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
-                logging.info('\tMethod = GET')
-                logging.info(f'\tURL = {self.URL}')
-                return False
-            response = self.fmc.send_to_api(method='get', url=url)
-            self.parse_kwargs(**response)
-            if 'name' in self.__dict__:
-                logging.info(f'GET success. Object with name: "{self.name}" and id: "{self.id}" fetched from FMC.')
+        if self.valid_for_get():
+            if 'id' in self.__dict__:
+                url = f'{self.URL}/{self.id}'
+                if self.dry_run:
+                    logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
+                    logging.info('\tMethod = GET')
+                    logging.info(f'\tURL = {self.URL}')
+                    return False
+                response = self.fmc.send_to_api(method='get', url=url)
+                self.parse_kwargs(**response)
+                if 'name' in self.__dict__:
+                    logging.info(f'GET success. Object with name: "{self.name}" and id: "{self.id}" fetched from FMC.')
+                else:
+                    logging.info(f'GET success. Object with id: "{self.id}" fetched from FMC.')
+            elif 'name' in self.__dict__:
+                if self.FILTER_BY_NAME:
+                    url = f'{self.URL}?name={self.name}&expanded=true'
+                else:
+                    url = f'{self.URL}?expanded=true'
+                    if 'limit' in self.__dict__:
+                        url = f'{url}&limit={self.limit}'
+                    if 'offset' in self.__dict__:
+                        url = f'{url}&offset={self.offset}'
+                response = self.fmc.send_to_api(method='get', url=url)
+                if 'items' not in response:
+                    response['items'] = []
+                for item in response['items']:
+                    if 'name' in item:
+                        if item['name'] == self.name:
+                            self.id = item['id']
+                            self.parse_kwargs(**item)
+                            logging.info(f'GET success. Object with name: "{self.name}" and id: "{self.id}" '
+                                         f'fetched from FMC.')
+                            return item
+                    else:
+                        logging.warning(f'No "name" attribute associated with this item to check against {self.name}.')
+                if 'id' not in self.__dict__:
+                    logging.warning(f"\tGET query for {self.name} is not found.\n\t\tResponse: {json.dumps(response)}")
             else:
-                logging.info(f'GET success. Object with id: "{self.id}" fetched from FMC.')
-        elif 'name' in self.__dict__:
-            if self.FILTER_BY_NAME:
-                url = f'{self.URL}?name={self.name}&expanded=true'
-            else:
-                url = f'{self.URL}?expanded=true'
-                if 'limit' in self.__dict__:
-                    url = f'{url}&limit={self.limit}'
-                if 'offset' in self.__dict__:
-                    url = f'{url}&offset={self.offset}'
-            response = self.fmc.send_to_api(method='get', url=url)
+                logging.info("GET query for object with no name or id set.  "
+                             "Returning full list of these object types instead.")
+                url = f'{self.URL}?expanded=true&limit={self.limit}'
+                if self.dry_run:
+                    logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
+                    logging.info('\tMethod = GET')
+                    logging.info(f'\tURL = {self.URL}')
+                    return False
+                response = self.fmc.send_to_api(method='get', url=url)
             if 'items' not in response:
                 response['items'] = []
-            for item in response['items']:
-                if 'name' in item:
-                    if item['name'] == self.name:
-                        self.id = item['id']
-                        self.parse_kwargs(**item)
-                        logging.info(f'GET success. Object with name: "{self.name}" and id: "{self.id}" '
-                                     f'fetched from FMC.')
-                        return item
-                else:
-                    logging.warning(f'No "name" attribute associated with this item to check against {self.name}.')
-            if 'id' not in self.__dict__:
-                logging.warning(f"\tGET query for {self.name} is not found.\n\t\tResponse: {json.dumps(response)}")
+            return response
         else:
-            logging.info("GET query for object with no name or id set.  "
-                         "Returning full list of these object types instead.")
-            url = f'{self.URL}?expanded=true&limit={self.limit}'
-            if self.dry_run:
-                logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
-                logging.info('\tMethod = GET')
-                logging.info(f'\tURL = {self.URL}')
-                return False
-            response = self.fmc.send_to_api(method='get', url=url)
-        if 'items' not in response:
-            response['items'] = []
-        return response
+            logging.warning("get() method failed due to failure to pass valid_for_get() test.")
+            return False
 
     def valid_for_post(self):
         logging.debug("In valid_for_post() for APIClassTemplate class.")
