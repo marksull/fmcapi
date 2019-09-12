@@ -75,11 +75,13 @@ from .variableset import VariableSet
 from .vlantag import VlanTag
 from .vlangrouptag import VlanGroupTag
 from .hitcounts import HitCount
+from .prefilterpolicies import PreFilterPolicy
 
 
 logging.debug("In the api_objects __init__.py file.")
 
 __all__ = ['AccessControlPolicy',
+           'PreFilterPolicy',
            'HitCount',
            'ACPRule',
            'AnyProtocolPortObjects',
