@@ -52,6 +52,10 @@ class Bulk(object):
         self.items.append(item)
         logging.info(f"Adding {item} to bulk items list.")
 
+    def clear(self, item):
+        logging.info(f"Clearing bulk items list.")
+        self.items = []
+
     def post(self):
         # Build URL
         self.URL = f'{self.URL}{self.URL_SUFFIX}&bulk=true'
