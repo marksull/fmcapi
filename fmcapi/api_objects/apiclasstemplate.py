@@ -17,6 +17,7 @@ class APIClassTemplate(object):
     URL = ''
     URL_SUFFIX = ''
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-]"""
+    FIRST_SUPPORTED_FMC_VERSION = '6.1.0'
 
     @property
     def show_json(self):
@@ -75,6 +76,9 @@ class APIClassTemplate(object):
         """
         logging.debug("In get() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
+        if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
+            logging.error(f'Your FMC version, {self.fmc.serverVersion} does not support GET of this feature.')
+            return {'items': []}
         if 'id' in self.__dict__:
             url = f'{self.URL}/{self.id}'
             if self.dry_run:
@@ -135,6 +139,9 @@ class APIClassTemplate(object):
 
     def post(self, **kwargs):
         logging.debug("In post() for APIClassTemplate class.")
+        if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
+            logging.error(f'Your FMC version, {self.fmc.serverVersion} does not support POST of this feature.')
+            return False
         if 'id' in self.__dict__:
             logging.info("ID value exists for this object.  Redirecting to put() method.")
             self.put()
@@ -170,6 +177,9 @@ class APIClassTemplate(object):
     def put(self, **kwargs):
         logging.debug("In put() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
+        if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
+            logging.error(f'Your FMC version, {self.fmc.serverVersion} does not support PUT of this feature.')
+            return False
         if self.valid_for_put():
             url = f'{self.URL}/{self.id}'
             if self.dry_run:
@@ -199,6 +209,9 @@ class APIClassTemplate(object):
     def delete(self, **kwargs):
         logging.debug("In delete() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
+        if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
+            logging.error(f'Your FMC version, {self.fmc.serverVersion} does not support DELETE of this feature.')
+            return False
         if self.valid_for_delete():
             url = f'{self.URL}/{self.id}'
             if self.dry_run:

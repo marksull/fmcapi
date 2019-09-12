@@ -511,13 +511,10 @@ class ACPRule(APIClassTemplate):
             else:
                 ipaddresses_json = IPAddresses(fmc=self.fmc).get()
                 networkgroup_json = NetworkGroup(fmc=self.fmc).get()
-                if self.fmc.serverVersion >= '6.4':
-                    fqdns_json = FQDNS(fmc=self.fmc).get()
-                else:
-                    fqdns_json = {'items': []}
+                fqdns_json = FQDNS(fmc=self.fmc).get()
                 items = ipaddresses_json.get('items', []) + \
-                    networkgroup_json.get('items', []) + \
-                    fqdns_json.get('items', [])
+                        networkgroup_json.get('items', []) + \
+                        fqdns_json.get('items', [])
                 new_net = None
                 for item in items:
                     if item['name'] == name:

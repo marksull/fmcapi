@@ -10,12 +10,16 @@ class FQDNS(APIClassTemplate):
     URL_SUFFIX = '/object/fqdns'
     VALID_FOR_DNS_RESOLUTION = ['IPV4_ONLY', 'IPV6_ONLY', 'IPV4_AND_IPV6']
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+    FIRST_SUPPORTED_FMC_VERSION = '6.3.0'
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for FQDNS class.")
         self.parse_kwargs(**kwargs)
         self.type = 'FQDN'
+        if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
+            logging.warning(f'The FQDNS API feature was released in version {self.FIRST_SUPPORTED_FMC_VERSION}.  '
+                            f'Your FMC version is {self.fmc.serverVersion}.  Upgrade to use this feature.')
 
     def format_data(self):
         logging.debug("In format_data() for FQDNS class.")
