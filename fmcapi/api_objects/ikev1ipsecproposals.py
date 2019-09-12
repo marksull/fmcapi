@@ -12,6 +12,7 @@ class IKEv1IpsecProposals(APIClassTemplate):
     VALID_FOR_ENCRYPTION = ['DES', '3DES', 'AES-128', 'AES-192', 'AES-256', 'ESP-NULL']
     VALID_FOR_HASH = ['NONE', 'MD5', 'SHA']
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+    FIRST_SUPPORTED_FMC_VERSION = '6.3'
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)

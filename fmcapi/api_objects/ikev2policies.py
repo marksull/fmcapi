@@ -15,6 +15,7 @@ class IKEv2Policies(APIClassTemplate):
     VALID_FOR_INTEGRITY = ['NULL', 'MD5', 'SHA', 'SHA-256', 'SHA-384', 'SHA-512']
     VALID_FOR_PRF_INTEGRITY = ['MD5', 'SHA', 'SHA-256', 'SHA-384', 'SHA-512']
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+    FIRST_SUPPORTED_FMC_VERSION = '6.3'
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)

@@ -13,6 +13,8 @@ class IKEv2IpsecProposals(APIClassTemplate):
                             'AES-GCM-256', 'AES-GMAC', 'AES-GMAC-192', 'AES-GMAC-256']
     VALID_FOR_HASH = ['NULL', 'MD5', 'SHA-1', 'SHA-256', 'SHA-384', 'SHA-512']
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+    FIRST_SUPPORTED_FMC_VERSION = '6.3'
+
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)

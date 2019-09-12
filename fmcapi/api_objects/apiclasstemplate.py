@@ -17,7 +17,7 @@ class APIClassTemplate(object):
     URL = ''
     URL_SUFFIX = ''
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-]"""
-    FIRST_SUPPORTED_FMC_VERSION = '6.1.0'
+    FIRST_SUPPORTED_FMC_VERSION = '6.1'
 
     @property
     def show_json(self):
