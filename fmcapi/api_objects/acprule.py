@@ -20,6 +20,7 @@ class ACPRule(APIClassTemplate):
     """
     PREFIX_URL = '/policy/accesspolicies'
     REQUIRED_FOR_POST = ['name', 'acp_id']
+    REQUIRED_FOR_GET = ['acp_id']
     VALID_FOR_ACTION = ['ALLOW', 'TRUST', 'BLOCK', 'MONITOR', 'BLOCK_RESET', 'BLOCK_INTERACTIVE',
                         'BLOCK_RESET_INTERACTIVE']
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""

@@ -11,6 +11,7 @@ class HitCount(APIClassTemplate):
     PREFIX_URL = '/policy/accesspolicies/'
     REQUIRED_FOR_PUT = ['acp_id']
     REQUIRED_FOR_DELETE = ['acp_id']
+    REQUIRED_FOR_GET = ['acp_id']
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 
     def __init__(self, fmc, **kwargs):
