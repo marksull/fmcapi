@@ -74,11 +74,13 @@ from .urlgroup import URLGroup
 from .variableset import VariableSet
 from .vlantag import VlanTag
 from .vlangrouptag import VlanGroupTag
+from .hitcounts import HitCount
 
 
 logging.debug("In the api_objects __init__.py file.")
 
 __all__ = ['AccessControlPolicy',
+           'HitCount',
            'ACPRule',
            'AnyProtocolPortObjects',
            'ApplicableDevices',
