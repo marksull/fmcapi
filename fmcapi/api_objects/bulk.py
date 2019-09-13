@@ -52,7 +52,7 @@ class Bulk(object):
         self.items.append(item)
         logging.info(f"Adding {item} to bulk items list.")
 
-    def clear(self, item):
+    def clear(self):
         logging.info(f"Clearing bulk items list.")
         self.items = []
 

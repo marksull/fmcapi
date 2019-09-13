@@ -25,6 +25,7 @@ default logger.  This reduces the size of our log files.
 logging.getLogger("requests").setLevel(logging.WARNING)
 
 
+# noinspection SpellCheckingInspection
 class FMC(object):
     """
 The FMC class has a series of methods, lines that start with "def", that are used to interact with the Cisco FMC
@@ -37,8 +38,16 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
     VERIFY_CERT = False
     MAX_PAGING_REQUESTS = 2000
 
-    def __init__(self, host='192.168.45.45', username='admin', password='Admin123', domain=None, autodeploy=True,
-                 file_logging=None, debug=False, limit=1000):
+    def __init__(self,
+                 host='192.168.45.45',
+                 username='admin',
+                 password='Admin123',
+                 domain=None,
+                 autodeploy=True,
+                 file_logging=None,
+                 logging_level='INFO',
+                 debug=False,
+                 limit=1000):
         """
         Instantiate some variables prior to calling the __enter__() method.
         :param host:
@@ -47,12 +56,14 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         :param autodeploy:
         :param file_logging (str): The filename (and optional path) of the output file if a file logger is required,
         None if no file logger is required
+        :param logging_level (str): The desired logging level, INFO by default.
         :param debug (bool): True to enable debug logging, default is False
         :param limit (int): Sets up max page of data to gather per "page".
         """
 
         root_logger = logging.getLogger('')
-        root_logger.setLevel(logging.DEBUG if debug else logging.INFO)
+        provided_log_level = f'logging.{logging_level.upper()}'
+        root_logger.setLevel(logging.DEBUG if debug else provided_log_level)
 
         if file_logging:
             print(f'Logging is enabled.  Look for file "{file_logging}" for output.')
@@ -70,6 +81,13 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         self.domain = domain
         self.autodeploy = autodeploy
         self.limit = limit
+        self.vdbVersion = None
+        self.sruVersion = None
+        self.serverVersion = None
+        self.geoVersion = None
+        self.configuration_url = None
+        self.platform_url = None
+        self.page_counter = None
 
     def __enter__(self):
         """
@@ -117,7 +135,9 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         Using the "method" type, send a request to the "url" with the "json_data" as the payload.
         :param method:
         :param url:
+        :param headers:
         :param json_data:
+        :param more_items:
         :return:
         """
         logging.debug("In the FMC send_to_api() class method.")
@@ -285,7 +305,7 @@ class Token(object):
 
     MAX_REFRESHES = 3
     TOKEN_LIFETIME = 60 * 30
-    TOKEN_REFRESH_TIME = int(TOKEN_LIFETIME * .95)  # Refresh token at 95% refresh time.
+    TOKEN_REFRESH_TIME = int(TOKEN_LIFETIME * .10)  # Refresh token at 95% refresh time.
     API_PLATFORM_VERSION = 'api/fmc_platform/v1'
 
     def __init__(self, host='192.168.45.45', username='admin', password='Admin123', domain=None, verify_cert=False):
@@ -302,14 +322,13 @@ class Token(object):
         self.__username = username
         self.__password = password
         self.__domain = domain
+        self.uuid = None
         self.verify_cert = verify_cert
-        self.token_expiry = None
         self.token_refreshes = 0
         self.access_token = None
-        self.uuid = None
         self.refresh_token = None
+        self.token_creation_time = None
         self.generate_tokens()
-        self.token_creation_time = datetime.datetime.now()  # Can't trust that your clock is in sync with FMC's.
 
     def generate_tokens(self):
         """
@@ -325,23 +344,32 @@ class Token(object):
             logging.info(f"Refreshing tokens, {self.token_refreshes} out of {self.MAX_REFRESHES} refreshes, "
                          f"from {url}.")
             response = requests.post(url, headers=headers, verify=self.verify_cert)
+            logging.debug('Response from refreshtoken post:\n'
+                          f'\turl: {url}\n'
+                          f'\theaders: {headers}\n'
+                          f'\tresponse: {response}')
             self.token_refreshes += 1
         else:
+            self.token_refreshes = 0
+            self.token_creation_time = datetime.datetime.now()  # Can't trust that your clock is in sync with FMC's.
             headers = {'Content-Type': 'application/json'}
             url = f'https://{self.__host}/{self.API_PLATFORM_VERSION}/auth/generatetoken'
             logging.info(f"Requesting new tokens from {url}.")
             response = requests.post(url, headers=headers,
                                      auth=requests.auth.HTTPBasicAuth(self.__username, self.__password),
                                      verify=self.verify_cert)
-            self.token_refreshes = 0
+            logging.debug('Response from generatetoken post:\n'
+                          f'\turl: {url}\n'
+                          f'\theaders: {headers}\n'
+                          f'\tresponse: {response}')
         self.access_token = response.headers.get('X-auth-access-token')
         self.refresh_token = response.headers.get('X-auth-refresh-token')
-        self.token_expiry = datetime.datetime.now() + datetime.timedelta(seconds=self.TOKEN_REFRESH_TIME)
         self.uuid = response.headers.get('DOMAIN_UUID')
         all_domain = json.loads(response.headers.get('DOMAINS'))
         if self.__domain is not None:
             for domain in all_domain:
                 if 'global/' + self.__domain.lower() == domain['name'].lower():
+                    logging.info(f"Domain set to {domain['name']}")
                     self.uuid = domain['uuid']
                 else:
                     logging.info("Domain name entered not found in FMC, falling back to Global")
@@ -349,11 +377,14 @@ class Token(object):
     def get_token(self):
         """
         Check validity of current token.  If needed make a new or refresh.  Then return access_token.
-        :return:
+        :return self.access_token
         """
         logging.debug("In the Token get_token() class method.")
         if datetime.datetime.now() > (self.token_creation_time + datetime.timedelta(seconds=self.TOKEN_REFRESH_TIME)):
             logging.info("Token expired.  Generating a new token.")
+            self.token_refreshes = 0
+            self.access_token = None
+            self.refresh_token = None
             self.generate_tokens()
 
         return self.access_token
