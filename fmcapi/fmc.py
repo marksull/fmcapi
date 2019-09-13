@@ -325,6 +325,10 @@ class Token(object):
             logging.info(f"Refreshing tokens, {self.token_refreshes} out of {self.MAX_REFRESHES} refreshes, "
                          f"from {url}.")
             response = requests.post(url, headers=headers, verify=self.verify_cert)
+            logging.info('Response from refreshtoken post:\n'
+                          f'\turl: {url}\n'
+                          f'\theaders: {headers}\n'
+                          f'\tresponse: {response}')
             self.token_refreshes += 1
         else:
             self.token_refreshes = 0
