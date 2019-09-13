@@ -56,6 +56,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         :param autodeploy:
         :param file_logging (str): The filename (and optional path) of the output file if a file logger is required,
         None if no file logger is required
+        :param logging_level (str): The desired logging level, INFO by default.
         :param debug (bool): True to enable debug logging, default is False
         :param limit (int): Sets up max page of data to gather per "page".
         """
