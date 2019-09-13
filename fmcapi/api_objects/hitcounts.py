@@ -1,6 +1,7 @@
 from .apiclasstemplate import APIClassTemplate
 from .accesscontrolpolicy import AccessControlPolicy
 from .device import Device
+from .prefilterpolicies import PreFilterPolicy
 import logging
 
 
@@ -21,25 +22,25 @@ class HitCount(APIClassTemplate):
         """
         Add the URL suffixes for filter.
         """
-        self.filter_init = '?filter="'
-        self.filter = self.filter_init
+        filter_init = '?filter="'
+        filter = filter_init
 
         self.URL = self.URL.split('?')[0]
 
-        if 'device_id' in self.__dict__:
-            self.filter += f'deviceId:{self.device_id};'
-        # if 'prefilter_ids' in self.__dict__:  # Haven't build prefilter Class yet but putting in here for that moment.
-        #     self.filter += f'ids:{self.prefilter_ids};'
-        if '_fetchZeroHitCount' in self.__dict__:
-            self.filter += f'fetchZeroHitCount:{self._fetchZeroHitCount};'
+        if self.device_id:
+            filter += f'deviceId:{self.device_id};'
+        if self.prefilter_ids:
+             filter += f'ids:{self.prefilter_ids};'
+        if self.fetchZeroHitCount:
+            filter += f'fetchZeroHitCount:{self._fetchZeroHitCount};'
 
-        if self.filter is self.filter_init:
-            self.filter += '"'
-        self.filter = f'{self.filter[:-1]}"&expanded=true'
+        if filter is filter_init:
+            filter += '"'
+        filter = f'{filter[:-1]}"&expanded=true'
 
         if 'limit' in self.__dict__:
-            self.filter += f'&limit={self.limit}'
-        return self.filter
+            filter += f'&limit={self.limit}'
+        return filter
 
     @property
     def fetchZeroHitCount(self):
@@ -53,14 +54,13 @@ class HitCount(APIClassTemplate):
         self.URL = f'{self.URL}{self.URL_SUFFIX}'
 
     def __init__(self, fmc, **kwargs):
-        super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for HitCount class.")
+        self.device_id = None
+        self.prefilter_ids = None
+        self.fetchZeroHitCount = False
+        super().__init__(fmc, **kwargs)
         self.parse_kwargs(**kwargs)
         self.type = 'HitCount'
-        self.filter = ''
-        self.fetchZeroHitCount = False
-        self.device_id = False
-        self.prefilter_ids = False
         self.URL = f'{self.URL}{self.URL_SUFFIX}'
 
     def parse_kwargs(self, **kwargs):
@@ -116,6 +116,60 @@ class HitCount(APIClassTemplate):
                 logging.warning(f'Device "{name}" not found.  Cannot configure device for HitCount.')
         else:
             logging.error('No device name or id was provided.')
+        # Rebuild the URL with possible new information
+        self.URL = self.URL.split('?')[0]
+        self.URL = f'{self.URL}{self.URL_SUFFIX}'
+
+    def prefilter_policies(self, action, name='', prefilter_id=''):
+        logging.debug("In prefilter_policies_tags() for HitCount class.")
+        if action == 'add':
+            ppolicy = PreFilterPolicy(fmc=self.fmc)
+            if prefilter_id:
+                ppolicy.get(id=prefilter_id)
+            elif name:
+                ppolicy.get(name=name)
+            if 'id' in ppolicy.__dict__:
+                if self.prefilter_ids:
+                    duplicate = False
+                    for obj in self.prefilter_ids.split(','):
+                        if obj is ppolicy.id:
+                            duplicate = True
+                            logging.warning(f'Id, {ppolicy.id}, already in prefilter_ids not duplicating.')
+                            break
+                    if not duplicate:
+                        self.prefilter_ids += f',{ppolicy.id}'
+                        logging.info(f'Adding "{ppolicy.id}" to prefilter_ids for this HitCount.')
+                else:
+                    self.prefilter_ids = f'{ppolicy.id}'
+                    logging.info(f'Adding "{ppolicy.id}" to prefilter_ids for this HitCount.')
+            else:
+                if name:
+                    logging.warning(f'Prefilter, "{name}", not found.  Cannot add to HitCount.')
+                elif prefilter_id:
+                    logging.warning(f'Prefilter, {prefilter_id}, not found.  Cannot add to HitCount.')
+        elif action == 'remove':
+            ppolicy = PreFilterPolicy(fmc=self.fmc)
+            if prefilter_id:
+                ppolicy.get(id=prefilter_id)
+            elif name:
+                ppolicy.get(name=name)
+            if 'id' in ppolicy.__dict__:
+                if self.prefilter_ids:
+                    objects = []
+                    for obj in self.prefilter_ids.split(','):
+                        if obj is not ppolicy.id:
+                            objects.append(obj)
+                    self.prefilter_ids = ''.join(objects)
+                    logging.info(f'Removed "{ppolicy.id}" from prefilter_ids for this HitCount.')
+                else:
+                    logging.info("prefilter_ids is empty for this HitCount.  Nothing to remove.")
+            else:
+                logging.warning(f'Prefilter Policy, {ppolicy.id}, not found.  Cannot remove from HitCount.')
+        elif action == 'clear':
+            if self.prefilter_ids:
+                self.prefilter_ids = None
+                logging.info('All prefilter_ids removed from this HitCount object.')
+
         # Rebuild the URL with possible new information
         self.URL = self.URL.split('?')[0]
         self.URL = f'{self.URL}{self.URL_SUFFIX}'
