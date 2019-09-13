@@ -62,7 +62,8 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         """
 
         root_logger = logging.getLogger('')
-        root_logger.setLevel(logging.DEBUG if debug else logging_level.upper())
+        provided_log_level = f'logging.{logging_level.upper()}'
+        root_logger.setLevel(logging.DEBUG if debug else provided_log_level)
 
         if file_logging:
             print(f'Logging is enabled.  Look for file "{file_logging}" for output.')
