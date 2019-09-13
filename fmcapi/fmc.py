@@ -25,6 +25,7 @@ default logger.  This reduces the size of our log files.
 logging.getLogger("requests").setLevel(logging.WARNING)
 
 
+# noinspection SpellCheckingInspection
 class FMC(object):
     """
 The FMC class has a series of methods, lines that start with "def", that are used to interact with the Cisco FMC
@@ -37,8 +38,16 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
     VERIFY_CERT = False
     MAX_PAGING_REQUESTS = 2000
 
-    def __init__(self, host='192.168.45.45', username='admin', password='Admin123', domain=None, autodeploy=True,
-                 file_logging=None, debug=False, limit=1000):
+    def __init__(self,
+                 host='192.168.45.45',
+                 username='admin',
+                 password='Admin123',
+                 domain=None,
+                 autodeploy=True,
+                 file_logging=None,
+                 logging_level='INFO',
+                 debug=False,
+                 limit=1000):
         """
         Instantiate some variables prior to calling the __enter__() method.
         :param host:
@@ -52,7 +61,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         """
 
         root_logger = logging.getLogger('')
-        root_logger.setLevel(logging.DEBUG if debug else logging.INFO)
+        root_logger.setLevel(logging.DEBUG if debug else logging_level.upper())
 
         if file_logging:
             print(f'Logging is enabled.  Look for file "{file_logging}" for output.')
