@@ -343,10 +343,10 @@ class Token(object):
             logging.info(f"Refreshing tokens, {self.token_refreshes} out of {self.MAX_REFRESHES} refreshes, "
                          f"from {url}.")
             response = requests.post(url, headers=headers, verify=self.verify_cert)
-            logging.info('Response from refreshtoken post:\n'
-                         f'\turl: {url}\n'
-                         f'\theaders: {headers}\n'
-                         f'\tresponse: {response}')
+            logging.debug('Response from refreshtoken post:\n'
+                          f'\turl: {url}\n'
+                          f'\theaders: {headers}\n'
+                          f'\tresponse: {response}')
             self.token_refreshes += 1
         else:
             self.token_refreshes = 0
@@ -357,10 +357,10 @@ class Token(object):
             response = requests.post(url, headers=headers,
                                      auth=requests.auth.HTTPBasicAuth(self.__username, self.__password),
                                      verify=self.verify_cert)
-            logging.info('Response from generatetoken post:\n'
-                         f'\turl: {url}\n'
-                         f'\theaders: {headers}\n'
-                         f'\tresponse: {response}')
+            logging.debug('Response from generatetoken post:\n'
+                          f'\turl: {url}\n'
+                          f'\theaders: {headers}\n'
+                          f'\tresponse: {response}')
         self.access_token = response.headers.get('X-auth-access-token')
         self.refresh_token = response.headers.get('X-auth-refresh-token')
         self.uuid = response.headers.get('DOMAIN_UUID')
