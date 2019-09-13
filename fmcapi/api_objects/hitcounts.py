@@ -11,9 +11,9 @@ class HitCount(APIClassTemplate):
     """
 
     PREFIX_URL = '/policy/accesspolicies'
-    REQUIRED_FOR_PUT = ['acp_id']
-    REQUIRED_FOR_DELETE = ['acp_id']
-    REQUIRED_FOR_GET = ['acp_id']
+    REQUIRED_FOR_PUT = ['acp_id', 'device_id']
+    REQUIRED_FOR_DELETE = ['acp_id', 'device_id']
+    REQUIRED_FOR_GET = ['acp_id', 'device_id']
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
     FIRST_SUPPORTED_FMC_VERSION = '6.4'
 
@@ -23,24 +23,24 @@ class HitCount(APIClassTemplate):
         Add the URL suffixes for filter.
         """
         filter_init = '?filter="'
-        filter = filter_init
+        filter_string = filter_init
 
         self.URL = self.URL.split('?')[0]
 
         if self.device_id:
-            filter += f'deviceId:{self.device_id};'
+            filter_string += f'deviceId:{self.device_id};'
         if self.prefilter_ids:
-             filter += f'ids:{self.prefilter_ids};'
+            filter_string += f'ids:{self.prefilter_ids};'
         if self.fetchZeroHitCount:
-            filter += f'fetchZeroHitCount:{self._fetchZeroHitCount};'
+            filter_string += f'fetchZeroHitCount:{self._fetchZeroHitCount};'
 
-        if filter is filter_init:
-            filter += '"'
-        filter = f'{filter[:-1]}"&expanded=true'
+        if filter_string is filter_init:
+            filter_string += '"'
+        filter_string = f'{filter_string[:-1]}"&expanded=true'
 
         if 'limit' in self.__dict__:
-            filter += f'&limit={self.limit}'
-        return filter
+            filter_string += f'&limit={self.limit}'
+        return filter_string
 
     @property
     def fetchZeroHitCount(self):
@@ -56,7 +56,7 @@ class HitCount(APIClassTemplate):
     def __init__(self, fmc, **kwargs):
         logging.debug("In __init__() for HitCount class.")
         self.device_id = None
-        self.prefilter_ids = None
+        self.prefilter_ids = []
         self.fetchZeroHitCount = False
         super().__init__(fmc, **kwargs)
         self.parse_kwargs(**kwargs)
@@ -137,10 +137,10 @@ class HitCount(APIClassTemplate):
                             logging.warning(f'Id, {ppolicy.id}, already in prefilter_ids not duplicating.')
                             break
                     if not duplicate:
-                        self.prefilter_ids += f',{ppolicy.id}'
+                        self.prefilter_ids.append(ppolicy.id)
                         logging.info(f'Adding "{ppolicy.id}" to prefilter_ids for this HitCount.')
                 else:
-                    self.prefilter_ids = f'{ppolicy.id}'
+                    self.prefilter_ids.append(ppolicy.id)
                     logging.info(f'Adding "{ppolicy.id}" to prefilter_ids for this HitCount.')
             else:
                 if name:
@@ -156,10 +156,10 @@ class HitCount(APIClassTemplate):
             if 'id' in ppolicy.__dict__:
                 if self.prefilter_ids:
                     objects = []
-                    for obj in self.prefilter_ids.split(','):
+                    for obj in self.prefilter_ids:
                         if obj is not ppolicy.id:
                             objects.append(obj)
-                    self.prefilter_ids = ''.join(objects)
+                    self.prefilter_ids = objects
                     logging.info(f'Removed "{ppolicy.id}" from prefilter_ids for this HitCount.')
                 else:
                     logging.info("prefilter_ids is empty for this HitCount.  Nothing to remove.")
@@ -167,7 +167,7 @@ class HitCount(APIClassTemplate):
                 logging.warning(f'Prefilter Policy, {ppolicy.id}, not found.  Cannot remove from HitCount.')
         elif action == 'clear':
             if self.prefilter_ids:
-                self.prefilter_ids = None
+                self.prefilter_ids = []
                 logging.info('All prefilter_ids removed from this HitCount object.')
 
         # Rebuild the URL with possible new information
@@ -198,6 +198,14 @@ class HitCount(APIClassTemplate):
         else:
             logging.warning("get() method failed due to failure to pass valid_for_get() test.")
             return False
+
+    def put(self, **kwargs):
+        logging.info('Though supported by FMC, API PUT method is not yet working for HitCount in fmcapi.')
+        pass
+
+    def delete(self, **kwargs):
+        logging.info('Though supported by FMC, API DELETE method is not yet working for HitCount in fmcapi.')
+        pass
 
     def post(self):
         logging.info('API POST method for HitCount not supported.')
