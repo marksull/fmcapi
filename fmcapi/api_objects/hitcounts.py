@@ -34,7 +34,7 @@ class HitCount(APIClassTemplate):
         if self.fetchZeroHitCount:
             filter_string += f'fetchZeroHitCount:{self._fetchZeroHitCount};'
 
-        if filter_string is filter_init:
+        if filter_string == filter_init:
             filter_string += '"'
         filter_string = f'{filter_string[:-1]}"&expanded=true'
 
@@ -132,7 +132,7 @@ class HitCount(APIClassTemplate):
                 if self.prefilter_ids:
                     duplicate = False
                     for obj in self.prefilter_ids.split(','):
-                        if obj is ppolicy.id:
+                        if obj == ppolicy.id:
                             duplicate = True
                             logging.warning(f'Id, {ppolicy.id}, already in prefilter_ids not duplicating.')
                             break
@@ -157,7 +157,7 @@ class HitCount(APIClassTemplate):
                 if self.prefilter_ids:
                     objects = []
                     for obj in self.prefilter_ids:
-                        if obj is not ppolicy.id:
+                        if obj != ppolicy.id:
                             objects.append(obj)
                     self.prefilter_ids = objects
                     logging.info(f'Removed "{ppolicy.id}" from prefilter_ids for this HitCount.')

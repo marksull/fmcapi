@@ -17,7 +17,7 @@ class IPRange(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         if 'value' in kwargs:
             value_type = get_networkaddress_type(kwargs['value'])
-            if value_type is 'host' or value_type is 'network':
+            if value_type == 'host' or value_type == 'network':
                 logging.warning(f"value, {kwargs['value']}, is of type {value_type}.  Limited functionality for this "
                                 f"object due to it being created via the IPRange function.")
             if validate_ip_bitmask_range(value=kwargs['value'], value_type=value_type):
