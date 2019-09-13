@@ -302,11 +302,11 @@ class Token(object):
         self.__username = username
         self.__password = password
         self.__domain = domain
+        self.uuid = None
         self.verify_cert = verify_cert
         self.token_expiry = None
         self.token_refreshes = 0
         self.access_token = None
-        self.uuid = None
         self.refresh_token = None
         self.generate_tokens()
         self.token_creation_time = datetime.datetime.now()  # Can't trust that your clock is in sync with FMC's.
@@ -318,7 +318,7 @@ class Token(object):
         """
         logging.debug("In the Token generate_tokens() class method.")
 
-        if self.token_refreshes <= self.MAX_REFRESHES and self.access_token is not None:
+        if self.token_refreshes < self.MAX_REFRESHES and self.access_token is not None:
             headers = {'Content-Type': 'application/json', 'X-auth-access-token': self.access_token,
                        'X-auth-refresh-token': self.refresh_token}
             url = f'https://{self.__host}/{self.API_PLATFORM_VERSION}/auth/refreshtoken'
@@ -327,13 +327,17 @@ class Token(object):
             response = requests.post(url, headers=headers, verify=self.verify_cert)
             self.token_refreshes += 1
         else:
+            self.token_refreshes = 0
             headers = {'Content-Type': 'application/json'}
             url = f'https://{self.__host}/{self.API_PLATFORM_VERSION}/auth/generatetoken'
             logging.info(f"Requesting new tokens from {url}.")
             response = requests.post(url, headers=headers,
                                      auth=requests.auth.HTTPBasicAuth(self.__username, self.__password),
                                      verify=self.verify_cert)
-            self.token_refreshes = 0
+            logging.info('Response from generatetoken post:\n'
+                          f'\turl: {url}\n'
+                          f'\theaders: {headers}\n'
+                          f'\tresponse: {response}')
         self.access_token = response.headers.get('X-auth-access-token')
         self.refresh_token = response.headers.get('X-auth-refresh-token')
         self.token_expiry = datetime.datetime.now() + datetime.timedelta(seconds=self.TOKEN_REFRESH_TIME)
@@ -342,6 +346,7 @@ class Token(object):
         if self.__domain is not None:
             for domain in all_domain:
                 if 'global/' + self.__domain.lower() == domain['name'].lower():
+                    logging.info(f"Domain set to {domain['name']}")
                     self.uuid = domain['uuid']
                 else:
                     logging.info("Domain name entered not found in FMC, falling back to Global")
