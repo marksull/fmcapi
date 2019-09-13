@@ -80,6 +80,13 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         self.domain = domain
         self.autodeploy = autodeploy
         self.limit = limit
+        self.vdbVersion = None
+        self.sruVersion = None
+        self.serverVersion = None
+        self.geoVersion = None
+        self.configuration_url = None
+        self.platform_url = None
+        self.page_counter = None
 
     def __enter__(self):
         """
@@ -297,7 +304,7 @@ class Token(object):
 
     MAX_REFRESHES = 3
     TOKEN_LIFETIME = 60 * 30
-    TOKEN_REFRESH_TIME = int(TOKEN_LIFETIME * .95)  # Refresh token at 95% refresh time.
+    TOKEN_REFRESH_TIME = int(TOKEN_LIFETIME * .10)  # Refresh token at 95% refresh time.
     API_PLATFORM_VERSION = 'api/fmc_platform/v1'
 
     def __init__(self, host='192.168.45.45', username='admin', password='Admin123', domain=None, verify_cert=False):
@@ -316,12 +323,11 @@ class Token(object):
         self.__domain = domain
         self.uuid = None
         self.verify_cert = verify_cert
-        self.token_expiry = None
         self.token_refreshes = 0
         self.access_token = None
         self.refresh_token = None
+        self.token_creation_time = None
         self.generate_tokens()
-        self.token_creation_time = datetime.datetime.now()  # Can't trust that your clock is in sync with FMC's.
 
     def generate_tokens(self):
         """
@@ -330,7 +336,7 @@ class Token(object):
         """
         logging.debug("In the Token generate_tokens() class method.")
 
-        if self.token_refreshes < self.MAX_REFRESHES and self.access_token is not None:
+        if self.token_refreshes <= self.MAX_REFRESHES and self.access_token is not None:
             headers = {'Content-Type': 'application/json', 'X-auth-access-token': self.access_token,
                        'X-auth-refresh-token': self.refresh_token}
             url = f'https://{self.__host}/{self.API_PLATFORM_VERSION}/auth/refreshtoken'
@@ -344,6 +350,7 @@ class Token(object):
             self.token_refreshes += 1
         else:
             self.token_refreshes = 0
+            self.token_creation_time = datetime.datetime.now()  # Can't trust that your clock is in sync with FMC's.
             headers = {'Content-Type': 'application/json'}
             url = f'https://{self.__host}/{self.API_PLATFORM_VERSION}/auth/generatetoken'
             logging.info(f"Requesting new tokens from {url}.")
@@ -356,7 +363,6 @@ class Token(object):
                          f'\tresponse: {response}')
         self.access_token = response.headers.get('X-auth-access-token')
         self.refresh_token = response.headers.get('X-auth-refresh-token')
-        self.token_expiry = datetime.datetime.now() + datetime.timedelta(seconds=self.TOKEN_REFRESH_TIME)
         self.uuid = response.headers.get('DOMAIN_UUID')
         all_domain = json.loads(response.headers.get('DOMAINS'))
         if self.__domain is not None:
@@ -370,11 +376,14 @@ class Token(object):
     def get_token(self):
         """
         Check validity of current token.  If needed make a new or refresh.  Then return access_token.
-        :return:
+        :return self.access_token
         """
         logging.debug("In the Token get_token() class method.")
         if datetime.datetime.now() > (self.token_creation_time + datetime.timedelta(seconds=self.TOKEN_REFRESH_TIME)):
             logging.info("Token expired.  Generating a new token.")
+            self.token_refreshes = 0
+            self.access_token = None
+            self.refresh_token = None
             self.generate_tokens()
 
         return self.access_token
