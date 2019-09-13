@@ -117,7 +117,9 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         Using the "method" type, send a request to the "url" with the "json_data" as the payload.
         :param method:
         :param url:
+        :param headers:
         :param json_data:
+        :param more_items:
         :return:
         """
         logging.debug("In the FMC send_to_api() class method.")
@@ -326,9 +328,9 @@ class Token(object):
                          f"from {url}.")
             response = requests.post(url, headers=headers, verify=self.verify_cert)
             logging.info('Response from refreshtoken post:\n'
-                          f'\turl: {url}\n'
-                          f'\theaders: {headers}\n'
-                          f'\tresponse: {response}')
+                         f'\turl: {url}\n'
+                         f'\theaders: {headers}\n'
+                         f'\tresponse: {response}')
             self.token_refreshes += 1
         else:
             self.token_refreshes = 0
@@ -339,9 +341,9 @@ class Token(object):
                                      auth=requests.auth.HTTPBasicAuth(self.__username, self.__password),
                                      verify=self.verify_cert)
             logging.info('Response from generatetoken post:\n'
-                          f'\turl: {url}\n'
-                          f'\theaders: {headers}\n'
-                          f'\tresponse: {response}')
+                         f'\turl: {url}\n'
+                         f'\theaders: {headers}\n'
+                         f'\tresponse: {response}')
         self.access_token = response.headers.get('X-auth-access-token')
         self.refresh_token = response.headers.get('X-auth-refresh-token')
         self.token_expiry = datetime.datetime.now() + datetime.timedelta(seconds=self.TOKEN_REFRESH_TIME)
