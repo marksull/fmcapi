@@ -61,19 +61,22 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         :param limit (int): Sets up max page of data to gather per "page".
         """
 
+        if debug:
+            logging_level = 'DEBUG'
         root_logger = logging.getLogger('')
-        root_logger.setLevel(logging.DEBUG)
-        if logging_level.upper() is 'INFO':
+        if logging_level.upper() == 'DEBUG':
+            root_logger.setLevel(logging.DEBUG)
+        if logging_level.upper() == 'INFO':
             root_logger.setLevel(logging.INFO)
-        if logging_level.upper() is 'WARNING':
+        if logging_level.upper() == 'WARNING':
             root_logger.setLevel(logging.WARNING)
-        if logging_level.upper() is 'ERROR':
+        if logging_level.upper() == 'ERROR':
             root_logger.setLevel(logging.ERROR)
-        if logging_level.upper() is 'CRITICAL':
+        if logging_level.upper() == 'CRITICAL':
             root_logger.setLevel(logging.CRITICAL)
 
         if file_logging:
-            print(f'Logging is enabled.  Look for file "{file_logging}" for output.')
+            print(f'Logging is enabled and set to {logging_level}.  Look for file "{file_logging}" for output.')
             formatter = logging.Formatter('%(asctime)s - %(levelname)s:%(filename)s:%(lineno)s - %(message)s',
                                           '%Y/%m/%d-%H:%M:%S')
             file_logger = RotatingFileHandler(file_logging, maxBytes=1024000, backupCount=10, mode='w')
