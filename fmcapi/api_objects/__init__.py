@@ -10,6 +10,15 @@ from .device_ha_pair_services.devicehafailovermac import DeviceHAFailoverMAC
 from .device_ha_pair_services.devicehamonitoredinterfaces import DeviceHAMonitoredInterfaces
 from .device_ha_pair_services.monitoredinterfaces import MonitoredInterfaces
 
+from .device_services.bridgegroupinterfaces import BridgeGroupInterfaces
+from .device_services.etherchannelinterfaces import EtherchannelInterfaces
+from .device_services.device import Device
+from .device_services.ipv4staticroute import IPv4StaticRoute
+from .device_services.ipv6staticroute import IPv6StaticRoute
+from .device_services.physicalinterface import PhysicalInterface
+from .device_services.redundantinterfaces import RedundantInterfaces
+from .device_services.staticroutes import StaticRoutes
+from .device_services.subinterfaces import SubInterfaces
 
 from .accesscontrolpolicy import AccessControlPolicy
 from .acprule import ACPRule
@@ -23,15 +32,12 @@ from .applicationrisk import ApplicationRisk
 from .applicationtag import ApplicationTag
 from .applicationtype import ApplicationType
 from .autonatrules import AutoNatRules
-from .bridgegroupinterfaces import BridgeGroupInterfaces
 from .bulk import Bulk
 from .certenrollment import CertEnrollment
 from .continent import Continent
 from .country import Country
-from .device import Device
 from .dnsservergroups import DNSServerGroups
 from .endpointdevicetypes import EndPointDeviceTypes
-from .etherchannelinterfaces import EtherchannelInterfaces
 from .extendedaccesslist import ExtendedAccessList
 from .filepolicies import FilePolicies
 from .fqdns import FQDNS
@@ -50,13 +56,10 @@ from .ipaddresses import IPAddresses
 from .iphost import IPHost
 from .ipnetwork import IPNetwork
 from .iprange import IPRange
-from .ipv4staticroute import IPv4StaticRoute
-from .ipv6staticroute import IPv6StaticRoute
 from .isesecuritygrouptags import ISESecurityGroupTags
 from .manualnatrules import ManualNatRules
 from .natrules import NatRules
 from .networkgroup import NetworkGroup
-from .physicalinterface import PhysicalInterface
 from .policyassignments import PolicyAssignments
 from .portobjectgroup import PortObjectGroup
 from .ports import Ports
@@ -64,14 +67,11 @@ from .protocolport import ProtocolPort
 from .realms import Realms
 from .realmusergroups import RealmUserGroups
 from .realmusers import RealmUsers
-from .redundantinterfaces import RedundantInterfaces
 from .securitygrouptags import SecurityGroupTags
 from .securityzone import SecurityZone
 from .siurlfeeds import SIUrlFeeds
 from .siurllists import SIUrlLists
 from .slamonitor import SLAMonitor
-from .staticroutes import StaticRoutes
-from .subinterfaces import SubInterfaces
 from .taskstatuses import TaskStatuses
 from .tunneltags import TunnelTags
 from .upgradepackage import UpgradePackage
@@ -85,7 +85,6 @@ from .vlangrouptag import VlanGroupTag
 from .hitcounts import HitCount
 from .prefilterpolicies import PreFilterPolicy
 
-
 logging.debug("In the api_objects __init__.py file.")
 
 __all__ = [
@@ -97,6 +96,15 @@ __all__ = [
     'DeviceHAFailoverMAC',
     'MonitoredInterfaces',
     'DeviceHAMonitoredInterfaces',
+    'BridgeGroupInterfaces',
+    'Device',
+    'EtherchannelInterfaces',
+    'IPv4StaticRoute',
+    'IPv6StaticRoute',
+    'PhysicalInterface',
+    'RedundantInterfaces',
+    'StaticRoutes',
+    'SubInterfaces',
 
     'AccessControlPolicy',
     'PreFilterPolicy',
@@ -112,15 +120,12 @@ __all__ = [
     'ApplicationTag',
     'ApplicationType',
     'AutoNatRules',
-    'BridgeGroupInterfaces',
     'Bulk',
     'CertEnrollment',
     'Continent',
     'Country',
-    'Device',
     'DNSServerGroups',
     'EndPointDeviceTypes',
-    'EtherchannelInterfaces',
     'ExtendedAccessList',
     'FilePolicies',
     'FQDNS',
@@ -139,13 +144,10 @@ __all__ = [
     'IPHost',
     'IPNetwork',
     'IPRange',
-    'IPv4StaticRoute',
-    'IPv6StaticRoute',
     'ISESecurityGroupTags',
     'ManualNatRules',
     'NetworkGroup',
     'NatRules',
-    'PhysicalInterface',
     'PortObjectGroup',
     'ProtocolPort',
     'PolicyAssignments',
@@ -153,14 +155,11 @@ __all__ = [
     'Realms',
     'RealmUserGroups',
     'RealmUsers',
-    'RedundantInterfaces',
     'SecurityGroupTags',
     'SecurityZone',
     'SLAMonitor',
     'SIUrlFeeds',
     'SIUrlLists',
-    'StaticRoutes',
-    'SubInterfaces',
     'TaskStatuses',
     'TunnelTags',
     'UpgradePackage',

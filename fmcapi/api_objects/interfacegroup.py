@@ -1,5 +1,5 @@
 from .apiclasstemplate import APIClassTemplate
-from .physicalinterface import PhysicalInterface
+from fmcapi.api_objects.device_services.physicalinterface import PhysicalInterface
 import logging
 
 

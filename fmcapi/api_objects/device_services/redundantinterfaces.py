@@ -1,24 +1,22 @@
-from .apiclasstemplate import APIClassTemplate
+from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .device import Device
-from .securityzone import SecurityZone
+from fmcapi.api_objects.securityzone import SecurityZone
 from .physicalinterface import PhysicalInterface
 import logging
 
 
-class EtherchannelInterfaces(APIClassTemplate):
+class RedundantInterfaces(APIClassTemplate):
     """
-    The Etherchanel Interface Object in the FMC.
+    The Bridge Group Interface Object in the FMC.
     """
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-\/\. ]"""
     PREFIX_URL = '/devices/devicerecords'
     URL_SUFFIX = None
-    REQUIRED_FOR_POST = ['etherChannelId', 'mode', 'MTU']
+    REQUIRED_FOR_POST = ['redundantId']
     REQUIRED_FOR_PUT = ['id', 'device_id']
     VALID_FOR_IPV4 = ['static', 'dhcp', 'pppoe']
     VALID_FOR_MODE = ['INLINE', 'PASSIVE', 'TAP', 'ERSPAN', 'NONE']
-    VALID_FOR_LACP_MODE = ['ACTIVE', 'PASSIVE', 'ON']
     VALID_FOR_MTU = range(64, 9000)
-    VALID_FOR_LOAD_BALANCING = []  # Not sure what to put here but it was an unresolved variable later in this code.
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
@@ -27,7 +25,7 @@ class EtherchannelInterfaces(APIClassTemplate):
         self.type = "RedundantInterface"
 
     def format_data(self):
-        logging.debug("In format_data() for EtherchannelInterfaces class.")
+        logging.debug("In format_data() for RedundantInterfaces class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -45,24 +43,12 @@ class EtherchannelInterfaces(APIClassTemplate):
             json_data['managementOnly'] = self.managementOnly
         if 'ipAddress' in self.__dict__:
             json_data['ipAddress'] = self.ipAddress
-        if 'selectedInterfaces' in self.__dict__:
-            json_data['selectedInterfaces'] = self.selectedInterfaces
-        if 'etherChannelId' in self.__dict__:
-            json_data['etherChannelId'] = self.etherChannelId
-        if 'lacpMode' in self.__dict__:
-            json_data['lacpMode'] = self.lacpMode
-        if 'maxActivePhysicalInterface' in self.__dict__:
-            json_data['maxActivePhysicalInterface'] = self.maxActivePhysicalInterface
-        if 'minActivePhysicalInterface' in self.__dict__:
-            json_data['minActivePhysicalInterface'] = self.minActivePhysicalInterface
-        if 'hardware' in self.__dict__:
-            json_data['hardware'] = self.hardware
-        if 'erspanFlowId' in self.__dict__:
-            json_data['erspanFlowId'] = self.erspanFlowId
-        if 'erspanSourceIP' in self.__dict__:
-            json_data['erspanSourceIP'] = self.erspanSourceIP
-        if 'loadBalancing' in self.__dict__:
-            json_data['loadBalancing'] = self.loadBalancing
+        if 'primaryInterface' in self.__dict__:
+            json_data['primaryInterface'] = self.primaryInterface
+        if 'secondaryInterface' in self.__dict__:
+            json_data['secondaryInterface'] = self.secondaryInterface
+        if 'redundantId' in self.__dict__:
+            json_data['redundantId'] = self.redundantId
         if 'macLearn' in self.__dict__:
             json_data['macLearn'] = self.macLearn
         if 'ifname' in self.__dict__:
@@ -91,7 +77,7 @@ class EtherchannelInterfaces(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for EtherchannelInterfaces class.")
+        logging.debug("In parse_kwargs() for RedundantInterfaces class.")
         if 'ipv4' in kwargs:
             if list(kwargs['ipv4'].keys())[0] in self.VALID_FOR_IPV4:
                 self.ipv4 = kwargs['ipv4']
@@ -118,30 +104,12 @@ class EtherchannelInterfaces(APIClassTemplate):
             self.managementOnly = kwargs['managementOnly']
         if 'ipAddress' in kwargs:
             self.ipAddress = kwargs['ipAddress']
-        if 'selectedInterfaces' in kwargs:
-            self.selectedInterfaces = kwargs['selectedInterfaces']
-        if 'etherChannelId' in kwargs:
-            self.etherChannelId = kwargs['etherChannelId']
-        if 'lacpMode' in kwargs:
-            if kwargs['lacpMode'] in self.VALID_FOR_LACP_MODE:
-                self.lacpMode = kwargs['lacpMode']
-            else:
-                logging.warning(f"LACP Mode {kwargs['lacpMode']} is not a valid mode.")
-        if 'maxActivePhysicalInterface' in kwargs:
-            self.maxActivePhysicalInterface = kwargs['maxActivePhysicalInterface']
-        if 'minActivePhysicalInterface' in kwargs:
-            self.minActivePhysicalInterface = kwargs['minActivePhysicalInterface']
-        if 'hardware' in kwargs:
-            self.hardware = kwargs['hardware']
-        if 'erspanFlowId' in kwargs:
-            self.erspanFlowId = kwargs['erspanFlowId']
-        if 'erspanSourceIP' in kwargs:
-            self.erspanSourceIP = kwargs['erspanSourceIP']
-        if 'loadBalancing' in kwargs:
-            if kwargs['loadBalancing'] in self.VALID_FOR_LOAD_BALANCING:
-                self.loadBalancing = kwargs['loadBalancing']
-            else:
-                logging.warning(f"Load balancing method {kwargs['loadBalancing']} is not a valid method.")
+        if 'primaryInterface' in kwargs:
+            self.primaryInterface = kwargs['primaryInterface']
+        if 'secondaryInterface' in kwargs:
+            self.secondaryInterface = kwargs['secondaryInterface']
+        if 'redundantId' in kwargs:
+            self.redundantId = kwargs['redundantId']
         if 'macLearn' in kwargs:
             self.macLearn = kwargs['macLearn']
         if 'ifname' in kwargs:
@@ -164,18 +132,18 @@ class EtherchannelInterfaces(APIClassTemplate):
             self.standbyMACAddress = kwargs['standbyMACAddress']
 
     def device(self, device_name):
-        logging.debug("In device() for EtherchannelInterfaces class.")
+        logging.debug("In device() for RedundantInterfaces class.")
         device1 = Device(fmc=self.fmc)
         device1.get(name=device_name)
         if 'id' in device1.__dict__:
             self.device_id = device1.id
-            self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.device_id}/etherchannelinterfaces'
+            self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.device_id}/redundantinterfaces'
             self.device_added_to_url = True
         else:
-            logging.warning(f'Device {device_name} not found.  Cannot set up device for EtherchannelInterfaces.')
+            logging.warning(f'Device "{device_name}" not found.  Cannot set up device for RedundantInterfaces.')
 
     def sz(self, name):
-        logging.debug("In sz() for EtherchannelInterfaces class.")
+        logging.debug("In sz() for RedundantInterfaces class.")
         sz = SecurityZone(fmc=self.fmc)
         sz.get(name=name)
         if 'id' in sz.__dict__:
@@ -185,21 +153,29 @@ class EtherchannelInterfaces(APIClassTemplate):
             logging.warning(f'Security Zone, "{name}", not found.  Cannot add to RedundantInterfaces.')
 
     def static(self, ipv4addr, ipv4mask):
-        logging.debug("In static() for EtherchannelInterfaces class.")
+        logging.debug("In static() for RedundantInterfaces class.")
         self.ipv4 = {"static": {"address": ipv4addr, "netmask": ipv4mask}}
 
     def dhcp(self, enableDefault=True, routeMetric=1):
-        logging.debug("In dhcp() for EtherchannelInterfaces class.")
+        logging.debug("In dhcp() for RedundantInterfaces class.")
         self.ipv4 = {"dhcp": {"enableDefaultRouteDHCP": enableDefault, "dhcpRouteMetric": routeMetric}}
 
-    def p_interfaces(self, p_interfaces, device_name):
-        logging.debug("In p_interfaces() for EtherchannelInterfaces class.")
-        list1 = []
-        for p_intf in p_interfaces:
-            intf1 = PhysicalInterface(fmc=self.fmc)
-            intf1.get(name=p_intf, device_name=device_name)
-            if 'id' in intf1.__dict__:
-                list1.append({'name': intf1.name, 'id': intf1.id, 'type': intf1.type})
-            else:
-                logging.warning(f'PhysicalInterface, "{intf1.name}", not found.  Cannot add to EtherchannelInterfaces.')
-        self.selectedInterfaces = list1
+    def primary(self, p_interface, device_name):
+        logging.debug("In primary() for RedundantInterfaces class.")
+        intf1 = PhysicalInterface(fmc=self.fmc)
+        intf1.get(name=p_interface, device_name=device_name)
+        if 'id' in intf1.__dict__:
+            self.primaryInterface = {'name': intf1.name, 'id': intf1.id, 'type': intf1.type}
+            if 'MTU' not in self.__dict__:
+                self.MTU = intf1.MTU
+        else:
+            logging.warning(f'PhysicalInterface, "{intf1.name}", not found.  Cannot add to RedundantInterfaces.')
+
+    def secondary(self, p_interface, device_name):
+        logging.debug("In primary() for RedundantInterfaces class.")
+        intf1 = PhysicalInterface(fmc=self.fmc)
+        intf1.get(name=p_interface, device_name=device_name)
+        if 'id' in intf1.__dict__:
+            self.secondaryInterface = {'name': intf1.name, 'id': intf1.id, 'type': intf1.type}
+        else:
+            logging.warning(f'PhysicalInterface, "{intf1.name}", not found.  Cannot add to RedundantInterfaces.')

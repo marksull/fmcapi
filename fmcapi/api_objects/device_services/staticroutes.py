@@ -1,4 +1,4 @@
-from .apiclasstemplate import APIClassTemplate
+from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .device import Device
 import logging
 

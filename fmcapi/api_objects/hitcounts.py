@@ -1,6 +1,6 @@
 from .apiclasstemplate import APIClassTemplate
 from .accesscontrolpolicy import AccessControlPolicy
-from .device import Device
+from .device_services.device import Device
 from .prefilterpolicies import PreFilterPolicy
 import logging
 
