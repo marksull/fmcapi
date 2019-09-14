@@ -78,11 +78,13 @@ from .hitcounts import HitCount
 from .prefilterpolicies import PreFilterPolicy
 from .ftddevicecluster import FTDDeviceCluster
 from .ftddevicehapairs import FTDDeviceHAPairs
+from .failoverinterfacemacaddressconfigs import FailoverInterfaceMACAddressConfigs
 
 
 logging.debug("In the api_objects __init__.py file.")
 
 __all__ = ['AccessControlPolicy',
+           'FailoverInterfaceMACAddressConfigs',
            'FTDDeviceHAPairs',
            'FTDDeviceCluster',
            'PreFilterPolicy',

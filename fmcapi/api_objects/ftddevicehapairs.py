@@ -5,7 +5,7 @@ import logging
 
 class FTDDeviceHAPairs(APIClassTemplate):
     """
-    The DeviceHAPairs Object in the FMC.
+    The FTDDeviceHAPairs Object in the FMC.
     """
 
     URL_SUFFIX = '/devicehapairs/ftddevicehapairs'
@@ -14,11 +14,11 @@ class FTDDeviceHAPairs(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for DeviceHAPairs class.")
+        logging.debug("In __init__() for FTDDeviceHAPairs class.")
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
-        logging.debug("In format_data() for DeviceHAPairs class.")
+        logging.debug("In format_data() for FTDDeviceHAPairs class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -38,7 +38,7 @@ class FTDDeviceHAPairs(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for DeviceHAPairs class.")
+        logging.debug("In parse_kwargs() for FTDDeviceHAPairs class.")
         if 'primary' in kwargs:
             self.primary = kwargs['primary']
         if 'secondary' in kwargs:
@@ -51,7 +51,7 @@ class FTDDeviceHAPairs(APIClassTemplate):
             self.forceBreak = kwargs['forceBreak']
 
     def device(self, primary_name="", secondary_name=""):
-        logging.debug("In device() for DeviceHAPairs class.")
+        logging.debug("In device() for FTDDeviceHAPairs class.")
         primary = Device(fmc=self.fmc)
         primary.get(name=primary_name)
         secondary = Device(fmc=self.fmc)
@@ -59,20 +59,20 @@ class FTDDeviceHAPairs(APIClassTemplate):
         if 'id' in primary.__dict__:
             self.primary_id = primary.id
         else:
-            logging.warning(f'Device {primary_name} not found.  Cannot set up device for DeviceHAPairs.')
+            logging.warning(f'Device {primary_name} not found.  Cannot set up device for FTDDeviceHAPairs.')
         if 'id' in secondary.__dict__:
             self.secondary_id = secondary.id
         else:
-            logging.warning(f'Device {secondary_name} not found.  Cannot set up device for DeviceHAPairs.')
+            logging.warning(f'Device {secondary_name} not found.  Cannot set up device for FTDDeviceHAPairs.')
 
     def primary(self, name):
-        logging.debug("In primary() for DeviceHAPairs class.")
+        logging.debug("In primary() for FTDDeviceHAPairs class.")
         primary = Device(fmc=self.fmc)
         primary.get(name=name)
         if 'id' in primary.__dict__:
             self.primary = {"id": primary.id}
         else:
-            logging.warning(f'Device {primary.name} not found.  Cannot set up device for DeviceHAPairs.')
+            logging.warning(f'Device {primary.name} not found.  Cannot set up device for FTDDeviceHAPairs.')
 
     def secondary(self, name):
         logging.debug("In secondary() for DeviceHAPairs class.")
@@ -81,7 +81,7 @@ class FTDDeviceHAPairs(APIClassTemplate):
         if 'id' in secondary.__dict__:
             self.secondary = {"id": secondary.id}
         else:
-            logging.warning(f'Device {secondary.name} not found.  Cannot set up device for DeviceHAPairs.')
+            logging.warning(f'Device {secondary.name} not found.  Cannot set up device for FTDDeviceHAPairs.')
 
     def switch_ha(self):
         logging.debug("In switch_ha() for DeviceHAPairs class.")
@@ -91,10 +91,10 @@ class FTDDeviceHAPairs(APIClassTemplate):
             self.id = ha1.id
             self.action = "SWITCH"
         else:
-            logging.warning(f'DeviceHAPair {self.name} not found.  Cannot set up HA for SWITCH.')
+            logging.warning(f'FTDDeviceHAPairs {self.name} not found.  Cannot set up HA for SWITCH.')
 
     def break_ha(self):
-        logging.debug("In break_ha() for DeviceHAPairs class.")
+        logging.debug("In break_ha() for FTDDeviceHAPairs class.")
         ha1 = DeviceHAPairs(fmc=self.fmc)
         ha1.get(name=self.name)
         if 'id' in ha1.__dict__:
@@ -102,16 +102,16 @@ class FTDDeviceHAPairs(APIClassTemplate):
             self.action = "HABREAK"
             self.forceBreak = True
         else:
-            logging.warning(f'DeviceHAPair {self.name} not found.  Cannot set up HA for BREAK.')
+            logging.warning(f'FTDDeviceHAPairs {self.name} not found.  Cannot set up HA for BREAK.')
 
     def post(self, **kwargs):
-        logging.debug("In post() for DeviceHAPairs class.")
+        logging.debug("In post() for FTDDeviceHAPairs class.")
         # Attempting to "Deploy" during Device registration causes issues.
         self.fmc.autodeploy = False
         return super().post(**kwargs)
 
     def put(self, **kwargs):
-        logging.debug("In put() for DeviceHAPairs class.")
+        logging.debug("In put() for FTDDeviceHAPairs class.")
         # Attempting to "Deploy" during Device registration causes issues.
         self.fmc.autodeploy = False
         return super().put(**kwargs)
