@@ -1,9 +1,15 @@
 import logging
 from .device_group_services import DeviceGroups
+
 from .device_clusters import FTDDeviceCluster
+
 from .device_ha_pair_services import FTDDeviceHAPairs
 from .device_ha_pair_services.devicehapairs import DeviceHAPairs
 from .device_ha_pair_services.failoverinterfacemacaddressconfigs import FailoverInterfaceMACAddressConfigs
+from .device_ha_pair_services.devicehafailovermac import DeviceHAFailoverMAC
+from .device_ha_pair_services.devicehamonitoredinterfaces import DeviceHAMonitoredInterfaces
+from .device_ha_pair_services.monitoredinterfaces import MonitoredInterfaces
+
 
 from .accesscontrolpolicy import AccessControlPolicy
 from .acprule import ACPRule
@@ -23,8 +29,6 @@ from .certenrollment import CertEnrollment
 from .continent import Continent
 from .country import Country
 from .device import Device
-from .devicehafailovermac import DeviceHAFailoverMAC
-from .devicehamonitoredinterfaces import DeviceHAMonitoredInterfaces
 from .dnsservergroups import DNSServerGroups
 from .endpointdevicetypes import EndPointDeviceTypes
 from .etherchannelinterfaces import EtherchannelInterfaces
@@ -80,7 +84,6 @@ from .vlantag import VlanTag
 from .vlangrouptag import VlanGroupTag
 from .hitcounts import HitCount
 from .prefilterpolicies import PreFilterPolicy
-from .monitoredinterfaces import MonitoredInterfaces
 
 
 logging.debug("In the api_objects __init__.py file.")
@@ -91,9 +94,11 @@ __all__ = [
     'FTDDeviceHAPairs',
     'DeviceHAPairs',
     'FailoverInterfaceMACAddressConfigs',
+    'DeviceHAFailoverMAC',
+    'MonitoredInterfaces',
+    'DeviceHAMonitoredInterfaces',
 
     'AccessControlPolicy',
-    'MonitoredInterfaces',
     'PreFilterPolicy',
     'HitCount',
     'ACPRule',
@@ -112,8 +117,6 @@ __all__ = [
     'CertEnrollment',
     'Continent',
     'Country',
-    'DeviceHAFailoverMAC',
-    'DeviceHAMonitoredInterfaces',
     'Device',
     'DNSServerGroups',
     'EndPointDeviceTypes',

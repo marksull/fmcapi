@@ -1,4 +1,4 @@
-from fmcapi.api_objects.device_ha_pair_services.failoverinterfacemacaddressconfigs import FailoverInterfaceMACAddressConfigs
+from .failoverinterfacemacaddressconfigs import FailoverInterfaceMACAddressConfigs
 
 
 class DeviceHAFailoverMAC(FailoverInterfaceMACAddressConfigs):
