@@ -1,5 +1,5 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from fmcapi.api_objects.accesscontrolpolicy import AccessControlPolicy
+from fmcapi.api_objects.policy_services.accesscontrolpolicy import AccessControlPolicy
 import time
 import logging
 

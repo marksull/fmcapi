@@ -1,8 +1,8 @@
 from .apiclasstemplate import APIClassTemplate
-from .accesscontrolpolicy import AccessControlPolicy
+from fmcapi.api_objects.policy_services.accesscontrolpolicy import AccessControlPolicy
 from fmcapi.api_objects.device_services.device import Device
 from fmcapi.api_objects.device_ha_pair_services.devicehapairs import DeviceHAPairs
-from .ftdnatpolicy import FTDNatPolicy
+from fmcapi.api_objects.policy_services.ftdnatpolicy import FTDNatPolicy
 import logging
 
 

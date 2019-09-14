@@ -1,16 +1,16 @@
-from .apiclasstemplate import APIClassTemplate
-from .accesscontrolpolicy import AccessControlPolicy
-from .intrusionpolicy import IntrusionPolicy
-from .object_services.variableset import VariableSet
-from .object_services.securityzone import SecurityZone
-from .object_services.vlantag import VlanTag
-from .object_services.portobjectgroup import PortObjectGroup
-from .object_services.protocolport import ProtocolPort
-from .object_services.fqdns import FQDNS
-from .object_services.networkgroup import NetworkGroup
-from .object_services.ipaddresses import IPAddresses
-from .filepolicies import FilePolicies
-from .helper_functions import get_networkaddress_type
+from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
+from fmcapi.api_objects.policy_services.accesscontrolpolicy import AccessControlPolicy
+from fmcapi.api_objects.policy_services.intrusionpolicy import IntrusionPolicy
+from fmcapi.api_objects.object_services.variableset import VariableSet
+from fmcapi.api_objects.object_services.securityzone import SecurityZone
+from fmcapi.api_objects.object_services.vlantag import VlanTag
+from fmcapi.api_objects.object_services.portobjectgroup import PortObjectGroup
+from fmcapi.api_objects.object_services.protocolport import ProtocolPort
+from fmcapi.api_objects.object_services.fqdns import FQDNS
+from fmcapi.api_objects.object_services.networkgroup import NetworkGroup
+from fmcapi.api_objects.object_services.ipaddresses import IPAddresses
+from fmcapi.api_objects.policy_services.filepolicies import FilePolicies
+from fmcapi.api_objects.helper_functions import get_networkaddress_type
 import logging
 
 

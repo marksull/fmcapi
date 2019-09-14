@@ -69,22 +69,23 @@ from .object_services.variableset import VariableSet
 from .object_services.vlangrouptag import VlanGroupTag
 from .object_services.vlantag import VlanTag
 
-from .accesscontrolpolicy import AccessControlPolicy
-from .acprule import ACPRule
+from .policy_services.accesscontrolpolicy import AccessControlPolicy
+from .policy_services.acprule import ACPRule
+from .policy_services.autonatrules import AutoNatRules
+from .policy_services.bulk import Bulk
+from .policy_services.filepolicies import FilePolicies
+from .policy_services.ftdnatpolicy import FTDNatPolicy
+from .policy_services.hitcounts import HitCount
+from .policy_services.intrusionpolicy import IntrusionPolicy
+from .policy_services.manualnatrules import ManualNatRules
+from .policy_services.natrules import NatRules
+from .policy_services.prefilterpolicies import PreFilterPolicy
+
 from .applicabledevices import ApplicableDevices
-from .autonatrules import AutoNatRules
-from .bulk import Bulk
-from .filepolicies import FilePolicies
-from .ftdnatpolicy import FTDNatPolicy
-from .intrusionpolicy import IntrusionPolicy
-from .manualnatrules import ManualNatRules
-from .natrules import NatRules
 from .policyassignments import PolicyAssignments
 from .taskstatuses import TaskStatuses
 from .upgradepackage import UpgradePackage
 from .upgrades import Upgrades
-from .hitcounts import HitCount
-from .prefilterpolicies import PreFilterPolicy
 
 logging.debug("In the api_objects __init__.py file.")
 
@@ -154,19 +155,19 @@ __all__ = [
     'VariableSet',
     'VlanGroupTag',
     'VlanTag',
-
     'AccessControlPolicy',
-    'PreFilterPolicy',
-    'HitCount',
     'ACPRule',
-    'ApplicableDevices',
     'AutoNatRules',
     'Bulk',
     'FilePolicies',
     'FTDNatPolicy',
+    'HitCount',
     'IntrusionPolicy',
     'ManualNatRules',
     'NatRules',
+    'PreFilterPolicy',
+
+    'ApplicableDevices',
     'PolicyAssignments',
     'TaskStatuses',
     'UpgradePackage',
