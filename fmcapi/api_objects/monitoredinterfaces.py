@@ -1,5 +1,5 @@
 from .apiclasstemplate import APIClassTemplate
-from .devicehapairs import FTDDeviceHAPairs
+from fmcapi.api_objects.device_ha_pair_services.devicehapairs import FTDDeviceHAPairs
 import logging
 
 
