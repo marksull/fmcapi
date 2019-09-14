@@ -81,8 +81,9 @@ from .policy_services.manualnatrules import ManualNatRules
 from .policy_services.natrules import NatRules
 from .policy_services.prefilterpolicies import PreFilterPolicy
 
+from .policy_assignment_services.policyassignments import PolicyAssignments
+
 from .applicabledevices import ApplicableDevices
-from .policyassignments import PolicyAssignments
 from .taskstatuses import TaskStatuses
 from .upgradepackage import UpgradePackage
 from .upgrades import Upgrades
@@ -166,9 +167,9 @@ __all__ = [
     'ManualNatRules',
     'NatRules',
     'PreFilterPolicy',
+    'PolicyAssignments',
 
     'ApplicableDevices',
-    'PolicyAssignments',
     'TaskStatuses',
     'UpgradePackage',
     'Upgrades',

@@ -1,4 +1,4 @@
-from .apiclasstemplate import APIClassTemplate
+from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.policy_services.accesscontrolpolicy import AccessControlPolicy
 from fmcapi.api_objects.device_services.device import Device
 from fmcapi.api_objects.device_ha_pair_services.devicehapairs import DeviceHAPairs
