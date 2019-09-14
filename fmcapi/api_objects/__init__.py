@@ -76,11 +76,13 @@ from .vlantag import VlanTag
 from .vlangrouptag import VlanGroupTag
 from .hitcounts import HitCount
 from .prefilterpolicies import PreFilterPolicy
+from .ftddevicecluster import FTDDeviceCluster
 
 
 logging.debug("In the api_objects __init__.py file.")
 
 __all__ = ['AccessControlPolicy',
+           'FTDDeviceCluster',
            'PreFilterPolicy',
            'HitCount',
            'ACPRule',
