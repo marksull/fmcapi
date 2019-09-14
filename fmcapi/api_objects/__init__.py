@@ -85,9 +85,9 @@ from .policy_assignment_services.policyassignments import PolicyAssignments
 
 from .status_services.taskstatuses import TaskStatuses
 
-from .applicabledevices import ApplicableDevices
-from .upgradepackage import UpgradePackage
-from .upgrades import Upgrades
+from .update_packages.applicabledevices import ApplicableDevices
+from .update_packages.upgradepackage import UpgradePackage
+from .update_packages.upgrades import Upgrades
 
 logging.debug("In the api_objects __init__.py file.")
 
@@ -170,7 +170,6 @@ __all__ = [
     'PreFilterPolicy',
     'PolicyAssignments',
     'TaskStatuses',
-
     'ApplicableDevices',
     'UpgradePackage',
     'Upgrades',
