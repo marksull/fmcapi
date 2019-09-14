@@ -1,10 +1,10 @@
 from .apiclasstemplate import APIClassTemplate
 from .ftdnatpolicy import FTDNatPolicy
-from .ipaddresses import IPAddresses
-from .networkgroup import NetworkGroup
-from .portobjectgroup import PortObjectGroup
-from .protocolport import ProtocolPort
-from .interfaceobject import InterfaceObject
+from .object_services.ipaddresses import IPAddresses
+from .object_services.networkgroup import NetworkGroup
+from .object_services.portobjectgroup import PortObjectGroup
+from .object_services.protocolport import ProtocolPort
+from .object_services.interfaceobject import InterfaceObject
 import logging
 
 

@@ -1,9 +1,9 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .device import Device
-from fmcapi.api_objects.ipaddresses import IPAddresses
-from fmcapi.api_objects.slamonitor import SLAMonitor
-from fmcapi.api_objects.iphost import IPHost
-from fmcapi.api_objects.networkgroup import NetworkGroup
+from fmcapi.api_objects.object_services.ipaddresses import IPAddresses
+from fmcapi.api_objects.object_services.slamonitor import SLAMonitor
+from fmcapi.api_objects.object_services.iphost import IPHost
+from fmcapi.api_objects.object_services.networkgroup import NetworkGroup
 import logging
 
 

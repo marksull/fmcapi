@@ -1,8 +1,8 @@
 from .apiclasstemplate import APIClassTemplate
 from .ftdnatpolicy import FTDNatPolicy
-from .ipaddresses import IPAddresses
-from .interfaceobject import InterfaceObject
-from .networkgroup import NetworkGroup
+from .object_services.ipaddresses import IPAddresses
+from .object_services.interfaceobject import InterfaceObject
+from .object_services.networkgroup import NetworkGroup
 import logging
 
 

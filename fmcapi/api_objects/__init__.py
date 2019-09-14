@@ -20,68 +20,69 @@ from .device_services.redundantinterfaces import RedundantInterfaces
 from .device_services.staticroutes import StaticRoutes
 from .device_services.subinterfaces import SubInterfaces
 
+from .object_services.anyprotocolportobjects import AnyProtocolPortObjects
+from .object_services.application import Application
+from .object_services.applicationcategory import ApplicationCategory
+from .object_services.applicationfilter import ApplicationFilter
+from .object_services.applicationproductivity import ApplicationProductivity
+from .object_services.applicationrisk import ApplicationRisk
+from .object_services.applicationtag import ApplicationTag
+from .object_services.applicationtype import ApplicationType
+from .object_services.certenrollment import CertEnrollment
+from .object_services.continent import Continent
+from .object_services.country import Country
+from .object_services.dnsservergroups import DNSServerGroups
+from .object_services.endpointdevicetypes import EndPointDeviceTypes
+from .object_services.extendedaccesslist import ExtendedAccessList
+from .object_services.fqdns import FQDNS
+from .object_services.geolocation import Geolocation
+from .object_services.icmpv4object import ICMPv4Object
+from .object_services.icmpv6object import ICMPv6Object
+from .object_services.ikev1ipsecproposals import IKEv1IpsecProposals
+from .object_services.ikev1policies import IKEv1Policies
+from .object_services.ikev2ipsecproposals import IKEv2IpsecProposals
+from .object_services.ikev2policies import IKEv2Policies
+from .object_services.interfacegroup import InterfaceGroup
+from .object_services.interfaceobject import InterfaceObject
+from .object_services.ipaddresses import IPAddresses
+from .object_services.iphost import IPHost
+from .object_services.ipnetwork import IPNetwork
+from .object_services.iprange import IPRange
+from .object_services.isesecuritygrouptags import ISESecurityGroupTags
+from .object_services.networkgroup import NetworkGroup
+from .object_services.portobjectgroup import PortObjectGroup
+from .object_services.ports import Ports
+from .object_services.protocolport import ProtocolPort
+from .object_services.realms import Realms
+from .object_services.realmusergroups import RealmUserGroups
+from .object_services.realmusers import RealmUsers
+from .object_services.securitygrouptags import SecurityGroupTags
+from .object_services.securityzone import SecurityZone
+from .object_services.siurlfeeds import SIUrlFeeds
+from .object_services.siurllists import SIUrlLists
+from .object_services.slamonitor import SLAMonitor
+from .object_services.tunneltags import TunnelTags
+from .object_services.url import URL
+from .object_services.urlcategory import URLCategory
+from .object_services.urlgroup import URLGroup
+from .object_services.variableset import VariableSet
+from .object_services.vlangrouptag import VlanGroupTag
+from .object_services.vlantag import VlanTag
+
 from .accesscontrolpolicy import AccessControlPolicy
 from .acprule import ACPRule
-from .anyprotocolportobjects import AnyProtocolPortObjects
 from .applicabledevices import ApplicableDevices
-from .application import Application
-from .applicationcategory import ApplicationCategory
-from .applicationfilter import ApplicationFilter
-from .applicationproductivity import ApplicationProductivity
-from .applicationrisk import ApplicationRisk
-from .applicationtag import ApplicationTag
-from .applicationtype import ApplicationType
 from .autonatrules import AutoNatRules
 from .bulk import Bulk
-from .certenrollment import CertEnrollment
-from .continent import Continent
-from .country import Country
-from .dnsservergroups import DNSServerGroups
-from .endpointdevicetypes import EndPointDeviceTypes
-from .extendedaccesslist import ExtendedAccessList
 from .filepolicies import FilePolicies
-from .fqdns import FQDNS
 from .ftdnatpolicy import FTDNatPolicy
-from .geolocation import Geolocation
-from .icmpv4object import ICMPv4Object
-from .icmpv6object import ICMPv6Object
-from .ikev1ipsecproposals import IKEv1IpsecProposals
-from .ikev1policies import IKEv1Policies
-from .ikev2ipsecproposals import IKEv2IpsecProposals
-from .ikev2policies import IKEv2Policies
-from .interfacegroup import InterfaceGroup
-from .interfaceobject import InterfaceObject
 from .intrusionpolicy import IntrusionPolicy
-from .ipaddresses import IPAddresses
-from .iphost import IPHost
-from .ipnetwork import IPNetwork
-from .iprange import IPRange
-from .isesecuritygrouptags import ISESecurityGroupTags
 from .manualnatrules import ManualNatRules
 from .natrules import NatRules
-from .networkgroup import NetworkGroup
 from .policyassignments import PolicyAssignments
-from .portobjectgroup import PortObjectGroup
-from .ports import Ports
-from .protocolport import ProtocolPort
-from .realms import Realms
-from .realmusergroups import RealmUserGroups
-from .realmusers import RealmUsers
-from .securitygrouptags import SecurityGroupTags
-from .securityzone import SecurityZone
-from .siurlfeeds import SIUrlFeeds
-from .siurllists import SIUrlLists
-from .slamonitor import SLAMonitor
 from .taskstatuses import TaskStatuses
-from .tunneltags import TunnelTags
 from .upgradepackage import UpgradePackage
 from .upgrades import Upgrades
-from .url import URL
-from .urlcategory import URLCategory
-from .urlgroup import URLGroup
-from .variableset import VariableSet
-from .vlantag import VlanTag
-from .vlangrouptag import VlanGroupTag
 from .hitcounts import HitCount
 from .prefilterpolicies import PreFilterPolicy
 
@@ -105,31 +106,21 @@ __all__ = [
     'RedundantInterfaces',
     'StaticRoutes',
     'SubInterfaces',
-
-    'AccessControlPolicy',
-    'PreFilterPolicy',
-    'HitCount',
-    'ACPRule',
     'AnyProtocolPortObjects',
-    'ApplicableDevices',
+    'Application',
     'ApplicationCategory',
     'ApplicationFilter',
     'ApplicationProductivity',
-    'Application',
     'ApplicationRisk',
     'ApplicationTag',
     'ApplicationType',
-    'AutoNatRules',
-    'Bulk',
     'CertEnrollment',
     'Continent',
     'Country',
     'DNSServerGroups',
     'EndPointDeviceTypes',
     'ExtendedAccessList',
-    'FilePolicies',
     'FQDNS',
-    'FTDNatPolicy',
     'Geolocation',
     'ICMPv4Object',
     'ICMPv6Object',
@@ -137,37 +128,47 @@ __all__ = [
     'IKEv1Policies',
     'IKEv2IpsecProposals',
     'IKEv2Policies',
-    'InterfaceObject',
     'InterfaceGroup',
-    'IntrusionPolicy',
+    'InterfaceObject',
     'IPAddresses',
     'IPHost',
     'IPNetwork',
     'IPRange',
     'ISESecurityGroupTags',
-    'ManualNatRules',
     'NetworkGroup',
-    'NatRules',
     'PortObjectGroup',
-    'ProtocolPort',
-    'PolicyAssignments',
     'Ports',
+    'ProtocolPort',
     'Realms',
     'RealmUserGroups',
     'RealmUsers',
     'SecurityGroupTags',
     'SecurityZone',
-    'SLAMonitor',
     'SIUrlFeeds',
     'SIUrlLists',
-    'TaskStatuses',
+    'SLAMonitor',
     'TunnelTags',
-    'UpgradePackage',
-    'Upgrades',
+    'URL',
     'URLCategory',
     'URLGroup',
-    'URL',
-    'VlanTag',
     'VariableSet',
     'VlanGroupTag',
+    'VlanTag',
+
+    'AccessControlPolicy',
+    'PreFilterPolicy',
+    'HitCount',
+    'ACPRule',
+    'ApplicableDevices',
+    'AutoNatRules',
+    'Bulk',
+    'FilePolicies',
+    'FTDNatPolicy',
+    'IntrusionPolicy',
+    'ManualNatRules',
+    'NatRules',
+    'PolicyAssignments',
+    'TaskStatuses',
+    'UpgradePackage',
+    'Upgrades',
 ]

@@ -1,6 +1,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .device import Device
-from fmcapi.api_objects.securityzone import SecurityZone
+from fmcapi.api_objects.object_services.securityzone import SecurityZone
 from .physicalinterface import PhysicalInterface
 import logging
 
