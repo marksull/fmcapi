@@ -27,8 +27,6 @@ def main():
                     ) as fmc1:
         logging.info('# ### Mega Test Start!!! ### #')
 
-        '''
-        # Working Tests
         unit_tests.test__fmc_version(fmc=fmc1)
         unit_tests.test__application_type(fmc=fmc1)
         unit_tests.test__application_tag(fmc=fmc1)
@@ -68,8 +66,10 @@ def main():
         unit_tests.test__port_object_group(fmc=fmc1)
         unit_tests.test__url_category(fmc=fmc1)
         unit_tests.test__ports(fmc=fmc1)
-        unit_tests.test__autonat(fmc=fmc1)  # Security Zones need to be created.
-        unit_tests.test__manualnat(fmc=fmc1)  # Security Zones need to be created.
+        unit_tests.test__autonat(fmc=fmc1)
+        unit_tests.test__manualnat(fmc=fmc1)
+        '''
+        # Working Tests
         '''
 
         '''
