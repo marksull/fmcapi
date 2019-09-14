@@ -37,6 +37,8 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
     API_PLATFORM_VERSION = 'api/fmc_platform/v1'
     VERIFY_CERT = False
     MAX_PAGING_REQUESTS = 2000
+    TOO_MANY_CONNECTIONS_TIMEOUT = 30
+    FMC_MAX_PAYLOAD = 2048000
 
     def __init__(self,
                  host='192.168.45.45',
@@ -176,13 +178,17 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                     return
                 status_code = response.status_code
                 if status_code == 429:
-                    logging.warning("Too many connections to the FMC.  Waiting 30 seconds and trying again.")
-                    time.sleep(30)
+                    logging.warning(f"Too many connections to the FMC.  Waiting {self.TOO_MANY_CONNECTIONS_TIMEOUT} "
+                                    f"seconds and trying again.")
+                    time.sleep(self.TOO_MANY_CONNECTIONS_TIMEOUT)
                 if status_code == 401:
                     logging.warning("Token has expired. Trying to refresh.")
                     self.mytoken.access_token = self.mytoken.get_token()
                     headers = {'Content-Type': 'application/json', 'X-auth-access-token': self.mytoken.access_token}
                     status_code = 429
+                if status_code == 422:
+                    logging.warning("Payload too large.  FMC can only handle a payload of "
+                                    f"{self.FMC_MAX_PAYLOAD} bytes.")
             json_response = json.loads(response.text)
             if status_code > 301 or 'error' in json_response:
                 response.raise_for_status()
