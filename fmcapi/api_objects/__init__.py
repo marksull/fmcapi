@@ -1,10 +1,14 @@
 import logging
+from .policy_services.accesscontrolpolicy import AccessControlPolicy
+from .device_services.device import Device
+from .device_ha_pair_services import FTDDeviceHAPairs
+from .device_ha_pair_services.devicehapairs import DeviceHAPairs
+
+
 from .device_group_services import DeviceGroups
 
 from .device_clusters import FTDDeviceCluster
 
-from .device_ha_pair_services import FTDDeviceHAPairs
-from .device_ha_pair_services.devicehapairs import DeviceHAPairs
 from .device_ha_pair_services.failoverinterfacemacaddressconfigs import FailoverInterfaceMACAddressConfigs
 from .device_ha_pair_services.devicehafailovermac import DeviceHAFailoverMAC
 from .device_ha_pair_services.devicehamonitoredinterfaces import DeviceHAMonitoredInterfaces
@@ -12,7 +16,6 @@ from .device_ha_pair_services.monitoredinterfaces import MonitoredInterfaces
 
 from .device_services.bridgegroupinterfaces import BridgeGroupInterfaces
 from .device_services.etherchannelinterfaces import EtherchannelInterfaces
-from .device_services.device import Device
 from .device_services.ipv4staticroute import IPv4StaticRoute
 from .device_services.ipv6staticroute import IPv6StaticRoute
 from .device_services.physicalinterface import PhysicalInterface
@@ -69,7 +72,6 @@ from .object_services.variableset import VariableSet
 from .object_services.vlangrouptag import VlanGroupTag
 from .object_services.vlantag import VlanTag
 
-from .policy_services.accesscontrolpolicy import AccessControlPolicy
 from .policy_services.acprule import ACPRule
 from .policy_services.autonatrules import AutoNatRules
 from .policy_services.bulk import Bulk
@@ -89,6 +91,22 @@ from .update_packages.applicabledevices import ApplicableDevices
 from .update_packages.upgradepackage import UpgradePackage
 from .update_packages.upgrades import Upgrades
 
+'''
+from .audit_services import *
+from .deployment_services import *
+from .status_services import *
+from .system_information import *
+from .object_services import *
+from .device_clusters import *
+from .device_services import *
+from .device_group_services import *
+from .device_ha_pair_services import *
+from .integration_services import *
+from .intelligence_services import *
+from .policy_assignment_services import *
+from .policy_services import *
+from .update_packages import *
+'''
 logging.debug("In the api_objects __init__.py file.")
 
 __all__ = [

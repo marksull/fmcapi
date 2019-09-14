@@ -1,5 +1,5 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from .device_ha_pair_services.devicehapairs import DeviceHAPairs
+from .devicehapairs import DeviceHAPairs
 from fmcapi.api_objects.device_services.physicalinterface import PhysicalInterface
 import logging
 
