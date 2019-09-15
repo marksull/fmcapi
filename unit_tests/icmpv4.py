@@ -9,7 +9,7 @@ def test__icmpv4(fmc):
     starttime = str(int(time.time()))
     namer = f'_fmcapi_test_{starttime}'
 
-    obj1 = fmcapi.ICMPv4Object(fmc=fmc)
+    obj1 = fmcapi.ICMPv4Objects(fmc=fmc)
     obj1.name = "_icmpv4" + namer
     obj1.icmpType = "3"
     obj1.code = "0"

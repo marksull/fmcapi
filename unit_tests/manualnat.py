@@ -10,84 +10,84 @@ def test__manualnat(fmc):
     namer = f'_fmcapi_test_{starttime}'
 
     # Create a container policy for FTD NAT rules
-    natpol1 = fmcapi.FTDNatPolicy(fmc=fmc, name=namer)
+    natpol1 = fmcapi.FTDNatPolicies(fmc=fmc, name=namer)
     natpol1.post()
     natpol1.get()
 
     # Create original and translate objects
-    obj1 = fmcapi.IPNetwork(fmc=fmc)
+    obj1 = fmcapi.Networks(fmc=fmc)
     obj1.name = '_net_original'
     obj1.value = '10.0.0.0/8'
     obj1.post()
     time.sleep(1)
 
-    obj2 = fmcapi.IPHost(fmc=fmc)
+    obj2 = fmcapi.Hosts(fmc=fmc)
     obj2.name = '_net_xlate'
     obj2.value = '192.0.2.1'
     obj2.post()
     time.sleep(1)
 
     # Create identity nat object
-    obj3 = fmcapi.IPNetwork(fmc=fmc)
+    obj3 = fmcapi.Networks(fmc=fmc)
     obj3.name = '_net_identity'
     obj3.value = '192.168.0.0/24'
     obj3.post()
     time.sleep(1)
 
     # Create nat pool objects
-    obj4 = fmcapi.IPNetwork(fmc=fmc)
+    obj4 = fmcapi.Networks(fmc=fmc)
     obj4.name = '_net_original_pool'
     obj4.value = '172.16.0.0/24'
     obj4.post()
     time.sleep(1)
 
     # PAT Pool must be a range, not a subnet
-    obj5 = fmcapi.IPRange(fmc=fmc)
+    obj5 = fmcapi.Ranges(fmc=fmc)
     obj5.name = '_net_xlate_pool'
     obj5.value = '192.0.2.128-192.0.2.254'
     obj5.post()
     time.sleep(1)
 
     # Create interface PAT object
-    obj6 = fmcapi.IPNetwork(fmc=fmc)
+    obj6 = fmcapi.Networks(fmc=fmc)
     obj6.name = '_net_original_intf'
     obj6.value = '192.168.1.0/24'
     obj6.post()
 
     # Create NAT divert objects
-    obj7 = fmcapi.IPHost(fmc=fmc)
+    obj7 = fmcapi.Hosts(fmc=fmc)
     obj7.name = '_net_source_divert'
     obj7.value = '172.30.1.1'
     obj7.post()
     time.sleep(1)
 
-    obj8 = fmcapi.IPHost(fmc=fmc)
+    obj8 = fmcapi.Hosts(fmc=fmc)
     obj8.name = '_net_destination_divert'
     obj8.value = '4.2.2.2'
     obj8.post()
     time.sleep(1)
 
     # Create port-based NAT objects
-    obj9 = fmcapi.IPHost(fmc=fmc)
+    obj9 = fmcapi.Hosts(fmc=fmc)
     obj9.name = '_net_source_portbased'
     obj9.value = '172.30.1.2'
     obj9.post()
     time.sleep(1)
 
-    obj10 = fmcapi.IPHost(fmc=fmc)
+    obj10 = fmcapi.Hosts(fmc=fmc)
     obj10.name = '_net_xlate_portbased'
     obj10.value = '192.0.2.254'
     obj10.post()
     time.sleep(1)
 
-    obj11 = fmcapi.ProtocolPort(fmc=fmc)
+    obj11 = fmcapi.ProtocolPortObjects(fmc=fmc)
     obj11.name = '_port_original'
     obj11.protocol = 'TCP'
     obj11.port = '443'
     obj11.post()
     time.sleep(1)
 
-    obj12 = fmcapi.ProtocolPort(fmc=fmc)
+    obj12 = fmcapi.ProtocolPortObjects(fmc=fmc)
     obj12.name = '_port_xlate'
     obj12.protocol = 'TCP'
     obj12.port = '8443'
@@ -95,9 +95,9 @@ def test__manualnat(fmc):
     time.sleep(1)
 
     # Create Security Zones
-    sz1 = fmcapi.SecurityZone(fmc=fmc, name='IG-INSIDE')
+    sz1 = fmcapi.SecurityZones(fmc=fmc, name='IG-INSIDE')
     sz1.post()
-    sz2 = fmcapi.SecurityZone(fmc=fmc, name='SZ-OUTSIDE1')
+    sz2 = fmcapi.SecurityZones(fmc=fmc, name='SZ-OUTSIDE1')
     sz2.post()
 
     # Manualnat a network object to a host

@@ -9,4 +9,4 @@ def test__fmc_version(fmc):
     logging.info('fmc.version() -- >')
     logging.info(version_info)
 
-    logging.info('Testing fmc.verson() done.')
+    logging.info('Testing fmc.version() done.\n')

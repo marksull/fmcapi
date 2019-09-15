@@ -9,14 +9,14 @@ def test__port_object_group(fmc):
     starttime = str(int(time.time()))
     namer = f'_fmcapi_test_{starttime}'
 
-    obj10 = fmcapi.ProtocolPort(fmc=fmc, name='_porttcp1', port='8443', protocol='TCP')
+    obj10 = fmcapi.ProtocolPortObjects(fmc=fmc, name='_porttcp1', port='8443', protocol='TCP')
     obj10.post()
-    obj11 = fmcapi.ProtocolPort(fmc=fmc, name='_portudp1', port='161', protocol='UDP')
+    obj11 = fmcapi.ProtocolPortObjects(fmc=fmc, name='_portudp1', port='161', protocol='UDP')
     obj11.post()
-    obj12 = fmcapi.ProtocolPort(fmc=fmc, name='_portrangetcp1', port='0-1023', protocol='TCP')
+    obj12 = fmcapi.ProtocolPortObjects(fmc=fmc, name='_portrangetcp1', port='0-1023', protocol='TCP')
     obj12.post()
     time.sleep(1)
-    obj1 = fmcapi.PortObjectGroup(fmc=fmc, name=namer)
+    obj1 = fmcapi.PortObjectGroups(fmc=fmc, name=namer)
     obj1.named_ports(action='add', name=obj10.name)
     obj1.named_ports(action='add', name=obj10.name)
     obj1.named_ports(action='remove', name=obj10.name)
@@ -28,7 +28,7 @@ def test__port_object_group(fmc):
     time.sleep(1)
     del obj1
 
-    obj1 = fmcapi.PortObjectGroup(fmc=fmc, name=namer)
+    obj1 = fmcapi.PortObjectGroups(fmc=fmc, name=namer)
     obj1.get()
     obj1.named_ports(action='add', name='HTTP')
     obj1.named_ports(action='clear')

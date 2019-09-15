@@ -13,16 +13,16 @@ def test__upgrades(fmc):
     device_list = []
 
     logging.info('All UpgradePackages -- >')
-    package1 = fmcapi.UpgradePackage(fmc=fmc)
+    package1 = fmcapi.UpgradePackages(fmc=fmc)
     result = package1.get()
     logging.info(result)
     del package1
 
-    package1 = fmcapi.UpgradePackage(fmc=fmc, name=package_name)
+    package1 = fmcapi.UpgradePackages(fmc=fmc, name=package_name)
     logging.info('One UpgradePackage -- >')
     logging.info(package1.get())
 
-    applicable1 = fmcapi.ApplicableDevices(fmc=fmc)
+    applicable1 = fmcapi.ListApplicableDevices(fmc=fmc)
     applicable1.upgrade_package(package_name=package_name)
     time.sleep(1)
     result = applicable1.get()

@@ -22,40 +22,40 @@ def main():
                     file_logging='hq-ftd.log') as fmc1:
 
         # Create an ACP
-        acp = fmcapi.AccessControlPolicy(fmc=fmc1, name='ACP Policy')
+        acp = fmcapi.AccessPolicies(fmc=fmc1, name='ACP Policy')
         # I intentially put a "space" in the ACP name to show that fmcapi will "fix" that for you.
         acp.post()
 
         # Create Security Zones
-        sz_inside = fmcapi.SecurityZone(fmc=fmc1, name='inside', interfaceMode='ROUTED')
+        sz_inside = fmcapi.SecurityZones(fmc=fmc1, name='inside', interfaceMode='ROUTED')
         sz_inside.post()
         # sz_inside.get()
-        sz_outside = fmcapi.SecurityZone(fmc=fmc1, name='outside', interfaceMode='ROUTED')
+        sz_outside = fmcapi.SecurityZones(fmc=fmc1, name='outside', interfaceMode='ROUTED')
         sz_outside.post()
         # sz_outside.get()
-        sz_dmz = fmcapi.SecurityZone(fmc=fmc1, name='dmz', interfaceMode='ROUTED')
+        sz_dmz = fmcapi.SecurityZones(fmc=fmc1, name='dmz', interfaceMode='ROUTED')
         sz_dmz.post()
         # sz_dmz.get()
 
         # Create Network Objects
-        hq_dfgw_gateway = fmcapi.IPHost(fmc=fmc1, name='hq-default-gateway', value='100.64.0.1')
+        hq_dfgw_gateway = fmcapi.Hosts(fmc=fmc1, name='hq-default-gateway', value='100.64.0.1')
         hq_dfgw_gateway.post()
-        hq_lan = fmcapi.IPNetwork(fmc=fmc1, name='hq-lan', value='10.0.0.0/24')
+        hq_lan = fmcapi.Networks(fmc=fmc1, name='hq-lan', value='10.0.0.0/24')
         hq_lan.post()
-        all_lans = fmcapi.IPNetwork(fmc=fmc1, name='all-lans', value='10.0.0.0/8')
+        all_lans = fmcapi.Networks(fmc=fmc1, name='all-lans', value='10.0.0.0/8')
         all_lans.post()
-        hq_fmc = fmcapi.IPHost(fmc=fmc1, name='hq_fmc', value='10.0.0.10')
+        hq_fmc = fmcapi.Hosts(fmc=fmc1, name='hq_fmc', value='10.0.0.10')
         hq_fmc.post()
-        fmc_public = fmcapi.IPHost(fmc=fmc1, name='fmc_public_ip', value='100.64.0.10')
+        fmc_public = fmcapi.Hosts(fmc=fmc1, name='fmc_public_ip', value='100.64.0.10')
         fmc_public.post()
 
         # Create ACP Rule to permit hq_lan traffic inside to outside.
-        hq_acprule = fmcapi.ACPRule(fmc=fmc1,
-                                    acp_name=acp.name,
-                                    name='Permit HQ LAN',
-                                    action='ALLOW',
-                                    enabled=True,
-                                    )
+        hq_acprule = fmcapi.AccessRules(fmc=fmc1,
+                                        acp_name=acp.name,
+                                        name='Permit HQ LAN',
+                                        action='ALLOW',
+                                        enabled=True,
+                                        )
         hq_acprule.source_zone(action='add', name=sz_inside.name)
         hq_acprule.destination_zone(action='add', name=sz_outside.name)
         hq_acprule.source_network(action='add', name=hq_lan.name)
@@ -63,7 +63,7 @@ def main():
         hq_acprule.post()
 
         # Build NAT Policy
-        nat = fmcapi.FTDNatPolicy(fmc=fmc1, name='NAT Policy')
+        nat = fmcapi.FTDNatPolicies(fmc=fmc1, name='NAT Policy')
         nat.post()
 
         # Build NAT Rule to NAT all_lans to interface outside
@@ -102,7 +102,7 @@ def main():
         hq_ftd.post(post_wait_time=300)
 
         # Once registration is complete configure the interfaces of hq-ftd.
-        hq_ftd_g00 = fmcapi.PhysicalInterface(fmc=fmc1, device_name=hq_ftd.name)
+        hq_ftd_g00 = fmcapi.PhysicalInterfaces(fmc=fmc1, device_name=hq_ftd.name)
         hq_ftd_g00.get(name="GigabitEthernet0/0")
         hq_ftd_g00.enabled = True
         hq_ftd_g00.ifname = "IN"
@@ -110,7 +110,7 @@ def main():
         hq_ftd_g00.sz(name="inside")
         hq_ftd_g00.put()
 
-        hq_ftd_g01 = fmcapi.PhysicalInterface(fmc=fmc1, device_name=hq_ftd.name)
+        hq_ftd_g01 = fmcapi.PhysicalInterfaces(fmc=fmc1, device_name=hq_ftd.name)
         hq_ftd_g01.get(name="GigabitEthernet0/1")
         hq_ftd_g01.enabled = True
         hq_ftd_g01.ifname = "OUT"
@@ -119,7 +119,7 @@ def main():
         hq_ftd_g01.put()
 
         # Build static default route for HQ FTD
-        hq_default_route = fmcapi.IPv4StaticRoute(fmc=fmc1, name='hq_default_route')
+        hq_default_route = fmcapi.IPv4StaticRoutes(fmc=fmc1, name='hq_default_route')
         hq_default_route.device(device_name=hq_ftd.name)
         hq_default_route.networks(action='add', networks=['any-ipv4'])
         hq_default_route.gw(name=hq_dfgw_gateway.name)

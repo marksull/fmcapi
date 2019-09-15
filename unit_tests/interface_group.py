@@ -6,7 +6,7 @@ import time
 def test__interface_group(fmc):
     logging.info('Test InterfaceGroup.  Post, get, put, delete InterfaceGroup Objects.')
 
-    obj1 = fmcapi.InterfaceGroup(fmc=fmc)
+    obj1 = fmcapi.InterfaceGroups(fmc=fmc)
     obj1.name = "_ig_outside_all"
     obj1.interfaceMode = 'ROUTED'
     logging.info('InterfaceGroup POST-->')
@@ -16,7 +16,7 @@ def test__interface_group(fmc):
     time.sleep(1)
     del obj1
 
-    obj1 = fmcapi.InterfaceGroup(fmc=fmc, name="_ig_outside_all")
+    obj1 = fmcapi.InterfaceGroups(fmc=fmc, name="_ig_outside_all")
     obj1.get()
     obj1.p_interface(device_name="device_name",
                      action="add",
@@ -28,7 +28,7 @@ def test__interface_group(fmc):
     time.sleep(1)
     del obj1
 
-    obj1 = fmcapi.InterfaceGroup(fmc=fmc, name="_ig_outside_all")
+    obj1 = fmcapi.InterfaceGroups(fmc=fmc, name="_ig_outside_all")
     obj1.get()
     obj1.p_interface(device_name="device_name",
                      action="remove",
@@ -40,7 +40,7 @@ def test__interface_group(fmc):
     time.sleep(1)
     del obj1
 
-    obj1 = fmcapi.InterfaceGroup(fmc=fmc, name="_ig_outside_all")
+    obj1 = fmcapi.InterfaceGroups(fmc=fmc, name="_ig_outside_all")
     obj1.get()
     obj1.p_interface(action="clear-all")
     obj1.put()

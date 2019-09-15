@@ -10,55 +10,55 @@ def test__acp_rule(fmc):
     namer = f'_fmcapi_test_{starttime}'
 
     # Build an IP host object
-    iphost1 = fmcapi.IPHost(fmc=fmc, name='_iphost1', value='7.7.7.7')
+    iphost1 = fmcapi.Hosts(fmc=fmc, name='_iphost1', value='7.7.7.7')
     iphost1.post()
     # Build an IP Network object
-    ipnet1 = fmcapi.IPNetwork(fmc=fmc, name='_ipnet1', value='1.2.3.0/24')
+    ipnet1 = fmcapi.Networks(fmc=fmc, name='_ipnet1', value='1.2.3.0/24')
     ipnet1.post()
     # Build an IP range object
-    iprange1 = fmcapi.IPRange(fmc=fmc, name='_iprange1', value='6.6.6.6-7.7.7.7')
+    iprange1 = fmcapi.Ranges(fmc=fmc, name='_iprange1', value='6.6.6.6-7.7.7.7')
     iprange1.post()
     # Build a Network Group object
-    ipnet2 = fmcapi.IPNetwork(fmc=fmc, name='_ipnet2', value='5.5.5.0/24')
+    ipnet2 = fmcapi.Networks(fmc=fmc, name='_ipnet2', value='5.5.5.0/24')
     ipnet2.post()
     time.sleep(1)
     # Build an FQDNS object
     fqdns1 = fmcapi.FQDNS(fmc=fmc, name='_fqdns1', value='www.cisco.com')
     fqdns1.post()
 
-    obj1 = fmcapi.NetworkGroup(fmc=fmc, name='_fmcapi_test_networkgroup')
+    obj1 = fmcapi.NetworkGroups(fmc=fmc, name='_fmcapi_test_networkgroup')
     obj1.named_networks(action='add', name=ipnet2.name)
     obj1.unnamed_networks(action='add', value='4.4.4.4/32')
     obj1.post()
     # Build a URL object
-    url1 = fmcapi.URL(fmc=fmc, name='_url1', url='asdf.org')
+    url1 = fmcapi.URLs(fmc=fmc, name='_url1', url='asdf.org')
     url1.post()
     url1.get()
     # lists = [{"type": url1.type, "id": url1.id, "name": url1.name}]
     # Build a VLAN Tag object
-    vlantag1 = fmcapi.VlanTag(fmc=fmc, name='_vlantag1', data={
+    vlantag1 = fmcapi.VlanTags(fmc=fmc, name='_vlantag1', data={
                        'startTag': '888', 'endTag': '999'})
     vlantag1.post()
     # Build a Port object
-    pport1 = fmcapi.ProtocolPort(fmc=fmc, name='_pport1', port='9090', protocol='UDP')
+    pport1 = fmcapi.ProtocolPortObjects(fmc=fmc, name='_pport1', port='9090', protocol='UDP')
     pport1.post()
     # Build a Port Group Object
-    obj10 = fmcapi.ProtocolPort(fmc=fmc, name='_porttcp1', port='8443', protocol='TCP')
+    obj10 = fmcapi.ProtocolPortObjects(fmc=fmc, name='_porttcp1', port='8443', protocol='TCP')
     obj10.post()
-    obj11 = fmcapi.ProtocolPort(fmc=fmc, name='_portudp1', port='161', protocol='UDP')
+    obj11 = fmcapi.ProtocolPortObjects(fmc=fmc, name='_portudp1', port='161', protocol='UDP')
     obj11.post()
-    obj12 = fmcapi.ProtocolPort(fmc=fmc, name='_portrangetcp1', port='0-1023', protocol='TCP')
+    obj12 = fmcapi.ProtocolPortObjects(fmc=fmc, name='_portrangetcp1', port='0-1023', protocol='TCP')
     obj12.post()
-    obj2 = fmcapi.PortObjectGroup(fmc=fmc, name='_fmcapi_test_portobjectgroup')
+    obj2 = fmcapi.PortObjectGroups(fmc=fmc, name='_fmcapi_test_portobjectgroup')
     obj2.named_ports(action='add', name=obj10.name)
     obj2.named_ports(action='add', name=obj11.name)
     obj2.named_ports(action='add', name=obj12.name)
     obj2.post()
     # Build a Security Zone object
-    sz1 = fmcapi.SecurityZone(fmc=fmc, name='_sz1', interfaceMode='ROUTED')
+    sz1 = fmcapi.SecurityZones(fmc=fmc, name='_sz1', interfaceMode='ROUTED')
     sz1.post()
     # Build an ACP Object
-    acp1 = fmcapi.AccessControlPolicy(fmc=fmc, name=namer)
+    acp1 = fmcapi.AccessPolicies(fmc=fmc, name=namer)
     acp1.post()
     # Get a file_policy
     # fp = fmcapi.FilePolicies(fmc=fmc1, name='daxm_test')
@@ -67,7 +67,7 @@ def test__acp_rule(fmc):
 
     logging.info(
         'Test ACPRule.  Try to test all features of all methods of the ACPRule class.')
-    acprule1 = fmcapi.ACPRule(fmc=fmc, acp_name=acp1.name)
+    acprule1 = fmcapi.AccessRules(fmc=fmc, acp_name=acp1.name)
     acprule1.name = namer
     acprule1.action = 'ALLOW'
     acprule1.enabled = False

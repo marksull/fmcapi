@@ -10,7 +10,7 @@ from fmcapi import api_objects
 class TestApiObjects(unittest.TestCase):
 
     def test_ip_host_required_for_put(self):
-        self.assertEqual(api_objects.IPHost.REQUIRED_FOR_PUT, ['id', 'name', 'value'])
+        self.assertEqual(api_objects.Hosts.REQUIRED_FOR_PUT, ['id', 'name', 'value'])
 
     @mock.patch('fmcapi.api_objects.APIClassTemplate.parse_kwargs')
     @mock.patch('fmcapi.api_objects.APIClassTemplate.valid_for_delete')
@@ -32,7 +32,7 @@ class TestApiObjects(unittest.TestCase):
         Test URL_SUFFIX property
             - No URL params
         """
-        a = api_objects.ACPRule(fmc=mock_fmc, acp_name='something')
+        a = api_objects.AccessRules(fmc=mock_fmc, acp_name='something')
 
         self.assertEqual('', a.URL_SUFFIX)
 
@@ -44,7 +44,7 @@ class TestApiObjects(unittest.TestCase):
         Test URL_SUFFIX property
             - Category param
         """
-        a = api_objects.ACPRule(fmc=mock_fmc, acp_name='something', category='something')
+        a = api_objects.AccessRules(fmc=mock_fmc, acp_name='something', category='something')
 
         self.assertTrue(a.URL.endswith('?category=something'))
 
@@ -56,7 +56,7 @@ class TestApiObjects(unittest.TestCase):
         Test URL_SUFFIX property
             - insertBefore param
         """
-        a = api_objects.ACPRule(fmc=mock_fmc, acp_name='something', insertBefore='something')
+        a = api_objects.AccessRules(fmc=mock_fmc, acp_name='something', insertBefore='something')
 
         self.assertTrue(a.URL.endswith('?insertBefore=something'))
 
@@ -68,7 +68,7 @@ class TestApiObjects(unittest.TestCase):
         Test URL_SUFFIX property
             - insertAfter param
         """
-        a = api_objects.ACPRule(fmc=mock_fmc, acp_name='something', insertAfter='something')
+        a = api_objects.AccessRules(fmc=mock_fmc, acp_name='something', insertAfter='something')
 
         self.assertTrue(a.URL.endswith('?insertAfter=something'))
 
@@ -81,7 +81,7 @@ class TestApiObjects(unittest.TestCase):
             - category param
             - insertBefore param
         """
-        a = api_objects.ACPRule(fmc=mock_fmc, acp_name='something', category='something', insertBefore='something')
+        a = api_objects.AccessRules(fmc=mock_fmc, acp_name='something', category='something', insertBefore='something')
 
         self.assertTrue(a.URL.endswith('?category=something&insertBefore=something'))
 
@@ -94,7 +94,7 @@ class TestApiObjects(unittest.TestCase):
             - Category param
             - insertAfter param
         """
-        a = api_objects.ACPRule(fmc=mock_fmc, acp_name='something', category='something', insertAfter='something')
+        a = api_objects.AccessRules(fmc=mock_fmc, acp_name='something', category='something', insertAfter='something')
 
         self.assertTrue(a.URL.endswith('?category=something&insertAfter=something'))
 
@@ -109,8 +109,8 @@ class TestApiObjects(unittest.TestCase):
             - insertBefore param
             - insertAfter param
         """
-        a = api_objects.ACPRule(fmc=mock_fmc, acp_name='something', category='something', insertBefore='something',
-                                insertAfter='something')
+        a = api_objects.AccessRules(fmc=mock_fmc, acp_name='something', category='something', insertBefore='something',
+                                    insertAfter='something')
 
         self.assertTrue(a.URL.endswith('?category=something&insertBefore=something&insertAfter=something'))
         mock_log.assert_called_once()
@@ -136,7 +136,7 @@ class TestApiObjects(unittest.TestCase):
         mock_nwgroup.return_value = dummyvalue3
         mock_fqdns.return_value = dummyvalue3
 
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.source_network(action='add', name='someExistingObjectName2')
         self.assertEqual(len(rule_obj.sourceNetworks['objects']), 1)
@@ -164,7 +164,7 @@ class TestApiObjects(unittest.TestCase):
         mock_nwgroup.return_value = dummyvalue3
         mock_fqdns.return_value = dummyvalue3
 
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.source_network(action='add', name='someExistingObjectName2')
         self.assertEqual(len(rule_obj.sourceNetworks['objects']), 1)
@@ -192,7 +192,7 @@ class TestApiObjects(unittest.TestCase):
         mock_ipaddress.return_value = value
         mock_nwgroup.return_value = dummyvalue3
         mock_fqdns.return_value = dummyvalue3
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.sourceNetworks = {'objects': [
             {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'}]}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
@@ -225,7 +225,7 @@ class TestApiObjects(unittest.TestCase):
         mock_ipaddress.return_value = value
         mock_nwgroup.return_value = dummyvalue3
         mock_fqdns.return_value = dummyvalue3
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.sourceNetworks = {'objects': [
             {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'},
             {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'}]}
@@ -262,7 +262,7 @@ class TestApiObjects(unittest.TestCase):
         mock_ipaddress.return_value = value
         mock_nwgroup.return_value = dummyvalue3
         mock_fqdns.return_value = dummyvalue3
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.sourceNetworks = {'objects': [
             {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'},
             {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'}]}
@@ -278,7 +278,7 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_source_network_add_for_literals_and_no_literal_present_initially(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.source_network(action='add', literal='10.0.0.1')
         self.assertEqual(len(rule_obj.sourceNetworks['literals']), 1)
@@ -286,7 +286,7 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_source_network_add_for_literals_and_one_literal_present_initially(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.sourceNetworks = {'literals': {'10.0.0.1': 'host'}}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.source_network(action='add', literal='10.0.0.2')
@@ -296,7 +296,7 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_source_network_add_for_literals_and_multiple_literal_present_initially(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.sourceNetworks = {'literals': {'10.0.0.1': 'host', '10.0.0.2': 'host', '10.0.0.3': 'host'}}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.source_network(action='add', literal='10.0.0.4')
@@ -308,7 +308,7 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_source_network_add_for_literals_and_duplicate_literal_present(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.sourceNetworks = {'literals': {'10.0.0.1': 'host'}}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.source_network(action='add', literal='10.0.0.1')
@@ -316,7 +316,7 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_source_network_add_for_literals_and_objects_present_initially(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.sourceNetworks = {'objects': [
             {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'},
             {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'}],
@@ -352,7 +352,7 @@ class TestApiObjects(unittest.TestCase):
         mock_ipaddress.return_value = value
         mock_nwgroup.return_value = dummyvalue3
         mock_fqdns.return_value = dummyvalue3
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.sourceNetworks = {'literals': {'10.0.0.1': 'host'}}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.source_network(action='add', name='someExistingObjectName3')
@@ -365,13 +365,13 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_source_network_with_both_name_and_literals_given(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         with self.assertRaises(ValueError):
             rule_obj.source_network(action='add', name='someObjectName', literal='10.0.0.1')
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_source_network_remove_for_literals_with_multiple_literals_present(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.sourceNetworks = {'literals': {'10.0.0.1': 'host', '10.0.0.2': 'host', '10.0.0.3': 'host'}}
         rule_obj.source_network(action='remove', literal='10.0.0.1')
         self.assertEqual(len(rule_obj.sourceNetworks['literals']), 2)
@@ -380,14 +380,14 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_source_network_remove_for_literals_with_only_one_literal_present(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.sourceNetworks = {'literals': {'10.0.0.1': 'host'}}
         rule_obj.source_network(action='remove', literal='10.0.0.1')
         self.assertEqual(len(rule_obj.sourceNetworks['literals']), 0)
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_source_network_remove_for_objects_with_only_one_object_present(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.sourceNetworks = {'objects': [
             {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'}]
         }
@@ -396,7 +396,7 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_source_network_remove_for_objects_with_multiple_objects_present(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.sourceNetworks = {'objects': [
             {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'},
             {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2', 'type': 'someExistingObjectType2'},
@@ -413,7 +413,7 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_source_network_clear_for_objects(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.sourceNetworks = {'objects': [
             {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'},
             {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2', 'type': 'someExistingObjectType2'},
@@ -424,7 +424,7 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_source_network_clear_for_literals(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.sourceNetworks = {'literals': {'10.0.0.1': 'host'}}
         rule_obj.source_network(action='clear')
         self.assertNotIn('sourceNetworks', self.__dict__)
@@ -450,7 +450,7 @@ class TestApiObjects(unittest.TestCase):
         mock_nwgroup.return_value = dummyvalue3
         mock_fqdns.return_value = dummyvalue3
 
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.destination_network(action='add', name='someExistingObjectName2')
         self.assertEqual(len(rule_obj.destinationNetworks['objects']), 1)
@@ -478,7 +478,7 @@ class TestApiObjects(unittest.TestCase):
         mock_nwgroup.return_value = dummyvalue3
         mock_fqdns.return_value = dummyvalue3
 
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.destination_network(action='add', name='someExistingObjectName2')
         self.assertEqual(len(rule_obj.destinationNetworks['objects']), 1)
@@ -506,7 +506,7 @@ class TestApiObjects(unittest.TestCase):
         mock_ipaddress.return_value = value
         mock_nwgroup.return_value = dummyvalue3
         mock_fqdns.return_value = dummyvalue3
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.destinationNetworks = {'objects': [
             {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'}]}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
@@ -539,7 +539,7 @@ class TestApiObjects(unittest.TestCase):
         mock_ipaddress.return_value = value
         mock_nwgroup.return_value = dummyvalue3
         mock_fqdns.return_value = dummyvalue3
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.destinationNetworks = {'objects': [
             {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'},
             {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'}]}
@@ -576,7 +576,7 @@ class TestApiObjects(unittest.TestCase):
         mock_ipaddress.return_value = value
         mock_nwgroup.return_value = dummyvalue3
         mock_fqdns.return_value = dummyvalue3
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.destinationNetworks = {'objects': [
             {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'},
             {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'}]}
@@ -592,7 +592,7 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_add_for_literals_and_no_literal_present_initially(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.destination_network(action='add', literal='10.0.0.1')
         self.assertEqual(len(rule_obj.destinationNetworks['literals']), 1)
@@ -600,7 +600,7 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_add_for_literals_and_one_literal_present_initially(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.destinationNetworks = {'literals': {'10.0.0.1': 'host'}}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.destination_network(action='add', literal='10.0.0.2')
@@ -610,7 +610,7 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_add_for_literals_and_multiple_literal_present_initially(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.destinationNetworks = {'literals': {'10.0.0.1': 'host', '10.0.0.2': 'host', '10.0.0.3': 'host'}}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.destination_network(action='add', literal='10.0.0.4')
@@ -622,7 +622,7 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_add_for_literals_and_duplicate_literal_present(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.destinationNetworks = {'literals': {'10.0.0.1': 'host'}}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.destination_network(action='add', literal='10.0.0.1')
@@ -630,7 +630,7 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_add_for_literals_and_objects_present_initially(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.destinationNetworks = {'objects': [
             {'name': 'someExistingObjectName3', 'id': 'someExistingObjectId3', 'type': 'someExistingObjectType3'},
             {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'}],
@@ -666,7 +666,7 @@ class TestApiObjects(unittest.TestCase):
         mock_ipaddress.return_value = value
         mock_nwgroup.return_value = dummyvalue3
         mock_fqdns.return_value = dummyvalue3
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.destinationNetworks = {'literals': {'10.0.0.1': 'host'}}
         rule_obj.URL = '/accesspolicies/<accesspolicyid>/accessrules/<accessruleid>'
         rule_obj.destination_network(action='add', name='someExistingObjectName3')
@@ -679,13 +679,13 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_with_both_name_and_literals_given(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         with self.assertRaises(ValueError):
             rule_obj.destination_network(action='add', name='someObjectName', literal='10.0.0.1')
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_remove_for_literals_with_multiple_literals_present(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.destinationNetworks = {'literals': {'10.0.0.1': 'host', '10.0.0.2': 'host', '10.0.0.3': 'host'}}
         rule_obj.destination_network(action='remove', literal='10.0.0.1')
         self.assertEqual(len(rule_obj.destinationNetworks['literals']), 2)
@@ -694,14 +694,14 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_remove_for_literals_with_only_one_literal_present(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.destinationNetworks = {'literals': {'10.0.0.1': 'host'}}
         rule_obj.destination_network(action='remove', literal='10.0.0.1')
         self.assertEqual(len(rule_obj.destinationNetworks['literals']), 0)
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_remove_for_objects_with_only_one_object_present(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.destinationNetworks = {'objects': [
             {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'}]
         }
@@ -710,7 +710,7 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_remove_for_objects_with_multiple_objects_present(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.destinationNetworks = {'objects': [
             {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'},
             {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2', 'type': 'someExistingObjectType2'},
@@ -727,7 +727,7 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_clear_for_objects(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.destinationNetworks = {'objects': [
             {'name': 'someExistingObjectName1', 'id': 'someExistingObjectId1', 'type': 'someExistingObjectType1'},
             {'name': 'someExistingObjectName2', 'id': 'someExistingObjectId2', 'type': 'someExistingObjectType2'},
@@ -738,32 +738,32 @@ class TestApiObjects(unittest.TestCase):
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_destination_network_clear_for_literals(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock())
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock())
         rule_obj.destinationNetworks = {'literals': {'10.0.0.1': 'host'}}
         rule_obj.destination_network(action='clear')
         self.assertNotIn('destinationNetworks', self.__dict__)
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_parse_kwargs_with_source_networks(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock(), sourceNetworks={'objects' : [{'name': 'someExistingObjectName1'}],
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock(), sourceNetworks={'objects' : [{'name': 'someExistingObjectName1'}],
                                                                         'literals': [{'type': 'host', 'value': '10.0.0.1'}]
-                                                                        })
+                                                                            })
         self.assertEqual([{'name': 'someExistingObjectName1'}], rule_obj.sourceNetworks['objects'])
         self.assertEqual({'10.0.0.1': 'host'}, rule_obj.sourceNetworks['literals'])
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_parse_kwargs_with_destination_networks(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock(), destinationNetworks={'objects' : [{'name': 'someExistingObjectName1'}],
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock(), destinationNetworks={'objects' : [{'name': 'someExistingObjectName1'}],
                                                                              'literals': [{'type': 'host', 'value': '10.0.0.1'}]
-                                                                             })
+                                                                                 })
         self.assertEqual([{'name': 'someExistingObjectName1'}], rule_obj.destinationNetworks['objects'])
         self.assertEqual({'10.0.0.1': 'host'}, rule_obj.destinationNetworks['literals'])
 
     @mock.patch('fmcapi.api_objects.ACPRule.variable_set')
     def test_ACPRule_format_data_with_source_networks(self, _):
-        rule_obj = api_objects.ACPRule(fmc=mock.Mock(), sourceNetworks={'objects' : [{'name': 'someExistingObjectName1'}],
+        rule_obj = api_objects.AccessRules(fmc=mock.Mock(), sourceNetworks={'objects' : [{'name': 'someExistingObjectName1'}],
                                                                         'literals': [{'type': 'host', 'value': '10.0.0.1'}]
-                                                                        })
+                                                                            })
         data = rule_obj.format_data()
         self.assertEqual([{'name': 'someExistingObjectName1'}], data['sourceNetworks']['objects'])
         self.assertEqual([{'type': 'host', 'value': '10.0.0.1'}], data['sourceNetworks']['literals'])
