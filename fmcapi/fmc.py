@@ -10,13 +10,9 @@ import datetime
 import requests
 import time
 import json
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import logging
 from logging.handlers import RotatingFileHandler
 import warnings
-
-# Disable annoying HTTP warnings
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 """"
 The 'requests' package is very chatty on the INFO logging level.  Change its logging threshold sent to logger to 
