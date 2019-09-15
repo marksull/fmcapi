@@ -16,6 +16,7 @@ from .manualnatrules import ManualNatRules
 from .natrules import NatRules
 from .prefilterpolicies import PreFilterPolicies
 from .prefilterpolicies import PreFilterPolicy
+from .defaultactions import DefaultActions
 
 logging.debug("In the object_services __init__.py file.")
 
@@ -37,4 +38,5 @@ __all__ = [
     'PreFilterPolicy',
     'HitCounts',
     'HitCount',
+    'DefaultActions'
 ]

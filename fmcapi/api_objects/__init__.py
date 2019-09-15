@@ -123,6 +123,7 @@ from .policy_services.manualnatrules import ManualNatRules
 from .policy_services.natrules import NatRules
 from .policy_services.prefilterpolicies import PreFilterPolicies
 from .policy_services.prefilterpolicies import PreFilterPolicy
+from .policy_services.defaultactions import DefaultActions
 
 from .policy_assignment_services.policyassignments import PolicyAssignments
 
@@ -137,6 +138,7 @@ from .update_packages.upgradepackage import Upgrades
 logging.debug("In the api_objects __init__.py file.")
 
 __all__ = [
+    'DefaultActions',
     'DeviceGroupRecords',
     'DeviceGroups',
     'FTDDeviceCluster',

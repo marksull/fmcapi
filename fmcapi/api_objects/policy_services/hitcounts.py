@@ -1,6 +1,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .accesspolicies import AccessPolicies
-from fmcapi.api_objects.device_services.devicerecords import Device
+from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 from .prefilterpolicies import PreFilterPolicies
 import logging
 import warnings
@@ -109,7 +109,7 @@ class HitCounts(APIClassTemplate):
         if id != '':
             self.device_id = id
         elif name != '':
-            device1 = Device(fmc=self.fmc)
+            device1 = DeviceRecords(fmc=self.fmc)
             device1.get(name=name)
             if 'id' in device1.__dict__:
                 self.device_id = device1.id
