@@ -41,4 +41,7 @@ class ProtocolPortObjects(APIClassTemplate):
 
 
 class ProtocolPort(ProtocolPortObjects):
-    warnings.warn("Deprecated: ProtocolPort() should be called via ProtocolPortObjects().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: ProtocolPort() should be called via ProtocolPortObjects().")
+        super().__init__(fmc, **kwargs)

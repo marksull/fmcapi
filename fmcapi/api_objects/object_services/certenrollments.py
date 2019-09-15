@@ -44,4 +44,7 @@ class CertEnrollments(APIClassTemplate):
 
 
 class CertEnrollment(CertEnrollments):
-    warnings.warn("Deprecated: CertEnrollment() should be called via CertEnrollments().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: CertEnrollment() should be called via CertEnrollments().")
+        super().__init__(fmc, **kwargs)

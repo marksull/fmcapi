@@ -122,4 +122,7 @@ class VlanGroupTags(APIClassTemplate):
 
 
 class VlanGroupTag(VlanGroupTags):
-    warnings.warn("Deprecated: VlanGroupTag() should be called via VlanGroupTags().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: VlanGroupTag() should be called via VlanGroupTags().")
+        super().__init__(fmc, **kwargs)

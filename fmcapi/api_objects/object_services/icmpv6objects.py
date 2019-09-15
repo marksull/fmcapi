@@ -54,4 +54,7 @@ class ICMPv6Objects(APIClassTemplate):
 
 
 class ICMPv6Object(ICMPv6Objects):
-    warnings.warn("Deprecated: ICMPv6Object() should be called via ICMPv6Objects().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: ICMPv6Object() should be called via ICMPv6Objects().")
+        super().__init__(fmc, **kwargs)

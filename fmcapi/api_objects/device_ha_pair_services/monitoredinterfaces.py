@@ -68,4 +68,7 @@ class MonitoredInterfaces(APIClassTemplate):
 
 
 class DeviceHAMonitoredInterfaces(MonitoredInterfaces):
-    warnings.warn("Deprecated: DeviceHAMonitoredInterfaces() should be called via MonitoredInterfaces().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: DeviceHAMonitoredInterfaces() should be called via MonitoredInterfaces().")
+        super().__init__(fmc, **kwargs)

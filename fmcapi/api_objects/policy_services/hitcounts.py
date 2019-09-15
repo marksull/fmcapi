@@ -214,4 +214,7 @@ class HitCounts(APIClassTemplate):
 
 
 class HitCount(HitCounts):
-    warnings.warn("Deprecated: HitCount() should be called via HitCount().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: HitCount() should be called via HitCount().")
+        super().__init__(fmc, **kwargs)

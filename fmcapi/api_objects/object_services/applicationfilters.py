@@ -51,4 +51,7 @@ class ApplicationFilters(APIClassTemplate):
 
 
 class ApplicationFilter(ApplicationFilters):
-    warnings.warn("Deprecated: ApplicationFilter() should be called via ApplicationFilters().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: ApplicationFilter() should be called via ApplicationFilters().")
+        super().__init__(fmc, **kwargs)

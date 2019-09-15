@@ -45,4 +45,7 @@ class ApplicationTags(APIClassTemplate):
 
 
 class ApplicationTag(ApplicationTags):
-    warnings.warn("Deprecated: ApplicationTag() should be called via ApplicationTags().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: ApplicationTag() should be called via ApplicationTags().")
+        super().__init__(fmc, **kwargs)

@@ -10,7 +10,6 @@ def test__devicegrouprecords(fmc):
     namer = f'_fmcapi_test_{starttime}'
 
     device_list = [{"name": "ftdv-HA", "type": "deviceHAPair"}]
-    dg0 = fmcapi.DeviceGroups(fmc=fmc)
     dg1 = fmcapi.DeviceGroupRecords(fmc=fmc)
     dg1.name = "_dg1" + namer
     dg1.devices(action='add', members=device_list)

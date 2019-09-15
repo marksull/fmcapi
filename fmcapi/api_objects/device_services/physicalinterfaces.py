@@ -141,4 +141,7 @@ class PhysicalInterfaces(APIClassTemplate):
 
 
 class PhysicalInterface(PhysicalInterfaces):
-    warnings.warn("Deprecated: PhysicalInterface() should be called via PhysicalInterfaces().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: PhysicalInterface() should be called via PhysicalInterfaces().")
+        super().__init__(fmc, **kwargs)

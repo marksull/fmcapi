@@ -153,5 +153,8 @@ class NetworkGroups(APIClassTemplate):
 
 
 class NetworkGroup(NetworkGroups):
-    warnings.warn("Deprecated: NetworkGroup() should be called via NetworkGroups().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: NetworkGroup() should be called via NetworkGroups().")
+        super().__init__(fmc, **kwargs)
 

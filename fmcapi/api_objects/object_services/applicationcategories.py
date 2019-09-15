@@ -45,4 +45,7 @@ class ApplicationCategories(APIClassTemplate):
 
 
 class ApplicationCategory(ApplicationCategories):
-    warnings.warn("Deprecated: ApplicationCategory() should be called via ApplicationCategories().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: ApplicationCategory() should be called via ApplicationCategories().")
+        super().__init__(fmc, **kwargs)

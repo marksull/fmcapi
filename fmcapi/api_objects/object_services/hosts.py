@@ -48,4 +48,7 @@ class Hosts(APIClassTemplate):
 
 
 class IPHost(Hosts):
-    warnings.warn("Deprecated: IPHost() should be called via Hosts().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: IPHost() should be called via Hosts().")
+        super().__init__(fmc, **kwargs)

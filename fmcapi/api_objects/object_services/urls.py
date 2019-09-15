@@ -37,4 +37,7 @@ class URLs(APIClassTemplate):
 
 
 class URL(URLs):
-    warnings.warn("Deprecated: URL() should be called via URLs().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: URL() should be called via URLs().")
+        super().__init__(fmc, **kwargs)

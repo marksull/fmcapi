@@ -52,4 +52,7 @@ class Countries(APIClassTemplate):
 
 
 class Country(Countries):
-    warnings.warn("Deprecated: Country() should be called via Countries().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: Country() should be called via Countries().")
+        super().__init__(fmc, **kwargs)

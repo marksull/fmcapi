@@ -44,4 +44,7 @@ class ApplicationTypes(APIClassTemplate):
 
 
 class ApplicationType(ApplicationTypes):
-    warnings.warn("Deprecated: ApplicationType() should be called via ApplicationTypes().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: ApplicationType() should be called via ApplicationTypes().")
+        super().__init__(fmc, **kwargs)

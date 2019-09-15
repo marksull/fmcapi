@@ -82,4 +82,7 @@ class DeviceGroupRecords(APIClassTemplate):
 
 
 class DeviceGroups(DeviceGroupRecords):
-    warnings.warn("Deprecated: DeviceGroups() should be called via DeviceGroupRecords().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: DeviceGroups() should be called via DeviceGroupRecords().")
+        super().__init__(fmc, **kwargs)

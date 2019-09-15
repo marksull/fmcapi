@@ -119,4 +119,7 @@ class FTDDeviceHAPairs(APIClassTemplate):
 
 
 class DeviceHAPairs(FTDDeviceHAPairs):
-    warnings.warn("Deprecated: DeviceHAPairs() should be called via FTDDeviceHAPairs().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: DeviceHAPairs() should be called via FTDDeviceHAPairs().")
+        super().__init__(fmc, **kwargs)

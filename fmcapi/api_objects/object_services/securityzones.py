@@ -44,4 +44,7 @@ class SecurityZones(APIClassTemplate):
 
 
 class SecurityZone(SecurityZones):
-    warnings.warn("Deprecated: SecurityZone() should be called via SecurityZones().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: SecurityZone() should be called via SecurityZones().")
+        super().__init__(fmc, **kwargs)

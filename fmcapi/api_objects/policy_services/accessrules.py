@@ -693,7 +693,10 @@ class AccessRules(APIClassTemplate):
 
 
 class ACPRule(AccessRules):
-    warnings.warn("Deprecated: ACPRule() should be called via AccessRules().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: ACPRule() should be called via AccessRules().")
+        super().__init__(fmc, **kwargs)
 
 
 class Bulk(object):

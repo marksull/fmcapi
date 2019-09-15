@@ -34,4 +34,7 @@ class FTDNatPolicies(APIClassTemplate):
 
 
 class FTDNatPolicy(FTDNatPolicies):
-    warnings.warn("Deprecated: FTDNatPolicy() should be called via FTDNatPolicies().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: FTDNatPolicy() should be called via FTDNatPolicies().")
+        super().__init__(fmc, **kwargs)

@@ -44,4 +44,7 @@ class PreFilterPolicies(APIClassTemplate):
 
 
 class PreFilterPolicy(PreFilterPolicies):
-    warnings.warn("Deprecated: PreFilterPolicy() should be called via PreFilterPolicies().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: PreFilterPolicy() should be called via PreFilterPolicies().")
+        super().__init__(fmc, **kwargs)

@@ -79,4 +79,7 @@ class ListApplicableDevices(APIClassTemplate):
 
 
 class ApplicableDevices(ListApplicableDevices):
-    warnings.warn("Deprecated: ApplicableDevices() should be called via ListApplicableDevices().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: ApplicableDevices() should be called via ListApplicableDevices().")
+        super().__init__(fmc, **kwargs)

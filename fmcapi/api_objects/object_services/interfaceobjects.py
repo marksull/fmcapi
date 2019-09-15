@@ -31,4 +31,7 @@ class InterfaceObjects(APIClassTemplate):
 
 
 class InterfaceObject(InterfaceObjects):
-    warnings.warn("Deprecated: InterfaceObject() should be called via InterfaceObjects().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: InterfaceObject() should be called via InterfaceObjects().")
+        super().__init__(fmc, **kwargs)

@@ -45,4 +45,7 @@ class IntrusionPolicies(APIClassTemplate):
 
 
 class IntrusionPolicy(IntrusionPolicies):
-    warnings.warn("Deprecated: IntrusionPolicy() should be called via IntrusionPolicies().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: IntrusionPolicy() should be called via IntrusionPolicies().")
+        super().__init__(fmc, **kwargs)

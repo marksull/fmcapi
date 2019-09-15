@@ -45,4 +45,7 @@ class ApplicationRisks(APIClassTemplate):
 
 
 class ApplicationRisk(ApplicationRisks):
-    warnings.warn("Deprecated: ApplicationRisk() should be called via ApplicationRisks().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: ApplicationRisk() should be called via ApplicationRisks().")
+        super().__init__(fmc, **kwargs)

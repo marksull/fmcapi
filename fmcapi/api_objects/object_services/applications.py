@@ -57,4 +57,7 @@ class Applications(APIClassTemplate):
 
 
 class Application(Applications):
-    warnings.warn("Deprecated: Application() should be called via Applications().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: Application() should be called via Applications().")
+        super().__init__(fmc, **kwargs)

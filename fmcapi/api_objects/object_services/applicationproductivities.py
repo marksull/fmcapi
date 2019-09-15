@@ -45,4 +45,7 @@ class ApplicationProductivities(APIClassTemplate):
 
 
 class ApplicationProductivity(ApplicationProductivities):
-    warnings.warn("Deprecated: ApplicationProductivity() should be called via ApplicationProductivities().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: ApplicationProductivity() should be called via ApplicationProductivities().")
+        super().__init__(fmc, **kwargs)

@@ -82,4 +82,7 @@ class InterfaceGroups(APIClassTemplate):
 
 
 class InterfaceGroup(InterfaceGroups):
-    warnings.warn("Deprecated: InterfaceGroup() should be called via InterfaceGroups().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: InterfaceGroup() should be called via InterfaceGroups().")
+        super().__init__(fmc, **kwargs)

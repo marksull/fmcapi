@@ -44,4 +44,7 @@ class VariableSets(APIClassTemplate):
 
 
 class VariableSet(VariableSets):
-    warnings.warn("Deprecated: VariableSet() should be called via VariableSets().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: VariableSet() should be called via VariableSets().")
+        super().__init__(fmc, **kwargs)

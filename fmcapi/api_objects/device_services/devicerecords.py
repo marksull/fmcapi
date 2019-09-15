@@ -125,4 +125,7 @@ class DeviceRecords(APIClassTemplate):
 
 
 class Device(DeviceRecords):
-    warnings.warn("Deprecated: Device() should be called via DeviceRecords().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: Device() should be called via DeviceRecords().")
+        super().__init__(fmc, **kwargs)

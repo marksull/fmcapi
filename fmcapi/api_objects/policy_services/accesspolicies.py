@@ -48,4 +48,7 @@ class AccessPolicies(APIClassTemplate):
 
 
 class AccessControlPolicy(AccessPolicies):
-    warnings.warn("Deprecated: AccessControlPolicy() should be called via AccessPolicies().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: AccessControlPolicy() should be called via AccessPolicies().")
+        super().__init__(fmc, **kwargs)

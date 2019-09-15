@@ -148,4 +148,7 @@ class IPv4StaticRoutes(APIClassTemplate):
 
 
 class IPv4StaticRoute(IPv4StaticRoutes):
-    warnings.warn("Deprecated: IPv4StaticRoute() should be called via IPv4StaticRoutes().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: IPv4StaticRoute() should be called via IPv4StaticRoutes().")
+        super().__init__(fmc, **kwargs)

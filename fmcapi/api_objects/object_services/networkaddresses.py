@@ -29,4 +29,7 @@ class NetworkAddresses(APIClassTemplate):
 
 
 class IPAddresses(NetworkAddresses):
-    warnings.warn("Deprecated: IPAddresses() should be called via NetworkAddresses().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: IPAddresses() should be called via NetworkAddresses().")
+        super().__init__(fmc, **kwargs)

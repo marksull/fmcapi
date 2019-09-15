@@ -47,4 +47,7 @@ class Networks(APIClassTemplate):
 
 
 class IPNetwork(Networks):
-    warnings.warn("Deprecated: IPNetwork() should be called via Networks().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: IPNetwork() should be called via Networks().")
+        super().__init__(fmc, **kwargs)

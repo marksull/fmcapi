@@ -121,4 +121,7 @@ class URLGroups(APIClassTemplate):
 
 
 class URLGroup(URLGroups):
-    warnings.warn("Deprecated: URLGroup() should be called via URLGroups().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: URLGroup() should be called via URLGroups().")
+        super().__init__(fmc, **kwargs)

@@ -48,4 +48,7 @@ class Continents(APIClassTemplate):
 
 
 class Continent(Continents):
-    warnings.warn("Deprecated: Continent() should be called via Continents().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: Continent() should be called via Continents().")
+        super().__init__(fmc, **kwargs)

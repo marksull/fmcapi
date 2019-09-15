@@ -45,4 +45,7 @@ class URLCategories(APIClassTemplate):
 
 
 class URLCategory(URLCategories):
-    warnings.warn("Deprecated: URLCategory() should be called via URLCategories().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: URLCategory() should be called via URLCategories().")
+        super().__init__(fmc, **kwargs)

@@ -92,4 +92,7 @@ class SLAMonitors(APIClassTemplate):
 
 
 class SLAMonitor(SLAMonitors):
-    warnings.warn("Deprecated: SLAMonitor() should be called via SLAMonitors().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: SLAMonitor() should be called via SLAMonitors().")
+        super().__init__(fmc, **kwargs)

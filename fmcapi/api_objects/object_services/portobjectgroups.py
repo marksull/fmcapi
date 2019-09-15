@@ -86,4 +86,7 @@ class PortObjectGroups(APIClassTemplate):
 
 
 class PortObjectGroup(PortObjectGroups):
-    warnings.warn("Deprecated: PortObjectGroup() should be called via PortObjectGroups().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: PortObjectGroup() should be called via PortObjectGroups().")
+        super().__init__(fmc, **kwargs)

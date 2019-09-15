@@ -42,4 +42,7 @@ class UpgradePackages(APIClassTemplate):
 
 
 class UpgradePackage(UpgradePackages):
-    warnings.warn("Deprecated: UpgradePackage() should be called via UpgradePackages().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: UpgradePackage() should be called via UpgradePackages().")
+        super().__init__(fmc, **kwargs)

@@ -54,4 +54,7 @@ class ICMPv4Objects(APIClassTemplate):
 
 
 class ICMPv4Object(ICMPv4Objects):
-    warnings.warn("Deprecated: ICMPv4Object() should be called via ICMPv4Objects().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: ICMPv4Object() should be called via ICMPv4Objects().")
+        super().__init__(fmc, **kwargs)

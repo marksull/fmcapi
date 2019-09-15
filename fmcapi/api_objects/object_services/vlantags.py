@@ -46,4 +46,7 @@ class VlanTags(APIClassTemplate):
 
 
 class VlanTag(VlanTags):
-    warnings.warn("Deprecated: VlanTag() should be called via VlanTags().")
+    def __init__(self, fmc, **kwargs):
+        warnings.resetwarnings()
+        warnings.warn("Deprecated: VlanTag() should be called via VlanTags().")
+        super().__init__(fmc, **kwargs)
