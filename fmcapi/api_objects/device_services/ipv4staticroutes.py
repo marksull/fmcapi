@@ -147,5 +147,5 @@ class IPv4StaticRoutes(APIClassTemplate):
             logging.warning(f'Object {name} not found.  Cannot set up device for IPv4StaticRoute.')
 
 
-class IPv4StaticRoute(APIClassTemplate):
+class IPv4StaticRoute(IPv4StaticRoutes):
     warnings.warn("Deprecated: IPv4StaticRoute() should be called via IPv4StaticRoutes().")

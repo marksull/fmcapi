@@ -7,7 +7,7 @@ import logging
 
 class EtherchannelInterfaces(APIClassTemplate):
     """
-    The Etherchanel Interface Object in the FMC.
+    The EtherchannelInterfaces Interface Object in the FMC.
     """
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-\/\. ]"""
     PREFIX_URL = '/devices/devicerecords'

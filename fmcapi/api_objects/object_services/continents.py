@@ -47,5 +47,5 @@ class Continents(APIClassTemplate):
         pass
 
 
-class Continent(APIClassTemplate):
+class Continent(Continents):
     warnings.warn("Deprecated: Continent() should be called via Continents().")

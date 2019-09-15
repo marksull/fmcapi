@@ -43,5 +43,5 @@ class ApplicationTypes(APIClassTemplate):
         pass
 
 
-class ApplicationType(APIClassTemplate):
+class ApplicationType(ApplicationTypes):
     warnings.warn("Deprecated: ApplicationType() should be called via ApplicationTypes().")

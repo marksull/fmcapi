@@ -43,5 +43,5 @@ class CertEnrollments(APIClassTemplate):
         pass
 
 
-class CertEnrollment(APIClassTemplate):
+class CertEnrollment(CertEnrollments):
     warnings.warn("Deprecated: CertEnrollment() should be called via CertEnrollments().")

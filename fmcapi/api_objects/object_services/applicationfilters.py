@@ -2,6 +2,7 @@ from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
 import warnings
 
+
 class ApplicationFilters(APIClassTemplate):
     """
     The ApplicationFilters Object in the FMC.
@@ -49,5 +50,5 @@ class ApplicationFilters(APIClassTemplate):
         pass
 
 
-class ApplicationFilter(APIClassTemplate):
+class ApplicationFilter(ApplicationFilters):
     warnings.warn("Deprecated: ApplicationFilter() should be called via ApplicationFilters().")

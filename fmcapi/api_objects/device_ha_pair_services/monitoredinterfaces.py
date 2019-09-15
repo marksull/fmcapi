@@ -3,6 +3,7 @@ from .ftddevicehapairs import FTDDeviceHAPairs
 import logging
 import warnings
 
+
 class MonitoredInterfaces(APIClassTemplate):
     """
     The MonitoredInterfaces Object in the FMC.

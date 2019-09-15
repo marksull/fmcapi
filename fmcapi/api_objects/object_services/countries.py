@@ -51,5 +51,5 @@ class Countries(APIClassTemplate):
         pass
 
 
-class Country(APIClassTemplate):
+class Country(Countries):
     warnings.warn("Deprecated: Country() should be called via Countries().")

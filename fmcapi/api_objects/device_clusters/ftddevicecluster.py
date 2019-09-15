@@ -46,8 +46,6 @@ class FTDDeviceCluster(APIClassTemplate):
         if 'accessPolicy' in kwargs:
             self.accessPolicy = kwargs['accessPolicy']
 
-
-
     def post(self):
         logging.info('POST method for API for FTDDeviceCluster not supported.')
         pass

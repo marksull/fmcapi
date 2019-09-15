@@ -44,5 +44,5 @@ class ApplicationTags(APIClassTemplate):
         pass
 
 
-class ApplicationTag(APIClassTemplate):
+class ApplicationTag(ApplicationTags):
     warnings.warn("Deprecated: ApplicationTag() should be called via ApplicationTags().")

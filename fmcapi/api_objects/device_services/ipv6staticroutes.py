@@ -126,5 +126,5 @@ class IPv6StaticRoutes(APIClassTemplate):
             logging.warning(f'Network "{name}" not found.  Cannot set up device for IPv6StaticRoute.')
 
 
-class IPv6StaticRoute(APIClassTemplate):
+class IPv6StaticRoute(IPv6StaticRoutes):
     warnings.warn("Deprecated: IPv6StaticRoute() should be called via IPv6StaticRoutes().")

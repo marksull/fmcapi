@@ -44,5 +44,5 @@ class ApplicationCategories(APIClassTemplate):
         pass
 
 
-class ApplicationCategory(APIClassTemplate):
+class ApplicationCategory(ApplicationCategories):
     warnings.warn("Deprecated: ApplicationCategory() should be called via ApplicationCategories().")

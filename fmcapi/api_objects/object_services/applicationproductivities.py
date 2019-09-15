@@ -44,5 +44,5 @@ class ApplicationProductivities(APIClassTemplate):
         pass
 
 
-class ApplicationProductivity(APIClassTemplate):
+class ApplicationProductivity(ApplicationProductivities):
     warnings.warn("Deprecated: ApplicationProductivity() should be called via ApplicationProductivities().")

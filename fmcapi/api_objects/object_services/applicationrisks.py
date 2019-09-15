@@ -44,5 +44,5 @@ class ApplicationRisks(APIClassTemplate):
         pass
 
 
-class ApplicationRisk(APIClassTemplate):
+class ApplicationRisk(ApplicationRisks):
     warnings.warn("Deprecated: ApplicationRisk() should be called via ApplicationRisks().")
