@@ -1,6 +1,7 @@
 import logging
-from .policy_services.accesscontrolpolicy import AccessControlPolicy
-from .device_services.device import Device
+from .policy_services.accesscontrolpolicy import AccessControlPolicy  # Needs loaded before Device
+from .device_services.device import Device  # Needs loaded early.
+
 from .device_ha_pair_services import FTDDeviceHAPairs
 from .device_ha_pair_services.devicehapairs import DeviceHAPairs
 
