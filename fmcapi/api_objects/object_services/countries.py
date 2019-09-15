@@ -1,10 +1,11 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
+import warnings
 
 
-class Country(APIClassTemplate):
+class Countries(APIClassTemplate):
     """
-    The Country Object in the FMC.
+    The Countries Object in the FMC.
     """
 
     URL_SUFFIX = '/object/countries'
@@ -12,12 +13,12 @@ class Country(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for Country class.")
+        logging.debug("In __init__() for Countries class.")
         self.parse_kwargs(**kwargs)
         self.type = 'Country'
 
     def format_data(self):
-        logging.debug("In format_data() for Country class.")
+        logging.debug("In format_data() for Countries class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -31,20 +32,24 @@ class Country(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for Country class.")
+        logging.debug("In parse_kwargs() for Countries class.")
         if 'iso2' in kwargs:
             self.iso2 = kwargs['iso2']
         if 'iso3' in kwargs:
             self.iso3 = kwargs['iso3']
 
     def post(self):
-        logging.info('POST method for API for Country not supported.')
+        logging.info('POST method for API for Countries not supported.')
         pass
 
     def put(self):
-        logging.info('PUT method for API for Country not supported.')
+        logging.info('PUT method for API for Countries not supported.')
         pass
 
     def delete(self):
-        logging.info('DELETE method for API for Country not supported.')
+        logging.info('DELETE method for API for Countries not supported.')
         pass
+
+
+class Country(APIClassTemplate):
+    warnings.warn("Deprecated: Country() should be called via Countries().")

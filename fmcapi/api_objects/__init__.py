@@ -30,16 +30,26 @@ from .device_services.staticroutes import StaticRoutes
 from .device_services.subinterfaces import SubInterfaces
 
 from .object_services.anyprotocolportobjects import AnyProtocolPortObjects
-from .object_services.application import Application
-from .object_services.applicationcategory import ApplicationCategory
-from .object_services.applicationfilter import ApplicationFilter
-from .object_services.applicationproductivity import ApplicationProductivity
-from .object_services.applicationrisk import ApplicationRisk
-from .object_services.applicationtag import ApplicationTag
-from .object_services.applicationtype import ApplicationType
-from .object_services.certenrollment import CertEnrollment
-from .object_services.continent import Continent
-from .object_services.country import Country
+from .object_services.applications import Applications
+from .object_services.applications import Application
+from .object_services.applicationcategories import ApplicationCategories
+from .object_services.applicationcategories import ApplicationCategory
+from .object_services.applicationfilters import ApplicationFilters
+from .object_services.applicationfilters import ApplicationFilter
+from .object_services.applicationproductivities import ApplicationProductivities
+from .object_services.applicationproductivities import ApplicationProductivity
+from .object_services.applicationrisks import ApplicationRisks
+from .object_services.applicationrisks import ApplicationRisk
+from .object_services.applicationtags import ApplicationTags
+from .object_services.applicationtags import ApplicationTag
+from .object_services.applicationtypes import ApplicationTypes
+from .object_services.applicationtypes import ApplicationType
+from .object_services.certenrollments import CertEnrollments
+from .object_services.certenrollments import CertEnrollment
+from .object_services.continents import Continents
+from .object_services.continents import Continent
+from .object_services.countries import Countries
+from .object_services.countries import Country
 from .object_services.dnsservergroups import DNSServerGroups
 from .object_services.endpointdevicetypes import EndPointDeviceTypes
 from .object_services.extendedaccesslist import ExtendedAccessList
@@ -54,7 +64,8 @@ from .object_services.ikev2policies import IKEv2Policies
 from .object_services.interfacegroup import InterfaceGroup
 from .object_services.interfaceobject import InterfaceObject
 from .object_services.ipaddresses import IPAddresses
-from .object_services.iphost import IPHost
+from .object_services.hosts import Hosts
+from .object_services.hosts import IPHost
 from .object_services.ipnetwork import IPNetwork
 from .object_services.iprange import IPRange
 from .object_services.isesecuritygrouptags import ISESecurityGroupTags
@@ -122,23 +133,35 @@ __all__ = [
     'RedundantInterfaces',
     'EtherchannelInterfaces',
     'SubInterfaces',
-
     'AnyProtocolPortObjects',
-    'Application',
+    'ApplicationCategories',
     'ApplicationCategory',
+    'ApplicationFilters',
     'ApplicationFilter',
+    'ApplicationProductivities',
     'ApplicationProductivity',
+    'ApplicationRisks',
     'ApplicationRisk',
+    'Applications',
+    'Application',
+    'ApplicationTags',
     'ApplicationTag',
+    'ApplicationTypes',
     'ApplicationType',
+    'CertEnrollments',
     'CertEnrollment',
+    'Continents',
     'Continent',
+    'Countries',
     'Country',
     'DNSServerGroups',
     'EndPointDeviceTypes',
     'ExtendedAccessList',
     'FQDNS',
     'Geolocation',
+    'Hosts',
+    'IPHost',
+
     'ICMPv4Object',
     'ICMPv6Object',
     'IKEv1IpsecProposals',
@@ -148,7 +171,6 @@ __all__ = [
     'InterfaceGroup',
     'InterfaceObject',
     'IPAddresses',
-    'IPHost',
     'IPNetwork',
     'IPRange',
     'ISESecurityGroupTags',

@@ -9,7 +9,7 @@ def test__network_group(fmc):
     starttime = str(int(time.time()))
     namer = f'_fmcapi_test_{starttime}'
 
-    obj10 = fmcapi.IPHost(fmc=fmc, name='_iphost1', value='3.3.3.3')
+    obj10 = fmcapi.Hosts(fmc=fmc, name='_iphost1', value='3.3.3.3')
     obj10.post()
     obj11 = fmcapi.IPNetwork(fmc=fmc, name='_ipnet1', value='3.3.3.0/24')
     obj11.post()

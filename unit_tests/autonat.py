@@ -21,7 +21,7 @@ def test__autonat(fmc):
     obj1.post()
     time.sleep(1)
 
-    obj2 = fmcapi.IPHost(fmc=fmc)
+    obj2 = fmcapi.Hosts(fmc=fmc)
     obj2.name = '_net_xlate'
     obj2.value = '192.0.2.1'
     obj2.post()

@@ -1,7 +1,7 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .devicerecords import Device
 from fmcapi.api_objects.object_services.ipaddresses import IPAddresses
-from fmcapi.api_objects.object_services.iphost import IPHost
+from fmcapi.api_objects.object_services.hosts import Hosts
 from fmcapi.api_objects.object_services.networkgroup import NetworkGroup
 import logging
 import warnings
@@ -114,7 +114,7 @@ class IPv6StaticRoutes(APIClassTemplate):
 
     def gw(self, name):
         logging.info("In gw() for IPv6StaticRoute class.")
-        gw1 = IPHost(fmc=self.fmc)
+        gw1 = Hosts(fmc=self.fmc)
         gw1.get(name=name)
         if 'id' in gw1.__dict__:
             self.gateway = {

@@ -10,7 +10,7 @@ def test__ipv4staticroutes(fmc):
     starttime = str(int(time.time()))
     namer = f'_fmcapi_test_{starttime}'
 
-    iphost1 = fmcapi.IPHost(fmc=fmc, name='_iphost1' + namer, value='10.254.0.1')
+    iphost1 = fmcapi.Hosts(fmc=fmc, name='_iphost1' + namer, value='10.254.0.1')
     iphost1.post()
     ipnet1 = fmcapi.IPNetwork(fmc=fmc, name='_ipnet1' + namer, value='192.0.2.0/25')
     ipnet2 = fmcapi.IPNetwork(fmc=fmc, name='_ipnet2' + namer, value='192.0.2.128/25')

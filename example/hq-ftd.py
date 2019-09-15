@@ -38,15 +38,15 @@ def main():
         # sz_dmz.get()
 
         # Create Network Objects
-        hq_dfgw_gateway = fmcapi.IPHost(fmc=fmc1, name='hq-default-gateway', value='100.64.0.1')
+        hq_dfgw_gateway = fmcapi.Hosts(fmc=fmc1, name='hq-default-gateway', value='100.64.0.1')
         hq_dfgw_gateway.post()
         hq_lan = fmcapi.IPNetwork(fmc=fmc1, name='hq-lan', value='10.0.0.0/24')
         hq_lan.post()
         all_lans = fmcapi.IPNetwork(fmc=fmc1, name='all-lans', value='10.0.0.0/8')
         all_lans.post()
-        hq_fmc = fmcapi.IPHost(fmc=fmc1, name='hq_fmc', value='10.0.0.10')
+        hq_fmc = fmcapi.Hosts(fmc=fmc1, name='hq_fmc', value='10.0.0.10')
         hq_fmc.post()
-        fmc_public = fmcapi.IPHost(fmc=fmc1, name='fmc_public_ip', value='100.64.0.10')
+        fmc_public = fmcapi.Hosts(fmc=fmc1, name='fmc_public_ip', value='100.64.0.10')
         fmc_public.post()
 
         # Create ACP Rule to permit hq_lan traffic inside to outside.

@@ -10,7 +10,7 @@ from fmcapi import api_objects
 class TestApiObjects(unittest.TestCase):
 
     def test_ip_host_required_for_put(self):
-        self.assertEqual(api_objects.IPHost.REQUIRED_FOR_PUT, ['id', 'name', 'value'])
+        self.assertEqual(api_objects.Hosts.REQUIRED_FOR_PUT, ['id', 'name', 'value'])
 
     @mock.patch('fmcapi.api_objects.APIClassTemplate.parse_kwargs')
     @mock.patch('fmcapi.api_objects.APIClassTemplate.valid_for_delete')

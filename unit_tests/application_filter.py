@@ -4,7 +4,7 @@ import fmcapi
 
 def test__application_filter(fmc):
     logging.info('Testing ApplicationFilter class.')
-    obj1 = fmcapi.ApplicationFilter(fmc=fmc)
+    obj1 = fmcapi.ApplicationFilters(fmc=fmc)
     logging.info('All ApplicationFilters -- >')
     result = obj1.get()
     logging.info(result)

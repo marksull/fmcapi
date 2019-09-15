@@ -1,10 +1,10 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
+import warnings
 
-
-class ApplicationFilter(APIClassTemplate):
+class ApplicationFilters(APIClassTemplate):
     """
-    The ApplicationFilter Object in the FMC.
+    The ApplicationFilters Object in the FMC.
     """
 
     URL_SUFFIX = '/object/applicationfilters'
@@ -12,11 +12,11 @@ class ApplicationFilter(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for ApplicationFilter class.")
+        logging.debug("In __init__() for ApplicationFilters class.")
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
-        logging.debug("In format_data() for ApplicationFilter class.")
+        logging.debug("In format_data() for ApplicationFilters class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -34,16 +34,20 @@ class ApplicationFilter(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for ApplicationFilter class.")
+        logging.debug("In parse_kwargs() for ApplicationFilters class.")
 
     def post(self):
-        logging.info('POST method for API for ApplicationFilter not supported.')
+        logging.info('POST method for API for ApplicationFilters not supported.')
         pass
 
     def put(self):
-        logging.info('PUT method for API for ApplicationFilter not supported.')
+        logging.info('PUT method for API for ApplicationFilters not supported.')
         pass
 
     def delete(self):
-        logging.info('DELETE method for API for ApplicationFilter not supported.')
+        logging.info('DELETE method for API for ApplicationFilters not supported.')
         pass
+
+
+class ApplicationFilter(APIClassTemplate):
+    warnings.warn("Deprecated: ApplicationFilter() should be called via ApplicationFilters().")

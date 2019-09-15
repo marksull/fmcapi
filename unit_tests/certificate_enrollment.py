@@ -5,7 +5,7 @@ import fmcapi
 def test__cert_enrollment(fmc):
     logging.info('Testing CertEnrollment class. Requires a CertEnrollment')
     
-    obj1 = fmcapi.CertEnrollment(fmc=fmc)
+    obj1 = fmcapi.CertEnrollments(fmc=fmc)
     logging.info('All CertEnrollments -- >')
     result = obj1.get()
     logging.info(result)

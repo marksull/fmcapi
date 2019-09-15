@@ -1,9 +1,10 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.helper_functions import *
 import logging
+import warnings
 
 
-class IPHost(APIClassTemplate):
+class Hosts(APIClassTemplate):
     """
     The Host Object in the FMC.
     """
@@ -44,3 +45,7 @@ class IPHost(APIClassTemplate):
         logging.debug("In parse_kwargs() for IPHost class.")
         if 'value' in kwargs:
             self.value = kwargs['value']
+
+
+class IPHost(Hosts):
+    warnings.warn("Deprecated: IPHost() should be called via Hosts().")

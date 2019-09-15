@@ -1,15 +1,25 @@
 import logging
 from .anyprotocolportobjects import AnyProtocolPortObjects
-from .application import Application
-from .applicationcategory import ApplicationCategory
-from .applicationfilter import ApplicationFilter
-from .applicationproductivity import ApplicationProductivity
-from .applicationrisk import ApplicationRisk
-from .applicationtag import ApplicationTag
-from .applicationtype import ApplicationType
-from .certenrollment import CertEnrollment
-from .continent import Continent
-from .country import Country
+from .applications import Applications
+from .applications import Application
+from .applicationcategories import ApplicationCategories
+from .applicationcategories import ApplicationCategory
+from .applicationfilters import ApplicationFilters
+from .applicationfilters import ApplicationFilter
+from .applicationproductivities import ApplicationProductivities
+from .applicationproductivities import ApplicationProductivity
+from .applicationrisks import ApplicationRisks
+from .applicationrisks import ApplicationRisk
+from .applicationtags import ApplicationTags
+from .applicationtags import ApplicationTag
+from .applicationtypes import ApplicationTypes
+from .applicationtypes import ApplicationType
+from .certenrollments import CertEnrollments
+from .certenrollments import CertEnrollment
+from .continents import Continents
+from .continents import Continent
+from .countries import Countries
+from .countries import Country
 from .dnsservergroups import DNSServerGroups
 from .endpointdevicetypes import EndPointDeviceTypes
 from .extendedaccesslist import ExtendedAccessList
@@ -24,7 +34,8 @@ from .ikev2policies import IKEv2Policies
 from .interfacegroup import InterfaceGroup
 from .interfaceobject import InterfaceObject
 from .ipaddresses import IPAddresses
-from .iphost import IPHost
+from .hosts import Hosts
+from .hosts import IPHost
 from .ipnetwork import IPNetwork
 from .iprange import IPRange
 from .isesecuritygrouptags import ISESecurityGroupTags
@@ -52,21 +63,33 @@ logging.debug("In the object_services __init__.py file.")
 
 __all__ = [
     'AnyProtocolPortObjects',
-    'Application',
+    'ApplicationCategories',
     'ApplicationCategory',
+    'Applications',
+    'Application',
+    'ApplicationFilters',
     'ApplicationFilter',
+    'ApplicationProductivities',
     'ApplicationProductivity',
+    'ApplicationRisks',
     'ApplicationRisk',
+    'ApplicationTags',
     'ApplicationTag',
+    'ApplicationTypes',
     'ApplicationType',
+    'CertEnrollments',
     'CertEnrollment',
+    'Continents',
     'Continent',
+    'Countries',
     'Country',
     'DNSServerGroups',
     'EndPointDeviceTypes',
     'ExtendedAccessList',
     'FQDNS',
     'Geolocation',
+    'Hosts',
+    'IPHost',
     'ICMPv4Object',
     'ICMPv6Object',
     'IKEv1IpsecProposals',
@@ -76,7 +99,6 @@ __all__ = [
     'InterfaceGroup',
     'InterfaceObject',
     'IPAddresses',
-    'IPHost',
     'IPNetwork',
     'IPRange',
     'ISESecurityGroupTags',

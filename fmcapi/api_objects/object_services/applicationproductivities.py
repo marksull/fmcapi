@@ -1,10 +1,11 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
+import warnings
 
 
-class ApplicationProductivity(APIClassTemplate):
+class ApplicationProductivities(APIClassTemplate):
     """
-    The ApplicationProductivity Object in the FMC.
+    The ApplicationProductivities Object in the FMC.
     """
 
     URL_SUFFIX = '/object/applicationproductivities'
@@ -12,11 +13,11 @@ class ApplicationProductivity(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for ApplicationProductivity class.")
+        logging.debug("In __init__() for ApplicationProductivities class.")
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
-        logging.debug("In format_data() for ApplicationProductivity class.")
+        logging.debug("In format_data() for ApplicationProductivities class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -28,16 +29,20 @@ class ApplicationProductivity(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for ApplicationProductivity class.")
+        logging.debug("In parse_kwargs() for ApplicationProductivities class.")
 
     def post(self):
-        logging.info('POST method for API for ApplicationProductivity not supported.')
+        logging.info('POST method for API for ApplicationProductivities not supported.')
         pass
 
     def put(self):
-        logging.info('PUT method for API for ApplicationProductivity not supported.')
+        logging.info('PUT method for API for ApplicationProductivities not supported.')
         pass
 
     def delete(self):
-        logging.info('DELETE method for API for ApplicationProductivity not supported.')
+        logging.info('DELETE method for API for ApplicationProductivities not supported.')
         pass
+
+
+class ApplicationProductivity(APIClassTemplate):
+    warnings.warn("Deprecated: ApplicationProductivity() should be called via ApplicationProductivities().")

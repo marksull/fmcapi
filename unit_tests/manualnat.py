@@ -21,7 +21,7 @@ def test__manualnat(fmc):
     obj1.post()
     time.sleep(1)
 
-    obj2 = fmcapi.IPHost(fmc=fmc)
+    obj2 = fmcapi.Hosts(fmc=fmc)
     obj2.name = '_net_xlate'
     obj2.value = '192.0.2.1'
     obj2.post()
@@ -55,26 +55,26 @@ def test__manualnat(fmc):
     obj6.post()
 
     # Create NAT divert objects
-    obj7 = fmcapi.IPHost(fmc=fmc)
+    obj7 = fmcapi.Hosts(fmc=fmc)
     obj7.name = '_net_source_divert'
     obj7.value = '172.30.1.1'
     obj7.post()
     time.sleep(1)
 
-    obj8 = fmcapi.IPHost(fmc=fmc)
+    obj8 = fmcapi.Hosts(fmc=fmc)
     obj8.name = '_net_destination_divert'
     obj8.value = '4.2.2.2'
     obj8.post()
     time.sleep(1)
 
     # Create port-based NAT objects
-    obj9 = fmcapi.IPHost(fmc=fmc)
+    obj9 = fmcapi.Hosts(fmc=fmc)
     obj9.name = '_net_source_portbased'
     obj9.value = '172.30.1.2'
     obj9.post()
     time.sleep(1)
 
-    obj10 = fmcapi.IPHost(fmc=fmc)
+    obj10 = fmcapi.Hosts(fmc=fmc)
     obj10.name = '_net_xlate_portbased'
     obj10.value = '192.0.2.254'
     obj10.post()

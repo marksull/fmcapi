@@ -10,7 +10,7 @@ def test__acp_rule(fmc):
     namer = f'_fmcapi_test_{starttime}'
 
     # Build an IP host object
-    iphost1 = fmcapi.IPHost(fmc=fmc, name='_iphost1', value='7.7.7.7')
+    iphost1 = fmcapi.Hosts(fmc=fmc, name='_iphost1', value='7.7.7.7')
     iphost1.post()
     # Build an IP Network object
     ipnet1 = fmcapi.IPNetwork(fmc=fmc, name='_ipnet1', value='1.2.3.0/24')
