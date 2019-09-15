@@ -34,6 +34,8 @@ class FTDNatPolicies(APIClassTemplate):
 
 
 class FTDNatPolicy(FTDNatPolicies):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: FTDNatPolicy() should be called via FTDNatPolicies().")

@@ -125,6 +125,8 @@ class DeviceRecords(APIClassTemplate):
 
 
 class Device(DeviceRecords):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: Device() should be called via DeviceRecords().")

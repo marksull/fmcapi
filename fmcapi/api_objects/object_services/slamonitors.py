@@ -92,6 +92,8 @@ class SLAMonitors(APIClassTemplate):
 
 
 class SLAMonitor(SLAMonitors):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: SLAMonitor() should be called via SLAMonitors().")

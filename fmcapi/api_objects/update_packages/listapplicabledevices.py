@@ -79,6 +79,8 @@ class ListApplicableDevices(APIClassTemplate):
 
 
 class ApplicableDevices(ListApplicableDevices):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: ApplicableDevices() should be called via ListApplicableDevices().")

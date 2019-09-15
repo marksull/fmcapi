@@ -127,6 +127,8 @@ class IPv6StaticRoutes(APIClassTemplate):
 
 
 class IPv6StaticRoute(IPv6StaticRoutes):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: IPv6StaticRoute() should be called via IPv6StaticRoutes().")

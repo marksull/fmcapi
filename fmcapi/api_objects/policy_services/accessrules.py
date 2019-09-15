@@ -693,6 +693,8 @@ class AccessRules(APIClassTemplate):
 
 
 class ACPRule(AccessRules):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: ACPRule() should be called via AccessRules().")

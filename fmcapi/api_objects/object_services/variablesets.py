@@ -44,6 +44,8 @@ class VariableSets(APIClassTemplate):
 
 
 class VariableSet(VariableSets):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: VariableSet() should be called via VariableSets().")

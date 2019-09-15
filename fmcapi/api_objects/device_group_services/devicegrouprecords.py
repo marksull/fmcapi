@@ -82,6 +82,8 @@ class DeviceGroupRecords(APIClassTemplate):
 
 
 class DeviceGroups(DeviceGroupRecords):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: DeviceGroups() should be called via DeviceGroupRecords().")

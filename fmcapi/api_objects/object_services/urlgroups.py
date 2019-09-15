@@ -121,6 +121,8 @@ class URLGroups(APIClassTemplate):
 
 
 class URLGroup(URLGroups):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: URLGroup() should be called via URLGroups().")

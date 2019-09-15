@@ -45,6 +45,8 @@ class ApplicationProductivities(APIClassTemplate):
 
 
 class ApplicationProductivity(ApplicationProductivities):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: ApplicationProductivity() should be called via ApplicationProductivities().")

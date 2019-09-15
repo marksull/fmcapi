@@ -44,6 +44,8 @@ class CertEnrollments(APIClassTemplate):
 
 
 class CertEnrollment(CertEnrollments):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: CertEnrollment() should be called via CertEnrollments().")

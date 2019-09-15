@@ -44,6 +44,8 @@ class PreFilterPolicies(APIClassTemplate):
 
 
 class PreFilterPolicy(PreFilterPolicies):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: PreFilterPolicy() should be called via PreFilterPolicies().")

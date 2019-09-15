@@ -31,6 +31,8 @@ class InterfaceObjects(APIClassTemplate):
 
 
 class InterfaceObject(InterfaceObjects):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: InterfaceObject() should be called via InterfaceObjects().")

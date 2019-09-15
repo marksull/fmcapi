@@ -115,7 +115,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                              verify_cert=self.VERIFY_CERT)
         self.uuid = self.mytoken.uuid
         self.build_urls()
-        self.version()
+        self.serverversion()
         logging.info(f"This FMC's version is {self.serverVersion}")
         return self
 
@@ -221,7 +221,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             # Used only when the response only has "one page" of results.
             return json_response
 
-    def version(self):
+    def serverversion(self):
         """
         Get the FMC's version information.  Set instance variables for each version info returned as well as return
         the whole response text.
@@ -242,6 +242,11 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             self.geoVersion = response['items'][0]['geoVersion']
         return response
 
+    def version(self):
+        """Dispose of this method after 20210101."""
+        warnings.warn("Deprecated: version() should be called via serverversion().")
+        self.serverversion()
+
     def auditrecords(self):
         """
         This API function supports filtering the GET query URL with: username, subsystem, source, starttime, and
@@ -256,7 +261,8 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         response = self.send_to_api(method='get', url=url)
         return response
 
-    def audit(self):  # Deprecated
+    def audit(self):
+        """Dispose of this method after 20210101."""
         warnings.warn("Deprecated: audit() should be called via auditrecords().")
         self.auditrecords()
 
@@ -285,7 +291,8 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                 uuids.append(item)
         return uuids
 
-    def get_deployable_devices(self):  # Deprecated
+    def get_deployable_devices(self):
+        """Dispose of this method after 20210101."""
         warnings.warn("Deprecated: get_deployable_devices() should be called via deployabledevices().")
         self.deployabledevices()
 
@@ -322,6 +329,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         return response['deviceList']
 
     def deploy_changes(self):
+        """Dispose of this method after 20210101."""
         warnings.warn("Deprecated: deploy_changes() should be called via deploymentrequests().")
         self.deploymentrequests()
 

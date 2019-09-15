@@ -37,6 +37,8 @@ class URLs(APIClassTemplate):
 
 
 class URL(URLs):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: URL() should be called via URLs().")

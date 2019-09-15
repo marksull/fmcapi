@@ -153,6 +153,8 @@ class NetworkGroups(APIClassTemplate):
 
 
 class NetworkGroup(NetworkGroups):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: NetworkGroup() should be called via NetworkGroups().")

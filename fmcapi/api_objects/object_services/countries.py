@@ -52,6 +52,8 @@ class Countries(APIClassTemplate):
 
 
 class Country(Countries):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: Country() should be called via Countries().")

@@ -47,6 +47,8 @@ class Ranges(APIClassTemplate):
 
 
 class IPRange(Ranges):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: IPRange() should be called via Ranges().")

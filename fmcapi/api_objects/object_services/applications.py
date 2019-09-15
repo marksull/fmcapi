@@ -57,6 +57,8 @@ class Applications(APIClassTemplate):
 
 
 class Application(Applications):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: Application() should be called via Applications().")

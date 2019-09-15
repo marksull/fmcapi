@@ -119,6 +119,8 @@ class FTDDeviceHAPairs(APIClassTemplate):
 
 
 class DeviceHAPairs(FTDDeviceHAPairs):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: DeviceHAPairs() should be called via FTDDeviceHAPairs().")

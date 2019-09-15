@@ -54,6 +54,8 @@ class ICMPv4Objects(APIClassTemplate):
 
 
 class ICMPv4Object(ICMPv4Objects):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: ICMPv4Object() should be called via ICMPv4Objects().")

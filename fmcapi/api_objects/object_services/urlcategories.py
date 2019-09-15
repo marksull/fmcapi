@@ -45,6 +45,8 @@ class URLCategories(APIClassTemplate):
 
 
 class URLCategory(URLCategories):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: URLCategory() should be called via URLCategories().")

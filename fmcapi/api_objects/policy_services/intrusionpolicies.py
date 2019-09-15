@@ -45,6 +45,8 @@ class IntrusionPolicies(APIClassTemplate):
 
 
 class IntrusionPolicy(IntrusionPolicies):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: IntrusionPolicy() should be called via IntrusionPolicies().")

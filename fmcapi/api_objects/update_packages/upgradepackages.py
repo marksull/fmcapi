@@ -42,6 +42,8 @@ class UpgradePackages(APIClassTemplate):
 
 
 class UpgradePackage(UpgradePackages):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: UpgradePackage() should be called via UpgradePackages().")

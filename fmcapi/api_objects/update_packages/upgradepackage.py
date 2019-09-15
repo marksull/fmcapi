@@ -6,6 +6,7 @@ import logging
 
 class Upgrades(APIClassTemplate):
     """
+    Change this class to UpgradePackage once the deprecated UpgradePackage name for UpgradePackages expires in 2021.
     The Upgrades Object in the FMC.
     NOTE:  This should be called UpgradePackage but that collides with a Deprecated name for UpgradePackages.
     We can rename this after we remove that deprecation... which will be a while from now.

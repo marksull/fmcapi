@@ -95,6 +95,8 @@ class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
 
 
 class DeviceHAFailoverMAC(FailoverInterfaceMACAddressConfigs):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: DeviceHAFailoverMAC() should be called via FailoverInterfaceMACAddressConfigs().")

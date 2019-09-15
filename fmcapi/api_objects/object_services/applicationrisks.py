@@ -45,6 +45,8 @@ class ApplicationRisks(APIClassTemplate):
 
 
 class ApplicationRisk(ApplicationRisks):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: ApplicationRisk() should be called via ApplicationRisks().")

@@ -29,6 +29,8 @@ class NetworkAddresses(APIClassTemplate):
 
 
 class IPAddresses(NetworkAddresses):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: IPAddresses() should be called via NetworkAddresses().")

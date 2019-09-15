@@ -82,6 +82,8 @@ class InterfaceGroups(APIClassTemplate):
 
 
 class InterfaceGroup(InterfaceGroups):
+    """Dispose of this Class after 20210101."""
+
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
         warnings.warn("Deprecated: InterfaceGroup() should be called via InterfaceGroups().")
