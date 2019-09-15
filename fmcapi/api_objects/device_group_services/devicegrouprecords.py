@@ -2,9 +2,10 @@ from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.device_services.device import Device
 from fmcapi.api_objects.device_ha_pair_services.devicehapairs import DeviceHAPairs
 import logging
+import warnings
 
 
-class DeviceGroups(APIClassTemplate):
+class DeviceGroupRecords(APIClassTemplate):
     """
     The DeviceGroups Object in the FMC.
     """
@@ -77,3 +78,7 @@ class DeviceGroups(APIClassTemplate):
             if 'members' in self.__dict__:
                 del self.members
                 logging.info('All devices removed from this DeviceGroup object.')
+
+
+class DeviceGroups(DeviceGroupRecords):
+    warnings.warn("Deprecated: DeviceGroups() should be called via DeviceGroupRecords().")

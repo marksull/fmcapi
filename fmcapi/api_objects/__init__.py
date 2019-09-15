@@ -6,6 +6,7 @@ from .device_ha_pair_services import FTDDeviceHAPairs
 from .device_ha_pair_services.devicehapairs import DeviceHAPairs
 
 
+from .device_group_services import DeviceGroupRecords
 from .device_group_services import DeviceGroups
 
 from .device_clusters import FTDDeviceCluster
@@ -92,25 +93,10 @@ from .update_packages.applicabledevices import ApplicableDevices
 from .update_packages.upgradepackage import UpgradePackage
 from .update_packages.upgrades import Upgrades
 
-'''
-from .audit_services import *
-from .deployment_services import *
-from .status_services import *
-from .system_information import *
-from .object_services import *
-from .device_clusters import *
-from .device_services import *
-from .device_group_services import *
-from .device_ha_pair_services import *
-from .integration_services import *
-from .intelligence_services import *
-from .policy_assignment_services import *
-from .policy_services import *
-from .update_packages import *
-'''
 logging.debug("In the api_objects __init__.py file.")
 
 __all__ = [
+    'DeviceGroupRecords',
     'DeviceGroups',
     'FTDDeviceCluster',
     'FTDDeviceHAPairs',

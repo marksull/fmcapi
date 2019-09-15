@@ -27,11 +27,14 @@ def main():
                     ) as fmc1:
         logging.info('# ### Mega Test Start!!! ### #')
 
-        unit_tests.test__fmc_version(fmc=fmc1)
-        unit_tests.test__deployabledevices(fmc=fmc1)
-        unit_tests.test__deploymentrequests(fmc=fmc1)
+        unit_tests.test__devicegrouprecords(fmc=fmc1)
         '''
         # Working Tests
+        unit_tests.test__auditrecords(fmc=fmc1)
+        unit_tests.test__deployabledevices(fmc=fmc1)
+        unit_tests.test__deploymentrequests(fmc=fmc1)
+
+        unit_tests.test__fmc_version(fmc=fmc1)
         unit_tests.test__application_type(fmc=fmc1)
         unit_tests.test__application_tag(fmc=fmc1)
         unit_tests.test__application(fmc=fmc1)
@@ -66,7 +69,6 @@ def main():
         unit_tests.test__intrusion_policy(fmc=fmc1)
         unit_tests.test__access_control_policy(fmc=fmc1)
         unit_tests.test__acp_rule(fmc=fmc1)
-        unit_tests.test__audit(fmc=fmc1)
         unit_tests.test__port_object_group(fmc=fmc1)
         unit_tests.test__url_category(fmc=fmc1)
         unit_tests.test__ports(fmc=fmc1)
@@ -86,7 +88,6 @@ def main():
         unit_tests.test__redundant_interfaces(fmc=fmc1)
         unit_tests.test__etherchannel_interfaces(fmc=fmc1)
         unit_tests.test__subinterfaces(fmc=fmc1)
-        unit_tests.test__device_group(fmc=fmc1)
         unit_tests.test__device_ha_monitored_interfaces(fmc=fmc1)
         unit_tests.test__device_ha_failover_mac(fmc=fmc1)
         unit_tests.test__device_ha_pair(fmc=fmc1)
