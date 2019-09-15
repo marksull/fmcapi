@@ -6,9 +6,9 @@ import time
 def test__ftddevicehapairs(fmc):
     logging.info('Test FTDDeviceHAPairs. After an HA Pair is created, all API calls to "devicerecords" objects should '
                  'be directed at the currently active device not the ha pair')
-    failover1 = fmcapi.PhysicalInterface(fmc=fmc)
+    failover1 = fmcapi.PhysicalInterfaces(fmc=fmc)
     failover1.get(device_name="PrimaryName", name="GigabitEthernet0/6")
-    stateful1 = fmcapi.PhysicalInterface(fmc=fmc)
+    stateful1 = fmcapi.PhysicalInterfaces(fmc=fmc)
     stateful1.get(device_name="PrimaryName", name="GigabitEthernet0/7")
     obj0 = fmcapi.DeviceHAPairs(fmc=fmc)
     obj1 = fmcapi.FTDDeviceHAPairs(fmc=fmc)

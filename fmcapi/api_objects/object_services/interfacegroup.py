@@ -1,5 +1,5 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from fmcapi.api_objects.device_services.physicalinterface import PhysicalInterface
+from fmcapi.api_objects.device_services.physicalinterfaces import PhysicalInterfaces
 import logging
 
 
@@ -49,7 +49,7 @@ class InterfaceGroup(APIClassTemplate):
         if action == 'add':
             intfs = []
             for name in names:
-                intf = PhysicalInterface(fmc=self.fmc)
+                intf = PhysicalInterfaces(fmc=self.fmc)
                 intf.get(name=name, device_name=device_name)
                 if 'id' in intf.__dict__ and 'ifname' in intf.__dict__:
                     intfs.append({'name': intf.name, 'id': intf.id, 'type': intf.type})

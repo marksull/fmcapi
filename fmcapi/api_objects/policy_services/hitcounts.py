@@ -1,6 +1,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .accesscontrolpolicy import AccessControlPolicy
-from fmcapi.api_objects.device_services.device import Device
+from fmcapi.api_objects.device_services.devicerecords import Device
 from .prefilterpolicies import PreFilterPolicy
 import logging
 

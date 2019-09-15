@@ -1,7 +1,7 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.object_services.securityzone import SecurityZone
-from .device import Device
-from .physicalinterface import PhysicalInterface
+from .devicerecords import Device
+from .physicalinterfaces import PhysicalInterfaces
 import logging
 
 
@@ -162,7 +162,7 @@ class BridgeGroupInterfaces(APIClassTemplate):
         logging.debug("In p_interface() for BridgeGroupInterfaces class.")
         list1 = []
         for p_intf in p_interfaces:
-            intf1 = PhysicalInterface(fmc=self.fmc)
+            intf1 = PhysicalInterfaces(fmc=self.fmc)
             intf1.get(name=p_intf, device_name=device_name)
             if 'id' in intf1.__dict__:
                 list1.append({'name': intf1.name, 'id': intf1.id, 'type': intf1.type})

@@ -102,7 +102,7 @@ def main():
         hq_ftd.post(post_wait_time=300)
 
         # Once registration is complete configure the interfaces of hq-ftd.
-        hq_ftd_g00 = fmcapi.PhysicalInterface(fmc=fmc1, device_name=hq_ftd.name)
+        hq_ftd_g00 = fmcapi.PhysicalInterfaces(fmc=fmc1, device_name=hq_ftd.name)
         hq_ftd_g00.get(name="GigabitEthernet0/0")
         hq_ftd_g00.enabled = True
         hq_ftd_g00.ifname = "IN"
@@ -110,7 +110,7 @@ def main():
         hq_ftd_g00.sz(name="inside")
         hq_ftd_g00.put()
 
-        hq_ftd_g01 = fmcapi.PhysicalInterface(fmc=fmc1, device_name=hq_ftd.name)
+        hq_ftd_g01 = fmcapi.PhysicalInterfaces(fmc=fmc1, device_name=hq_ftd.name)
         hq_ftd_g01.get(name="GigabitEthernet0/1")
         hq_ftd_g01.enabled = True
         hq_ftd_g01.ifname = "OUT"
@@ -119,7 +119,7 @@ def main():
         hq_ftd_g01.put()
 
         # Build static default route for HQ FTD
-        hq_default_route = fmcapi.IPv4StaticRoute(fmc=fmc1, name='hq_default_route')
+        hq_default_route = fmcapi.IPv4StaticRoutes(fmc=fmc1, name='hq_default_route')
         hq_default_route.device(device_name=hq_ftd.name)
         hq_default_route.networks(action='add', networks=['any-ipv4'])
         hq_default_route.gw(name=hq_dfgw_gateway.name)

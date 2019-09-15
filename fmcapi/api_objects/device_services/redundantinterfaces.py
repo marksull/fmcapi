@@ -1,7 +1,7 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from .device import Device
+from .devicerecords import Device
 from fmcapi.api_objects.object_services.securityzone import SecurityZone
-from .physicalinterface import PhysicalInterface
+from .physicalinterfaces import PhysicalInterfaces
 import logging
 
 
@@ -162,7 +162,7 @@ class RedundantInterfaces(APIClassTemplate):
 
     def primary(self, p_interface, device_name):
         logging.debug("In primary() for RedundantInterfaces class.")
-        intf1 = PhysicalInterface(fmc=self.fmc)
+        intf1 = PhysicalInterfaces(fmc=self.fmc)
         intf1.get(name=p_interface, device_name=device_name)
         if 'id' in intf1.__dict__:
             self.primaryInterface = {'name': intf1.name, 'id': intf1.id, 'type': intf1.type}
@@ -173,7 +173,7 @@ class RedundantInterfaces(APIClassTemplate):
 
     def secondary(self, p_interface, device_name):
         logging.debug("In primary() for RedundantInterfaces class.")
-        intf1 = PhysicalInterface(fmc=self.fmc)
+        intf1 = PhysicalInterfaces(fmc=self.fmc)
         intf1.get(name=p_interface, device_name=device_name)
         if 'id' in intf1.__dict__:
             self.secondaryInterface = {'name': intf1.name, 'id': intf1.id, 'type': intf1.type}

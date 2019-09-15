@@ -1,7 +1,7 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.policy_services.accesscontrolpolicy import AccessControlPolicy
-from fmcapi.api_objects.device_services.device import Device
-from fmcapi.api_objects.device_ha_pair_services.devicehapairs import DeviceHAPairs
+from fmcapi.api_objects.device_services.devicerecords import Device
+from fmcapi.api_objects.device_ha_pair_services.ftddevicehapairs import FTDDeviceHAPairs
 from fmcapi.api_objects.policy_services.ftdnatpolicy import FTDNatPolicy
 import logging
 
@@ -58,7 +58,7 @@ class PolicyAssignments(APIClassTemplate):
                 dev1 = Device(fmc=self.fmc)
                 dev1.get(name=device['name'])
             elif device["type"] == 'deviceHAPair':
-                dev1 = DeviceHAPairs(fmc=self.fmc)
+                dev1 = FTDDeviceHAPairs(fmc=self.fmc)
                 dev1.get(name=device['name'])
             if 'id' in dev1.__dict__:
                 logging.info(f'Adding "{dev1.name}" to targets for this FTDNat PolicyAssignment.')
@@ -81,7 +81,7 @@ class PolicyAssignments(APIClassTemplate):
                 dev1 = Device(fmc=self.fmc)
                 dev1.get(name=device['name'])
             elif device["type"] == 'deviceHAPair':
-                dev1 = DeviceHAPairs(fmc=self.fmc)
+                dev1 = FTDDeviceHAPairs(fmc=self.fmc)
                 dev1.get(name=device['name'])
             if 'id' in dev1.__dict__:
                 logging.info(f'Adding "{dev1.name}" to targets for this Access Control Policy PolicyAssignment.')

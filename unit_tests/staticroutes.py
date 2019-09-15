@@ -2,7 +2,7 @@ import logging
 import fmcapi
 
 
-def test__static_routes(fmc):
+def test__staticroutes(fmc):
     logging.info('Testing StaticRoutes class. Requires a registered device')
 
     obj1 = fmcapi.StaticRoutes(fmc=fmc)

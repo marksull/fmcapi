@@ -1,6 +1,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .ftddevicehapairs import FTDDeviceHAPairs
-from fmcapi.api_objects.device_services.physicalinterface import PhysicalInterface
+from fmcapi.api_objects.device_services.physicalinterfaces import PhysicalInterfaces
 import logging
 import warnings
 
@@ -61,7 +61,7 @@ class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
 
     def p_interface(self, name, device_name):
         logging.debug("In p_interface() for FailoverInterfaceMACAddressConfigs class.")
-        intf1 = PhysicalInterface(fmc=self.fmc)
+        intf1 = PhysicalInterfaces(fmc=self.fmc)
         intf1.get(name=name, device_name=device_name)
         if 'id' in intf1.__dict__:
             self.physicalInterface = {'name': intf1.name, 'id': intf1.id, 'type': intf1.type}

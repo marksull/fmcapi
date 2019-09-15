@@ -8,8 +8,6 @@ from .port_object_group import test__port_object_group
 from .acprule import test__acp_rule
 from .acp import test__access_control_policy
 from .intrusion_policy import test__intrusion_policy
-from .static_routes_ipv4 import test__ipv4_static_routes
-from .static_routes import test__static_routes
 from .interfaces_subinterfaces import test__subinterfaces
 from .interfaces_etherchannel import test__etherchannel_interfaces
 from .interfaces_redundant import test__redundant_interfaces
@@ -17,7 +15,6 @@ from .interfaces_bridge_group import test__bridge_group_interfaces
 from .interfaces_physical import test__phys_interfaces
 from .wait_for_task import wait_for_task
 from .device_with_task import test__device_with_task
-from .device import test__device
 from .sla_monitor import test__slamonitor
 from .interface_group import test__interface_group
 from .security_zone import test__security_zone
@@ -59,6 +56,10 @@ from .devicegrouprecords import test__devicegrouprecords
 from .ftddevicehapairs import test__ftddevicehapairs
 from .failoverinterfacemacaddressconfigs import test__failoverinterfacemacaddressconfigs
 from .monitored_interface import test__monitoredinterfaces
+from .devicerecords import test__devicerecords
+from .staticroutes import test__staticroutes
+from .ipv4staticroutes import test__ipv4staticroutes
+from .ipv6staticroutes import test__ipv6staticroutes
 
 logging.debug("In the unit-tests __init__.py file.")
 
@@ -70,6 +71,11 @@ __all__ = [
     'test__ftddevicehapairs',
     'test__failoverinterfacemacaddressconfigs',
     'test__monitoredinterfaces',
+    'test__devicerecords',
+    'test__staticroutes',
+    'test__ipv4staticroutes',
+    'test__ipv6staticroutes',
+    'test__bridge_group_interfaces',
 
     'test__url_category',
     'test__application_type',
@@ -105,16 +111,12 @@ __all__ = [
     'test__security_zone',
     'test__interface_group',
     'test__slamonitor',
-    'test__device',
     'test__device_with_task',
     'wait_for_task',
     'test__phys_interfaces',
-    'test__bridge_group_interfaces',
     'test__redundant_interfaces',
     'test__etherchannel_interfaces',
     'test__subinterfaces',
-    'test__static_routes',
-    'test__ipv4_static_routes',
     'test__ports',
     'test__upgrades',
     'test__manualnat',

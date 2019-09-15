@@ -27,8 +27,6 @@ def main():
                     ) as fmc1:
         logging.info('# ### Mega Test Start!!! ### #')
 
-        '''
-        # Working Tests
         unit_tests.test__auditrecords(fmc=fmc1)
         unit_tests.test__deployabledevices(fmc=fmc1)
         unit_tests.test__deploymentrequests(fmc=fmc1)
@@ -75,18 +73,20 @@ def main():
         unit_tests.test__autonat(fmc=fmc1)
         unit_tests.test__manualnat(fmc=fmc1)
         '''
+        # Working Tests
+        '''
 
         '''
         # Need FTD device to test
         unit_tests.test__ftddevicehapairs(fmc=fmc1)
         unit_tests.test__failoverinterfacemacaddressconfigs(fmc=fmc1)
         unit_tests.test__monitoredinterfaces(fmc=fmc1)
-
+        unit_tests.test__devicerecords(fmc=fmc1)
+        unit_tests.test__staticroutes(fmc=fmc1)
+        unit_tests.test__ipv4staticroutes(fmc=fmc1)
+        unit_tests.test__ipv6staticroutes(fmc=fmc1)
         unit_tests.test__upgrades(fmc=fmc1)
-        unit_tests.test__ipv4_static_routes(fmc=fmc1)
-        unit_tests.test__static_routes(fmc=fmc1)
         unit_tests.test__interface_group(fmc=fmc1)
-        unit_tests.test__device(fmc=fmc1)
         unit_tests.test__device_with_task(fmc=fmc1)
         unit_tests.test__phys_interfaces(fmc=fmc1)
         unit_tests.test__redundant_interfaces(fmc=fmc1)

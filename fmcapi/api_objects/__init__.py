@@ -1,6 +1,7 @@
 import logging
 from .policy_services.accesscontrolpolicy import AccessControlPolicy  # Needs loaded before Device
-from .device_services.device import Device  # Needs loaded early.
+from .device_services.devicerecords import DeviceRecords  # Needs loaded early.
+from .device_services.devicerecords import Device  # Needs loaded early.
 
 from .device_ha_pair_services import FTDDeviceHAPairs
 from .device_ha_pair_services.ftddevicehapairs import DeviceHAPairs
@@ -18,9 +19,12 @@ from .device_ha_pair_services.monitoredinterfaces import MonitoredInterfaces
 
 from .device_services.bridgegroupinterfaces import BridgeGroupInterfaces
 from .device_services.etherchannelinterfaces import EtherchannelInterfaces
-from .device_services.ipv4staticroute import IPv4StaticRoute
-from .device_services.ipv6staticroute import IPv6StaticRoute
-from .device_services.physicalinterface import PhysicalInterface
+from .device_services.ipv4staticroutes import IPv4StaticRoutes
+from .device_services.ipv4staticroutes import IPv4StaticRoute
+from .device_services.ipv6staticroutes import IPv6StaticRoutes
+from .device_services.ipv6staticroutes import IPv6StaticRoute
+from .device_services.physicalinterfaces import PhysicalInterfaces
+from .device_services.physicalinterfaces import PhysicalInterface
 from .device_services.redundantinterfaces import RedundantInterfaces
 from .device_services.staticroutes import StaticRoutes
 from .device_services.subinterfaces import SubInterfaces
@@ -105,15 +109,20 @@ __all__ = [
     'DeviceHAFailoverMAC',
     'MonitoredInterfaces',
     'DeviceHAMonitoredInterfaces',
-    'BridgeGroupInterfaces',
     'Device',
-    'EtherchannelInterfaces',
-    'IPv4StaticRoute',
-    'IPv6StaticRoute',
-    'PhysicalInterface',
-    'RedundantInterfaces',
+    'DeviceRecords',
     'StaticRoutes',
+    'IPv4StaticRoutes',
+    'IPv4StaticRoute',
+    'IPv6StaticRoutes',
+    'IPv6StaticRoute',
+    'PhysicalInterfaces',
+    'PhysicalInterface',
+    'BridgeGroupInterfaces',
+    'RedundantInterfaces',
+    'EtherchannelInterfaces',
     'SubInterfaces',
+
     'AnyProtocolPortObjects',
     'Application',
     'ApplicationCategory',

@@ -1,5 +1,5 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from fmcapi.api_objects.device_services.device import Device
+from fmcapi.api_objects.device_services.devicerecords import Device
 from .upgradepackage import UpgradePackage
 import logging
 

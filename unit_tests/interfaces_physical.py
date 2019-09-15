@@ -15,7 +15,7 @@ def test__phys_interfaces(fmc):
     sz2.post()
     time.sleep(1)
 
-    intf1 = fmcapi.PhysicalInterface(fmc=fmc, device_name="device_name")
+    intf1 = fmcapi.PhysicalInterfaces(fmc=fmc, device_name="device_name")
     intf1.get(name="GigabitEthernet0/0")
     intf1.enabled = True
     intf1.ifname = "OUTSIDE1"
@@ -23,7 +23,7 @@ def test__phys_interfaces(fmc):
     intf1.standbyMACAddress = "0050.5686.0c2e"
     intf1.static(ipv4addr="10.254.0.3", ipv4mask=24)
     intf1.sz(name=sz1.name)
-    intf2 = fmcapi.PhysicalInterface(fmc=fmc, device_name="device_name")
+    intf2 = fmcapi.PhysicalInterfaces(fmc=fmc, device_name="device_name")
     intf2.get(name="GigabitEthernet0/1")
     intf2.enabled = True
     intf2.ifname = "OUTSIDE2"

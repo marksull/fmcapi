@@ -1,7 +1,7 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from fmcapi.api_objects.device_services.device import Device
+from fmcapi.api_objects.device_services.devicerecords import Device
 from fmcapi.api_objects.object_services.securityzone import SecurityZone
-from fmcapi.api_objects.device_services.physicalinterface import PhysicalInterface
+from fmcapi.api_objects.device_services.physicalinterfaces import PhysicalInterfaces
 import logging
 
 
@@ -160,7 +160,7 @@ class SubInterfaces(APIClassTemplate):
 
     def p_interface(self, p_interface, device_name):
         logging.debug("In p_interface() for SubInterfaces class.")
-        intf1 = PhysicalInterface(fmc=self.fmc)
+        intf1 = PhysicalInterfaces(fmc=self.fmc)
         intf1.get(name=p_interface, device_name=device_name)
         if 'id' in intf1.__dict__:
             self.name = intf1.name
