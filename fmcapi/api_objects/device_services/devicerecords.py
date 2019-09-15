@@ -1,5 +1,5 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from fmcapi.api_objects.policy_services.accesscontrolpolicy import AccessControlPolicy
+from fmcapi.api_objects.policy_services.accesspolicies import AccessPolicies
 import time
 import logging
 import warnings
@@ -104,7 +104,7 @@ class DeviceRecords(APIClassTemplate):
 
     def acp(self, name=''):
         logging.debug("In acp() for Device class.")
-        acp = AccessControlPolicy(fmc=self.fmc)
+        acp = AccessPolicies(fmc=self.fmc)
         acp.get(name=name)
         if 'id' in acp.__dict__:
             self.accessPolicy = {'id': acp.id, 'type': acp.type}

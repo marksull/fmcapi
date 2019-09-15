@@ -22,7 +22,7 @@ def main():
                     file_logging='hq-ftd.log') as fmc1:
 
         # Create an ACP
-        acp = fmcapi.AccessControlPolicy(fmc=fmc1, name='ACP Policy')
+        acp = fmcapi.AccessPolicies(fmc=fmc1, name='ACP Policy')
         # I intentially put a "space" in the ACP name to show that fmcapi will "fix" that for you.
         acp.post()
 
@@ -50,12 +50,12 @@ def main():
         fmc_public.post()
 
         # Create ACP Rule to permit hq_lan traffic inside to outside.
-        hq_acprule = fmcapi.ACPRule(fmc=fmc1,
-                                    acp_name=acp.name,
-                                    name='Permit HQ LAN',
-                                    action='ALLOW',
-                                    enabled=True,
-                                    )
+        hq_acprule = fmcapi.AccessRules(fmc=fmc1,
+                                        acp_name=acp.name,
+                                        name='Permit HQ LAN',
+                                        action='ALLOW',
+                                        enabled=True,
+                                        )
         hq_acprule.source_zone(action='add', name=sz_inside.name)
         hq_acprule.destination_zone(action='add', name=sz_outside.name)
         hq_acprule.source_network(action='add', name=hq_lan.name)
@@ -63,7 +63,7 @@ def main():
         hq_acprule.post()
 
         # Build NAT Policy
-        nat = fmcapi.FTDNatPolicy(fmc=fmc1, name='NAT Policy')
+        nat = fmcapi.FTDNatPolicies(fmc=fmc1, name='NAT Policy')
         nat.post()
 
         # Build NAT Rule to NAT all_lans to interface outside

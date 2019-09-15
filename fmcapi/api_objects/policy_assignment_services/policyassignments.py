@@ -1,8 +1,8 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from fmcapi.api_objects.policy_services.accesscontrolpolicy import AccessControlPolicy
+from fmcapi.api_objects.policy_services.accesspolicies import AccessPolicies
 from fmcapi.api_objects.device_services.devicerecords import Device
 from fmcapi.api_objects.device_ha_pair_services.ftddevicehapairs import FTDDeviceHAPairs
-from fmcapi.api_objects.policy_services.ftdnatpolicy import FTDNatPolicy
+from fmcapi.api_objects.policy_services.ftdnatpolicies import FTDNatPolicies
 import logging
 
 
@@ -47,7 +47,7 @@ class PolicyAssignments(APIClassTemplate):
     def ftd_natpolicy(self, name, devices):
         logging.debug("In ftd_natpolicy() for PolicyAssignments class.")
         targets = []
-        pol1 = FTDNatPolicy(fmc=self.fmc)
+        pol1 = FTDNatPolicies(fmc=self.fmc)
         pol1.get(name=name)
         if 'id' in pol1.__dict__:
             self.policy = {"type": pol1.type, "name": pol1.name, "id": pol1.id}
@@ -70,7 +70,7 @@ class PolicyAssignments(APIClassTemplate):
     def accesspolicy(self, name, devices):
         logging.debug("In accesspolicy() for PolicyAssignments class.")
         targets = []
-        pol1 = AccessControlPolicy(fmc=self.fmc)
+        pol1 = AccessPolicies(fmc=self.fmc)
         pol1.get(name=name)
         if 'id' in pol1.__dict__:
             self.policy = {"type": pol1.type, "name": pol1.name, "id": pol1.id}

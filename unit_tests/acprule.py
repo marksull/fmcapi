@@ -58,7 +58,7 @@ def test__acp_rule(fmc):
     sz1 = fmcapi.SecurityZones(fmc=fmc, name='_sz1', interfaceMode='ROUTED')
     sz1.post()
     # Build an ACP Object
-    acp1 = fmcapi.AccessControlPolicy(fmc=fmc, name=namer)
+    acp1 = fmcapi.AccessPolicies(fmc=fmc, name=namer)
     acp1.post()
     # Get a file_policy
     # fp = fmcapi.FilePolicies(fmc=fmc1, name='daxm_test')
@@ -67,7 +67,7 @@ def test__acp_rule(fmc):
 
     logging.info(
         'Test ACPRule.  Try to test all features of all methods of the ACPRule class.')
-    acprule1 = fmcapi.ACPRule(fmc=fmc, acp_name=acp1.name)
+    acprule1 = fmcapi.AccessRules(fmc=fmc, acp_name=acp1.name)
     acprule1.name = namer
     acprule1.action = 'ALLOW'
     acprule1.enabled = False

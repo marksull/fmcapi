@@ -1,5 +1,5 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from .ftdnatpolicy import FTDNatPolicy
+from .ftdnatpolicies import FTDNatPolicies
 from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
 from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
 from fmcapi.api_objects.object_services.portobjectgroups import PortObjectGroups
@@ -130,7 +130,7 @@ class ManualNatRules(APIClassTemplate):
 
     def nat_policy(self, name):
         logging.debug("In nat_policy() for ManualNatRules class.")
-        ftd_nat = FTDNatPolicy(fmc=self.fmc)
+        ftd_nat = FTDNatPolicies(fmc=self.fmc)
         ftd_nat.get(name=name)
         if 'id' in ftd_nat.__dict__:
             self.nat_id = ftd_nat.id

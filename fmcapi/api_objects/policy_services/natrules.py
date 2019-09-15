@@ -1,5 +1,5 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from .ftdnatpolicy import FTDNatPolicy
+from .ftdnatpolicies import FTDNatPolicies
 import logging
 
 
@@ -33,7 +33,7 @@ class NatRules(APIClassTemplate):
 
     def nat_policy(self,name):
         logging.debug("In nat_policy() for NatRules class.")
-        ftd_nat = FTDNatPolicy(fmc=self.fmc)
+        ftd_nat = FTDNatPolicies(fmc=self.fmc)
         ftd_nat.get(name=name)
         if 'id' in ftd_nat.__dict__:
             self.nat_id = ftd_nat.id

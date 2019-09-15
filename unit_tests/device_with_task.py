@@ -11,7 +11,7 @@ def test__device_with_task(fmc):
     starttime = str(int(time.time()))
     namer = f'_fmcapi_test_{starttime}'
 
-    acp1 = fmcapi.AccessControlPolicy(fmc=fmc, name=namer)
+    acp1 = fmcapi.AccessPolicies(fmc=fmc, name=namer)
     acp1.post()
 
     starttime = str(int(time.time()))

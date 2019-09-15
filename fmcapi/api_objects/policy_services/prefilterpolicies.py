@@ -1,10 +1,11 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
+import warnings
 
 
-class PreFilterPolicy(APIClassTemplate):
+class PreFilterPolicies(APIClassTemplate):
     """
-    The PreFilterPolicy Object in the FMC.
+    The PreFilterPolicies Object in the FMC.
     """
 
     URL_SUFFIX = '/policy/prefilterpolicies'
@@ -12,12 +13,12 @@ class PreFilterPolicy(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for PreFilterPolicy class.")
+        logging.debug("In __init__() for PreFilterPolicies class.")
         self.parse_kwargs(**kwargs)
         self.type = 'PreFilterPolicy'
 
     def format_data(self):
-        logging.debug("In format_data() for PreFilterPolicy class.")
+        logging.debug("In format_data() for PreFilterPolicies class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -27,16 +28,20 @@ class PreFilterPolicy(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for PreFilterPolicy class.")
+        logging.debug("In parse_kwargs() for PreFilterPolicies class.")
 
     def post(self):
-        logging.info('POST method for API for PreFilterPolicy not supported.')
+        logging.info('POST method for API for PreFilterPolicies not supported.')
         pass
 
     def put(self):
-        logging.info('PUT method for API for PreFilterPolicy not supported.')
+        logging.info('PUT method for API for PreFilterPolicies not supported.')
         pass
 
     def delete(self):
-        logging.info('DELETE method for API for PreFilterPolicy not supported.')
+        logging.info('DELETE method for API for PreFilterPolicies not supported.')
         pass
+
+
+class PreFilterPolicy(PreFilterPolicies):
+    warnings.warn("Deprecated: PreFilterPolicy() should be called via PreFilterPolicies().")

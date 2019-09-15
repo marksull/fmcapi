@@ -1,5 +1,6 @@
 import logging
-from .policy_services.accesscontrolpolicy import AccessControlPolicy  # Needs loaded before Device
+from .policy_services.accesspolicies import AccessPolicies  # Needs loaded before Device
+from .policy_services.accesspolicies import AccessControlPolicy  # Needs loaded before Device
 from .device_services.devicerecords import DeviceRecords  # Needs loaded early.
 from .device_services.devicerecords import Device  # Needs loaded early.
 
@@ -107,24 +108,31 @@ from .object_services.vlangrouptags import VlanGroupTag
 from .object_services.vlantags import VlanTags
 from .object_services.vlantags import VlanTag
 
-from .policy_services.acprule import ACPRule
+from .policy_services.accessrules import AccessRules
+from .policy_services.accessrules import ACPRule
+from .policy_services.accessrules import Bulk
 from .policy_services.autonatrules import AutoNatRules
-from .policy_services.bulk import Bulk
 from .policy_services.filepolicies import FilePolicies
-from .policy_services.ftdnatpolicy import FTDNatPolicy
+from .policy_services.ftdnatpolicies import FTDNatPolicies
+from .policy_services.ftdnatpolicies import FTDNatPolicy
+from .policy_services.hitcounts import HitCounts
 from .policy_services.hitcounts import HitCount
-from .policy_services.intrusionpolicy import IntrusionPolicy
+from .policy_services.intrusionpolicies import IntrusionPolicies
+from .policy_services.intrusionpolicies import IntrusionPolicy
 from .policy_services.manualnatrules import ManualNatRules
 from .policy_services.natrules import NatRules
+from .policy_services.prefilterpolicies import PreFilterPolicies
 from .policy_services.prefilterpolicies import PreFilterPolicy
 
 from .policy_assignment_services.policyassignments import PolicyAssignments
 
 from .status_services.taskstatuses import TaskStatuses
 
-from .update_packages.applicabledevices import ApplicableDevices
-from .update_packages.upgradepackage import UpgradePackage
-from .update_packages.upgrades import Upgrades
+from .update_packages.listapplicabledevices import ListApplicableDevices
+from .update_packages.listapplicabledevices import ApplicableDevices
+from .update_packages.upgradepackages import UpgradePackages
+from .update_packages.upgradepackages import UpgradePackage
+from .update_packages.upgradepackage import Upgrades
 
 logging.debug("In the api_objects __init__.py file.")
 
@@ -228,21 +236,28 @@ __all__ = [
     'VlanGroupTag',
     'VlanTags',
     'VlanTag',
-
+    'PolicyAssignments',
+    'AccessPolicies',
     'AccessControlPolicy',
+    'AccessRules',
     'ACPRule',
-    'AutoNatRules',
     'Bulk',
     'FilePolicies',
+    'FTDNatPolicies',
     'FTDNatPolicy',
-    'HitCount',
-    'IntrusionPolicy',
+    'AutoNatRules',
     'ManualNatRules',
     'NatRules',
+    'IntrusionPolicies',
+    'IntrusionPolicy',
+    'PreFilterPolicies',
     'PreFilterPolicy',
-    'PolicyAssignments',
+    'HitCounts',
+    'HitCount',
     'TaskStatuses',
+    'ListApplicableDevices',
     'ApplicableDevices',
+    'UpgradePackages',
     'UpgradePackage',
     'Upgrades',
 ]

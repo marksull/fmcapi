@@ -1,22 +1,24 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from .upgradepackage import UpgradePackage
+from .upgradepackages import UpgradePackages
 import logging
+import warnings
 
-class ApplicableDevices(APIClassTemplate):
+
+class ListApplicableDevices(APIClassTemplate):
     """
-    The ApplicableDevices Object in the FMC.
+    The ListApplicableDevices Object in the FMC.
     """
 
     URL_SUFFIX = '/updates/upgradepackages'
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for ApplicableDevices class.")
+        logging.debug("In __init__() for ListApplicableDevices class.")
         self.type = 'UpgradePackage'
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
-        logging.debug("In format_data() for ApplicableDevices class.")
+        logging.debug("In format_data() for ListApplicableDevices class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -50,27 +52,31 @@ class ApplicableDevices(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for ApplicableDevices class.")
+        logging.debug("In parse_kwargs() for ListApplicableDevices class.")
 
     def upgrade_package(self, package_name):
-        logging.debug("In upgrade_package() for ApplicableDevices class.")
-        package1 = UpgradePackage(fmc=self.fmc)
+        logging.debug("In upgrade_package() for ListApplicableDevices class.")
+        package1 = UpgradePackages(fmc=self.fmc)
         package1.get(name=package_name)
         if 'id' in package1.__dict__:
             self.package_id = package1.id
             self.URL = f'{self.fmc.platform_url}{self.URL_SUFFIX}/{self.package_id}/applicabledevices'
             self.package_added_to_url = True
         else:
-            logging.warning(f'UpgradePackage {package_name} not found.  Cannot get list of ApplicableDevices.')
+            logging.warning(f'UpgradePackage {package_name} not found.  Cannot get list of ListApplicableDevices.')
 
     def post(self):
-        logging.info('POST method for API for ApplicableDevices not supported.')
+        logging.info('POST method for API for ListApplicableDevices not supported.')
         pass
 
     def put(self):
-        logging.info('PUT method for API for ApplicableDevices not supported.')
+        logging.info('PUT method for API for ListApplicableDevices not supported.')
         pass
 
     def delete(self):
-        logging.info('DELETE method for API for ApplicableDevices not supported.')
+        logging.info('DELETE method for API for ListApplicableDevices not supported.')
         pass
+
+
+class ApplicableDevices(ListApplicableDevices):
+    warnings.warn("Deprecated: ApplicableDevices() should be called via ListApplicableDevices().")

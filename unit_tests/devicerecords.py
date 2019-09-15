@@ -10,7 +10,7 @@ def test__devicerecords(fmc):
     starttime = str(int(time.time()))
     namer = f'_fmcapi_test_{starttime}'
 
-    acp1 = fmcapi.AccessControlPolicy(fmc=fmc, name=namer)
+    acp1 = fmcapi.AccessPolicies(fmc=fmc, name=namer)
     acp1.post()
     obj1 = fmcapi.DeviceRecords(fmc=fmc)
     obj1.name = namer

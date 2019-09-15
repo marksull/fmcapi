@@ -10,7 +10,7 @@ def test__manualnat(fmc):
     namer = f'_fmcapi_test_{starttime}'
 
     # Create a container policy for FTD NAT rules
-    natpol1 = fmcapi.FTDNatPolicy(fmc=fmc, name=namer)
+    natpol1 = fmcapi.FTDNatPolicies(fmc=fmc, name=namer)
     natpol1.post()
     natpol1.get()
 
