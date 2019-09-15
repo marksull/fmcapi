@@ -1,7 +1,8 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from .devicehapairs import DeviceHAPairs
+from .ftddevicehapairs import FTDDeviceHAPairs
 from fmcapi.api_objects.device_services.physicalinterface import PhysicalInterface
 import logging
+import warnings
 
 
 class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
@@ -47,7 +48,7 @@ class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
 
     def device_ha(self, ha_name):
         logging.debug("In device_ha() for FailoverInterfaceMACAddressConfigs class.")
-        deviceha1 = DeviceHAPairs(fmc=self.fmc, name=ha_name)
+        deviceha1 = FTDDeviceHAPairs(fmc=self.fmc, name=ha_name)
         deviceha1.get()
         if 'id' in deviceha1.__dict__:
             self.deviceha_id = deviceha1.id
@@ -55,7 +56,8 @@ class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
                        f'{self.deviceha_id}/failoverinterfacemacaddressconfigs'
             self.deviceha_added_to_url = True
         else:
-            logging.warning(f'Device HA {ha_name} not found.  Cannot set up device for FailoverInterfaceMACAddressConfigs.')
+            logging.warning(f'Device HA {ha_name} not found. '
+                            f'Cannot set up device for FailoverInterfaceMACAddressConfigs.')
 
     def p_interface(self, name, device_name):
         logging.debug("In p_interface() for FailoverInterfaceMACAddressConfigs class.")
@@ -64,11 +66,12 @@ class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
         if 'id' in intf1.__dict__:
             self.physicalInterface = {'name': intf1.name, 'id': intf1.id, 'type': intf1.type}
         else:
-            logging.warning(f'PhysicalInterface, "{name}", not found.  Cannot add to FailoverInterfaceMACAddressConfigs.')
+            logging.warning(f'PhysicalInterface, "{name}", not found.  '
+                            f'Cannot add to FailoverInterfaceMACAddressConfigs.')
 
     def edit(self, name, ha_name):
         logging.debug("In edit() for FailoverInterfaceMACAddressConfigs class.")
-        deviceha1 = DeviceHAPairs(fmc=self.fmc, name=ha_name)
+        deviceha1 = FTDDeviceHAPairs(fmc=self.fmc, name=ha_name)
         deviceha1.get()
         obj1 = FailoverInterfaceMACAddressConfigs(fmc=self.fmc)
         obj1.device_ha(ha_name=ha_name)
@@ -89,3 +92,7 @@ class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
         if found is False:
             logging.warning(f'PhysicalInterface, "{name}", not found.  Cannot add to '
                             f'FailoverInterfaceMACAddressConfigs.')
+
+
+class DeviceHAFailoverMAC(FailoverInterfaceMACAddressConfigs):
+    warnings.warn("Deprecated: DeviceHAFailoverMAC() should be called via FailoverInterfaceMACAddressConfigs().")

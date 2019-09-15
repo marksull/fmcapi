@@ -1,9 +1,9 @@
 import logging
 from .ftddevicehapairs import FTDDeviceHAPairs
-from .devicehapairs import DeviceHAPairs
+from .ftddevicehapairs import DeviceHAPairs
 from .failoverinterfacemacaddressconfigs import FailoverInterfaceMACAddressConfigs
-from .devicehafailovermac import DeviceHAFailoverMAC
-from .devicehamonitoredinterfaces import DeviceHAMonitoredInterfaces
+from .failoverinterfacemacaddressconfigs import DeviceHAFailoverMAC
+from .monitoredinterfaces import DeviceHAMonitoredInterfaces
 from .monitoredinterfaces import MonitoredInterfaces
 
 logging.debug("In the device_ha_pair_services __init__.py file.")

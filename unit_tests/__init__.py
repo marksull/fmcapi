@@ -8,9 +8,6 @@ from .port_object_group import test__port_object_group
 from .acprule import test__acp_rule
 from .acp import test__access_control_policy
 from .intrusion_policy import test__intrusion_policy
-from .device_ha_failover_mac import test__device_ha_failover_mac
-from .device_ha_monitored_interface import test__device_ha_monitored_interfaces
-from .device_ha_pair import test__device_ha_pair
 from .static_routes_ipv4 import test__ipv4_static_routes
 from .static_routes import test__static_routes
 from .interfaces_subinterfaces import test__subinterfaces
@@ -59,6 +56,9 @@ from .auditrecords import test__auditrecords
 from .deployabledevices import test__deployabledevices
 from .deploymentrequests import test__deploymentrequests
 from .devicegrouprecords import test__devicegrouprecords
+from .ftddevicehapairs import test__ftddevicehapairs
+from .failoverinterfacemacaddressconfigs import test__failoverinterfacemacaddressconfigs
+from .monitored_interface import test__monitoredinterfaces
 
 logging.debug("In the unit-tests __init__.py file.")
 
@@ -67,6 +67,9 @@ __all__ = [
     'test__deploymentrequests',
     'test__deployabledevices',
     'test__devicegrouprecords',
+    'test__ftddevicehapairs',
+    'test__failoverinterfacemacaddressconfigs',
+    'test__monitoredinterfaces',
 
     'test__url_category',
     'test__application_type',
@@ -112,8 +115,6 @@ __all__ = [
     'test__subinterfaces',
     'test__static_routes',
     'test__ipv4_static_routes',
-    'test__device_ha_pair',
-    'test__device_ha_monitored_interfaces',
     'test__ports',
     'test__upgrades',
     'test__manualnat',
@@ -122,5 +123,4 @@ __all__ = [
     'test__acp_rule',
     'test__access_control_policy',
     'test__intrusion_policy',
-    'test__device_ha_failover_mac',
 ]

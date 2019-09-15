@@ -1,7 +1,7 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from .devicehapairs import FTDDeviceHAPairs
+from .ftddevicehapairs import FTDDeviceHAPairs
 import logging
-
+import warnings
 
 class MonitoredInterfaces(APIClassTemplate):
     """
@@ -64,3 +64,7 @@ class MonitoredInterfaces(APIClassTemplate):
     def post(self):
         logging.info('POST method for API for MonitoredInterfaces not supported.')
         pass
+
+
+class DeviceHAMonitoredInterfaces(MonitoredInterfaces):
+    warnings.warn("Deprecated: DeviceHAMonitoredInterfaces() should be called via MonitoredInterfaces().")

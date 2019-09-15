@@ -2,8 +2,9 @@ import logging
 import fmcapi
 
 
-def test__device_ha_failover_mac(fmc):
-    logging.info('Test DeviceHAFailoverMAC. get, post, put, delete DeviceHAFailoverMAC Objects')
+def test__failoverinterfacemacaddressconfigs(fmc):
+    logging.info('Test FailoverInterfaceMACAddressConfigs. get, post, put, '
+                 'delete FailoverInterfaceMACAddressConfigs Objects')
 
     obj1 = fmcapi.DeviceHAFailoverMAC(fmc=fmc, ha_name="HaName")
     obj1.p_interface(name="GigabitEthernet0/0", device_name="device_name")

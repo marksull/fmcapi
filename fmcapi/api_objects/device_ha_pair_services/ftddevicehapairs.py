@@ -1,6 +1,7 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.device_services.device import Device
 import logging
+import warnings
 
 
 class FTDDeviceHAPairs(APIClassTemplate):
@@ -84,7 +85,7 @@ class FTDDeviceHAPairs(APIClassTemplate):
             logging.warning(f'Device {secondary.name} not found.  Cannot set up device for FTDDeviceHAPairs.')
 
     def switch_ha(self):
-        logging.debug("In switch_ha() for DeviceHAPairs class.")
+        logging.debug("In switch_ha() for FTDDeviceHAPairs class.")
         ha1 = DeviceHAPairs(fmc=self.fmc)
         ha1.get(name=self.name)
         if 'id' in ha1.__dict__:
@@ -115,3 +116,7 @@ class FTDDeviceHAPairs(APIClassTemplate):
         # Attempting to "Deploy" during Device registration causes issues.
         self.fmc.autodeploy = False
         return super().put(**kwargs)
+
+
+class DeviceHAPairs(FTDDeviceHAPairs):
+    warnings.warn("Deprecated: DeviceHAPairs() should be called via FTDDeviceHAPairs().")

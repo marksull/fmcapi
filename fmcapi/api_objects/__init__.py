@@ -3,7 +3,7 @@ from .policy_services.accesscontrolpolicy import AccessControlPolicy  # Needs lo
 from .device_services.device import Device  # Needs loaded early.
 
 from .device_ha_pair_services import FTDDeviceHAPairs
-from .device_ha_pair_services.devicehapairs import DeviceHAPairs
+from .device_ha_pair_services.ftddevicehapairs import DeviceHAPairs
 
 
 from .device_group_services import DeviceGroupRecords
@@ -12,8 +12,8 @@ from .device_group_services import DeviceGroups
 from .device_clusters import FTDDeviceCluster
 
 from .device_ha_pair_services.failoverinterfacemacaddressconfigs import FailoverInterfaceMACAddressConfigs
-from .device_ha_pair_services.devicehafailovermac import DeviceHAFailoverMAC
-from .device_ha_pair_services.devicehamonitoredinterfaces import DeviceHAMonitoredInterfaces
+from .device_ha_pair_services.failoverinterfacemacaddressconfigs import DeviceHAFailoverMAC
+from .device_ha_pair_services.monitoredinterfaces import DeviceHAMonitoredInterfaces
 from .device_ha_pair_services.monitoredinterfaces import MonitoredInterfaces
 
 from .device_services.bridgegroupinterfaces import BridgeGroupInterfaces

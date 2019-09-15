@@ -3,14 +3,15 @@ import fmcapi
 import time
 
 
-def test__device_ha_pair(fmc):
-    logging.info('Test DeviceHAPairs. After an HA Pair is created, all API calls to "devicerecords" objects should '
+def test__ftddevicehapairs(fmc):
+    logging.info('Test FTDDeviceHAPairs. After an HA Pair is created, all API calls to "devicerecords" objects should '
                  'be directed at the currently active device not the ha pair')
     failover1 = fmcapi.PhysicalInterface(fmc=fmc)
     failover1.get(device_name="PrimaryName", name="GigabitEthernet0/6")
     stateful1 = fmcapi.PhysicalInterface(fmc=fmc)
     stateful1.get(device_name="PrimaryName", name="GigabitEthernet0/7")
-    obj1 = fmcapi.DeviceHAPairs(fmc=fmc)
+    obj0 = fmcapi.DeviceHAPairs(fmc=fmc)
+    obj1 = fmcapi.FTDDeviceHAPairs(fmc=fmc)
     obj1.primary(name="PrimaryName")
     obj1.secondary(name="SecondaryName")
     obj1.name = "HaName"
@@ -52,7 +53,7 @@ def test__device_ha_pair(fmc):
     time.sleep(300)
     del obj1
 
-    obj1 = fmcapi.DeviceHAPairs(fmc=fmc, name="HaName")
+    obj1 = fmcapi.FTDDeviceHAPairs(fmc=fmc, name="HaName")
     obj1.switch_ha()
     logging.info('Device HA Switch-->')
     logging.info(obj1.format_data())
@@ -62,7 +63,7 @@ def test__device_ha_pair(fmc):
     time.sleep(20)
     del obj1
 
-    obj1 = fmcapi.DeviceHAPairs(fmc=fmc, name="HaName")
+    obj1 = fmcapi.FTDDeviceHAPairs(fmc=fmc, name="HaName")
     obj1.break_ha()
     logging.info('Device HA Break-->')
     logging.info(obj1.format_data())
@@ -72,7 +73,7 @@ def test__device_ha_pair(fmc):
 
     time.sleep(300)
     del obj1
-    obj1 = fmcapi.DeviceHAPairs(fmc=fmc)
+    obj1 = fmcapi.FTDDeviceHAPairs(fmc=fmc)
     obj1.get(name="FTDv-HA2")
 
     #  Deleting the HAPair object will delete the HA configuration AND remove the devices from the FMC
