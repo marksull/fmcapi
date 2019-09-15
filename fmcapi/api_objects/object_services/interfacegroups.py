@@ -1,11 +1,12 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.device_services.physicalinterfaces import PhysicalInterfaces
 import logging
+import warnings
 
 
-class InterfaceGroup(APIClassTemplate):
+class InterfaceGroups(APIClassTemplate):
     """
-    The InterfaceGroup Object in the FMC.
+    The InterfaceGroups Object in the FMC.
     """
 
     URL_SUFFIX = '/object/interfacegroups'
@@ -15,12 +16,12 @@ class InterfaceGroup(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for InterfaceGroup class.")
+        logging.debug("In __init__() for InterfaceGroups class.")
         self.parse_kwargs(**kwargs)
         self.type = 'InterfaceGroup'
 
     def format_data(self):
-        logging.debug("In format_data() for InterfaceGroup class.")
+        logging.debug("In format_data() for InterfaceGroups class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -36,7 +37,7 @@ class InterfaceGroup(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for InterfaceGroup class.")
+        logging.debug("In parse_kwargs() for InterfaceGroups class.")
         if 'interfaceMode' in kwargs:
             self.interfaceMode = kwargs['interfaceMode']
         else:
@@ -45,7 +46,7 @@ class InterfaceGroup(APIClassTemplate):
             self.interfaces = kwargs['interfaces']
 
     def p_interface(self, device_name="", action="add", names=[]):
-        logging.debug("In interfaces() for InterfaceGroup class.")
+        logging.debug("In interfaces() for InterfaceGroups class.")
         if action == 'add':
             intfs = []
             for name in names:
@@ -55,14 +56,14 @@ class InterfaceGroup(APIClassTemplate):
                     intfs.append({'name': intf.name, 'id': intf.id, 'type': intf.type})
                 elif 'id' in intf.__dict__:
                     logging.warning(f'PhysicalInterface, "{name}", found without logical ifname.  '
-                                    f'Cannot add to InterfaceGroup.')
+                                    f'Cannot add to InterfaceGroups.')
                 else:
-                    logging.warning(f'PhysicalInterface, "{name}", not found.  Cannot add to InterfaceGroup.')
+                    logging.warning(f'PhysicalInterface, "{name}", not found.  Cannot add to InterfaceGroups.')
             if len(intfs) != 0:
                 # Make sure we found at least one intf
                 self.interfaces = intfs
             else:
-                logging.warning(f'No valid PhysicalInterface found: "{names}".  Cannot remove from InterfaceGroup.')
+                logging.warning(f'No valid PhysicalInterface found: "{names}".  Cannot remove from InterfaceGroups.')
         elif action == 'remove':
             if 'interfaces' in self.__dict__:
                 intfs = []
@@ -70,11 +71,15 @@ class InterfaceGroup(APIClassTemplate):
                     if interface["name"] not in names:
                         intfs.append(interface)
                     else:
-                        logging.info(f"""Removed "{interface['name']}" from InterfaceGroup.""")
+                        logging.info(f"""Removed "{interface['name']}" from InterfaceGroups.""")
                 self.interfaces = intfs
             else:
                 logging.warning("This InterfaceObject has no interfaces.  Nothing to remove.")
         elif action == 'clear-all':
             if 'interfaces' in self.__dict__:
                 del self.interfaces
-                logging.info('All PhysicalInterfaces removed from this InterfaceGroup.')
+                logging.info('All PhysicalInterfaces removed from this InterfaceGroups.')
+
+
+class InterfaceGroup(InterfaceGroups):
+    warnings.warn("Deprecated: InterfaceGroup() should be called via InterfaceGroups().")

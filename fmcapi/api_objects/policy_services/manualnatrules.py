@@ -1,10 +1,10 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .ftdnatpolicy import FTDNatPolicy
-from fmcapi.api_objects.object_services.ipaddresses import IPAddresses
-from fmcapi.api_objects.object_services.networkgroup import NetworkGroup
+from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
+from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
 from fmcapi.api_objects.object_services.portobjectgroup import PortObjectGroup
 from fmcapi.api_objects.object_services.protocolport import ProtocolPort
-from fmcapi.api_objects.object_services.interfaceobject import InterfaceObject
+from fmcapi.api_objects.object_services.interfaceobjects import InterfaceObjects
 import logging
 
 
@@ -141,8 +141,8 @@ class ManualNatRules(APIClassTemplate):
 
     def original_source(self, name):
         logging.debug("In original_source() for ManualNatRules class.")
-        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
-        networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+        ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroups(fmc=self.fmc).get()
         items = ipaddresses_json.get('items', [])
         new_net = None
         for item in items:
@@ -157,8 +157,8 @@ class ManualNatRules(APIClassTemplate):
 
     def translated_source(self, name):
         logging.debug("In translated_source() for ManualNatRules class.")
-        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
-        networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+        ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroups(fmc=self.fmc).get()
         items = ipaddresses_json.get('items', [])
         new_net = None
         for item in items:
@@ -173,8 +173,8 @@ class ManualNatRules(APIClassTemplate):
 
     def original_destination(self, name):
         logging.debug("In original_destination() for ManualNatRules class.")
-        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
-        networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+        ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroups(fmc=self.fmc).get()
         items = ipaddresses_json.get('items', [])
         new_net = None
         for item in items:
@@ -189,8 +189,8 @@ class ManualNatRules(APIClassTemplate):
 
     def translated_destination(self, name):
         logging.debug("In translated_destination() for ManualNatRules class.")
-        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
-        networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+        ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroups(fmc=self.fmc).get()
         items = ipaddresses_json.get('items', [])
         new_net = None
         for item in items:
@@ -269,7 +269,7 @@ class ManualNatRules(APIClassTemplate):
 
     def source_intf(self, name):
         logging.debug("In source_intf() for ManualNatRules class.")
-        intf_obj = InterfaceObject(fmc=self.fmc).get()
+        intf_obj = InterfaceObjects(fmc=self.fmc).get()
         items = intf_obj.get('items', [])
         new_intf = None
         for item in items:
@@ -284,7 +284,7 @@ class ManualNatRules(APIClassTemplate):
 
     def destination_intf(self, name):
         logging.debug("In destination_intf() for ManualNatRules class.")
-        intf_obj = InterfaceObject(fmc=self.fmc).get()
+        intf_obj = InterfaceObjects(fmc=self.fmc).get()
         items = intf_obj.get('items', [])
         new_intf = None
         for item in items:
@@ -299,8 +299,8 @@ class ManualNatRules(APIClassTemplate):
 
     def identity_nat(self, name):
         logging.debug("In identity_nat() for ManualNatRules class.")
-        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
-        networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+        ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroups(fmc=self.fmc).get()
         items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
         new_net = None
         for item in items:
@@ -316,8 +316,8 @@ class ManualNatRules(APIClassTemplate):
             logging.info(f'Adding "{name}" to ManualNatRules.')
 
     def patPool(self, name, options={}):
-        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
-        networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+        ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroups(fmc=self.fmc).get()
         items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
         new_net = None
         for item in items:

@@ -1,8 +1,8 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .ftdnatpolicy import FTDNatPolicy
-from fmcapi.api_objects.object_services.ipaddresses import IPAddresses
-from fmcapi.api_objects.object_services.interfaceobject import InterfaceObject
-from fmcapi.api_objects.object_services.networkgroup import NetworkGroup
+from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
+from fmcapi.api_objects.object_services.interfaceobjects import InterfaceObjects
+from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
 import logging
 
 
@@ -114,7 +114,7 @@ class AutoNatRules(APIClassTemplate):
 
     def original_network(self, name):
         logging.debug("In original_network() for AutoNatRules class.")
-        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+        ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
         items = ipaddresses_json.get('items', [])
         new_net = None
         for item in items:
@@ -130,7 +130,7 @@ class AutoNatRules(APIClassTemplate):
     def translated_network(self, name):
         # Auto Nat rules can't use network group objects
         logging.debug("In translated_network() for AutoNatRules class.")
-        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+        ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
         items = ipaddresses_json.get('items', [])
         new_net = None
         for item in items:
@@ -145,7 +145,7 @@ class AutoNatRules(APIClassTemplate):
 
     def source_intf(self, name):
         logging.debug("In source_intf() for AutoNatRules class.")
-        intf_obj = InterfaceObject(fmc=self.fmc).get()
+        intf_obj = InterfaceObjects(fmc=self.fmc).get()
         items = intf_obj.get('items', [])
         new_intf = None
         for item in items:
@@ -164,7 +164,7 @@ class AutoNatRules(APIClassTemplate):
 
     def destination_intf(self, name):
         logging.debug("In destination_intf() for AutoNatRules class.")
-        intf_obj = InterfaceObject(fmc=self.fmc).get()
+        intf_obj = InterfaceObjects(fmc=self.fmc).get()
         items = intf_obj.get('items', [])
         new_intf = None
         for item in items:
@@ -183,7 +183,7 @@ class AutoNatRules(APIClassTemplate):
 
     def identity_nat(self, name):
         logging.debug("In identity_nat() for AutoNatRules class.")
-        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
+        ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
         items = ipaddresses_json.get('items', [])
         new_net = None
         for item in items:
@@ -200,8 +200,8 @@ class AutoNatRules(APIClassTemplate):
 
     def patPool(self, name, options={}):
         # Network Group Object permitted for patPool
-        ipaddresses_json = IPAddresses(fmc=self.fmc).get()
-        networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+        ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroups(fmc=self.fmc).get()
         items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
         new_net = None
         for item in items:

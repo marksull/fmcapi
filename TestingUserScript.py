@@ -27,6 +27,8 @@ def main():
                     ) as fmc1:
         logging.info('# ### Mega Test Start!!! ### #')
 
+        '''
+        # Working Tests
         unit_tests.test__auditrecords(fmc=fmc1)
         unit_tests.test__deployabledevices(fmc=fmc1)
         unit_tests.test__deploymentrequests(fmc=fmc1)
@@ -72,8 +74,6 @@ def main():
         unit_tests.test__ports(fmc=fmc1)
         unit_tests.test__autonat(fmc=fmc1)
         unit_tests.test__manualnat(fmc=fmc1)
-        '''
-        # Working Tests
         '''
 
         '''

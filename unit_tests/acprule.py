@@ -26,7 +26,7 @@ def test__acp_rule(fmc):
     fqdns1 = fmcapi.FQDNS(fmc=fmc, name='_fqdns1', value='www.cisco.com')
     fqdns1.post()
 
-    obj1 = fmcapi.NetworkGroup(fmc=fmc, name='_fmcapi_test_networkgroup')
+    obj1 = fmcapi.NetworkGroups(fmc=fmc, name='_fmcapi_test_networkgroup')
     obj1.named_networks(action='add', name=ipnet2.name)
     obj1.unnamed_networks(action='add', value='4.4.4.4/32')
     obj1.post()

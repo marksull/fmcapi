@@ -55,21 +55,26 @@ from .object_services.endpointdevicetypes import EndPointDeviceTypes
 from .object_services.extendedaccesslist import ExtendedAccessList
 from .object_services.fqdns import FQDNS
 from .object_services.geolocation import Geolocation
-from .object_services.icmpv4object import ICMPv4Object
-from .object_services.icmpv6object import ICMPv6Object
+from .object_services.icmpv4objects import ICMPv4Objects
+from .object_services.icmpv4objects import ICMPv4Object
+from .object_services.icmpv6objects import ICMPv6Objects
+from .object_services.icmpv6objects import ICMPv6Object
 from .object_services.ikev1ipsecproposals import IKEv1IpsecProposals
 from .object_services.ikev1policies import IKEv1Policies
 from .object_services.ikev2ipsecproposals import IKEv2IpsecProposals
 from .object_services.ikev2policies import IKEv2Policies
-from .object_services.interfacegroup import InterfaceGroup
-from .object_services.interfaceobject import InterfaceObject
-from .object_services.ipaddresses import IPAddresses
+from .object_services.interfacegroups import InterfaceGroups
+from .object_services.interfacegroups import InterfaceGroup
+from .object_services.interfaceobjects import InterfaceObjects
+from .object_services.interfaceobjects import InterfaceObject
+from .object_services.networkaddresses import NetworkAddresses
+from .object_services.networkaddresses import IPAddresses
 from .object_services.hosts import Hosts
 from .object_services.hosts import IPHost
 from .object_services.ipnetwork import IPNetwork
 from .object_services.iprange import IPRange
 from .object_services.isesecuritygrouptags import ISESecurityGroupTags
-from .object_services.networkgroup import NetworkGroup
+from .object_services.networkgroups import NetworkGroups
 from .object_services.portobjectgroup import PortObjectGroup
 from .object_services.ports import Ports
 from .object_services.protocolport import ProtocolPort
@@ -161,20 +166,25 @@ __all__ = [
     'Geolocation',
     'Hosts',
     'IPHost',
-
+    'ICMPv4Objects',
     'ICMPv4Object',
+    'ICMPv6Objects',
     'ICMPv6Object',
     'IKEv1IpsecProposals',
     'IKEv1Policies',
     'IKEv2IpsecProposals',
     'IKEv2Policies',
+    'InterfaceGroups',
     'InterfaceGroup',
+    'InterfaceObjects',
     'InterfaceObject',
+    'NetworkAddresses',
     'IPAddresses',
+
     'IPNetwork',
     'IPRange',
     'ISESecurityGroupTags',
-    'NetworkGroup',
+    'NetworkGroups',
     'PortObjectGroup',
     'Ports',
     'ProtocolPort',

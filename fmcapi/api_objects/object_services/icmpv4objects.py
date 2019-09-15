@@ -1,10 +1,11 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
+import warnings
 
 
-class ICMPv4Object(APIClassTemplate):
+class ICMPv4Objects(APIClassTemplate):
     """
-    The ICMPv4Object Object in the FMC.
+    The ICMPv4Objects Object in the FMC.
     """
 
     URL_SUFFIX = '/object/icmpv4objects'
@@ -12,12 +13,12 @@ class ICMPv4Object(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for ICMPv4Object class.")
+        logging.debug("In __init__() for ICMPv4Objects class.")
         self.parse_kwargs(**kwargs)
         self.type = 'ICMPV4Object'
 
     def format_data(self):
-        logging.debug("In format_data() for ICMPv4Object class.")
+        logging.debug("In format_data() for ICMPv4Objects class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -39,7 +40,7 @@ class ICMPv4Object(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for ICMPv4Object class.")
+        logging.debug("In parse_kwargs() for ICMPv4Objects class.")
         if 'overrideTargetId' in kwargs:
             self.overrideTargetId = kwargs['overrideTargetId']
         if 'code' in kwargs:
@@ -50,3 +51,7 @@ class ICMPv4Object(APIClassTemplate):
             self.overrides = kwargs['overrides']
         if 'overridable' in kwargs:
             self.overridable = kwargs['overridable']
+
+
+class ICMPv4Object(ICMPv4Objects):
+    warnings.warn("Deprecated: ICMPv4Object() should be called via ICMPv4Objects().")

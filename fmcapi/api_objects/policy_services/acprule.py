@@ -7,8 +7,8 @@ from fmcapi.api_objects.object_services.vlantag import VlanTag
 from fmcapi.api_objects.object_services.portobjectgroup import PortObjectGroup
 from fmcapi.api_objects.object_services.protocolport import ProtocolPort
 from fmcapi.api_objects.object_services.fqdns import FQDNS
-from fmcapi.api_objects.object_services.networkgroup import NetworkGroup
-from fmcapi.api_objects.object_services.ipaddresses import IPAddresses
+from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
+from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
 from fmcapi.api_objects.policy_services.filepolicies import FilePolicies
 from fmcapi.api_objects.helper_functions import get_networkaddress_type
 import logging
@@ -510,8 +510,8 @@ class ACPRule(APIClassTemplate):
                 self.sourceNetworks['literals'][literal] = type_
                 logging.info(f'Adding literal "{literal}" of type "{type_}" to sourceNetworks for this ACPRule.')
             else:
-                ipaddresses_json = IPAddresses(fmc=self.fmc).get()
-                networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+                ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
+                networkgroup_json = NetworkGroups(fmc=self.fmc).get()
                 fqdns_json = FQDNS(fmc=self.fmc).get()
                 items = ipaddresses_json.get('items', []) + \
                         networkgroup_json.get('items', []) + \
@@ -609,8 +609,8 @@ class ACPRule(APIClassTemplate):
                 self.destinationNetworks['literals'][literal] = type_
                 logging.info(f'Adding literal "{literal}" of type "{type_}" to destinationNetworks for this ACPRule.')
             else:
-                ipaddresses_json = IPAddresses(fmc=self.fmc).get()
-                networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+                ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
+                networkgroup_json = NetworkGroups(fmc=self.fmc).get()
                 if self.fmc.serverVersion >= '6.4':
                     fqdns_json = FQDNS(fmc=self.fmc).get()
                 else:

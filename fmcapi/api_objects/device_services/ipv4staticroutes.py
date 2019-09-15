@@ -1,9 +1,9 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .devicerecords import Device
-from fmcapi.api_objects.object_services.ipaddresses import IPAddresses
+from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
 from fmcapi.api_objects.object_services.slamonitor import SLAMonitor
 from fmcapi.api_objects.object_services.hosts import Hosts
-from fmcapi.api_objects.object_services.networkgroup import NetworkGroup
+from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
 import logging
 import warnings
 
@@ -79,8 +79,8 @@ class IPv4StaticRoutes(APIClassTemplate):
         if action == 'add':
             # Valid objects are IPHost, IPNetwork and NetworkGroup.
             # Create a dictionary to contain all three object type.
-            ipaddresses_json = IPAddresses(fmc=self.fmc).get()
-            networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+            ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
+            networkgroup_json = NetworkGroups(fmc=self.fmc).get()
             items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
             for network in networks:
                 # Find the matching object name in the dictionary if it exists
@@ -104,8 +104,8 @@ class IPv4StaticRoutes(APIClassTemplate):
                 else:
                     logging.warning(f'Network "{network}" not found.  Cannot set up device for IPv4StaticRoute.')
         elif action == 'remove':
-            ipaddresses_json = IPAddresses(fmc=self.fmc).get()
-            networkgroup_json = NetworkGroup(fmc=self.fmc).get()
+            ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
+            networkgroup_json = NetworkGroups(fmc=self.fmc).get()
             items = ipaddresses_json.get('items', []) + networkgroup_json.get('items', [])
             for network in networks:
                 net1 = list(filter(lambda i: i['name'] == network, items))

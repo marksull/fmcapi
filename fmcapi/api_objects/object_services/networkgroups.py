@@ -1,12 +1,13 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.helper_functions import *
-from .ipaddresses import IPAddresses
+from .networkaddresses import NetworkAddresses
 import logging
+import warnings
 
 
-class NetworkGroup(APIClassTemplate):
+class NetworkGroups(APIClassTemplate):
     """
-    The NetworkGroup Object in the FMC.
+    The NetworkGroups Object in the FMC.
     """
 
     URL_SUFFIX = '/object/networkgroups'
@@ -16,12 +17,12 @@ class NetworkGroup(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for NetworkGroup class.")
+        logging.debug("In __init__() for NetworkGroups class.")
         self.parse_kwargs(**kwargs)
         self.type = 'NetworkGroup'
 
     def format_data(self):
-        logging.debug("In format_data() for NetworkGroup class.")
+        logging.debug("In format_data() for NetworkGroups class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -37,16 +38,16 @@ class NetworkGroup(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for NetworkGroup class.")
+        logging.debug("In parse_kwargs() for NetworkGroups class.")
         if 'objects' in kwargs:
             self.objects = kwargs['objects']
         if 'literals' in kwargs:
             self.literals = kwargs['literals']
 
     def named_networks(self, action, name=''):
-        logging.debug("In named_networks() for NetworkGroup class.")
+        logging.debug("In named_networks() for NetworkGroups class.")
         if action == 'add':
-            net1 = IPAddresses(fmc=self.fmc)
+            net1 = NetworkAddresses(fmc=self.fmc)
             response = net1.get()
             if 'items' in response:
                 new_net = None
@@ -70,7 +71,7 @@ class NetworkGroup(APIClassTemplate):
                         self.objects = [new_net]
                         logging.info(f'Adding "{name}" to NetworkGroup.')
         if action == 'addgroup':
-            netg1 = NetworkGroup(fmc=self.fmc)
+            netg1 = NetworkGroups(fmc=self.fmc)
             response = netg1.get()
             if 'items' in response:
                 new_net = None
@@ -149,3 +150,8 @@ class NetworkGroup(APIClassTemplate):
             if 'literals' in self.__dict__:
                 del self.literals
                 logging.info('All unnamed_networks removed from this NetworkGroup.')
+
+
+class NetworkGroup(NetworkGroups):
+    warnings.warn("Deprecated: NetworkGroup() should be called via NetworkGroups().")
+

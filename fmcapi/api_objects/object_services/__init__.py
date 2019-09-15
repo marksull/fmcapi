@@ -25,21 +25,26 @@ from .endpointdevicetypes import EndPointDeviceTypes
 from .extendedaccesslist import ExtendedAccessList
 from .fqdns import FQDNS
 from .geolocation import Geolocation
-from .icmpv4object import ICMPv4Object
-from .icmpv6object import ICMPv6Object
+from .icmpv4objects import ICMPv4Objects
+from .icmpv4objects import ICMPv4Object
+from .icmpv6objects import ICMPv6Objects
+from .icmpv6objects import ICMPv6Object
 from .ikev1ipsecproposals import IKEv1IpsecProposals
 from .ikev1policies import IKEv1Policies
 from .ikev2ipsecproposals import IKEv2IpsecProposals
 from .ikev2policies import IKEv2Policies
-from .interfacegroup import InterfaceGroup
-from .interfaceobject import InterfaceObject
-from .ipaddresses import IPAddresses
+from .interfacegroups import InterfaceGroups
+from .interfacegroups import InterfaceGroup
+from .interfaceobjects import InterfaceObjects
+from .interfaceobjects import InterfaceObject
+from .networkaddresses import NetworkAddresses
+from .networkaddresses import IPAddresses
 from .hosts import Hosts
 from .hosts import IPHost
 from .ipnetwork import IPNetwork
 from .iprange import IPRange
 from .isesecuritygrouptags import ISESecurityGroupTags
-from .networkgroup import NetworkGroup
+from .networkgroups import NetworkGroups
 from .portobjectgroup import PortObjectGroup
 from .ports import Ports
 from .protocolport import ProtocolPort
@@ -90,19 +95,24 @@ __all__ = [
     'Geolocation',
     'Hosts',
     'IPHost',
+    'ICMPv4Objects',
     'ICMPv4Object',
+    'ICMPv6Objects',
     'ICMPv6Object',
     'IKEv1IpsecProposals',
     'IKEv1Policies',
     'IKEv2IpsecProposals',
     'IKEv2Policies',
+    'InterfaceGroups',
     'InterfaceGroup',
+    'InterfaceObjects',
     'InterfaceObject',
+    'NetworkAddresses',
     'IPAddresses',
     'IPNetwork',
     'IPRange',
     'ISESecurityGroupTags',
-    'NetworkGroup',
+    'NetworkGroups',
     'PortObjectGroup',
     'Ports',
     'ProtocolPort',
