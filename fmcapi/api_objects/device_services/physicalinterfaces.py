@@ -1,5 +1,5 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from fmcapi.api_objects.object_services.securityzone import SecurityZone
+from fmcapi.api_objects.object_services.securityzones import SecurityZones
 from fmcapi.api_objects.device_services.devicerecords import Device
 import logging
 import warnings
@@ -108,7 +108,7 @@ class PhysicalInterfaces(APIClassTemplate):
 
     def sz(self, name):
         logging.debug("In sz() for PhysicalInterface class.")
-        sz = SecurityZone(fmc=self.fmc)
+        sz = SecurityZones(fmc=self.fmc)
         sz.get(name=name)
         if 'id' in sz.__dict__:
             new_zone = {'name': sz.name, 'id': sz.id, 'type': sz.type}

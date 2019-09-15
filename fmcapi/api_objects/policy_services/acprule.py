@@ -1,11 +1,11 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.policy_services.accesscontrolpolicy import AccessControlPolicy
 from fmcapi.api_objects.policy_services.intrusionpolicy import IntrusionPolicy
-from fmcapi.api_objects.object_services.variableset import VariableSet
-from fmcapi.api_objects.object_services.securityzone import SecurityZone
-from fmcapi.api_objects.object_services.vlantag import VlanTag
-from fmcapi.api_objects.object_services.portobjectgroup import PortObjectGroup
-from fmcapi.api_objects.object_services.protocolport import ProtocolPort
+from fmcapi.api_objects.object_services.variablesets import VariableSets
+from fmcapi.api_objects.object_services.securityzones import SecurityZones
+from fmcapi.api_objects.object_services.vlantags import VlanTags
+from fmcapi.api_objects.object_services.portobjectgroups import PortObjectGroups
+from fmcapi.api_objects.object_services.protocolportobjects import ProtocolPortObjects
 from fmcapi.api_objects.object_services.fqdns import FQDNS
 from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
 from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
@@ -239,7 +239,7 @@ class ACPRule(APIClassTemplate):
                 del self.variableSet
                 logging.info('Variable Set removed from this ACPRule object.')
         elif action == 'set':
-            vs = VariableSet(fmc=self.fmc)
+            vs = VariableSets(fmc=self.fmc)
             vs.get(name=name)
             self.variableSet = {'name': vs.name, 'id': vs.id, 'type': vs.type}
             logging.info(f'VariableSet set to "{name}" for this ACPRule object.')
@@ -259,7 +259,7 @@ class ACPRule(APIClassTemplate):
     def vlan_tags(self, action, name=''):
         logging.debug("In vlan_tags() for ACPRule class.")
         if action == 'add':
-            vlantag = VlanTag(fmc=self.fmc)
+            vlantag = VlanTags(fmc=self.fmc)
             vlantag.get(name=name)
             if 'id' in vlantag.__dict__:
                 if 'vlanTags' in self.__dict__:
@@ -278,7 +278,7 @@ class ACPRule(APIClassTemplate):
             else:
                 logging.warning(f'VLAN Tag, "{name}", not found.  Cannot add to ACPRule.')
         elif action == 'remove':
-            vlantag = VlanTag(fmc=self.fmc)
+            vlantag = VlanTags(fmc=self.fmc)
             vlantag.get(name=name)
             if 'id' in vlantag.__dict__:
                 if 'vlanTags' in self.__dict__:
@@ -300,7 +300,7 @@ class ACPRule(APIClassTemplate):
     def source_zone(self, action, name=''):
         logging.debug("In source_zone() for ACPRule class.")
         if action == 'add':
-            sz = SecurityZone(fmc=self.fmc)
+            sz = SecurityZones(fmc=self.fmc)
             sz.get(name=name)
             if 'id' in sz.__dict__:
                 if 'sourceZones' in self.__dict__:
@@ -319,7 +319,7 @@ class ACPRule(APIClassTemplate):
             else:
                 logging.warning('Security Zone, "{name}", not found.  Cannot add to ACPRule.')
         elif action == 'remove':
-            sz = SecurityZone(fmc=self.fmc)
+            sz = SecurityZones(fmc=self.fmc)
             sz.get(name=name)
             if 'id' in sz.__dict__:
                 if 'sourceZones' in self.__dict__:
@@ -341,7 +341,7 @@ class ACPRule(APIClassTemplate):
     def destination_zone(self, action, name=''):
         logging.debug("In destination_zone() for ACPRule class.")
         if action == 'add':
-            sz = SecurityZone(fmc=self.fmc)
+            sz = SecurityZones(fmc=self.fmc)
             sz.get(name=name)
             if 'id' in sz.__dict__:
                 if 'destinationZones' in self.__dict__:
@@ -360,7 +360,7 @@ class ACPRule(APIClassTemplate):
             else:
                 logging.warning(f'Security Zone, "{name}", not found.  Cannot add to ACPRule.')
         elif action == 'remove':
-            sz = SecurityZone(fmc=self.fmc)
+            sz = SecurityZones(fmc=self.fmc)
             sz.get(name=name)
             if 'id' in sz.__dict__:
                 if 'destinationZones' in self.__dict__:
@@ -382,12 +382,12 @@ class ACPRule(APIClassTemplate):
     def source_port(self, action, name=''):
         logging.debug("In source_port() for ACPRule class.")
         if action == 'add':
-            pport_json = ProtocolPort(fmc=self.fmc)
+            pport_json = ProtocolPortObjects(fmc=self.fmc)
             pport_json.get(name=name)
             if 'id' in pport_json.__dict__:
                 item = pport_json
             else:
-                item = PortObjectGroup(fmc=self.fmc)
+                item = PortObjectGroups(fmc=self.fmc)
                 item.get(name=name)
             if 'id' in item.__dict__:
                 if 'sourcePorts' in self.__dict__:
@@ -408,12 +408,12 @@ class ACPRule(APIClassTemplate):
             else:
                 logging.warning(f'Protocol Port or Protocol Port Group: "{name}", not found.  Cannot add to ACPRule.')
         elif action == 'remove':
-            pport_json = ProtocolPort(fmc=self.fmc)
+            pport_json = ProtocolPortObjects(fmc=self.fmc)
             pport_json.get(name=name)
             if 'id' in pport_json.__dict__:
                 item = pport_json
             else:
-                item = PortObjectGroup(fmc=self.fmc)
+                item = PortObjectGroups(fmc=self.fmc)
                 item.get(name=name)
             if 'id' in item.__dict__:
                 if 'sourcePorts' in self.__dict__:
@@ -435,12 +435,12 @@ class ACPRule(APIClassTemplate):
     def destination_port(self, action, name=''):
         logging.debug("In destination_port() for ACPRule class.")
         if action == 'add':
-            pport_json = ProtocolPort(fmc=self.fmc)
+            pport_json = ProtocolPortObjects(fmc=self.fmc)
             pport_json.get(name=name)
             if 'id' in pport_json.__dict__:
                 item = pport_json
             else:
-                item = PortObjectGroup(fmc=self.fmc)
+                item = PortObjectGroups(fmc=self.fmc)
                 item.get(name=name)
             if 'id' in item.__dict__:
                 if 'destinationPorts' in self.__dict__:
@@ -461,12 +461,12 @@ class ACPRule(APIClassTemplate):
             else:
                 logging.warning(f'Protocol Port or Protocol Port Group: "{name}", not found.  Cannot add to ACPRule.')
         elif action == 'remove':
-            pport_json = ProtocolPort(fmc=self.fmc)
+            pport_json = ProtocolPortObjects(fmc=self.fmc)
             pport_json.get(name=name)
             if 'id' in pport_json.__dict__:
                 item = pport_json
             else:
-                item = PortObjectGroup(fmc=self.fmc)
+                item = PortObjectGroups(fmc=self.fmc)
                 item.get(name=name)
             if 'id' in item.__dict__:
                 if 'destinationPorts' in self.__dict__:

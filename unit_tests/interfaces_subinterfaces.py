@@ -9,11 +9,11 @@ def test__subinterfaces(fmc):
     starttime = str(int(time.time()))
     namer = f'_fmcapi_test_{starttime}'
 
-    sz1 = fmcapi.SecurityZone(fmc=fmc)
+    sz1 = fmcapi.SecurityZones(fmc=fmc)
     sz1.name = "_sz1" + namer
     sz1.post()
     time.sleep(1)
-    sz2 = fmcapi.SecurityZone(fmc=fmc)
+    sz2 = fmcapi.SecurityZones(fmc=fmc)
     sz2.name = "_sz2" + namer
     sz2.post()
     time.sleep(1)

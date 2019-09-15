@@ -6,11 +6,11 @@ import time
 def test__phys_interfaces(fmc):
     logging.info('Test PhysicalInterface.  get, put PhysicalInterface Objects. Requires registered device')
 
-    sz1 = fmcapi.SecurityZone(fmc=fmc)
+    sz1 = fmcapi.SecurityZones(fmc=fmc)
     sz1.name = "SZ-OUTSIDE1"
     sz1.post()
     time.sleep(1)
-    sz2 = fmcapi.SecurityZone(fmc=fmc)
+    sz2 = fmcapi.SecurityZones(fmc=fmc)
     sz2.name = "SZ-OUTSIDE2"
     sz2.post()
     time.sleep(1)

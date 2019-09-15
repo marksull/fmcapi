@@ -11,9 +11,9 @@ def test__network_group(fmc):
 
     obj10 = fmcapi.Hosts(fmc=fmc, name='_iphost1', value='3.3.3.3')
     obj10.post()
-    obj11 = fmcapi.IPNetwork(fmc=fmc, name='_ipnet1', value='3.3.3.0/24')
+    obj11 = fmcapi.Networks(fmc=fmc, name='_ipnet1', value='3.3.3.0/24')
     obj11.post()
-    obj12 = fmcapi.IPRange(fmc=fmc, name='_iprange1', value='3.3.3.3-33.33.33.33')
+    obj12 = fmcapi.Ranges(fmc=fmc, name='_iprange1', value='3.3.3.3-33.33.33.33')
     obj12.post()
     time.sleep(1)
 

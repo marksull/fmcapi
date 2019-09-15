@@ -27,22 +27,22 @@ def main():
         acp.post()
 
         # Create Security Zones
-        sz_inside = fmcapi.SecurityZone(fmc=fmc1, name='inside', interfaceMode='ROUTED')
+        sz_inside = fmcapi.SecurityZones(fmc=fmc1, name='inside', interfaceMode='ROUTED')
         sz_inside.post()
         # sz_inside.get()
-        sz_outside = fmcapi.SecurityZone(fmc=fmc1, name='outside', interfaceMode='ROUTED')
+        sz_outside = fmcapi.SecurityZones(fmc=fmc1, name='outside', interfaceMode='ROUTED')
         sz_outside.post()
         # sz_outside.get()
-        sz_dmz = fmcapi.SecurityZone(fmc=fmc1, name='dmz', interfaceMode='ROUTED')
+        sz_dmz = fmcapi.SecurityZones(fmc=fmc1, name='dmz', interfaceMode='ROUTED')
         sz_dmz.post()
         # sz_dmz.get()
 
         # Create Network Objects
         hq_dfgw_gateway = fmcapi.Hosts(fmc=fmc1, name='hq-default-gateway', value='100.64.0.1')
         hq_dfgw_gateway.post()
-        hq_lan = fmcapi.IPNetwork(fmc=fmc1, name='hq-lan', value='10.0.0.0/24')
+        hq_lan = fmcapi.Networks(fmc=fmc1, name='hq-lan', value='10.0.0.0/24')
         hq_lan.post()
-        all_lans = fmcapi.IPNetwork(fmc=fmc1, name='all-lans', value='10.0.0.0/8')
+        all_lans = fmcapi.Networks(fmc=fmc1, name='all-lans', value='10.0.0.0/8')
         all_lans.post()
         hq_fmc = fmcapi.Hosts(fmc=fmc1, name='hq_fmc', value='10.0.0.10')
         hq_fmc.post()

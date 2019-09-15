@@ -1,7 +1,7 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .devicerecords import Device
 from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
-from fmcapi.api_objects.object_services.slamonitor import SLAMonitor
+from fmcapi.api_objects.object_services.slamonitors import SLAMonitors
 from fmcapi.api_objects.object_services.hosts import Hosts
 from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
 import logging
@@ -136,7 +136,7 @@ class IPv4StaticRoutes(APIClassTemplate):
 
     def ipsla(self, name):
         logging.info("In ipsla() for IPv4StaticRoute class.")
-        ipsla1 = SLAMonitor(fmc=self.fmc)
+        ipsla1 = SLAMonitors(fmc=self.fmc)
         ipsla1.get(name=name)
         if 'id' in ipsla1.__dict__:
             self.routeTracking = {

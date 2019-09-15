@@ -1,12 +1,13 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from .vlantag import VlanTag
+from .vlantags import VlanTags
 from fmcapi.api_objects.helper_functions import validate_vlans
 import logging
+import warnings
 
 
-class VlanGroupTag(APIClassTemplate):
+class VlanGroupTags(APIClassTemplate):
     """
-    The NetworkGroup Object in the FMC.
+    The VlanGroupTags Object in the FMC.
     """
 
     URL_SUFFIX = '/object/vlangrouptags'
@@ -16,12 +17,12 @@ class VlanGroupTag(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for VlanGroupTag class.")
+        logging.debug("In __init__() for VlanGroupTags class.")
         self.parse_kwargs(**kwargs)
         self.type = 'VlanGroupTag'
 
     def format_data(self):
-        logging.debug("In format_data() for VlanGroupTag class.")
+        logging.debug("In format_data() for VlanGroupTags class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -39,16 +40,16 @@ class VlanGroupTag(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for VlanGroupTag class.")
+        logging.debug("In parse_kwargs() for VlanGroupTags class.")
         if 'objects' in kwargs:
             self.objects = kwargs['objects']
         if 'literals' in kwargs:
             self.literals = kwargs['literals']
 
     def named_vlantags(self, action, name=''):
-        logging.debug("In named_vlantags() for VlanGroupTag class.")
+        logging.debug("In named_vlantags() for VlanGroupTags class.")
         if action == 'add':
-            vlan1 = VlanTag(fmc=self.fmc)
+            vlan1 = VlanTags(fmc=self.fmc)
             response = vlan1.get()
             if 'items' in response:
                 new_vlan = None
@@ -57,7 +58,7 @@ class VlanGroupTag(APIClassTemplate):
                         new_vlan = {'name': item['name'], 'id': item['id'], 'type': item['type']}
                         break
                 if new_vlan is None:
-                    logging.warning(f'VlanTag "{name}" is not found in FMC.  Cannot add to VlanGroupTag.')
+                    logging.warning(f'VlanTag "{name}" is not found in FMC.  Cannot add to VlanGroupTags.')
                 else:
                     if 'objects' in self.__dict__:
                         duplicate = False
@@ -67,10 +68,10 @@ class VlanGroupTag(APIClassTemplate):
                                 break
                         if not duplicate:
                             self.objects.append(new_vlan)
-                            logging.info(f'Adding "{name}" to VlanGroupTag.')
+                            logging.info(f'Adding "{name}" to VlanGroupTags.')
                     else:
                         self.objects = [new_vlan]
-                        logging.info(f'Adding "{name}" to VlanGroupTag.')
+                        logging.info(f'Adding "{name}" to VlanGroupTags.')
         elif action == 'remove':
             if 'objects' in self.__dict__:
                 objects_list = []
@@ -78,16 +79,16 @@ class VlanGroupTag(APIClassTemplate):
                     if obj['name'] != name:
                         objects_list.append(obj)
                 self.objects = objects_list
-                logging.info(f'Removed "{name}" from VlanGroupTag.')
+                logging.info(f'Removed "{name}" from VlanGroupTags.')
             else:
-                logging.info("This VlanGroupTag has no named_vlantags.  Nothing to remove.")
+                logging.info("This VlanGroupTags has no named_vlantags.  Nothing to remove.")
         elif action == 'clear':
             if 'objects' in self.__dict__:
                 del self.objects
-                logging.info('All named_vlantags removed from this VlanGroupTag.')
+                logging.info('All named_vlantags removed from this VlanGroupTags.')
 
     def unnamed_vlantags(self, action, startvlan='', endvlan=''):
-        logging.debug("In unnamed_vlantags() for VlanGroupTag class.")
+        logging.debug("In unnamed_vlantags() for VlanGroupTags class.")
         if action == 'add':
             startvlan, endvlan = validate_vlans(start_vlan=startvlan, end_vlan=endvlan)
             new_literal = {'startTag': startvlan, 'endTag': endvlan, 'type': ''}
@@ -99,10 +100,10 @@ class VlanGroupTag(APIClassTemplate):
                         break
                 if not duplicate:
                     self.literals.append(new_literal)
-                    logging.info(f'Adding "{startvlan}/{endvlan}" to VlanGroupTag.')
+                    logging.info(f'Adding "{startvlan}/{endvlan}" to VlanGroupTags.')
             else:
                 self.literals = [new_literal]
-                logging.info(f'Adding "{startvlan}/{endvlan}" to VlanGroupTag.')
+                logging.info(f'Adding "{startvlan}/{endvlan}" to VlanGroupTags.')
         elif action == 'remove':
             startvlan, endvlan = validate_vlans(start_vlan=startvlan, end_vlan=endvlan)
             if 'literals' in self.__dict__:
@@ -111,10 +112,14 @@ class VlanGroupTag(APIClassTemplate):
                     if obj['startTag'] != startvlan and obj['endTag'] != endvlan:
                         literals_list.append(obj)
                 self.literals = literals_list
-                logging.info(f'Removed "{startvlan}/{endvlan}" from VlanGroupTag.')
+                logging.info(f'Removed "{startvlan}/{endvlan}" from VlanGroupTags.')
             else:
                 logging.info("This VlanGroupTag has no unnamed_vlantags.  Nothing to remove.")
         elif action == 'clear':
             if 'literals' in self.__dict__:
                 del self.literals
-                logging.info('All unnamed_vlantags removed from this VlanGroupTag.')
+                logging.info('All unnamed_vlantags removed from this VlanGroupTags.')
+
+
+class VlanGroupTag(VlanGroupTags):
+    warnings.warn("Deprecated: VlanGroupTag() should be called via VlanGroupTags().")

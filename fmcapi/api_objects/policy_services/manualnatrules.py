@@ -2,8 +2,8 @@ from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .ftdnatpolicy import FTDNatPolicy
 from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
 from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
-from fmcapi.api_objects.object_services.portobjectgroup import PortObjectGroup
-from fmcapi.api_objects.object_services.protocolport import ProtocolPort
+from fmcapi.api_objects.object_services.portobjectgroups import PortObjectGroups
+from fmcapi.api_objects.object_services.protocolportobjects import ProtocolPortObjects
 from fmcapi.api_objects.object_services.interfaceobjects import InterfaceObjects
 import logging
 
@@ -205,8 +205,8 @@ class ManualNatRules(APIClassTemplate):
 
     def original_source_port(self, name):
         logging.debug("In original_source_port() for ManualNatRules class.")
-        ports_json = ProtocolPort(fmc=self.fmc).get()
-        portgroup_json = PortObjectGroup(fmc=self.fmc).get()
+        ports_json = ProtocolPortObjects(fmc=self.fmc).get()
+        portgroup_json = PortObjectGroups(fmc=self.fmc).get()
         items = ports_json.get('items', []) + portgroup_json.get('items', [])
         new_port = None
         for item in items:
@@ -221,8 +221,8 @@ class ManualNatRules(APIClassTemplate):
 
     def translated_source_port(self, name):
         logging.debug("In translated_source_port() for ManualNatRules class.")
-        ports_json = ProtocolPort(fmc=self.fmc).get()
-        portgroup_json = PortObjectGroup(fmc=self.fmc).get()
+        ports_json = ProtocolPortObjects(fmc=self.fmc).get()
+        portgroup_json = PortObjectGroups(fmc=self.fmc).get()
         items = ports_json.get('items', []) + portgroup_json.get('items', [])
         new_port = None
         for item in items:
@@ -237,8 +237,8 @@ class ManualNatRules(APIClassTemplate):
 
     def original_destination_port(self, name):
         logging.debug("In original_destination_port() for ManualNatRules class.")
-        ports_json = ProtocolPort(fmc=self.fmc).get()
-        portgroup_json = PortObjectGroup(fmc=self.fmc).get()
+        ports_json = ProtocolPortObjects(fmc=self.fmc).get()
+        portgroup_json = PortObjectGroups(fmc=self.fmc).get()
         items = ports_json.get('items', []) + portgroup_json.get('items', [])
         new_port = None
         for item in items:
@@ -253,8 +253,8 @@ class ManualNatRules(APIClassTemplate):
 
     def translated_destination_port(self, name):
         logging.debug("In translated_destination_port() for ManualNatRules class.")
-        ports_json = ProtocolPort(fmc=self.fmc).get()
-        portgroup_json = PortObjectGroup(fmc=self.fmc).get()
+        ports_json = ProtocolPortObjects(fmc=self.fmc).get()
+        portgroup_json = PortObjectGroups(fmc=self.fmc).get()
         items = ports_json.get('items', []) + portgroup_json.get('items', [])
         new_port = None
         for item in items:

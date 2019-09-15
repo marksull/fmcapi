@@ -1,10 +1,11 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
+import warnings
 
 
-class SecurityZone(APIClassTemplate):
+class SecurityZones(APIClassTemplate):
     """
-    The Security Zone Object in the FMC.
+    The SecurityZones Object in the FMC.
     """
 
     URL_SUFFIX = '/object/securityzones'
@@ -13,11 +14,11 @@ class SecurityZone(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for SecurityZone class.")
+        logging.debug("In __init__() for SecurityZones class.")
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
-        logging.debug("In format_data() for SecurityZone class.")
+        logging.debug("In format_data() for SecurityZones class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -33,10 +34,14 @@ class SecurityZone(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for SecurityZone class.")
+        logging.debug("In parse_kwargs() for SecurityZones class.")
         if 'interfaceMode' in kwargs:
             self.interfaceMode = kwargs['interfaceMode']
         else:
             self.interfaceMode = 'ROUTED'
         if 'interfaces' in kwargs:
             self.interfaces = kwargs['interfaces']
+
+
+class SecurityZone(SecurityZones):
+    warnings.warn("Deprecated: SecurityZone() should be called via SecurityZones().")

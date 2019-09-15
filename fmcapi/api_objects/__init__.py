@@ -71,28 +71,41 @@ from .object_services.networkaddresses import NetworkAddresses
 from .object_services.networkaddresses import IPAddresses
 from .object_services.hosts import Hosts
 from .object_services.hosts import IPHost
-from .object_services.ipnetwork import IPNetwork
-from .object_services.iprange import IPRange
+from .object_services.networks import Networks
+from .object_services.networks import IPNetwork
+from .object_services.ranges import Ranges
+from .object_services.ranges import IPRange
 from .object_services.isesecuritygrouptags import ISESecurityGroupTags
 from .object_services.networkgroups import NetworkGroups
-from .object_services.portobjectgroup import PortObjectGroup
+from .object_services.networkgroups import NetworkGroup
+from .object_services.portobjectgroups import PortObjectGroups
+from .object_services.portobjectgroups import PortObjectGroup
 from .object_services.ports import Ports
-from .object_services.protocolport import ProtocolPort
+from .object_services.protocolportobjects import ProtocolPortObjects
+from .object_services.protocolportobjects import ProtocolPort
 from .object_services.realms import Realms
 from .object_services.realmusergroups import RealmUserGroups
 from .object_services.realmusers import RealmUsers
 from .object_services.securitygrouptags import SecurityGroupTags
-from .object_services.securityzone import SecurityZone
+from .object_services.securityzones import SecurityZones
+from .object_services.securityzones import SecurityZone
 from .object_services.siurlfeeds import SIUrlFeeds
 from .object_services.siurllists import SIUrlLists
-from .object_services.slamonitor import SLAMonitor
+from .object_services.slamonitors import SLAMonitors
+from .object_services.slamonitors import SLAMonitor
 from .object_services.tunneltags import TunnelTags
-from .object_services.url import URL
-from .object_services.urlcategory import URLCategory
-from .object_services.urlgroup import URLGroup
-from .object_services.variableset import VariableSet
-from .object_services.vlangrouptag import VlanGroupTag
-from .object_services.vlantag import VlanTag
+from .object_services.urls import URLs
+from .object_services.urls import URL
+from .object_services.urlcategories import URLCategories
+from .object_services.urlcategories import URLCategory
+from .object_services.urlgroups import URLGroups
+from .object_services.urlgroups import URLGroup
+from .object_services.variablesets import VariableSets
+from .object_services.variablesets import VariableSet
+from .object_services.vlangrouptags import VlanGroupTags
+from .object_services.vlangrouptags import VlanGroupTag
+from .object_services.vlantags import VlanTags
+from .object_services.vlantags import VlanTag
 
 from .policy_services.acprule import ACPRule
 from .policy_services.autonatrules import AutoNatRules
@@ -178,31 +191,44 @@ __all__ = [
     'InterfaceGroup',
     'InterfaceObjects',
     'InterfaceObject',
+    'ISESecurityGroupTags',
     'NetworkAddresses',
     'IPAddresses',
-
-    'IPNetwork',
-    'IPRange',
-    'ISESecurityGroupTags',
     'NetworkGroups',
+    'NetworkGroup',
+    'Networks',
+    'IPNetwork',
+    'PortObjectGroups',
     'PortObjectGroup',
     'Ports',
+    'ProtocolPortObjects',
     'ProtocolPort',
+    'Ranges',
+    'IPRange',
     'Realms',
     'RealmUserGroups',
     'RealmUsers',
     'SecurityGroupTags',
+    'SecurityZones',
     'SecurityZone',
     'SIUrlFeeds',
     'SIUrlLists',
+    'SLAMonitors',
     'SLAMonitor',
     'TunnelTags',
-    'URL',
+    'URLCategories',
     'URLCategory',
+    'URLGroups',
     'URLGroup',
+    'URLs',
+    'URL',
+    'VariableSets',
     'VariableSet',
+    'VlanGroupTags',
     'VlanGroupTag',
+    'VlanTags',
     'VlanTag',
+
     'AccessControlPolicy',
     'ACPRule',
     'AutoNatRules',

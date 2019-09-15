@@ -9,14 +9,14 @@ def test__url_group(fmc):
     starttime = str(int(time.time()))
     namer = f'_fmcapi_test_{starttime}'
 
-    url1 = fmcapi.URL(fmc=fmc, name='_url1', url='example.org')
+    url1 = fmcapi.URLs(fmc=fmc, name='_url1', url='example.org')
     url1.post()
-    url2 = fmcapi.URL(fmc=fmc, name='_url2', url='example.net')
+    url2 = fmcapi.URLs(fmc=fmc, name='_url2', url='example.net')
     url2.post()
-    url3 = fmcapi.URL(fmc=fmc, name='_url3', url='example.com')
+    url3 = fmcapi.URLs(fmc=fmc, name='_url3', url='example.com')
     url3.post()
     time.sleep(1)
-    obj1 = fmcapi.URLGroup(fmc=fmc, name=namer)
+    obj1 = fmcapi.URLGroups(fmc=fmc, name=namer)
     obj1.named_urls(action='add', name=url1.name)
     obj1.named_urls(action='add', name=url1.name)
     obj1.named_urls(action='clear')
@@ -27,7 +27,7 @@ def test__url_group(fmc):
     obj1.post()
     time.sleep(1)
     del obj1
-    obj1 = fmcapi.URLGroup(fmc=fmc, name=namer)
+    obj1 = fmcapi.URLGroups(fmc=fmc, name=namer)
     obj1.get()
     obj1.unnamed_urls(action='add', value='daxm.net')
     obj1.unnamed_urls(action='add', value='daxm.com')

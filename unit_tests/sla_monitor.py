@@ -9,19 +9,19 @@ def test__slamonitor(fmc):
     starttime = str(int(time.time()))
     namer = f'_fmcapi_test_{starttime}'
 
-    sz1 = fmcapi.SecurityZone(fmc=fmc)
+    sz1 = fmcapi.SecurityZones(fmc=fmc)
     sz1.name = "SZ-OUTSIDE1"
     sz1.interfaceMode = 'ROUTED'
     sz1.post()
     time.sleep(1)
 
-    sz2 = fmcapi.SecurityZone(fmc=fmc)
+    sz2 = fmcapi.SecurityZones(fmc=fmc)
     sz2.name = "SZ-OUTSIDE2"
     sz2.interfaceMode = 'ROUTED'
     sz2.post()
     time.sleep(1)
 
-    obj1 = fmcapi.SLAMonitor(fmc=fmc)
+    obj1 = fmcapi.SLAMonitors(fmc=fmc)
     obj1.name = namer
     obj1.frequency = 30
     obj1.slaId = 1

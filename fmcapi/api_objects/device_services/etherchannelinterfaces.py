@@ -1,6 +1,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .devicerecords import Device
-from fmcapi.api_objects.object_services.securityzone import SecurityZone
+from fmcapi.api_objects.object_services.securityzones import SecurityZones
 from fmcapi.api_objects.device_services.physicalinterfaces import PhysicalInterfaces
 import logging
 
@@ -176,7 +176,7 @@ class EtherchannelInterfaces(APIClassTemplate):
 
     def sz(self, name):
         logging.debug("In sz() for EtherchannelInterfaces class.")
-        sz = SecurityZone(fmc=self.fmc)
+        sz = SecurityZones(fmc=self.fmc)
         sz.get(name=name)
         if 'id' in sz.__dict__:
             new_zone = {'name': sz.name, 'id': sz.id, 'type': sz.type}

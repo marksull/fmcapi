@@ -1,11 +1,12 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .ports import Ports
 import logging
+import warnings
 
 
-class PortObjectGroup(APIClassTemplate):
+class PortObjectGroups(APIClassTemplate):
     """
-    The PortObjectGroup Object in the FMC.
+    The PortObjectGroups Object in the FMC.
     """
 
     URL_SUFFIX = '/object/portobjectgroups'
@@ -15,12 +16,12 @@ class PortObjectGroup(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for PortObjectGroup class.")
+        logging.debug("In __init__() for PortObjectGroups class.")
         self.parse_kwargs(**kwargs)
         self.type = 'NetworkGroup'
 
     def format_data(self):
-        logging.debug("In format_data() for PortObjectGroup class.")
+        logging.debug("In format_data() for PortObjectGroups class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -36,14 +37,14 @@ class PortObjectGroup(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for PortObjectGroup class.")
+        logging.debug("In parse_kwargs() for PortObjectGroups class.")
         if 'objects' in kwargs:
             self.objects = kwargs['objects']
         if 'literals' in kwargs:
             self.literals = kwargs['literals']
 
     def named_ports(self, action, name=''):
-        logging.debug("In named_ports() for PortObjectGroup class.")
+        logging.debug("In named_ports() for PortObjectGroups class.")
         if action == 'add':
             port1 = Ports(fmc=self.fmc)
             response = port1.get()
@@ -54,7 +55,7 @@ class PortObjectGroup(APIClassTemplate):
                         new_port = {'name': item['name'], 'id': item['id'], 'type': item['type']}
                         break
                 if new_port is None:
-                    logging.warning(f'Port "{name}" is not found in FMC.  Cannot add to PortObjectGroup.')
+                    logging.warning(f'Port "{name}" is not found in FMC.  Cannot add to PortObjectGroups.')
                 else:
                     if 'objects' in self.__dict__:
                         duplicate = False
@@ -64,10 +65,10 @@ class PortObjectGroup(APIClassTemplate):
                                 break
                         if not duplicate:
                             self.objects.append(new_port)
-                            logging.info(f'Adding "{name}" to PortObjectGroup.')
+                            logging.info(f'Adding "{name}" to PortObjectGroups.')
                     else:
                         self.objects = [new_port]
-                        logging.info(f'Adding "{name}" to PortObjectGroup.')
+                        logging.info(f'Adding "{name}" to PortObjectGroups.')
         elif action == 'remove':
             if 'objects' in self.__dict__:
                 objects_list = []
@@ -75,10 +76,14 @@ class PortObjectGroup(APIClassTemplate):
                     if obj['name'] != name:
                         objects_list.append(obj)
                 self.objects = objects_list
-                logging.info(f'Removed "{name}" from PortObjectGroup.')
+                logging.info(f'Removed "{name}" from PortObjectGroups.')
             else:
-                logging.info("This PortObjectGroup has no named_ports.  Nothing to remove.")
+                logging.info("This PortObjectGroups has no named_ports.  Nothing to remove.")
         elif action == 'clear':
             if 'objects' in self.__dict__:
                 del self.objects
-                logging.info('All named_ports removed from this PortObjectGroup.')
+                logging.info('All named_ports removed from this PortObjectGroups.')
+
+
+class PortObjectGroup(PortObjectGroups):
+    warnings.warn("Deprecated: PortObjectGroup() should be called via PortObjectGroups().")

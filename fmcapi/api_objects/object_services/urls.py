@@ -1,10 +1,11 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
+import warnings
 
 
-class URL(APIClassTemplate):
+class URLs(APIClassTemplate):
     """
-    The URL Object in the FMC.
+    The URLs Object in the FMC.
     """
 
     URL_SUFFIX = '/object/urls'
@@ -12,11 +13,11 @@ class URL(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for URL class.")
+        logging.debug("In __init__() for URLs class.")
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
-        logging.debug("In format_data() for URL class.")
+        logging.debug("In format_data() for URLs class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -30,6 +31,10 @@ class URL(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for URL class.")
+        logging.debug("In parse_kwargs() for URLs class.")
         if 'url' in kwargs:
             self.url = kwargs['url']
+
+
+class URL(URLs):
+    warnings.warn("Deprecated: URL() should be called via URLs().")

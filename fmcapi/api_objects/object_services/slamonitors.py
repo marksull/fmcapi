@@ -1,11 +1,12 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from .securityzone import SecurityZone
+from .securityzones import SecurityZones
 import logging
+import warnings
 
 
-class SLAMonitor(APIClassTemplate):
+class SLAMonitors(APIClassTemplate):
     """
-    The SLAMonitor Object in the FMC.
+    The SLAMonitors Object in the FMC.
     """
     URL_SUFFIX = '/object/slamonitors'
     REQUIRED_FOR_POST = ['name', 'slaId', 'monitorAddress', 'interfaceObjects', 'type']
@@ -13,12 +14,12 @@ class SLAMonitor(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for SLAMonitor class.")
+        logging.debug("In __init__() for SLAMonitors class.")
         self.parse_kwargs(**kwargs)
         self.type = "SLAMonitor"
 
     def format_data(self):
-        logging.debug("In format_data() for SLAMonitor class.")
+        logging.debug("In format_data() for SLAMonitors class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -50,7 +51,7 @@ class SLAMonitor(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for SLAMonitor class.")
+        logging.debug("In parse_kwargs() for SLAMonitors class.")
         if 'timeout' in kwargs:
             self.timeout = kwargs['timeout']
         if 'threshold' in kwargs:
@@ -73,18 +74,22 @@ class SLAMonitor(APIClassTemplate):
             self.description = kwargs['description']
 
     def interfaces(self, names):
-        logging.debug("In interfaces() for SLAMonitor class.")
+        logging.debug("In interfaces() for SLAMonitors class.")
         zones = []
         for name in names:
             # Supports passing list of str
-            sz = SecurityZone(fmc=self.fmc)
+            sz = SecurityZones(fmc=self.fmc)
             sz.get(name=name)
             if 'id' in sz.__dict__:
                 zones.append({'name': sz.name, 'id': sz.id, 'type': sz.type})
             else:
-                logging.warning(f'Security Zone, "{name}", not found.  Cannot add to SLAMonitor.')
+                logging.warning(f'Security Zone, "{name}", not found.  Cannot add to SLAMonitors.')
         if len(zones) != 0:
             # Make sure we found at least one zone
             self.interfaceObjects = zones
         else:
-            logging.warning(f'No valid Security Zones found: "{names}".  Cannot add to SLAMonitor.')
+            logging.warning(f'No valid Security Zones found: "{names}".  Cannot add to SLAMonitosr.')
+
+
+class SLAMonitor(SLAMonitors):
+    warnings.warn("Deprecated: SLAMonitor() should be called via SLAMonitors().")

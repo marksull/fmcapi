@@ -1,10 +1,11 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
+import warnings
 
 
-class ProtocolPort(APIClassTemplate):
+class ProtocolPortObjects(APIClassTemplate):
     """
-    The Port Object in the FMC.
+    The ProtocolPortObjects in the FMC.
     """
 
     URL_SUFFIX = '/object/protocolportobjects'
@@ -12,11 +13,11 @@ class ProtocolPort(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for ProtocolPort class.")
+        logging.debug("In __init__() for ProtocolPortObjects class.")
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
-        logging.debug("In format_data() for ProtocolPort class.")
+        logging.debug("In format_data() for ProtocolPortObjects class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -32,8 +33,12 @@ class ProtocolPort(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for ProtocolPort class.")
+        logging.debug("In parse_kwargs() for ProtocolPortObjects class.")
         if 'port' in kwargs:
             self.port = kwargs['port']
         if 'protocol' in kwargs:
             self.protocol = kwargs['protocol']
+
+
+class ProtocolPort(ProtocolPortObjects):
+    warnings.warn("Deprecated: ProtocolPort() should be called via ProtocolPortObjects().")

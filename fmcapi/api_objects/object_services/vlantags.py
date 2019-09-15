@@ -1,11 +1,12 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.helper_functions import validate_vlans
 import logging
+import warnings
 
 
-class VlanTag(APIClassTemplate):
+class VlanTags(APIClassTemplate):
     """
-    The URL Object in the FMC.
+    The VlanTags Object in the FMC.
     """
 
     URL_SUFFIX = '/object/vlantags'
@@ -13,12 +14,12 @@ class VlanTag(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for VlanTag class.")
+        logging.debug("In __init__() for VlanTags class.")
         self.type = 'VlanTag'
         self.parse_kwargs(**kwargs)
 
     def format_data(self):
-        logging.debug("In format_data() for VlanTag class.")
+        logging.debug("In format_data() for VlanTasg class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -34,11 +35,15 @@ class VlanTag(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for VlanTag class.")
+        logging.debug("In parse_kwargs() for VlanTags class.")
         if 'data' in kwargs:
             self.data = kwargs['data']
 
     def vlans(self, start_vlan, end_vlan=''):
-        logging.debug("In vlans() for VlanTag class.")
+        logging.debug("In vlans() for VlanTags class.")
         start_vlan, end_vlan = validate_vlans(start_vlan=start_vlan, end_vlan=end_vlan)
         self.data = {'startTag': start_vlan, 'endTag': end_vlan}
+
+
+class VlanTag(VlanTags):
+    warnings.warn("Deprecated: VlanTag() should be called via VlanTags().")

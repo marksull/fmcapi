@@ -41,28 +41,41 @@ from .networkaddresses import NetworkAddresses
 from .networkaddresses import IPAddresses
 from .hosts import Hosts
 from .hosts import IPHost
-from .ipnetwork import IPNetwork
-from .iprange import IPRange
+from .networks import Networks
+from .networks import IPNetwork
+from .ranges import Ranges
+from .ranges import IPRange
 from .isesecuritygrouptags import ISESecurityGroupTags
 from .networkgroups import NetworkGroups
-from .portobjectgroup import PortObjectGroup
+from .networkgroups import NetworkGroup
+from .portobjectgroups import PortObjectGroups
+from .portobjectgroups import PortObjectGroup
 from .ports import Ports
-from .protocolport import ProtocolPort
+from .protocolportobjects import ProtocolPortObjects
+from .protocolportobjects import ProtocolPort
 from .realms import Realms
 from .realmusergroups import RealmUserGroups
 from .realmusers import RealmUsers
 from .securitygrouptags import SecurityGroupTags
-from .securityzone import SecurityZone
+from .securityzones import SecurityZones
+from .securityzones import SecurityZone
 from .siurlfeeds import SIUrlFeeds
 from .siurllists import SIUrlLists
-from .slamonitor import SLAMonitor
+from .slamonitors import SLAMonitors
+from .slamonitors import SLAMonitor
 from .tunneltags import TunnelTags
-from .url import URL
-from .urlcategory import URLCategory
-from .urlgroup import URLGroup
-from .variableset import VariableSet
-from .vlangrouptag import VlanGroupTag
-from .vlantag import VlanTag
+from .urls import URLs
+from .urls import URL
+from .urlcategories import URLCategories
+from .urlcategories import URLCategory
+from .urlgroups import URLGroups
+from .urlgroups import URLGroup
+from .variablesets import VariableSets
+from .variablesets import VariableSet
+from .vlangrouptags import VlanGroupTags
+from .vlangrouptags import VlanGroupTag
+from .vlantags import VlanTags
+from .vlantags import VlanTag
 
 logging.debug("In the object_services __init__.py file.")
 
@@ -107,28 +120,41 @@ __all__ = [
     'InterfaceGroup',
     'InterfaceObjects',
     'InterfaceObject',
+    'ISESecurityGroupTags',
     'NetworkAddresses',
     'IPAddresses',
-    'IPNetwork',
-    'IPRange',
-    'ISESecurityGroupTags',
     'NetworkGroups',
+    'NetworkGroup',
+    'Networks',
+    'IPNetwork',
+    'PortObjectGroups',
     'PortObjectGroup',
     'Ports',
+    'ProtocolPortObjects',
     'ProtocolPort',
+    'Ranges',
+    'IPRange',
     'Realms',
     'RealmUserGroups',
     'RealmUsers',
     'SecurityGroupTags',
+    'SecurityZones',
     'SecurityZone',
     'SIUrlFeeds',
     'SIUrlLists',
+    'SLAMonitors',
     'SLAMonitor',
     'TunnelTags',
-    'URL',
-    'URLGroup',
+    'URLCategories',
     'URLCategory',
+    'URLGroups',
+    'URLGroup',
+    'URLs',
+    'URL',
+    'VariableSets',
     'VariableSet',
+    'VlanGroupTags',
     'VlanGroupTag',
+    'VlanTags',
     'VlanTag',
 ]

@@ -1,11 +1,12 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from .url import URL
+from .urls import URLs
 import logging
+import warnings
 
 
-class URLGroup(APIClassTemplate):
+class URLGroups(APIClassTemplate):
     """
-    The URLGroup Object in the FMC.
+    The URLGroups Object in the FMC.
     """
 
     URL_SUFFIX = '/object/urlgroups'
@@ -15,12 +16,12 @@ class URLGroup(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
-        logging.debug("In __init__() for URLGroup class.")
+        logging.debug("In __init__() for URLGroups class.")
         self.parse_kwargs(**kwargs)
         self.type = 'URLGroup'
 
     def format_data(self):
-        logging.debug("In format_data() for URLGroup class.")
+        logging.debug("In format_data() for URLGroups class.")
         json_data = {}
         if 'id' in self.__dict__:
             json_data['id'] = self.id
@@ -36,16 +37,16 @@ class URLGroup(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for URLGroup class.")
+        logging.debug("In parse_kwargs() for URLGroups class.")
         if 'objects' in kwargs:
             self.objects = kwargs['objects']
         if 'literals' in kwargs:
             self.literals = kwargs['literals']
 
     def named_urls(self, action, name=''):
-        logging.debug("In named_urls() for URLGroup class.")
+        logging.debug("In named_urls() for URLGroups class.")
         if action == 'add':
-            url1 = URL(fmc=self.fmc)
+            url1 = URLs(fmc=self.fmc)
             response = url1.get()
             if 'items' in response:
                 new_url = None
@@ -54,7 +55,7 @@ class URLGroup(APIClassTemplate):
                         new_url = {'name': item['name'], 'id': item['id'], 'type': item['type']}
                         break
                 if new_url is None:
-                    logging.warning(f'URL "{name}" is not found in FMC.  Cannot add to URLGroup.')
+                    logging.warning(f'URL "{name}" is not found in FMC.  Cannot add to URLGroups.')
                 else:
                     if 'objects' in self.__dict__:
                         duplicate = False
@@ -64,10 +65,10 @@ class URLGroup(APIClassTemplate):
                                 break
                         if not duplicate:
                             self.objects.append(new_url)
-                            logging.info(f'Adding "{name}" to URLGroup.')
+                            logging.info(f'Adding "{name}" to URLGroups.')
                     else:
                         self.objects = [new_url]
-                        logging.info(f'Adding "{name}" to URLGroup.')
+                        logging.info(f'Adding "{name}" to URLGroups.')
         elif action == 'remove':
             if 'objects' in self.__dict__:
                 objects_list = []
@@ -75,19 +76,19 @@ class URLGroup(APIClassTemplate):
                     if obj['name'] != name:
                         objects_list.append(obj)
                 self.objects = objects_list
-                logging.info(f'Removed "{name}" from URLGroup.')
+                logging.info(f'Removed "{name}" from URLGroups.')
             else:
-                logging.info("This URLGroup has no named_urls.  Nothing to remove.")
+                logging.info("This URLGroups has no named_urls.  Nothing to remove.")
         elif action == 'clear':
             if 'objects' in self.__dict__:
                 del self.objects
-                logging.info('All named_urls removed from this URLGroup.')
+                logging.info('All named_urls removed from this URLGroups.')
 
     def unnamed_urls(self, action, value=''):
-        logging.debug("In unnamed_urls() for URLGroup class.")
+        logging.debug("In unnamed_urls() for URLGroups class.")
         if action == 'add':
             if value == '':
-                logging.error('Value assignment required to add unamed_url to URLGroup.')
+                logging.error('Value assignment required to add unnamed_url to URLGroups.')
                 return
             value_type = 'Url'
             new_literal = {'type': value_type, 'url': value}
@@ -99,10 +100,10 @@ class URLGroup(APIClassTemplate):
                         break
                 if not duplicate:
                     self.literals.append(new_literal)
-                    logging.info(f'Adding "{value}" to URLGroup.')
+                    logging.info(f'Adding "{value}" to URLGroups.')
             else:
                 self.literals = [new_literal]
-                logging.info(f'Adding "{value}" to URLGroup.')
+                logging.info(f'Adding "{value}" to URLGroups.')
         elif action == 'remove':
             if 'literals' in self.__dict__:
                 literals_list = []
@@ -110,10 +111,14 @@ class URLGroup(APIClassTemplate):
                     if obj['url'] != value:
                         literals_list.append(obj)
                 self.literals = literals_list
-                logging.info(f'Removed "{value}" from URLGroup.')
+                logging.info(f'Removed "{value}" from URLGroups.')
             else:
-                logging.info("This URLGroup has no unnamed_urls.  Nothing to remove.")
+                logging.info("This URLGroups has no unnamed_urls.  Nothing to remove.")
         elif action == 'clear':
             if 'literals' in self.__dict__:
                 del self.literals
-                logging.info('All unnamed_urls removed from this URLGroup.')
+                logging.info('All unnamed_urls removed from this URLGroups.')
+
+
+class URLGroup(URLGroups):
+    warnings.warn("Deprecated: URLGroup() should be called via URLGroups().")

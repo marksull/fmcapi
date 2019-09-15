@@ -12,8 +12,8 @@ def test__ipv6staticroutes(fmc):
 
     iphost1 = fmcapi.Hosts(fmc=fmc, name='_iphost1' + namer, value='2001:db8::1')
     iphost1.post()
-    ipnet1 = fmcapi.IPNetwork(fmc=fmc, name='_ipnet1' + namer, value='2001:db8:1::/64')
-    ipnet2 = fmcapi.IPNetwork(fmc=fmc, name='_ipnet2' + namer, value='2001:db8:2::/64')
+    ipnet1 = fmcapi.Networks(fmc=fmc, name='_ipnet1' + namer, value='2001:db8:1::/64')
+    ipnet2 = fmcapi.Networks(fmc=fmc, name='_ipnet2' + namer, value='2001:db8:2::/64')
     ipnet1.post()
     ipnet2.post()
 
