@@ -4,7 +4,8 @@ import time
 
 
 def test__devicegrouprecords(fmc):
-    logging.info('Test DeviceGroupRecords.  get, post, put, delete DeviceGroups Objects. Requires registered device')
+    logging.info('Test DeviceGroupRecords: '
+                 'get, post, put, delete DeviceGroupRecords Objects requires registered device')
 
     starttime = str(int(time.time()))
     namer = f'_fmcapi_test_{starttime}'

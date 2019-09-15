@@ -52,11 +52,15 @@ an idea of what is possible.
 
 I recorded a quick "howto" video which can be accessed via:  (This is outdated and I need to make new videos.) 
 https://www.youtube.com/watch?v=4NIe3T-HjDw
- 
-**Note #1:  Check out the example directory's scripts for ideas on how to use fmcapi.**
 
-**Note #2:  You can directly send requests to the FMC via the send_to_api() method in the FMC class.  This allows you 
-to access any of the API features of the FMC.**
+## Notes
+* 1:  Check out the example directory's scripts for ideas on how to use fmcapi.
+* 2:  A lot of work has gone into making fmcapi easier to use and to develop on.  Doing this has forced us to
+issue a deprecation notice on some of the original fmcapi Classes (so that our Class names align with Cisco's
+API call names).  **Take note of any deprecation warnings and move to the correct Class name in your scripts.**
+* 3:  You can directly send requests to the FMC via the send_to_api() method in the FMC class.  This allows you 
+to access any of the API features of the FMC.
 
 ## ToDos
-**Most importantly:** Write better how-to instructions.  (Anyone willing to help?) 
+* Write better how-to instructions.  (Anyone willing to help?) 
+* Finish adding all the FMC API calls as fmcapi Classes.
