@@ -5,7 +5,7 @@ from .upgrades import test__upgrades
 from .manualnat import test__manualnat
 from .autonat import test__autonat
 from .port_object_group import test__port_object_group
-from .audit import test__audit
+from .auditrecords import test__audit
 from .acprule import test__acp_rule
 from .acp import test__access_control_policy
 from .intrusion_policy import test__intrusion_policy
@@ -56,10 +56,14 @@ from .application_risk import test__application_risk
 from .application import test__application
 from .application_tag import test__application_tag
 from .application_type import test__application_type
+from .deployabledevices import test__deployabledevices
+from .deploymentrequests import test__deploymentrequests
 
 logging.debug("In the unit-tests __init__.py file.")
 
 __all__ = ['test__url_category',
+           'test__deploymentrequests',
+           'test__deployabledevices',
            'test__application_type',
            'test__application_tag',
            'test__application',

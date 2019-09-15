@@ -13,6 +13,7 @@ import json
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import logging
 from logging.handlers import RotatingFileHandler
+import warnings
 
 # Disable annoying HTTP warnings
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -127,7 +128,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         logging.debug("In the FMC __exit__() class method.")
 
         if self.autodeploy:
-            self.deploy_changes()
+            self.deploymentrequests()
         else:
             logging.info("Auto deploy changes set to False.  "
                          "Use the Deploy button in FMC to push changes to FTDs.\n\n")
@@ -241,12 +242,13 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             self.geoVersion = response['items'][0]['geoVersion']
         return response
 
-    def audit(self, **kwargs):
+    def auditrecords(self):
         """
         This API function supports filtering the GET query URL with: username, subsystem, source, starttime, and
         endtime parameters.
         :return: response
         """
+        logging.debug('In the auditrecords method of FMC.')
         url_parameters = 'expanded=true'
         url_suffix = '/audit/auditrecords'
         url = f'{self.platform_url}/domain/{self.uuid}{url_suffix}?{url_parameters}'
@@ -254,12 +256,16 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         response = self.send_to_api(method='get', url=url)
         return response
 
-    def get_deployable_devices(self):
+    def audit(self):  # Deprecated
+        warnings.warn("Deprecated: audit() should be called via auditrecords().")
+        self.auditrecords()
+
+    def deployabledevices(self):
         """
         Collect a list of FMC managed devices who's configuration is not up-to-date.
         :return: List of devices needing updates.
         """
-        logging.debug("In the FMC get_deployable_devices() class method.")
+        logging.debug("In the FMC deployabledevices() class method.")
 
         waittime = 15
         logging.info(f"Waiting {waittime} seconds to allow the FMC to update the list of deployable devices.")
@@ -279,16 +285,20 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                 uuids.append(item)
         return uuids
 
-    def deploy_changes(self):
+    def get_deployable_devices(self):  # Deprecated
+        warnings.warn("Deprecated: get_deployable_devices() should be called via deployabledevices().")
+        self.deployabledevices()
+
+    def deploymentrequests(self):
         """
         Iterate through the list of devices needing deployed and submit a request to the FMC to deploy changes to them.
         :return:
         """
-        logging.debug("In the deploy_changes() class method.")
+        logging.debug("In the deploymentrequests() class method.")
 
         url_suffix = "/deployment/deploymentrequests"
         url = f'{self.configuration_url}{url_suffix}'
-        devices = self.get_deployable_devices()
+        devices = self.deployabledevices()
         if not devices:
             logging.info("No devices need deployed.\n\n")
             return
@@ -310,6 +320,10 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         logging.info("Deploying changes to devices.")
         response = self.send_to_api(method='post', url=url, json_data=json_data)
         return response['deviceList']
+
+    def deploy_changes(self):
+        warnings.warn("Deprecated: deploy_changes() should be called via deploymentrequests().")
+        self.deploymentrequests()
 
 
 class Token(object):

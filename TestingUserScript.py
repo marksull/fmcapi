@@ -28,6 +28,8 @@ def main():
         logging.info('# ### Mega Test Start!!! ### #')
 
         unit_tests.test__fmc_version(fmc=fmc1)
+        unit_tests.test__deployabledevices(fmc=fmc1)
+        unit_tests.test__deploymentrequests(fmc=fmc1)
         '''
         # Working Tests
         unit_tests.test__application_type(fmc=fmc1)
