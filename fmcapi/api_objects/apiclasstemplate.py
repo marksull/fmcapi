@@ -228,6 +228,7 @@ class APIClassTemplate(object):
 
     def __init__(self, fmc, **kwargs):
         logging.debug("In __init__() for APIClassTemplate class.")
+        self.class_data = {}
         self.fmc = fmc
         self.URL = f'{self.fmc.configuration_url}{self.URL_SUFFIX}'
         if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
@@ -241,6 +242,12 @@ class APIClassTemplate(object):
             if key_value in self.__dict__:
                 json_data[key_value] = self.__dict__[key_value]
         return json_data
+
+    def parse_kwargs_proposed(self, **kwargs):
+        logging.debug("In parse_kwargs() for APIClassTemplate class.")
+        for key_value in self.VALID_FOR_KWARGS:
+            if key_value in kwargs:
+                self.class_data[key_value] = kwargs[key_value]
 
     def parse_kwargs(self, **kwargs):
         logging.debug("In parse_kwargs() for APIClassTemplate class.")
