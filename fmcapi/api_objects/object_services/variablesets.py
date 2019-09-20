@@ -8,7 +8,7 @@ class VariableSets(APIClassTemplate):
     The VariableSets Object in the FMC.
     """
 
-    VALID_JSON_DATA = ['id', 'name', 'description']
+    VALID_JSON_DATA = ['id', 'name', 'type', 'description']
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/variablesets'
 

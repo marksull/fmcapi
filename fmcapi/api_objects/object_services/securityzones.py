@@ -8,7 +8,7 @@ class SecurityZones(APIClassTemplate):
     The SecurityZones Object in the FMC.
     """
 
-    VALID_JSON_DATA = ['id', 'name', 'description', 'interfaceMode', 'interfaces']
+    VALID_JSON_DATA = ['id', 'name', 'type', 'description', 'interfaceMode', 'interfaces']
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/securityzones'
     REQUIRED_FOR_POST = ['name', 'interfaceMode']
