@@ -10,7 +10,7 @@ class DefaultActions(APIClassTemplate):
 
     VALID_JSON_DATA = []
     VALID_FOR_KWARGS = VALID_JSON_DATA + ['acp_id', 'acp_name', 'device_id', 'device_name', 'fetchZeroHitCount',
-                                          'limit',
+                                          'limit', 'action',
                                           ]
     PREFIX_URL = '/policy/accesspolicies'
     REQUIRED_FOR_PUT = ['acp_id', 'id', 'action']
@@ -26,7 +26,7 @@ class DefaultActions(APIClassTemplate):
 
     def format_data(self):
         json_data = super().format_data()
-        logging.debug("In format_data() for FilePolicies class.")
+        logging.debug("In format_data() for DefaultActions class.")
         if 'action' in self.__dict__:
             if self.action in self.VALID_ACTION:
                 json_data['action'] = self.action
@@ -36,7 +36,7 @@ class DefaultActions(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for HitCounts class.")
+        logging.debug("In parse_kwargs() for DefaultActions class.")
         if 'action' in kwargs:
             if kwargs['action'] in self.VALID_ACTION:
                 self.action = kwargs['action']
