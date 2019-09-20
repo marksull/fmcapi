@@ -18,37 +18,6 @@ class SLAMonitors(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = "SLAMonitor"
 
-    def format_data(self):
-        logging.debug("In format_data() for SLAMonitors class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'timeout' in self.__dict__:
-            json_data['timeout'] = self.timeout
-        if 'threshold' in self.__dict__:
-            json_data['threshold'] = self.threshold
-        if 'frequency' in self.__dict__:
-            json_data['frequency'] = self.frequency
-        if 'slaId' in self.__dict__:
-            json_data['slaId'] = self.slaId
-        if 'dataSize' in self.__dict__:
-            json_data['dataSize'] = self.dataSize
-        if 'tos' in self.__dict__:
-            json_data['tos'] = self.tos
-        if 'noOfPackets' in self.__dict__:
-            json_data['noOfPackets'] = self.noOfPackets
-        if 'monitorAddress' in self.__dict__:
-            json_data['monitorAddress'] = self.monitorAddress
-        if 'interfaceObjects' in self.__dict__:
-            json_data['interfaceObjects'] = self.interfaceObjects
-        if 'description' in self.__dict__:
-            json_data['description'] = self.description
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for SLAMonitors class.")

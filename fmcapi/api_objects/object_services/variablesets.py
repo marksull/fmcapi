@@ -15,17 +15,6 @@ class VariableSets(APIClassTemplate):
         logging.debug("In __init__() for VariableSets class.")
         self.parse_kwargs(**kwargs)
 
-    def format_data(self):
-        logging.debug("In format_data() for VariableSets class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'description' in self.__dict__:
-            json_data['description'] = self.description
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for VariableSets class.")

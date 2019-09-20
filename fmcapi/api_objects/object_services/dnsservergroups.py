@@ -17,25 +17,6 @@ class DNSServerGroups(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = 'DNSServerGroupObject'
 
-    def format_data(self):
-        logging.debug("In format_data() for DNSServerGroups class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'retries' in self.__dict__:
-            json_data['retries'] = self.retries
-        if 'timeout' in self.__dict__:
-            json_data['timeout'] = self.timeout
-        if 'dnsservers' in self.__dict__:
-            json_data['dnsservers'] = self.dnsservers
-        if 'defaultdomain' in self.__dict__:
-            json_data['defaultdomain'] = self.defaultdomain
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for DNSServerGroups class.")

@@ -15,27 +15,11 @@ class IKEv2IpsecProposals(APIClassTemplate):
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
     FIRST_SUPPORTED_FMC_VERSION = '6.3'
 
-
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for IKEv2IpsecProposals class.")
         self.parse_kwargs(**kwargs)
         self.type = 'IKEv2IPsecProposal'
-
-    def format_data(self):
-        logging.debug("In format_data() for IKEv2IpsecProposals class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'encryptionAlgorithms' in self.__dict__:
-            json_data['encryptionAlgorithms'] = self.encryptionAlgorithms
-        if 'integrityAlgorithms' in self.__dict__:
-            json_data['integrityAlgorithms'] = self.integrityAlgorithms
-        return json_data
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)

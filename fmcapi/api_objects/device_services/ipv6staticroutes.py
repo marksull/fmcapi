@@ -23,25 +23,6 @@ class IPv6StaticRoutes(APIClassTemplate):
         self.type = 'IPv6StaticRoute'
         self.parse_kwargs(**kwargs)
 
-    def format_data(self):
-        logging.debug("In format_data() for IPv6StaticRoute class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'interfaceName' in self.__dict__:
-            json_data['interfaceName'] = self.interfaceName
-        if 'selectedNetworks' in self.__dict__:
-            json_data['selectedNetworks'] = self.selectedNetworks
-        if 'gateway' in self.__dict__:
-            json_data['gateway'] = self.gateway
-        if 'metricValue' in self.__dict__:
-            json_data['metricValue'] = self.metricValue
-        if 'isTunneled' in self.__dict__:
-            json_data['isTunneled'] = self.isTunneled
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for IPv6StaticRoute class.")

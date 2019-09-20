@@ -20,21 +20,6 @@ class InterfaceGroups(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = 'InterfaceGroup'
 
-    def format_data(self):
-        logging.debug("In format_data() for InterfaceGroups class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'description' in self.__dict__:
-            json_data['description'] = self.description
-        if 'interfaceMode' in self.__dict__:
-            json_data['interfaceMode'] = self.interfaceMode
-        if 'interfaces' in self.__dict__:
-            json_data['interfaces'] = self.interfaces
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for InterfaceGroups class.")

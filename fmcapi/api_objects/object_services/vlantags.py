@@ -18,21 +18,6 @@ class VlanTags(APIClassTemplate):
         self.type = 'VlanTag'
         self.parse_kwargs(**kwargs)
 
-    def format_data(self):
-        logging.debug("In format_data() for VlanTasg class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'data' in self.__dict__:
-            json_data['data'] = self.data
-        if 'description' in self.__dict__:
-            json_data['description'] = self.description
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for VlanTags class.")

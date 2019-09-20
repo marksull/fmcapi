@@ -17,27 +17,6 @@ class ICMPv6Objects(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = 'ICMPV6Object'
 
-    def format_data(self):
-        logging.debug("In format_data() for ICMPv6Objects class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'overrideTargetId' in self.__dict__:
-            json_data['overrideTargetId'] = self.overrideTargetId
-        if 'code' in self.__dict__:
-            json_data['code'] = self.code
-        if 'icmpType' in self.__dict__:
-            json_data['icmpType'] = self.icmpType
-        if 'overrides' in self.__dict__:
-            json_data['overrides'] = self.overrides
-        if 'overridable' in self.__dict__:
-            json_data['overridable'] = self.overridable
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for ICMPv6Objects class.")

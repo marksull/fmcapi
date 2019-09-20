@@ -23,29 +23,6 @@ class IKEv2Policies(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = 'Ikev2PolicyObject'
 
-    def format_data(self):
-        logging.debug("In format_data() for IKEv2Policies class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'priority' in self.__dict__:
-            json_data['priority'] = self.priority
-        if 'diffieHellmanGroups' in self.__dict__:
-            json_data['diffieHellmanGroups'] = self.diffieHellmanGroups
-        if 'integrityAlgorithms' in self.__dict__:
-            json_data['integrityAlgorithms'] = self.integrityAlgorithms
-        if 'prfIntegrityAlgorithms' in self.__dict__:
-            json_data['prfIntegrityAlgorithms'] = self.prfIntegrityAlgorithms
-        if 'encryptionAlgorithms' in self.__dict__:
-            json_data['encryptionAlgorithms'] = self.encryptionAlgorithms
-        if 'lifetimeInSeconds' in self.__dict__:
-            json_data['lifetimeInSeconds'] = self.lifetimeInSeconds
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for IKEv2Policies class.")

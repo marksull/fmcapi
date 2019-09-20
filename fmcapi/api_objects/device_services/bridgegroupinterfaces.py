@@ -24,55 +24,6 @@ class BridgeGroupInterfaces(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = "BridgeGroupInterface"
 
-    def format_data(self):
-        logging.debug("In format_data() for BridgeGroupInterfaces class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'mode' in self.__dict__:
-            json_data['mode'] = self.mode
-        if 'enabled' in self.__dict__:
-            json_data['enabled'] = self.enabled
-        if 'MTU' in self.__dict__:
-            json_data['MTU'] = self.MTU
-        if 'managementOnly' in self.__dict__:
-            json_data['managementOnly'] = self.managementOnly
-        if 'ipAddress' in self.__dict__:
-            json_data['ipAddress'] = self.ipAddress
-        if 'selectedInterfaces' in self.__dict__:
-            json_data['selectedInterfaces'] = self.selectedInterfaces
-        if 'bridgeGroupId' in self.__dict__:
-            json_data['bridgeGroupId'] = self.bridgeGroupId
-        if 'macLearn' in self.__dict__:
-            json_data['macLearn'] = self.macLearn
-        if 'ifname' in self.__dict__:
-            json_data['ifname'] = self.ifname
-        if 'securityZone' in self.__dict__:
-            json_data['securityZone'] = self.securityZone
-        if 'arpConfig' in self.__dict__:
-            json_data['arpConfig'] = self.arpConfig
-        if 'ipv4' in self.__dict__:
-            json_data['ipv4'] = self.ipv4
-        if 'ipv6' in self.__dict__:
-            json_data['ipv6'] = self.ipv6
-        if 'macTable' in self.__dict__:
-            json_data['macTable'] = self.macTable
-        if 'enableAntiSpoofing' in self.__dict__:
-            json_data['enableAntiSpoofing'] = self.enableAntiSpoofing
-        if 'fragmentReassembly' in self.__dict__:
-            json_data['fragmentReassembly'] = self.fragmentReassembly
-        if 'enableDNSLookup' in self.__dict__:
-            json_data['enableDNSLookup'] = self.enableDNSLookup
-        if 'activeMACAddress' in self.__dict__:
-            json_data['activeMACAddress'] = self.activeMACAddress
-        if 'standbyMACAddress' in self.__dict__:
-            json_data['standbyMACAddress'] = self.standbyMACAddress
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for BridgeGroupInterfaces class.")

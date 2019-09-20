@@ -24,39 +24,6 @@ class PhysicalInterfaces(APIClassTemplate):
         logging.debug("In __init__() for PhysicalInterface class.")
         self.parse_kwargs(**kwargs)
 
-    def format_data(self):
-        logging.debug("In format_data() for PhysicalInterface class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'mode' in self.__dict__:
-            json_data['mode'] = self.mode
-        if 'enabled' in self.__dict__:
-            json_data['enabled'] = self.enabled
-        if 'hardware' in self.__dict__:
-            json_data['hardware'] = self.hardware
-        if 'MTU' in self.__dict__:
-            json_data['MTU'] = self.MTU
-        if 'managementOnly' in self.__dict__:
-            json_data['managementOnly'] = self.managementOnly
-        if 'ifname' in self.__dict__:
-            json_data['ifname'] = self.ifname
-        if 'securityZone' in self.__dict__:
-            json_data['securityZone'] = self.securityZone
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'ipv4' in self.__dict__:
-            json_data['ipv4'] = self.ipv4
-        if 'ipv6' in self.__dict__:
-            json_data['ipv6'] = self.ipv6
-        if 'activeMACAddress' in self.__dict__:
-            json_data['activeMACAddress'] = self.activeMACAddress
-        if 'standbyMACAddress' in self.__dict__:
-            json_data['standbyMACAddress'] = self.standbyMACAddress
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for PhysicalInterface class.")

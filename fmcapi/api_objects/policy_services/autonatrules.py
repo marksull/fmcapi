@@ -20,49 +20,6 @@ class AutoNatRules(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = "FTDAutoNatRule"
 
-    def format_data(self):
-        logging.debug("In format_data() for AutoNatRules class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'originalNetwork' in self.__dict__:
-            json_data['originalNetwork'] = self.originalNetwork
-        if 'translatedNetwork' in self.__dict__:
-            json_data['translatedNetwork'] = self.translatedNetwork
-        if 'interfaceInTranslatedNetwork' in self.__dict__:
-            json_data['interfaceInTranslatedNetwork'] = self.interfaceInTranslatedNetwork
-        if 'natType' in self.__dict__:
-            json_data['natType'] = self.natType
-        if 'interfaceIpv6' in self.__dict__:
-            json_data['interfaceIpv6'] = self.interfaceIpv6
-        if 'fallThrough' in self.__dict__:
-            json_data['fallThrough'] = self.fallThrough
-        if 'dns' in self.__dict__:
-            json_data['dns'] = self.dns
-        if 'routeLookup' in self.__dict__:
-            json_data['routeLookup'] = self.routeLookup
-        if 'noProxyArp' in self.__dict__:
-            json_data['noProxyArp'] = self.noProxyArp
-        if 'netToNet' in self.__dict__:
-            json_data['netToNet'] = self.netToNet
-        if 'sourceInterface' in self.__dict__:
-            json_data['sourceInterface'] = self.sourceInterface
-        if 'destinationInterface' in self.__dict__:
-            json_data['destinationInterface'] = self.destinationInterface
-        if 'originalPort' in self.__dict__:
-            json_data['originalPort'] = self.originalPort
-        if 'translatedPort' in self.__dict__:
-            json_data['translatedPort'] = self.translatedPort
-        if 'serviceProtocol' in self.__dict__:
-            json_data['serviceProtocol'] = self.serviceProtocol
-        if 'patOptions' in self.__dict__:
-            json_data['patOptions'] = self.patOptions
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for AutoNatRules class.")

@@ -26,19 +26,6 @@ class Ranges(APIClassTemplate):
             else:
                 logging.error(f"Provided value, {kwargs['value']}, has an error with the IP address(es).")
 
-    def format_data(self):
-        logging.debug("In format_data() for Ranges class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'value' in self.__dict__:
-            json_data['value'] = self.value
-        if 'description' in self.__dict__:
-            json_data['description'] = self.description
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for Ranges class.")

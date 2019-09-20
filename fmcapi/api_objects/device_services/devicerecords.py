@@ -20,25 +20,6 @@ class DeviceRecords(APIClassTemplate):
         logging.debug("In __init__() for DeviceRecords class.")
         self.parse_kwargs(**kwargs)
 
-    def format_data(self):
-        logging.debug("In format_data() for DeviceRecords class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'hostName' in self.__dict__:
-            json_data['hostName'] = self.hostName
-        if 'natID' in self.__dict__:
-            json_data['natID'] = self.natID
-        if 'regKey' in self.__dict__:
-            json_data['regKey'] = self.regKey
-        if 'license_caps' in self.__dict__:
-            json_data['license_caps'] = self.license_caps
-        if 'accessPolicy' in self.__dict__:
-            json_data['accessPolicy'] = self.accessPolicy
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for DeviceRecords class.")

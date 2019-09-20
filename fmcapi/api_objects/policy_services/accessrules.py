@@ -62,6 +62,19 @@ class AccessRules(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.URL = f'{self.URL}{self.URL_SUFFIX}'
 
+    def format_data(self):
+        json_data = super().format_data()
+        logging.debug("In format_data() for AccessRules class.")
+        if 'sourceNetworks' in self.__dict__:
+            json_data['sourceNetworks'] = {'objects': self.sourceNetworks['objects']}
+            json_data['sourceNetworks']['literals'] = \
+                [{'type': v, 'value': k} for k, v in self.sourceNetworks['literals'].items()]
+        if 'destinationNetworks' in self.__dict__:
+            json_data['destinationNetworks'] = {'objects': self.destinationNetworks['objects']}
+            json_data['destinationNetworks']['literals'] = \
+                [{'type': v, 'value': k} for k, v in self.destinationNetworks['literals'].items()]
+        return json_data
+
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for AccessRules class.")
@@ -148,60 +161,6 @@ class AccessRules(APIClassTemplate):
 
         # Check if suffix should be added to URL
         # self.url_suffix()
-
-    def format_data(self):
-        logging.debug("In format_data() for AccessRules class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'action' in self.__dict__:
-            json_data['action'] = self.action
-        if 'enabled' in self.__dict__:
-            json_data['enabled'] = self.enabled
-        if 'sendEventsToFMC' in self.__dict__:
-            json_data['sendEventsToFMC'] = self.sendEventsToFMC
-        if 'logFiles' in self.__dict__:
-            json_data['logFiles'] = self.logFiles
-        if 'logBegin' in self.__dict__:
-            json_data['logBegin'] = self.logBegin
-        if 'logEnd' in self.__dict__:
-            json_data['logEnd'] = self.logEnd
-        if 'variableSet' in self.__dict__:
-            json_data['variableSet'] = self.variableSet
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'originalSourceNetworks' in self.__dict__:
-            json_data['originalSourceNetworks'] = self.originalSourceNetworks
-        if 'vlanTags' in self.__dict__:
-            json_data['vlanTags'] = self.vlanTags
-        if 'sourceNetworks' in self.__dict__:
-            json_data['sourceNetworks'] = {'objects': self.sourceNetworks['objects']}
-            json_data['sourceNetworks']['literals'] = \
-                [{'type': v, 'value': k} for k, v in self.sourceNetworks['literals'].items()]
-        if 'destinationNetworks' in self.__dict__:
-            json_data['destinationNetworks'] = {'objects': self.destinationNetworks['objects']}
-            json_data['destinationNetworks']['literals'] = \
-                [{'type': v, 'value': k} for k, v in self.destinationNetworks['literals'].items()]
-        if 'sourcePorts' in self.__dict__:
-            json_data['sourcePorts'] = self.sourcePorts
-        if 'destinationPorts' in self.__dict__:
-            json_data['destinationPorts'] = self.destinationPorts
-        if 'ipsPolicy' in self.__dict__:
-            json_data['ipsPolicy'] = self.ipsPolicy
-        if 'urls' in self.__dict__:
-            json_data['urls'] = self.urls
-        if 'sourceZones' in self.__dict__:
-            json_data['sourceZones'] = self.sourceZones
-        if 'destinationZones' in self.__dict__:
-            json_data['destinationZones'] = self.destinationZones
-        if 'applications' in self.__dict__:
-            json_data['applications'] = self.applications
-        if 'filePolicy' in self.__dict__:
-            json_data['filePolicy'] = self.filePolicy
-
-        return json_data
 
     def acp(self, name='', acp_id=''):
         # either name or id of the ACP should be given

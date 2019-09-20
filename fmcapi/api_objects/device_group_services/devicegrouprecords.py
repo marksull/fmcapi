@@ -18,17 +18,6 @@ class DeviceGroupRecords(APIClassTemplate):
         self.type = 'DeviceGroup'
         self.parse_kwargs(**kwargs)
 
-    def format_data(self):
-        logging.debug("In format_data() for DeviceGroupRecords class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'members' in self.__dict__:
-            json_data['members'] = self.members
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for DeviceGroupRecords class.")

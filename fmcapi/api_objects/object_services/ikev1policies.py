@@ -26,14 +26,8 @@ class IKEv1Policies(APIClassTemplate):
         self.type = 'Ikev1PolicyObject'
 
     def format_data(self):
+        json_data = super().format_data()
         logging.debug("In format_data() for IKEv1Policies class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
         if 'encryption' in self.__dict__:
             if self.encryption in self.VALID_FOR_ENCRYPTION:
                 json_data['encryption'] = self.encryption
@@ -44,14 +38,6 @@ class IKEv1Policies(APIClassTemplate):
                 json_data['hash'] = self.hash
             else:
                 logging.warning(f'hash "{self.hash}" not a valid type.')
-        if 'priority' in self.__dict__:
-            json_data['priority'] = self.priority
-        if 'diffieHellmanGroup' in self.__dict__:
-            json_data['diffieHellmanGroup'] = self.diffieHellmanGroup
-        if 'authenticationMethod' in self.__dict__:
-            json_data['authenticationMethod'] = self.authenticationMethod
-        if 'lifetimeInSeconds' in self.__dict__:
-            json_data['lifetimeInSeconds'] = self.lifetimeInSeconds
         return json_data
 
     def parse_kwargs(self, **kwargs):

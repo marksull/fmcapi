@@ -23,61 +23,6 @@ class ManualNatRules(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = "FTDManualNatRule"
 
-    def format_data(self):
-        logging.debug("In format_data() for ManualNatRules class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'originalSource' in self.__dict__:
-            json_data['originalSource'] = self.originalSource
-        if 'originalDestination' in self.__dict__:
-            json_data['originalDestination'] = self.originalDestination
-        if 'translatedSource' in self.__dict__:
-            json_data['translatedSource'] = self.translatedSource
-        if 'translatedDestination' in self.__dict__:
-            json_data['translatedDestination'] = self.translatedDestination
-        if 'interfaceInTranslatedSource' in self.__dict__:
-            json_data['interfaceInTranslatedSource'] = self.interfaceInTranslatedSource
-        if 'interfaceInOriginalDestination' in self.__dict__:
-            json_data['interfaceInOriginalDestination'] = self.interfaceInOriginalDestination
-        if 'natType' in self.__dict__:
-            json_data['natType'] = self.natType
-        if 'interfaceIpv6' in self.__dict__:
-            json_data['interfaceIpv6'] = self.interfaceIpv6
-        if 'fallThrough' in self.__dict__:
-            json_data['fallThrough'] = self.fallThrough
-        if 'dns' in self.__dict__:
-            json_data['dns'] = self.dns
-        if 'routeLookup' in self.__dict__:
-            json_data['routeLookup'] = self.routeLookup
-        if 'noProxyArp' in self.__dict__:
-            json_data['noProxyArp'] = self.noProxyArp
-        if 'netToNet' in self.__dict__:
-            json_data['netToNet'] = self.netToNet
-        if 'sourceInterface' in self.__dict__:
-            json_data['sourceInterface'] = self.sourceInterface
-        if 'destinationInterface' in self.__dict__:
-            json_data['destinationInterface'] = self.destinationInterface
-        if 'originalSourcePort' in self.__dict__:
-            json_data['originalSourcePort'] = self.originalSourcePort
-        if 'translatedSourcePort' in self.__dict__:
-            json_data['translatedSourcePort'] = self.translatedSourcePort
-        if 'originalDestinationPort' in self.__dict__:
-            json_data['originalDestinationPort'] = self.originalDestinationPort
-        if 'translatedDestinationPort' in self.__dict__:
-            json_data['translatedDestinationPort'] = self.translatedDestinationPort
-        if 'patOptions' in self.__dict__:
-            json_data['patOptions'] = self.patOptions
-        if 'unidirectional' in self.__dict__:
-            json_data['unidirectional'] = self.unidirectional
-        if 'enabled' in self.__dict__:
-            json_data['enabled'] = self.enabled
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for ManualNatRules class.")

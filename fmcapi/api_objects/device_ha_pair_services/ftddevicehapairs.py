@@ -18,25 +18,6 @@ class FTDDeviceHAPairs(APIClassTemplate):
         logging.debug("In __init__() for FTDDeviceHAPairs class.")
         self.parse_kwargs(**kwargs)
 
-    def format_data(self):
-        logging.debug("In format_data() for FTDDeviceHAPairs class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'primary' in self.__dict__:
-            json_data['primary'] = self.primary
-        if 'secondary' in self.__dict__:
-            json_data['secondary'] = self.secondary
-        if 'ftdHABootstrap' in self.__dict__:
-            json_data['ftdHABootstrap'] = self.ftdHABootstrap
-        if 'action' in self.__dict__:
-            json_data['action'] = self.action
-        if 'forceBreak' in self.__dict__:
-            json_data['forceBreak'] = self.forceBreak
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for FTDDeviceHAPairs class.")

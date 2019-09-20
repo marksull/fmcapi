@@ -21,35 +21,13 @@ class DefaultActions(APIClassTemplate):
         self.URL = f'{self.URL}{self.URL_SUFFIX}'
 
     def format_data(self):
+        json_data = super().format_data()
         logging.debug("In format_data() for FilePolicies class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
         if 'action' in self.__dict__:
             if self.action in self.VALID_ACTION:
                 json_data['action'] = self.action
             else:
                 logging.warning(f'action variable must be one of: {self.VALID_ACTION}.')
-        if 'logEnd' in self.__dict__:
-            json_data['logEnd'] = self.logEnd
-        if 'logBegin' in self.__dict__:
-            json_data['logBegin'] = self.logBegin
-        if 'snmpConfig' in self.__dict__:
-            json_data['snmpConfig'] = self.snmpConfig
-        if 'intrusionPolicy' in self.__dict__:
-            json_data['intrusionPolicy'] = self.intrusionPolicy
-        if 'sendEventsToFMC' in self.__dict__:
-            json_data['sendEventsToFMC'] = self.sendEventsToFMC
-        if 'description' in self.__dict__:
-            json_data['description'] = self.description
-        if 'variableSet' in self.__dict__:
-            json_data['variableSet'] = self.variableSet
-        if 'version' in self.__dict__:
-            json_data['version'] = self.version
-        if 'syslogConfig' in self.__dict__:
-            json_data['syslogConfig'] = self.syslogConfig
         return json_data
 
     def parse_kwargs(self, **kwargs):
