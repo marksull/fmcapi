@@ -20,6 +20,7 @@ class APIClassTemplate(object):
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-]"""
     FIRST_SUPPORTED_FMC_VERSION = '6.1'
     VALID_JSON_DATA = []
+    GLOBAL_VALID_FOR_KWARGS = ['dry_run']
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
 
     @property
@@ -28,6 +29,7 @@ class APIClassTemplate(object):
 
     def __init__(self, fmc, **kwargs):
         logging.debug("In __init__() for APIClassTemplate class.")
+        self.VALID_FOR_KWARGS = self.VALID_FOR_KWARGS + self.GLOBAL_VALID_FOR_KWARGS
         self.fmc = fmc
         self.limit = self.fmc.limit
         self.description = 'Created by fmcapi.'
