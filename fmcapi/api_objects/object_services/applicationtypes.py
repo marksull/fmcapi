@@ -15,10 +15,6 @@ class ApplicationTypes(APIClassTemplate):
         logging.debug("In __init__() for ApplicationTypes class.")
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for ApplicationTypes class.")
-
     def post(self):
         logging.info('POST method for API for ApplicationTypes not supported.')
         pass

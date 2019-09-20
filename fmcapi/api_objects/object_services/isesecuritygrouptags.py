@@ -14,10 +14,6 @@ class ISESecurityGroupTags(APIClassTemplate):
         logging.debug("In __init__() for ISESecurityGroupTags class.")
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for ISESecurityGroupTags class.")
-
     def post(self):
         logging.info('POST method for API for ISESecurityGroupTags not supported.')
         pass

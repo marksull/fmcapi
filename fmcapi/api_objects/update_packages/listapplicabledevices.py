@@ -17,10 +17,6 @@ class ListApplicableDevices(APIClassTemplate):
         self.type = 'UpgradePackage'
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for ListApplicableDevices class.")
-
     def upgrade_package(self, package_name):
         logging.debug("In upgrade_package() for ListApplicableDevices class.")
         package1 = UpgradePackages(fmc=self.fmc)

@@ -16,10 +16,6 @@ class StaticRoutes(APIClassTemplate):
         logging.debug("In __init__() for StaticRoutes class.")
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for StaticRoutes class.")
-
     def device(self, device_name):
         logging.debug("In device() for StaticRoutes class.")
         device1 = Device(fmc=self.fmc)

@@ -17,10 +17,6 @@ class FTDNatPolicies(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = "FTDNatPolicy"
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for FTDNatPolicies class.")
-
 
 class FTDNatPolicy(FTDNatPolicies):
     """Dispose of this Class after 20210101."""

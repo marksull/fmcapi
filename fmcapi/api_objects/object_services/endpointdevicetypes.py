@@ -14,10 +14,6 @@ class EndPointDeviceTypes(APIClassTemplate):
         logging.debug("In __init__() for EndPointDeviceTypes class.")
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for EndPointDeviceTypes class.")
-
     def post(self):
         logging.info('POST method for API for EndPointDeviceTypes not supported.')
         pass

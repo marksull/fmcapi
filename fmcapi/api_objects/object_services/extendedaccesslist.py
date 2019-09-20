@@ -14,10 +14,6 @@ class ExtendedAccessList(APIClassTemplate):
         logging.debug("In __init__() for ExtendedAccessList class.")
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for ExtendedAccessList class.")
-
     def post(self):
         logging.info('POST method for API for ExtendedAccessList not supported.')
         pass

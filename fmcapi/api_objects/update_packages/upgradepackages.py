@@ -17,10 +17,6 @@ class UpgradePackages(APIClassTemplate):
         self.URL = f'{self.fmc.platform_url}{self.URL_SUFFIX}'
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for UpgradePackages class.")
-
     def post(self):
         logging.info('POST method for API for UpgradePackages not supported.')
         pass

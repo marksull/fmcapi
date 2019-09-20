@@ -16,10 +16,6 @@ class NatRules(APIClassTemplate):
         logging.debug("In __init__() for NatRules class.")
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for NatRules class.")
-
     def nat_policy(self,name):
         logging.debug("In nat_policy() for NatRules class.")
         ftd_nat = FTDNatPolicies(fmc=self.fmc)
