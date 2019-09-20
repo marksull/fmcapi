@@ -7,6 +7,8 @@ class Geolocation(APIClassTemplate):
     The Geolocation Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'continentId', 'continents', 'countries', 'continentUUID']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/geolocations'
 
     def __init__(self, fmc, **kwargs):

@@ -11,6 +11,12 @@ class AutoNatRules(APIClassTemplate):
     The AutoNatRules Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'originalNetwork', 'translatedNetwork', 'interfaceInTranslatedNetwork',
+                       'natType', 'interfaceIpv6', 'fallThrough', 'dns', 'routeLookup', 'noProxyArp', 'netToNet',
+                       'sourceInterface', 'destinationInterface', 'originalPort', 'translatedPort', 'serviceProtocol',
+                       'patOptions',
+                       ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     PREFIX_URL = '/policy/ftdnatpolicies'
     REQUIRED_FOR_POST = ["nat_id"]
 

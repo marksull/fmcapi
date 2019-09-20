@@ -7,13 +7,14 @@ class IKEv1Policies(APIClassTemplate):
     The IKEv1Policies Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'encryption', 'hash', 'priority', 'diffieHellmanGroup',
+                       'authenticationMethod', 'lifetimeInSeconds',
+                       ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/ikev1policies'
-    REQUIRED_FOR_POST = ['name',
-                         'encryption',
-                         'hash',
-                         'diffieHellmanGroup',
-                         'lifetimeInSeconds',
-                         'authenticationMethod']
+    REQUIRED_FOR_POST = ['name', 'encryption', 'hash', 'diffieHellmanGroup', 'lifetimeInSeconds',
+                         'authenticationMethod',
+                         ]
     VALID_FOR_ENCRYPTION = ['DES', '3DES', 'AES-128', 'AES-192', 'AES-256']
     VALID_FOR_HASH = ['MD5', 'SHA']
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""

@@ -13,6 +13,10 @@ class IPv4StaticRoutes(APIClassTemplate):
     The IPv4StaticRoute Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'interfaceName', 'selectedNetworks', 'gateway', 'routeTracking', 'metricValue',
+                       'isTunneled',
+                       ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['device_name']
     PREFIX_URL = '/devices/devicerecords'
     URL_SUFFIX = None
     REQUIRED_FOR_POST = ['interfaceName', 'selectedNetworks', 'gateway']

@@ -8,6 +8,10 @@ class DefaultActions(APIClassTemplate):
     The DefaultActions Object in the FMC.
     """
 
+    VALID_JSON_DATA = []
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['acp_id', 'acp_name', 'device_id', 'device_name', 'fetchZeroHitCount',
+                                          'limit',
+                                          ]
     PREFIX_URL = '/policy/accesspolicies'
     REQUIRED_FOR_PUT = ['acp_id', 'id', 'action']
     REQUIRED_FOR_GET = ['acp_id']

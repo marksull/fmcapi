@@ -8,6 +8,8 @@ class ICMPv6Objects(APIClassTemplate):
     The ICMPv6Objects Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'overrideTargetId', 'code', 'icmpType', 'overrides', 'overridable']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/icmpv6objects'
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 

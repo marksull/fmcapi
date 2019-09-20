@@ -9,6 +9,11 @@ class ListApplicableDevices(APIClassTemplate):
     The ListApplicableDevices Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'upgradePackage', 'model', 'modelId', 'modelNumber', 'modelType',
+                       'healthStatus', 'sw_version', 'isPartofContainer', 'containerType', 'healthPolicy',
+                       'accessPolicy',
+                       ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/updates/upgradepackages'
 
     def __init__(self, fmc, **kwargs):

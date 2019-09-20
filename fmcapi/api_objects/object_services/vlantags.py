@@ -9,6 +9,8 @@ class VlanTags(APIClassTemplate):
     The VlanTags Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'data', 'description']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/vlantags'
     REQUIRED_FOR_POST = ['name', 'data']
 

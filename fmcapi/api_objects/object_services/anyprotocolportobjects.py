@@ -7,6 +7,8 @@ class AnyProtocolPortObjects(APIClassTemplate):
     The AnyProtocolPortObjects Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'overrideTargetId']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/anyprotocolportobjects'
 
     def __init__(self, fmc, **kwargs):

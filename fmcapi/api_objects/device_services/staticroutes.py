@@ -8,6 +8,8 @@ class StaticRoutes(APIClassTemplate):
     The StaticRoutes Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'continentId', 'continents', 'countries', 'continentUUID']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     PREFIX_URL = '/devices/devicerecords'
     URL_SUFFIX = None
 

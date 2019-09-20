@@ -12,6 +12,8 @@ class Upgrades(APIClassTemplate):
     We can rename this after we remove that deprecation... which will be a while from now.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'upgradePackage', 'targets', 'pushUpgradeFileOnly']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/updates/upgrades'
 
     def __init__(self, fmc, **kwargs):

@@ -9,6 +9,8 @@ class Ranges(APIClassTemplate):
     The Ranges Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'value', 'description']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/ranges'
     REQUIRED_FOR_POST = ['name', 'value']
 

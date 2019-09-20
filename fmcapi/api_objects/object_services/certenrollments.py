@@ -8,6 +8,8 @@ class CertEnrollments(APIClassTemplate):
     The CertEnrollments Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/certenrollments'
 
     def __init__(self, fmc, **kwargs):

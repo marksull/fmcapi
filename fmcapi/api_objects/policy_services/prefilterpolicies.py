@@ -8,6 +8,8 @@ class PreFilterPolicies(APIClassTemplate):
     The PreFilterPolicies Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/policy/prefilterpolicies'
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 

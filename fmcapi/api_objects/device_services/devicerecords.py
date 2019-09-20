@@ -10,6 +10,10 @@ class DeviceRecords(APIClassTemplate):
     The DeviceRecords Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'hostName', 'natID', 'regKey', 'license_caps', 'accessPolicy']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['acp_name', 'acp_id', 'model', 'modelId', 'modelNumber', 'modelType',
+                                          'healthStatus', 'healthPolicy', 'keepLocalEvents', 'prohibitPacketTransfer',
+                                          ]
     URL_SUFFIX = '/devices/devicerecords'
     REQUIRED_FOR_POST = ['accessPolicy', 'hostName', 'regKey']
     REQUIRED_FOR_PUT = ['id']

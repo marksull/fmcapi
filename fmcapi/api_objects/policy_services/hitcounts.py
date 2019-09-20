@@ -11,6 +11,10 @@ class HitCounts(APIClassTemplate):
     The HitCounts Object in the FMC.
     """
 
+    VALID_JSON_DATA = []
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['acp_id', 'acp_name', 'device_id', 'device_name', 'fetchZeroHitcount',
+                                          'limit',
+                                          ]
     PREFIX_URL = '/policy/accesspolicies'
     REQUIRED_FOR_PUT = ['acp_id', 'device_id']
     REQUIRED_FOR_DELETE = ['acp_id', 'device_id']

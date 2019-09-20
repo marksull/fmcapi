@@ -8,6 +8,8 @@ class ApplicationFilters(APIClassTemplate):
     The ApplicationFilters Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'appConditions', 'applications', 'conditions']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/applicationfilters'
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 

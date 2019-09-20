@@ -8,6 +8,10 @@ class Applications(APIClassTemplate):
     The Applications Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['appProductivity', 'appCategories', 'appTags', 'appId', 'risk',
+                                          'applicationTypes',
+                                          ]
     URL_SUFFIX = '/object/applications'
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-\/\. ]"""
 

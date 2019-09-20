@@ -9,6 +9,12 @@ class RedundantInterfaces(APIClassTemplate):
     """
     The Bridge Group Interface Object in the FMC.
     """
+    VALID_JSON_DATA = ['id', 'name', 'type', 'mode', 'enabled', 'MTU', 'managementOnly', 'ipAddress',
+                       'primaryInterface', 'secondaryInterface', 'redundantId', 'macLearn', 'ifname', 'securityZone',
+                       'arpConfig', 'ipv4', 'ipv6', 'macTable', 'enableAntiSpoofing', 'fragmentReassembly',
+                       'enableDNSLookup', 'activeMACAddress', 'standbyMACAddress',
+                       ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['device_name']
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-\/\. ]"""
     PREFIX_URL = '/devices/devicerecords'
     URL_SUFFIX = None

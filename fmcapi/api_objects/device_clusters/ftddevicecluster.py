@@ -7,6 +7,16 @@ class FTDDeviceCluster(APIClassTemplate):
     The FTDDeviceCluster Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['slavedevices',
+                                          'modelType',
+                                          'version', 'sw_version',
+                                          'healthStatus',
+                                          'healthPolicy',
+                                          'model',
+                                          'modelNumber',
+                                          'accessPolicy',
+                                          ]
     URL_SUFFIX = '/deviceclusters/ftddevicecluster'
 
     def __init__(self, fmc, **kwargs):

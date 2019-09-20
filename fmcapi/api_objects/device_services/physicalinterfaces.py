@@ -9,6 +9,10 @@ class PhysicalInterfaces(APIClassTemplate):
     """
     The Physical Interface Object in the FMC.
     """
+    VALID_JSON_DATA = ['id', 'name', 'mode', 'enabled', 'hardware', 'MTU', 'managementOnly', 'ifname', 'securityZone',
+                       'type', 'ipv4', 'ipv6', 'activeMACAddress', 'standbyMACAddress',
+                       ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['device_name']
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-\/\. ]"""
     PREFIX_URL = '/devices/devicerecords'
     URL_SUFFIX = None

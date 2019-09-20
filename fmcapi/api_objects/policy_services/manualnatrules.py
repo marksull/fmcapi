@@ -14,6 +14,14 @@ class ManualNatRules(APIClassTemplate):
     The ManualNatRules Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'originalSource', 'originalDestination', 'translatedSource',
+                       'translatedDestination', 'interfaceInTranslatedSource', 'interfaceInOriginalDestination',
+                       'natType', 'interfaceIpv6', 'fallThrough', 'dns', 'routeLookup', 'noProxyArp', 'netToNet',
+                       'sourceInterface', 'destinationInterface', 'originalSourcePort', 'translatedSourcePort',
+                       'originalDestinationPort', 'translatedDestinationPort', 'patOptions', 'unidirectional',
+                       'enabled',
+                       ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     PREFIX_URL = '/policy/ftdnatpolicies'
     REQUIRED_FOR_POST = ["nat_id"]
 

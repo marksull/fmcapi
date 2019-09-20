@@ -7,6 +7,10 @@ class IKEv2Policies(APIClassTemplate):
     The IKEv2Policies Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'priority', 'diffieHellmanGroups', 'integrityAlgorithms',
+                       'prfIntegrityAlgorithms', 'encryptionAlgorithms', 'lifetimeInSeconds',
+                       ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/ikev2policies'
     REQUIRED_FOR_POST = ['name', 'integrityAlgorithms', 'prfIntegrityAlgorithms', 'encryptionAlgorithms',
                          'diffieHellmanGroups']

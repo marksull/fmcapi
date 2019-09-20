@@ -9,6 +9,8 @@ class FTDDeviceHAPairs(APIClassTemplate):
     The FTDDeviceHAPairs Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'primary', 'secondary', 'ftdHABootstrap', 'action', 'forceBreak']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/devicehapairs/ftddevicehapairs'
     REQUIRED_FOR_POST = ['primary', 'secondary', 'ftdHABootstrap']
     REQUIRED_FOR_PUT = ['id']

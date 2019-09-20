@@ -8,6 +8,10 @@ class SLAMonitors(APIClassTemplate):
     """
     The SLAMonitors Object in the FMC.
     """
+    VALID_JSON_DATA = ['id', 'name', 'type', 'timeout', 'threshold', 'frequency', 'slaId', 'dataSize', 'tos',
+                       'noOfPackets', 'monitorAddress', 'interfaceObjects', 'description'
+                       ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/slamonitors'
     REQUIRED_FOR_POST = ['name', 'slaId', 'monitorAddress', 'interfaceObjects', 'type']
     REQUIRED_FOR_PUT = ['id', 'type']

@@ -7,6 +7,8 @@ class TunnelTags(APIClassTemplate):
     The TunnelTags Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'overrides', 'overridable']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/tunneltags'
 
     def __init__(self, fmc, **kwargs):

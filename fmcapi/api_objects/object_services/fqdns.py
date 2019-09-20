@@ -7,6 +7,10 @@ class FQDNS(APIClassTemplate):
     The FQDNS Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'overridableTargetId', 'value', 'dnsResolution', 'overrides',
+                       'overridable',
+                       ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/fqdns'
     VALID_FOR_DNS_RESOLUTION = ['IPV4_ONLY', 'IPV6_ONLY', 'IPV4_AND_IPV6']
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""

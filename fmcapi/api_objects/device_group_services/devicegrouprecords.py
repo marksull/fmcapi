@@ -10,6 +10,8 @@ class DeviceGroupRecords(APIClassTemplate):
     The DeviceGroupRecords Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'members']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/devicegroups/devicegrouprecords'
 
     def __init__(self, fmc, **kwargs):

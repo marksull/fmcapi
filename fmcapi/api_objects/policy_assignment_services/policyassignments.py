@@ -10,6 +10,8 @@ class PolicyAssignments(APIClassTemplate):
     """
     The PolicyAssignments Object in the FMC.
     """
+    VALID_JSON_DATA = ['id', 'name', 'type', 'targets', 'policy']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     REQUIRED_FOR_POST = ['targets', 'policy']
     REQUIRED_FOR_PUT = ['id', 'targets', 'policy']
     URL_SUFFIX = '/assignment/policyassignments'

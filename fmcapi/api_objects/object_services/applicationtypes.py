@@ -8,6 +8,8 @@ class ApplicationTypes(APIClassTemplate):
     The ApplicationTypes Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/applicationtypes'
 
     def __init__(self, fmc, **kwargs):

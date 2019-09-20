@@ -9,6 +9,8 @@ class PortObjectGroups(APIClassTemplate):
     The PortObjectGroups Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'objects', 'literals']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/portobjectgroups'
 
     # Technically you can have objects OR literals but I'm not set up for "OR" logic, yet.

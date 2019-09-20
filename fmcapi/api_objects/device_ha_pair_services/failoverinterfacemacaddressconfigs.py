@@ -10,6 +10,8 @@ class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
     The FailoverInterfaceMACAddressConfigs Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'physicalInterface', 'failoverActiveMac','failoverStandbyMac']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['ha_name']
     PREFIX_URL = '/devicehapairs/ftddevicehapairs'
     REQUIRED_FOR_POST = ['physicalInterface', 'failoverActiveMac', 'failoverStandbyMac']
     REQUIRED_FOR_PUT = ['id']

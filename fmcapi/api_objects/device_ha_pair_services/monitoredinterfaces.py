@@ -9,6 +9,8 @@ class MonitoredInterfaces(APIClassTemplate):
     The MonitoredInterfaces Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'ipv4Configuration', 'ipv6Configuration', 'monitorForFailures']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['ha_name']
     PREFIX_URL = '/devicehapairs/ftddevicehapairs'
     REQUIRED_FOR_PUT = ['id']
 

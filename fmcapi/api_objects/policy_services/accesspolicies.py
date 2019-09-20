@@ -8,6 +8,8 @@ class AccessPolicies(APIClassTemplate):
     The AccessPolicies Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'description', 'defaultAction']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/policy/accesspolicies'
     REQUIRED_FOR_POST = ['name']
     DEFAULT_ACTION_OPTIONS = ['BLOCK', 'NETWORK_DISCOVERY', 'IPS']  # Not implemented yet.

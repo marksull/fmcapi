@@ -7,6 +7,8 @@ class SIUrlFeeds(APIClassTemplate):
     The SIUrlFeeds Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'checksumURL', 'feedURL', 'updateFrequency', 'overrides', 'overridable']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/siurlfeeds'
 
     def __init__(self, fmc, **kwargs):

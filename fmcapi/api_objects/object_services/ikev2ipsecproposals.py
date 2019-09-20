@@ -7,10 +7,13 @@ class IKEv2IpsecProposals(APIClassTemplate):
     The IKEv2IpsecProposals Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'encryptionAlgorithms', 'integrityAlgorithms']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/ikev2ipsecproposals'
     REQUIRED_FOR_POST = ['name', 'encryptionAlgorithms', 'integrityAlgorithms']
     VALID_FOR_ENCRYPTION = ['DES', '3DES', 'AES', 'AES-192', 'AES-256', 'NULL', 'AES-GCM', 'AES-GCM-192',
-                            'AES-GCM-256', 'AES-GMAC', 'AES-GMAC-192', 'AES-GMAC-256']
+                            'AES-GCM-256', 'AES-GMAC', 'AES-GMAC-192', 'AES-GMAC-256',
+                            ]
     VALID_FOR_HASH = ['NULL', 'MD5', 'SHA-1', 'SHA-256', 'SHA-384', 'SHA-512']
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
     FIRST_SUPPORTED_FMC_VERSION = '6.3'

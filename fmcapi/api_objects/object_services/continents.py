@@ -8,6 +8,8 @@ class Continents(APIClassTemplate):
     The Continents Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'countries']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/continents'
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 

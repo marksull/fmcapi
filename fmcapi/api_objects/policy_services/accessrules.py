@@ -20,6 +20,12 @@ class AccessRules(APIClassTemplate):
     """
     The AccessRules Object in the FMC.
     """
+    VALID_JSON_DATA = ['id', 'name', 'type', 'action', 'enabled', 'sendEventsToFMC', 'logFiles', 'logBegin', 'logEnd',
+                       'variableSet', 'originalSourceNetworks', 'vlanTags', 'sourceNetworks', 'destinationNetworks',
+                       'sourcePorts', 'destinationPorts', 'ipsPolicy', 'urls', 'sourceZones', 'destinationZones',
+                       'applications', 'filePolicy',
+                       ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['acp_id', 'acp_name', 'insertBefore', 'insertAfter', 'section', 'file_policy']
     PREFIX_URL = '/policy/accesspolicies'
     REQUIRED_FOR_POST = ['name', 'acp_id']
     REQUIRED_FOR_GET = ['acp_id']

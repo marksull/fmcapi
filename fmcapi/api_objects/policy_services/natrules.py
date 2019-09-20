@@ -8,6 +8,8 @@ class NatRules(APIClassTemplate):
     The NatRules Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     PREFIX_URL = '/policy/ftdnatpolicies'
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 

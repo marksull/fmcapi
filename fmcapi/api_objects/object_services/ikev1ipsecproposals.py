@@ -7,6 +7,8 @@ class IKEv1IpsecProposals(APIClassTemplate):
     The IKEv1IpsecProposals Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'espEncryption', 'espHash']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/ikev1ipsecproposals'
     REQUIRED_FOR_POST = ['name', 'espEncryption', 'espHash']
     VALID_FOR_ENCRYPTION = ['DES', '3DES', 'AES-128', 'AES-192', 'AES-256', 'ESP-NULL']
