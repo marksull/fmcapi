@@ -29,12 +29,6 @@ class Hosts(APIClassTemplate):
             else:
                 logging.error(f"Provided value, {kwargs['value']}, has an error with the IP address(es).")
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for IPHost class.")
-        if 'value' in kwargs:
-            self.value = kwargs['value']
-
 
 class IPHost(Hosts):
     """Dispose of this Class after 20210101."""

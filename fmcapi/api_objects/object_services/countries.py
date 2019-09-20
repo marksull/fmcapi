@@ -19,14 +19,6 @@ class Countries(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = 'Country'
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for Countries class.")
-        if 'iso2' in kwargs:
-            self.iso2 = kwargs['iso2']
-        if 'iso3' in kwargs:
-            self.iso3 = kwargs['iso3']
-
     def post(self):
         logging.info('POST method for API for Countries not supported.')
         pass

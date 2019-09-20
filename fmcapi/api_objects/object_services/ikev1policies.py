@@ -40,19 +40,3 @@ class IKEv1Policies(APIClassTemplate):
             else:
                 logging.warning(f'hash "{self.hash}" not a valid type.')
         return json_data
-
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for IKEv1Policies class.")
-        if 'encryption' in kwargs:
-            self.encryption = kwargs['encryption']
-        if 'hash' in kwargs:
-            self.hash = kwargs['hash']
-        if 'priority' in kwargs:
-            self.priority = kwargs['priority']
-        if 'diffieHellmanGroup' in kwargs:
-            self.diffieHellmanGroup = kwargs['diffieHellmanGroup']
-        if 'authenticationMethod' in kwargs:
-            self.authenticationMethod = kwargs['authenticationMethod']
-        if 'lifetimeInSeconds' in kwargs:
-            self.lifetimeInSeconds = kwargs['lifetimeInSeconds']

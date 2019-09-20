@@ -20,20 +20,6 @@ class FTDDeviceHAPairs(APIClassTemplate):
         logging.debug("In __init__() for FTDDeviceHAPairs class.")
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for FTDDeviceHAPairs class.")
-        if 'primary' in kwargs:
-            self.primary = kwargs['primary']
-        if 'secondary' in kwargs:
-            self.secondary = kwargs['secondary']
-        if 'ftdHABootstrap' in kwargs:
-            self.ftdHABootstrap = kwargs['ftdHABootstrap']
-        if 'action' in kwargs:
-            self.action = kwargs['action']
-        if 'forceBreak' in kwargs:
-            self.forceBreak = kwargs['forceBreak']
-
     def device(self, primary_name="", secondary_name=""):
         logging.debug("In device() for FTDDeviceHAPairs class.")
         primary = Device(fmc=self.fmc)

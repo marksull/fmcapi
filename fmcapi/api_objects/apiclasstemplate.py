@@ -28,8 +28,11 @@ class APIClassTemplate(object):
 
     def __init__(self, fmc, **kwargs):
         logging.debug("In __init__() for APIClassTemplate class.")
-        self.class_data = {}
         self.fmc = fmc
+        self.limit = self.fmc.limit
+        self.description = 'Created by fmcapi.'
+        self.overridable = False
+        self.dry_run = False
         self.URL = f'{self.fmc.configuration_url}{self.URL_SUFFIX}'
         if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
             logging.warning(f'This API feature was released in version {self.FIRST_SUPPORTED_FMC_VERSION}.  '
@@ -43,48 +46,15 @@ class APIClassTemplate(object):
                 json_data[key_value] = self.__dict__[key_value]
         return json_data
 
-    def parse_kwargs_proposed(self, **kwargs):
+    def parse_kwargs(self, **kwargs):
         logging.debug("In parse_kwargs() for APIClassTemplate class.")
         for key_value in self.VALID_FOR_KWARGS:
             if key_value in kwargs:
-                self.class_data[key_value] = kwargs[key_value]
-
-    def parse_kwargs(self, **kwargs):
-        logging.debug("In parse_kwargs() for APIClassTemplate class.")
-        if 'limit' in kwargs:
-            self.limit = kwargs['limit']
-        else:
-            self.limit = self.fmc.limit
-        if 'offset' in kwargs:
-            self.offset = kwargs['offset']
+                self.__dict__[key_value] = kwargs[key_value]
         if 'name' in kwargs:
             self.name = syntax_correcter(kwargs['name'], permitted_syntax=self.VALID_CHARACTERS_FOR_NAME)
             if self.name != kwargs['name']:
                 logging.info(f"Adjusting name '{kwargs['name']}' to '{self.name}' due to invalid characters.")
-        if 'description' in kwargs:
-            self.description = kwargs['description']
-        else:
-            self.description = 'Created by fmcapi.'
-        if 'metadata' in kwargs:
-            self.metadata = kwargs['metadata']
-        if 'overridable' in kwargs:
-            self.overridable = kwargs['overridable']
-        else:
-            self.overridable = False
-        if 'type' in kwargs:
-            self.type = kwargs['type']
-        if 'links' in kwargs:
-            self.links = kwargs['links']
-        if 'paging' in kwargs:
-            self.paging = kwargs['paging']
-        if 'id' in kwargs:
-            self.id = kwargs['id']
-        if 'items' in kwargs:
-            self.items = kwargs['items']
-        if 'dry_run' in kwargs:
-            self.dry_run = kwargs['dry_run']
-        else:
-            self.dry_run = False
 
     def valid_for_get(self):
         logging.debug("In valid_for_get() for APIClassTemplate class.")

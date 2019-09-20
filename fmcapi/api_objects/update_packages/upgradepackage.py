@@ -23,16 +23,6 @@ class Upgrades(APIClassTemplate):
         self.URL = f'{self.fmc.platform_url}{self.URL_SUFFIX}'
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for Upgrades class.")
-        if 'upgradePackage' in kwargs:
-            self.upgradePackage = kwargs['upgradePackage']
-        if 'targets' in kwargs:
-            self.targets = kwargs['targets']
-        if 'pushUpgradeFileOnly' in kwargs:
-            self.pushUpgradeFileOnly = kwargs['pushUpgradeFileOnly']
-
     def upgrade_package(self, package_name):
         logging.debug("In upgrade_package() for Upgrades class.")
         package1 = UpgradePackages(fmc=self.fmc)

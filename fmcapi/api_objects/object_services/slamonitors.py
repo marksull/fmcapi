@@ -22,30 +22,6 @@ class SLAMonitors(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = "SLAMonitor"
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for SLAMonitors class.")
-        if 'timeout' in kwargs:
-            self.timeout = kwargs['timeout']
-        if 'threshold' in kwargs:
-            self.securityZone = kwargs['threshold']
-        if 'frequency' in kwargs:
-            self.frequency = kwargs['frequency']
-        if 'slaId' in kwargs:
-            self.slaId = kwargs['slaId']
-        if 'dataSize' in kwargs:
-            self.dataSize = kwargs['dataSize']
-        if 'tos' in kwargs:
-            self.tos = kwargs['tos']
-        if 'noOfPackets' in kwargs:
-            self.noOfPackets = kwargs['noOfPackets']
-        if 'monitorAddress' in kwargs:
-            self.monitorAddress = kwargs['monitorAddress']
-        if 'interfaceObjects' in kwargs:
-            self.interfaceObjects = kwargs['interfaceObjects']
-        if 'description' in kwargs:
-            self.description = kwargs['description']
-
     def interfaces(self, names):
         logging.debug("In interfaces() for SLAMonitors class.")
         zones = []

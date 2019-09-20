@@ -42,71 +42,27 @@ class EtherchannelInterfaces(APIClassTemplate):
                 self.ipv4 = kwargs['ipv4']
             else:
                 logging.warning(f"Method {kwargs['ipv4']} is not a valid ipv4 type.")
-        if 'device_name' in kwargs:
-            self.device(device_name=kwargs['device_name'])
         if 'mode' in kwargs:
             if kwargs['mode'] in self.VALID_FOR_MODE:
                 self.mode = kwargs['mode']
             else:
                 logging.warning(f"Mode {kwargs['mode']} is not a valid mode.")
-        if 'securityZone' in kwargs:
-            self.securityZone = kwargs['securityZone']
-        if 'enabled' in kwargs:
-            self.enabled = kwargs['enabled']
         if 'MTU' in kwargs:
             if kwargs['MTU'] in self.VALID_FOR_MTU:
                 self.MTU = kwargs['MTU']
             else:
                 logging.warning(f"MTU {kwargs['MTU']} should be in the range 64-9000.")
                 self.MTU = 1500
-        if 'managementOnly' in kwargs:
-            self.managementOnly = kwargs['managementOnly']
-        if 'ipAddress' in kwargs:
-            self.ipAddress = kwargs['ipAddress']
-        if 'selectedInterfaces' in kwargs:
-            self.selectedInterfaces = kwargs['selectedInterfaces']
-        if 'etherChannelId' in kwargs:
-            self.etherChannelId = kwargs['etherChannelId']
         if 'lacpMode' in kwargs:
             if kwargs['lacpMode'] in self.VALID_FOR_LACP_MODE:
                 self.lacpMode = kwargs['lacpMode']
             else:
                 logging.warning(f"LACP Mode {kwargs['lacpMode']} is not a valid mode.")
-        if 'maxActivePhysicalInterface' in kwargs:
-            self.maxActivePhysicalInterface = kwargs['maxActivePhysicalInterface']
-        if 'minActivePhysicalInterface' in kwargs:
-            self.minActivePhysicalInterface = kwargs['minActivePhysicalInterface']
-        if 'hardware' in kwargs:
-            self.hardware = kwargs['hardware']
-        if 'erspanFlowId' in kwargs:
-            self.erspanFlowId = kwargs['erspanFlowId']
-        if 'erspanSourceIP' in kwargs:
-            self.erspanSourceIP = kwargs['erspanSourceIP']
         if 'loadBalancing' in kwargs:
             if kwargs['loadBalancing'] in self.VALID_FOR_LOAD_BALANCING:
                 self.loadBalancing = kwargs['loadBalancing']
             else:
                 logging.warning(f"Load balancing method {kwargs['loadBalancing']} is not a valid method.")
-        if 'macLearn' in kwargs:
-            self.macLearn = kwargs['macLearn']
-        if 'ifname' in kwargs:
-            self.ifname = kwargs['ifname']
-        if 'arpConfig' in kwargs:
-            self.arpConfig = kwargs['arpConfig']
-        if 'ipv6' in kwargs:
-            self.ipv6 = kwargs['ipv6']
-        if 'macTable' in kwargs:
-            self.macTable = kwargs['macTable']
-        if 'enableAntiSpoofing' in kwargs:
-            self.enableAntiSpoofing = kwargs['enableAntiSpoofing']
-        if 'fragmentReassembly' in kwargs:
-            self.fragmentReassembly = kwargs['fragmentReassembly']
-        if 'enableDNSLookup' in kwargs:
-            self.enableDNSLookup = kwargs['enableDNSLookup']
-        if 'activeMACAddress' in kwargs:
-            self.activeMACAddress = kwargs['activeMACAddress']
-        if 'standbyMACAddress' in kwargs:
-            self.standbyMACAddress = kwargs['standbyMACAddress']
 
     def device(self, device_name):
         logging.debug("In device() for EtherchannelInterfaces class.")

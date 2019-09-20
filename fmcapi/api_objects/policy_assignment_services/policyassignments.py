@@ -23,14 +23,6 @@ class PolicyAssignments(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = "PolicyAssignment"
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for PolicyAssignments class.")
-        if 'targets' in kwargs:
-            self.targets = kwargs['targets']
-        if 'policy' in kwargs:
-            self.policy = kwargs['policy']
-
     def ftd_natpolicy(self, name, devices):
         logging.debug("In ftd_natpolicy() for PolicyAssignments class.")
         targets = []

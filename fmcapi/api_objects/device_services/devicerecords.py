@@ -24,38 +24,6 @@ class DeviceRecords(APIClassTemplate):
         logging.debug("In __init__() for DeviceRecords class.")
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for DeviceRecords class.")
-        if 'hostName' in kwargs:
-            self.hostName = kwargs['hostName']
-        if 'natID' in kwargs:
-            self.natID = kwargs['natID']
-        if 'regKey' in kwargs:
-            self.regKey = kwargs['regKey']
-        if 'license_caps' in kwargs:
-            self.license_caps = kwargs['license_caps']
-        if 'accessPolicy' in kwargs:
-            self.accessPolicy = kwargs['accessPolicy']
-        if 'acp_name' in kwargs:
-            self.acp(name=kwargs['acp_name'])
-        if 'model' in kwargs:
-            self.model = kwargs['model']
-        if 'modelId' in kwargs:
-            self.modelId = kwargs['modelId']
-        if 'modelNumber' in kwargs:
-            self.modelNumber = kwargs['modelNumber']
-        if 'modelType' in kwargs:
-            self.modelType = kwargs['modelType']
-        if 'healthStatus' in kwargs:
-            self.healthStatus = kwargs['healthStatus']
-        if 'healthPolicy' in kwargs:
-            self.healthPolicy = kwargs['healthPolicy']
-        if 'keepLocalEvents' in kwargs:
-            self.keepLocalEvents = kwargs['keepLocalEvents']
-        if 'prohibitPacketTransfer' in kwargs:
-            self.prohibitPacketTransfer = kwargs['prohibitPacketTransfer']
-
     def licensing(self, action, name='BASE'):
         logging.debug("In licensing() for DeviceRecords class.")
         if action == 'add':

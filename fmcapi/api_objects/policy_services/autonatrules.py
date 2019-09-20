@@ -29,40 +29,12 @@ class AutoNatRules(APIClassTemplate):
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for AutoNatRules class.")
-        if 'originalNetwork' in kwargs:
-            self.originalNetwork = kwargs['originalNetwork']
         if 'translatedNetwork' in kwargs and 'interfaceInTranslatedNetwork' is True:
             logging.warning("Cannot have both a translatedNetwork and interfaceInTranslatedNetwork")
         elif 'translatedNetwork' in kwargs:
             self.translatedNetwork = kwargs['translatedNetwork']
         elif 'interfaceInTranslatedNetwork' in kwargs:
             self.interfaceInTranslatedNetwork = kwargs['interfaceInTranslatedNetwork']
-        if 'natType' in kwargs:
-            self.natType = kwargs['natType']
-        if 'interfaceIpv6' in kwargs:
-            self.interfaceIpv6 = kwargs['interfaceIpv6']
-        if 'fallThrough' in kwargs:
-            self.fallThrough = kwargs['fallThrough']
-        if 'dns' in kwargs:
-            self.dns = kwargs['dns']
-        if 'routeLookup' in kwargs:
-            self.routeLookup = kwargs['routeLookup']
-        if 'noProxyArp' in kwargs:
-            self.noProxyArp = kwargs['noProxyArp']
-        if 'netToNet' in kwargs:
-            self.netToNet = kwargs['netToNet']
-        if 'sourceInterface' in kwargs:
-            self.sourceInterface = kwargs['sourceInterface']
-        if 'destinationInterface' in kwargs:
-            self.destinationInterface = kwargs['destinationInterface']
-        if 'originalPort' in kwargs:
-            self.originalPort = kwargs['originalPort']
-        if 'translatedPort' in kwargs:
-            self.translatedPort = kwargs['translatedPort']
-        if 'serviceProtocol' in kwargs:
-            self.serviceProtocol = kwargs['serviceProtocol']
-        if 'patOptions' in kwargs:
-            self.patOptions = kwargs['patOptions']
 
     def nat_policy(self, name):
         logging.debug("In nat_policy() for AutoNatRules class.")

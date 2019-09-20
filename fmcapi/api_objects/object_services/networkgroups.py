@@ -23,14 +23,6 @@ class NetworkGroups(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = 'NetworkGroup'
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for NetworkGroups class.")
-        if 'objects' in kwargs:
-            self.objects = kwargs['objects']
-        if 'literals' in kwargs:
-            self.literals = kwargs['literals']
-
     def named_networks(self, action, name=''):
         logging.debug("In named_networks() for NetworkGroups class.")
         if action == 'add':

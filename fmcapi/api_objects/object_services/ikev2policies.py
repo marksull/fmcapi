@@ -27,22 +27,6 @@ class IKEv2Policies(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = 'Ikev2PolicyObject'
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for IKEv2Policies class.")
-        if 'priority' in kwargs:
-            self.priority = kwargs['priority']
-        if 'diffieHellmanGroups' in kwargs:
-            self.diffieHellmanGroups = kwargs['diffieHellmanGroups']
-        if 'integrityAlgorithms' in kwargs:
-            self.integrityAlgorithms = kwargs['integrityAlgorithms']
-        if 'prfIntegrityAlgorithms' in kwargs:
-            self.prfIntegrityAlgorithms = kwargs['prfIntegrityAlgorithms']
-        if 'encryptionAlgorithms' in kwargs:
-            self.encryptionAlgorithms = kwargs['encryptionAlgorithms']
-        if 'lifetimeInSeconds' in kwargs:
-            self.lifetimeInSeconds = kwargs['lifetimeInSeconds']
-
     def encryption(self, action, algorithms=[]):
         logging.debug("In encryption() for IKEv2Policies class.")
         if action == 'add':

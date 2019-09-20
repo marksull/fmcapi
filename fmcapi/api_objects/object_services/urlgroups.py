@@ -22,14 +22,6 @@ class URLGroups(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = 'URLGroup'
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for URLGroups class.")
-        if 'objects' in kwargs:
-            self.objects = kwargs['objects']
-        if 'literals' in kwargs:
-            self.literals = kwargs['literals']
-
     def named_urls(self, action, name=''):
         logging.debug("In named_urls() for URLGroups class.")
         if action == 'add':

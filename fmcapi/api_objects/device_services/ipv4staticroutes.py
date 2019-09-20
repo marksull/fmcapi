@@ -28,24 +28,6 @@ class IPv4StaticRoutes(APIClassTemplate):
         self.type = 'IPv4StaticRoute'
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for IPv4StaticRoute class.")
-        if 'device_name' in kwargs:
-            self.device(device_name=kwargs['device_name'])
-        if 'interfaceName' in kwargs:
-            self.interfaceName = kwargs['interfaceName']
-        if 'selectedNetworks' in kwargs:
-            self.selectedNetworks = kwargs['selectedNetworks']
-        if 'gateway' in kwargs:
-            self.gateway = kwargs['gateway']
-        if 'routeTracking' in kwargs:
-            self.routeTracking = kwargs['routeTracking']
-        if 'metricValue' in kwargs:
-            self.metricValue = kwargs['metricValue']
-        if 'isTunneled' in kwargs:
-            self.isTunneled = kwargs['isTunneled']
-
     def device(self, device_name):
         logging.debug("In device() for IPv4StaticRoute class.")
         device1 = Device(fmc=self.fmc)

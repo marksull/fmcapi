@@ -19,18 +19,6 @@ class DNSServerGroups(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = 'DNSServerGroupObject'
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for DNSServerGroups class.")
-        if 'retries' in kwargs:
-            self.retries = kwargs['retries']
-        if 'timeout' in kwargs:
-            self.timeout = kwargs['timeout']
-        if 'dnsservers' in kwargs:
-            self.dnsservers = kwargs['dnsservers']
-        if 'defaultdomain' in kwargs:
-            self.defaultdomain = kwargs['defaultdomain']
-
     def servers(self, action, name_servers):
         logging.debug("In servers() for DNSServerGroups class.")
         if action == 'add':

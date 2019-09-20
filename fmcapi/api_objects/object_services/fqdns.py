@@ -38,16 +38,8 @@ class FQDNS(APIClassTemplate):
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for FQDNS class.")
-        if 'overrideTargetId' in kwargs:
-            self.overrideTargetId = kwargs['overrideTargetId']
-        if 'value' in kwargs:
-            self.value = kwargs['value']
         if 'dnsResolution' in kwargs:
             if kwargs['dnsResolution'] in self.VALID_FOR_DNS_RESOLUTION:
                 self.dnsResolution = kwargs['dnsResolution']
             else:
                 logging.warning(f"dnsResolution {kwargs['dnsResolution']} not a valid type.")
-        if 'overrides' in kwargs:
-            self.overrides = kwargs['overrides']
-        if 'overridable' in kwargs:
-            self.overridable = kwargs['overridable']

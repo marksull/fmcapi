@@ -29,8 +29,6 @@ class InterfaceGroups(APIClassTemplate):
             self.interfaceMode = kwargs['interfaceMode']
         else:
             self.interfaceMode = 'ROUTED'
-        if 'interfaces' in kwargs:
-            self.interfaces = kwargs['interfaces']
 
     def p_interface(self, device_name="", action="add", names=[]):
         logging.debug("In interfaces() for InterfaceGroups class.")

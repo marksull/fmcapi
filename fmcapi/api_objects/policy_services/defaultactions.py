@@ -37,44 +37,12 @@ class DefaultActions(APIClassTemplate):
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for HitCounts class.")
-        if 'acp_id' in kwargs:
-            self.acp(acp_id=kwargs['acp_id'])
-        if 'acp_name' in kwargs:
-            self.acp(name=kwargs['acp_name'])
-        if 'id' in kwargs:
-            self.id = kwargs['id']
         if 'action' in kwargs:
             if kwargs['action'] in self.VALID_ACTION:
                 self.action = kwargs['action']
             else:
                 logging.warning(f'action variable must be one of: {self.VALID_ACTION}.')
             self.action = kwargs['action']
-        if 'logEnd' in kwargs:
-            self.logEnd = kwargs['logEnd']
-        if 'logBegin' in kwargs:
-            self.logBegin = kwargs['logBegin']
-        if 'snmpConfig' in kwargs:
-            self.snmpConfig = kwargs['snmpConfig']
-        if 'intrusionPolicy' in kwargs:
-            self.intrusionPolicy = kwargs['intrusionPolicy']
-        if 'sendEventsToFMC' in kwargs:
-            self.sendEventsToFMC = kwargs['sendEventsToFMC']
-        if 'description' in kwargs:
-            self.description = kwargs['description']
-        if 'variableSet' in kwargs:
-            self.variableSet = kwargs['variableSet']
-        if 'version' in kwargs:
-            self.version = kwargs['version']
-        if 'syslogConfig' in kwargs:
-            self.syslogConfig = kwargs['syslogConfig']
-        if 'name' in kwargs:
-            self.name = kwargs['name']
-        if 'id' in kwargs:
-            self.id = kwargs['id']
-        if 'limit' in kwargs:
-            self.limit = kwargs['limit']
-        else:
-            self.limit = self.fmc.limit
 
     def acp(self, name='', acp_id=''):
         # either name or id of the ACP should be given

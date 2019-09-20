@@ -18,14 +18,6 @@ class ProtocolPortObjects(APIClassTemplate):
         logging.debug("In __init__() for ProtocolPortObjects class.")
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for ProtocolPortObjects class.")
-        if 'port' in kwargs:
-            self.port = kwargs['port']
-        if 'protocol' in kwargs:
-            self.protocol = kwargs['protocol']
-
 
 class ProtocolPort(ProtocolPortObjects):
     """Dispose of this Class after 20210101."""

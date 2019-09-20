@@ -24,14 +24,6 @@ class IKEv2IpsecProposals(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = 'IKEv2IPsecProposal'
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for IKEv2IpsecProposals class.")
-        if 'encryptionAlgorithms' in kwargs:
-            self.encryptionAlgorithms = kwargs['encryptionAlgorithms']
-        if 'integrityAlgorithms' in kwargs:
-            self.integrityAlgorithms = kwargs['integrityAlgorithms']
-
     def encryption(self, action, algorithms=[]):
         logging.debug("In encryption() for IKEv2IpsecProposals class.")
         if action == 'add':

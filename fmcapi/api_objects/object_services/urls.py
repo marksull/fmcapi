@@ -18,12 +18,6 @@ class URLs(APIClassTemplate):
         logging.debug("In __init__() for URLs class.")
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for URLs class.")
-        if 'url' in kwargs:
-            self.url = kwargs['url']
-
 
 class URL(URLs):
     """Dispose of this Class after 20210101."""

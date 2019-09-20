@@ -22,14 +22,6 @@ class PortObjectGroups(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = 'NetworkGroup'
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for PortObjectGroups class.")
-        if 'objects' in kwargs:
-            self.objects = kwargs['objects']
-        if 'literals' in kwargs:
-            self.literals = kwargs['literals']
-
     def named_ports(self, action, name=''):
         logging.debug("In named_ports() for PortObjectGroups class.")
         if action == 'add':

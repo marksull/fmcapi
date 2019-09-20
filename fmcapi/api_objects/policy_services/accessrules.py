@@ -90,10 +90,6 @@ class AccessRules(APIClassTemplate):
             else:
                 logging.warning(f"Action {kwargs['action']} is not a valid action.")
                 logging.warning(f"\tValid actions are: {self.VALID_FOR_ACTION}.")
-        if 'acp_id' in kwargs:
-            self.acp(acp_id=kwargs['acp_id'])
-        if 'acp_name' in kwargs:
-            self.acp(name=kwargs['acp_name'])
         if 'enabled' in kwargs:
             self.enabled = kwargs['enabled']
         else:
@@ -114,56 +110,20 @@ class AccessRules(APIClassTemplate):
             self.logEnd = kwargs['logEnd']
         else:
             self.logEnd = False
-        if 'originalSourceNetworks' in kwargs:
-            self.originalSourceNetworks = kwargs['originalSourceNetworks']
-        if 'sourceZones' in kwargs:
-            self.sourceZones = kwargs['sourceZones']
-        if 'destinationZones' in kwargs:
-            self.destinationZones = kwargs['destinationZones']
-        if 'variableSet' in kwargs:
-            self.variableSet = kwargs['variableSet']
-        if 'ipsPolicy' in kwargs:
-            self.ipsPolicy = kwargs['ipsPolicy']
-        if 'vlanTags' in kwargs:
-            self.vlanTags = kwargs['vlanTags']
-        if 'sourcePorts' in kwargs:
-            self.sourcePorts = kwargs['sourcePorts']
-        if 'destinationPorts' in kwargs:
-            self.destinationPorts = kwargs['destinationPorts']
         if 'sourceNetworks' in kwargs:
             self.sourceNetworks = {'objects': [], 'literals': {}}
-
             if kwargs['sourceNetworks'].get('objects'):
                 self.sourceNetworks['objects'] = kwargs['sourceNetworks']['objects']
-
             if kwargs['sourceNetworks'].get('literals'):
                 for literal in kwargs['sourceNetworks']['literals']:
                     self.sourceNetworks['literals'][literal['value']] = literal['type']
-
         if 'destinationNetworks' in kwargs:
             self.destinationNetworks = {'objects': [], 'literals': {}}
-
             if kwargs['destinationNetworks'].get('objects'):
                 self.destinationNetworks['objects'] = kwargs['destinationNetworks']['objects']
-
             if kwargs['destinationNetworks'].get('literals'):
                 for literal in kwargs['destinationNetworks']['literals']:
                     self.destinationNetworks['literals'][literal['value']] = literal['type']
-
-        if 'urls' in kwargs:
-            self.urls = kwargs['urls']
-        if 'applications' in kwargs:
-            self.applications = kwargs['applications']
-        if 'category' in kwargs:
-            self.category = kwargs['category']
-        if 'insertBefore' in kwargs:
-            self.insertBefore = kwargs['insertBefore']
-        if 'insertAfter' in kwargs:
-            self.insertAfter = kwargs['insertAfter']
-        if 'section' in kwargs:
-            self.section = kwargs['section']
-        if 'file_policy' in kwargs:
-            self.filePolicy = kwargs['file_policy']
 
         # Check if suffix should be added to URL
         # self.url_suffix()

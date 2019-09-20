@@ -23,14 +23,6 @@ class VlanGroupTags(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = 'VlanGroupTag'
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for VlanGroupTags class.")
-        if 'objects' in kwargs:
-            self.objects = kwargs['objects']
-        if 'literals' in kwargs:
-            self.literals = kwargs['literals']
-
     def named_vlantags(self, action, name=''):
         logging.debug("In named_vlantags() for VlanGroupTags class.")
         if action == 'add':

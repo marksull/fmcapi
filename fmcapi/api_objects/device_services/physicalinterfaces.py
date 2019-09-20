@@ -36,35 +36,17 @@ class PhysicalInterfaces(APIClassTemplate):
                 self.ipv4 = kwargs['ipv4']
             else:
                 logging.warning(f"Method {kwargs['ipv4']} is not a valid ipv4 type.")
-        if 'device_name' in kwargs:
-            self.device(device_name=kwargs['device_name'])
         if 'mode' in kwargs:
             if kwargs['mode'] in self.VALID_FOR_MODE:
                 self.mode = kwargs['mode']
             else:
                 logging.warning(f"Mode {kwargs['mode']} is not a valid mode.")
-        if 'hardware' in kwargs:
-            self.hardware = kwargs['hardware']
-        if 'securityZone' in kwargs:
-            self.securityZone = kwargs['securityZone']
-        if 'enabled' in kwargs:
-            self.enabled = kwargs['enabled']
         if 'MTU' in kwargs:
             if kwargs['MTU'] in self.VALID_FOR_MTU:
                 self.MTU = kwargs['MTU']
             else:
                 logging.warning(f"MTU {kwargs['MTU']} should be in the range 64-9000, setting to 1500.")
                 self.MTU = 1500
-        if 'managementOnly' in kwargs:
-            self.managementOnly = kwargs['managementOnly']
-        if 'ifname' in kwargs:
-            self.ifname = kwargs['ifname']
-        if 'ipv6' in kwargs:
-            self.ipv6 = kwargs['ipv6']
-        if 'activeMACAddress' in kwargs:
-            self.activeMACAddress = kwargs['activeMACAddress']
-        if 'standbyMACAddress' in kwargs:
-            self.standbyMACAddress = kwargs['standbyMACAddress']
 
     def device(self, device_name):
         logging.debug("In device() for PhysicalInterface class.")

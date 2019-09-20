@@ -20,22 +20,6 @@ class Applications(APIClassTemplate):
         logging.debug("In __init__() for Applications class.")
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for Applications class.")
-        if 'appProductivity' in kwargs:
-            self.appProductivity = kwargs['appProductivity']
-        if 'appCategories' in kwargs:
-            self.appCategories = kwargs['appCategories']
-        if 'appTags' in kwargs:
-            self.appTags = kwargs['appTags']
-        if 'appId' in kwargs:
-            self.appId = kwargs['appId']
-        if 'risk' in kwargs:
-            self.risk = kwargs['risk']
-        if 'applicationTypes' in kwargs:
-            self.applicationTypes = kwargs['applicationTypes']
-
     def post(self):
         logging.info('POST method for API for Applications not supported.')
         pass

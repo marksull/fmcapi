@@ -20,12 +20,6 @@ class VlanTags(APIClassTemplate):
         self.type = 'VlanTag'
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for VlanTags class.")
-        if 'data' in kwargs:
-            self.data = kwargs['data']
-
     def vlans(self, start_vlan, end_vlan=''):
         logging.debug("In vlans() for VlanTags class.")
         start_vlan, end_vlan = validate_vlans(start_vlan=start_vlan, end_vlan=end_vlan)

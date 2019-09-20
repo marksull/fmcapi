@@ -26,8 +26,6 @@ class SecurityZones(APIClassTemplate):
             self.interfaceMode = kwargs['interfaceMode']
         else:
             self.interfaceMode = 'ROUTED'
-        if 'interfaces' in kwargs:
-            self.interfaces = kwargs['interfaces']
 
 
 class SecurityZone(SecurityZones):

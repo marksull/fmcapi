@@ -20,12 +20,6 @@ class DeviceGroupRecords(APIClassTemplate):
         self.type = 'DeviceGroup'
         self.parse_kwargs(**kwargs)
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for DeviceGroupRecords class.")
-        if 'members' in kwargs:
-            self.members = kwargs['members']
-
     def devices(self, action, members=[]):
         logging.debug("In devices() for DeviceGroupRecords class.")
         if action == 'add':

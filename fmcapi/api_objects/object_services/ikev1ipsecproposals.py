@@ -21,11 +21,3 @@ class IKEv1IpsecProposals(APIClassTemplate):
         logging.debug("In __init__() for IKEv1IpsecProposals class.")
         self.parse_kwargs(**kwargs)
         self.type = 'IKEv1IPsecProposal'
-
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for IKEv1IpsecProposals class.")
-        if 'espEncryption' in kwargs:
-            self.espEncryption = kwargs['espEncryption']
-        if 'espHash' in kwargs:
-            self.espHash = kwargs['espHash']
