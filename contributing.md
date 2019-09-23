@@ -11,8 +11,8 @@ file and the Class you create to match the associated API method from the Quick 
 what class is associated wot which FMC API method.
 * 99% of the time your Class should inherit from APIClassTemplate to get all the additional Class methods. No need for 
 you to re-write that code!
-* In both the api_objects' dunder init and the sub-package's dunder init please import your specific Class and add it to
- the dunder all variable.
+* In both the api_objects' `__init__.py` and the sub-package's `__init__.py` please import your specific Class and add it
+ to the `__all__` variable.
 * Lastly, please create a "unit-test" for your new Class' features. These unit-tests are referenced from the 
 TestingUserScript.py file.  Think of these "tests" as the best documentation that user's of the FMCAPI will have in
 knowing how to use that particular Class.  (Unless you want to write up good use documentation too.)  :-)
@@ -61,5 +61,3 @@ For example:
         elif 'action == 'clear':
             blah
 ```
-
-       
