@@ -56,7 +56,7 @@ please use the following for the action variable (as applicable): 'set', 'clear'
 For example:
 ```
     def foo(self, action='', ...):
-        if 'action' == 'add':
+        if 'action' == 'set':
             blah
         elif 'action == 'clear':
             blah
