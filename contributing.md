@@ -23,3 +23,6 @@ parse_kwargs() class methods. It's been my experience that the FMC is VERY touch
 we might as well accept that we need to manage what is sent. So, you'll see that each API class has VALID_JSON_DATA and 
 VALID_FOR_KWARGS variables. These are lists of variable names we will allow. Be sure to create/update these variables as
  you create/modify the Class(es).
+* I know that the FMC API documentation is horrible for identifying which FMC version first released an API feature.
+That said, please do your best to associate your Class to the correct version in which it was released.  This is what 
+the FIRST_SUPPORTED_FMC_VERSION variable is for.
