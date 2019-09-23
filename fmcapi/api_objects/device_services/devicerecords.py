@@ -56,7 +56,7 @@ class DeviceRecords(APIClassTemplate):
                 logging.info('All licensing removed from this DeviceRecords object.')
 
     def acp(self, name=''):
-        logging.debug("In acp() for Device class.")
+        logging.debug("In acp() for DeviceRecords class.")
         acp = AccessPolicies(fmc=self.fmc)
         acp.get(name=name)
         if 'id' in acp.__dict__:
@@ -65,7 +65,7 @@ class DeviceRecords(APIClassTemplate):
             logging.warning(f'Access Control Policy {name} not found.  Cannot set up accessPolicy for DeviceRecords.')
 
     def post(self, **kwargs):
-        logging.debug("In post() for Device class.")
+        logging.debug("In post() for DeviceRecords class.")
         response = super().post(**kwargs)
         if 'post_wait_time' in kwargs:
             self.post_wait_time = kwargs['post_wait_time']
@@ -75,6 +75,11 @@ class DeviceRecords(APIClassTemplate):
                      f'Waiting {self.post_wait_time} seconds for it to complete.')
         time.sleep(self.post_wait_time)
         return response
+
+    def get(self, **kwargs):
+        print(f"__dict__: {self.__dict__}")
+        response = super().get(self, **kwargs)
+        print(f'Response: {response}')
 
 
 class Device(DeviceRecords):
