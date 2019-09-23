@@ -76,11 +76,6 @@ class DeviceRecords(APIClassTemplate):
         time.sleep(self.post_wait_time)
         return response
 
-    def get(self, **kwargs):
-        print(f"__dict__: {self.__dict__}")
-        response = super().get(self, **kwargs)
-        print(f'Response: {response}')
-
 
 class Device(DeviceRecords):
     """Dispose of this Class after 20210101."""
