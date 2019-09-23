@@ -1,5 +1,5 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from .devicerecords import Device
+from .devicerecords import DeviceRecords
 import logging
 
 
@@ -20,7 +20,7 @@ class StaticRoutes(APIClassTemplate):
 
     def device(self, device_name):
         logging.debug("In device() for StaticRoutes class.")
-        device1 = Device(fmc=self.fmc)
+        device1 = DeviceRecords(fmc=self.fmc)
         device1.get(name=device_name)
         if 'id' in device1.__dict__:
             self.device_id = device1.id

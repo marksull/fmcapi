@@ -1,5 +1,5 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from fmcapi.api_objects.device_services.devicerecords import Device
+from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 from .upgradepackages import UpgradePackages
 import logging
 
@@ -35,7 +35,7 @@ class Upgrades(APIClassTemplate):
     def devices(self, devices):
         logging.debug("In devices() for Upgrades class.")
         for device in devices:
-            device1 = Device(fmc=self.fmc)
+            device1 = DeviceRecords(fmc=self.fmc)
             device1.get(name=device)
             if 'id' in device1.__dict__ and 'targets' in self.__dict__:
                 self.targets.append({"id": device1.id, "type": device1.type, "name": device1.name})

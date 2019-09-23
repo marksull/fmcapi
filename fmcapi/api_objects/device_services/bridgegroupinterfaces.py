@@ -1,6 +1,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.object_services.securityzones import SecurityZones
-from .devicerecords import Device
+from .devicerecords import DeviceRecords
 from .physicalinterfaces import PhysicalInterfaces
 import logging
 
@@ -32,7 +32,7 @@ class BridgeGroupInterfaces(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for BridgeGroupInterfaces class.").
+        logging.debug("In parse_kwargs() for BridgeGroupInterfaces class.")
         if 'device_name' in kwargs:
             self.device(device_name=kwargs['device_name'])
         if 'ipv4' in kwargs:
@@ -54,7 +54,7 @@ class BridgeGroupInterfaces(APIClassTemplate):
 
     def device(self, device_name):
         logging.debug("In device() for BridgeGroupInterfaces class.")
-        device1 = Device(fmc=self.fmc)
+        device1 = DeviceRecords(fmc=self.fmc)
         device1.get(name=device_name)
         if 'id' in device1.__dict__:
             self.device_id = device1.id
