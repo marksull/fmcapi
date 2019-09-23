@@ -42,10 +42,21 @@ please use the following for the action variable (as applicable): 'add', 'remove
 consistent "language" to the user's of fmcapi.
 For example:
 ```
-    def foo(self, action=''):
+    def foo(self, action='', ...):
         if 'action' == 'add':
             blah
         elif 'action' == 'remove':
+            blah
+        elif 'action == 'clear':
+            blah
+```
+* If you have a method in your Class that is used to add another class object (not a list like described above)
+please use the following for the action variable (as applicable): 'set', 'clear'.  This will provide a  consistent 
+"language" to the user's of fmcapi.
+For example:
+```
+    def foo(self, action='', ...):
+        if 'action' == 'add':
             blah
         elif 'action == 'clear':
             blah
