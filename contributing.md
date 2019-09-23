@@ -26,3 +26,29 @@ VALID_FOR_KWARGS variables. These are lists of variable names we will allow. Be 
 * I know that the FMC API documentation is horrible for identifying which FMC version first released an API feature.
 That said, please do your best to associate your Class to the correct version in which it was released.  This is what 
 the FIRST_SUPPORTED_FMC_VERSION variable is for.
+* The various FMC API methods have differing rules on what is/isn't allowed in the 'name' field.  Please use the
+VALID_CHARACTERS_FOR_NAME variable is to provide a regex "string" that describes what is permitted.  The real issue
+here is whether spaces are/aren't permitted in the 'name'.
+* When performing a GET, and not specifying an 'id', will generally render a list of all objects for that API method.
+Some of these allow the ability to filter/search by name.  Use the FILTER_BY_NAME boolean variable to specify if this
+is possible.
+* If you copy/paste one Class to create a new one:  **PLEASE** carefully comb through the copied code and update it to be
+accurate to your new Class.  Remove unneeded variables and class methods.  Update any logging/comments to match the
+new Class.
+* If specific variables are required for an FMC's API method please ensure your Class' REQUIRED_FOR_<method> variable
+is set correctly.  (e.g. REQUIRED_FOR_GET = 'id')
+* If you have a method in your Class that is used to add objects to a list (like a list of networks for a network group)
+please use the following for the action variable (as applicable): 'add', 'remove', 'clear'.  This will provide a 
+consistent "language" to the user's of fmcapi.
+For example:
+```
+    def foo(self, action=''):
+        if 'action' == 'add':
+            blah
+        elif 'action' == 'remove':
+            blah
+        elif 'action == 'clear':
+            blah
+```
+
+       
