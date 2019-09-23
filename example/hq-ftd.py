@@ -88,7 +88,7 @@ def main():
         fmc_nat.post()
 
         # Add hq-ftd device to FMC
-        hq_ftd = fmcapi.Device(fmc=fmc1)
+        hq_ftd = fmcapi.DeviceRecords(fmc=fmc1)
         # Minimum things set.
         hq_ftd.hostName = '10.0.0.254'
         hq_ftd.regKey = 'cisco123'
