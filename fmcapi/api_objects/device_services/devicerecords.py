@@ -10,7 +10,7 @@ class DeviceRecords(APIClassTemplate):
     The DeviceRecords Object in the FMC.
     """
 
-    VALID_JSON_DATA = ['id', 'name', 'hostName', 'natID', 'regKey', 'license_caps', 'accessPolicy']
+    VALID_JSON_DATA = ['id', 'name', 'type', 'hostName', 'natID', 'regKey', 'license_caps', 'accessPolicy']
     VALID_FOR_KWARGS = VALID_JSON_DATA + ['acp_name', 'acp_id', 'model', 'modelId', 'modelNumber', 'modelType',
                                           'healthStatus', 'healthPolicy', 'keepLocalEvents', 'prohibitPacketTransfer',
                                           ]

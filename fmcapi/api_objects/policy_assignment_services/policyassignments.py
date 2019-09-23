@@ -1,6 +1,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.policy_services.accesspolicies import AccessPolicies
-from fmcapi.api_objects.device_services.devicerecords import Device
+from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 from fmcapi.api_objects.device_ha_pair_services.ftddevicehapairs import FTDDeviceHAPairs
 from fmcapi.api_objects.policy_services.ftdnatpolicies import FTDNatPolicies
 import logging
@@ -34,7 +34,7 @@ class PolicyAssignments(APIClassTemplate):
             logging.warning(f'FTD NAT Policy {name} not found.  Cannot set up PolicyAssignment.')
         for device in devices:
             if device["type"] == 'device':
-                dev1 = Device(fmc=self.fmc)
+                dev1 = DeviceRecords(fmc=self.fmc)
                 dev1.get(name=device['name'])
             elif device["type"] == 'deviceHAPair':
                 dev1 = FTDDeviceHAPairs(fmc=self.fmc)
@@ -57,7 +57,7 @@ class PolicyAssignments(APIClassTemplate):
             logging.warning(f'Access Control Policy {name} not found.  Cannot set up PolicyAssignment.')
         for device in devices:
             if device["type"] == 'device':
-                dev1 = Device(fmc=self.fmc)
+                dev1 = DeviceRecords(fmc=self.fmc)
                 dev1.get(name=device['name'])
             elif device["type"] == 'deviceHAPair':
                 dev1 = FTDDeviceHAPairs(fmc=self.fmc)
