@@ -32,7 +32,9 @@ class BridgeGroupInterfaces(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for BridgeGroupInterfaces class.")
+        logging.debug("In parse_kwargs() for BridgeGroupInterfaces class.").
+        if 'device_name' in kwargs:
+            self.device(device_name=kwargs['device_name'])
         if 'ipv4' in kwargs:
             if list(kwargs['ipv4'].keys())[0] in self.VALID_FOR_IPV4:
                 self.ipv4 = kwargs['ipv4']

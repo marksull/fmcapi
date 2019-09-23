@@ -37,6 +37,14 @@ class DefaultActions(APIClassTemplate):
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for DefaultActions class.")
+        if 'acp_id' in kwargs:
+            self.acp(acp_id=kwargs['acp_id'])
+        if 'acp_name' in kwargs:
+            self.acp(name=kwargs['acp_name'])
+        if 'device_id' in kwargs:
+            self.device(id=kwargs['device_id'])
+        if 'device_name' in kwargs:
+            self.device(name=kwargs['device_name'])
         if 'action' in kwargs:
             if kwargs['action'] in self.VALID_ACTION:
                 self.action = kwargs['action']

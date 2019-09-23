@@ -68,6 +68,18 @@ class HitCounts(APIClassTemplate):
         self.type = 'HitCount'
         self.URL = f'{self.URL}{self.URL_SUFFIX}'
 
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for HitCounts class.")
+        if 'acp_id' in kwargs:
+            self.acp(acp_id=kwargs['acp_id'])
+        if 'acp_name' in kwargs:
+            self.acp(name=kwargs['acp_name'])
+        if 'device_id' in kwargs:
+            self.device(id=kwargs['device_id'])
+        if 'device_name' in kwargs:
+            self.device(name=kwargs['device_name'])
+
     def acp(self, name='', acp_id=''):
         # either name or id of the ACP should be given
         logging.debug("In acp() for HitCounts class.")

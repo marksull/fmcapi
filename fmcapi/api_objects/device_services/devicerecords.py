@@ -24,6 +24,12 @@ class DeviceRecords(APIClassTemplate):
         logging.debug("In __init__() for DeviceRecords class.")
         self.parse_kwargs(**kwargs)
 
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for DeviceRecords class.")
+        if 'acp_name' in kwargs:
+            self.acp(name=kwargs['acp_name'])
+
     def licensing(self, action, name='BASE'):
         logging.debug("In licensing() for DeviceRecords class.")
         if action == 'add':

@@ -21,6 +21,12 @@ class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
         logging.debug("In __init__() for FailoverInterfaceMACAddressConfigs class.")
         self.parse_kwargs(**kwargs)
 
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for FailoverInterfaceMACAddressConfigs class.")
+        if 'ha_name' in kwargs:
+            self.device_ha(ha_name=kwargs['ha_name'])
+
     def device_ha(self, ha_name):
         logging.debug("In device_ha() for FailoverInterfaceMACAddressConfigs class.")
         deviceha1 = FTDDeviceHAPairs(fmc=self.fmc, name=ha_name)

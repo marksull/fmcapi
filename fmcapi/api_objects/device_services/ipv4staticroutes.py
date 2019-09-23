@@ -28,6 +28,12 @@ class IPv4StaticRoutes(APIClassTemplate):
         self.type = 'IPv4StaticRoute'
         self.parse_kwargs(**kwargs)
 
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for IPv4StaticRoute class.")
+        if 'device_name' in kwargs:
+            self.device(device_name=kwargs['device_name'])
+
     def device(self, device_name):
         logging.debug("In device() for IPv4StaticRoute class.")
         device1 = DeviceRecords(fmc=self.fmc)
