@@ -6,7 +6,7 @@ __license__ = "BSD"
 
 setup(
     name='fmcapi',
-    version='20190915.1',
+    version='20190923.0',
     description="Easier interface to Cisco's FMC API than writing your own way.",
     long_description="""With the removal to configure a Cisco NGFW via the command line your only option is to
      do so via a manager.  Some things are better when automated so using the manager's API gives us that power. 
@@ -18,9 +18,8 @@ setup(
     author_email='dmickels@cisco.com',
     license='BSD',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Plugins',
-        'Intended Audience :: Education',
         'Intended Audience :: System Administrators',
         'Intended Audience :: Developers',
         'Intended Audience :: Other Audience',
@@ -29,8 +28,7 @@ setup(
         'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS',
         'Operating System :: Microsoft',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3',
         'Topic :: Security',
         'Topic :: Software Development',
         'Topic :: Software Development :: Libraries :: Python Modules',
