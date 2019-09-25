@@ -98,6 +98,8 @@ def main():
         hq_ftd.licensing(action='add', name='MALWARE')
         hq_ftd.licensing(action='add', name='VPN')
         hq_ftd.licensing(action='add', name='BASE')
+        hq_ftd.licensing(action='add', name='THREAT')
+        hq_ftd.licensing(action='add', name='URLFilter')
         # Push to FMC to start device registration.
         hq_ftd.post(post_wait_time=300)
 
