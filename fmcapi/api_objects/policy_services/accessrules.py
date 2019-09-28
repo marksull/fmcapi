@@ -26,7 +26,7 @@ class AccessRules(APIClassTemplate):
                        'sourcePorts', 'destinationPorts', 'ipsPolicy', 'urls', 'sourceZones', 'destinationZones',
                        'applications', 'filePolicy', 'sourceSecurityGroupTags', 'destinationSecurityGroupTags',
                        ]
-    VALID_FOR_KWARGS = VALID_JSON_DATA + ['acp_id', 'acp_name', 'insertBefore', 'insertAfter', 'section',]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['acp_id', 'acp_name', 'insertBefore', 'insertAfter', 'section', 'dry_run']
     PREFIX_URL = '/policy/accesspolicies'
     REQUIRED_FOR_POST = ['name', 'acp_id']
     REQUIRED_FOR_GET = ['acp_id']
@@ -99,10 +99,6 @@ class AccessRules(APIClassTemplate):
             self.enabled = kwargs['enabled']
         else:
             self.enabled = True
-        if 'sendEventsToFMC' in kwargs:
-            self.sendEventsToFMC = kwargs['sendEventsToFMC']
-        else:
-            self.sendEventsToFMC = True
         if 'logFiles' in kwargs:
             self.logFiles = kwargs['logFiles']
         else:
