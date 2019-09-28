@@ -620,6 +620,12 @@ class AccessRules(APIClassTemplate):
                 del self.destinationNetworks
                 logging.info('All Destination Networks removed from this AccessRules object.')
 
+    def source_sgt(self, action, name=''):
+        pass
+
+    def destination_sgt(self, action, name=''):
+        pass
+
 
 class ACPRule(AccessRules):
     """Dispose of this Class after 20210101."""
