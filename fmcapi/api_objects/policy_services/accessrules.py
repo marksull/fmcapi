@@ -10,6 +10,7 @@ from fmcapi.api_objects.object_services.fqdns import FQDNS
 from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
 from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
 from fmcapi.api_objects.policy_services.filepolicies import FilePolicies
+from fmcapi.api_objects.object_services.isesecuritygrouptags import ISESecurityGroupTags
 from fmcapi.api_objects.helper_functions import get_networkaddress_type
 import logging
 import sys
@@ -23,9 +24,9 @@ class AccessRules(APIClassTemplate):
     VALID_JSON_DATA = ['id', 'name', 'type', 'action', 'enabled', 'sendEventsToFMC', 'logFiles', 'logBegin', 'logEnd',
                        'variableSet', 'originalSourceNetworks', 'vlanTags', 'sourceNetworks', 'destinationNetworks',
                        'sourcePorts', 'destinationPorts', 'ipsPolicy', 'urls', 'sourceZones', 'destinationZones',
-                       'applications', 'filePolicy',
+                       'applications', 'filePolicy', 'sourceSecurityGroupTags', 'destinationSecurityGroupTags',
                        ]
-    VALID_FOR_KWARGS = VALID_JSON_DATA + ['acp_id', 'acp_name', 'insertBefore', 'insertAfter', 'section', 'file_policy']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['acp_id', 'acp_name', 'insertBefore', 'insertAfter', 'section',]
     PREFIX_URL = '/policy/accesspolicies'
     REQUIRED_FOR_POST = ['name', 'acp_id']
     REQUIRED_FOR_GET = ['acp_id']
@@ -620,10 +621,106 @@ class AccessRules(APIClassTemplate):
                 del self.destinationNetworks
                 logging.info('All Destination Networks removed from this AccessRules object.')
 
-    def source_sgt(self, action, name=''):
-        pass
+    def source_sgt(self, action, name='', literal=None):
+        """
+        Adds Either object having name=name or literal with {value:<>, type:<>} to the sourceSecurityGroupTags
+        field of AccessRules object
+        Args:
+            action: the action to be done
+            name: name of the object in question
+            literal: the literal in question
+        Returns:
+            None
+        """
+        # using dict() as default value is dangerous here, any thoughts/workarounds on this?
 
-    def destination_sgt(self, action, name=''):
+        logging.debug("In destination_network() for ACPRule class.")
+        if literal and name != '':
+            raise ValueError('Only one of literals or name (object name) should be set while creating a source network')
+
+        if not hasattr(self, 'sourceSecurityGroupTags'):
+            self.sourceSecurityGroupTags = {'objects': [], 'literals': {}}
+
+        if action == 'add':
+            if literal:
+                type_ = 'sourceSecurityGroupTags'  # This is probably wrong.
+                self.sourceSecurityGroupTags['literals'][literal] = type_
+                logging.info(f'Adding literal "{literal}" of type "{type_}" '
+                             f'to sourceSecurityGroupTags for this AccessRules.')
+            else:
+                # Query FMC for all SGTs and iterate through them to see if our name matches 1 of them.
+                sgt = ISESecurityGroupTags(fmc=self.fmc)
+                sgt.get(name=name)
+                if 'id' in sgt.__dict__:
+                    item = sgt
+                else:
+                    item = {}
+                new_sgt = None
+                if item['name'] == name:
+                    new_sgt = {'name': item['name'], 'tag': item['tag'], 'type': item['type']}
+                if new_sgt is None:
+                    logging.warning(f'SecurityGroupTag "{name}" is not found in FMC.  '
+                                    f'Cannot add to sourceSecurityGroupTags.')
+                else:
+                    if 'sourceSecurityGroupTags' in self.__dict__:
+                        # thus either some objects are already present in sourceSecurityGroupTags,
+                        # or only literals are present in sourceSecurityGroupTags
+                        if 'objects' in self.__dict__['sourceSecurityGroupTags']:
+                            # some objects are already present
+                            duplicate = False
+                            for obj in self.sourceSecurityGroupTags['objects']:
+                                if obj['name'] == new_sgt['name']:
+                                    duplicate = True
+                                    break
+                            if not duplicate:
+                                self.sourceSecurityGroupTags['objects'].append(new_sgt)
+                                logging.info(f'Adding "{name}" to sourceSecurityGroupTags for this AccessRules.')
+                        else:
+                            # this means no objects were present in sourceSecurityGroupTags,
+                            # and sourceSecurityGroupTags contains literals only
+                            self.sourceSecurityGroupTags.update({'objects': [new_sgt]})
+                            # So update the sourceSecurityGroupTags dict which contained 'literals' key initially
+                            # to have a 'objects' key as well
+                            logging.info(f'Adding "{name}" to sourceSecurityGroupTags for this AccessRules.')
+                    else:
+                        # None of literals or objects are present in sourceSecurityGroupTags,
+                        # so initialize it with objects and update the provided object
+                        self.sourceSecurityGroupTags = {'objects': [new_sgt]}
+                        logging.info(f'Adding "{name}" to sourceSecurityGroupTags for this AccessRules.')
+        elif action == 'remove':
+            if 'sourceSecurityGroupTags' in self.__dict__:
+                if name != '':
+                    # an object's name has been provided to be removed
+                    objects = []
+                    for obj in self.sourceSecurityGroupTags['objects']:
+                        if obj['name'] != name:
+                            objects.append(obj)
+                    if len(objects) == 0:
+                        # it was the last object which was deleted now
+                        del self.sourceSecurityGroupTags
+                        logging.info(f'Removed "{name}" from sourceSecurityGroupTags for this AccessRules')
+                        logging.info('All source security group tags are removed from this AccessRules object.')
+                    else:
+                        self.sourceSecurityGroupTags['objects'] = objects
+                        logging.info(f'Removed "{name}" from sourceSecurityGroupTags for this AccessRules.')
+                else:
+                    # a literal value has been provided to be removed
+                    type_ = self.sourceSecurityGroupTags['literals'].get(literal)
+                    if type_:
+                        self.sourceSecurityGroupTags['literals'].pop(literal)
+                        logging.info(f'Removed literal "{literal}" of '
+                                     f'type "{type_}" from sourceSecurityGroupTags for this AccessRules.')
+                    else:
+                        logging.info(f'Unable to removed literal "{literal}" '
+                                     f'from sourceSecurityGroupTags as it was not found')
+            else:
+                logging.info("No sourceSecurityGroupTags exist for this AccessRules.  Nothing to remove.")
+        elif action == 'clear':
+            if 'sourceSecurityGroupTags' in self.__dict__:
+                del self.sourceSecurityGroupTags
+                logging.info('All source security group tags are removed from this AccessRules object.')
+
+    def destination_sgt(self, action, name='', literal=None):
         pass
 
 
