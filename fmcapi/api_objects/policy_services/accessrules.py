@@ -80,6 +80,10 @@ class AccessRules(APIClassTemplate):
             json_data['destinationNetworks'] = {'objects': self.destinationNetworks['objects']}
             json_data['destinationNetworks']['literals'] = \
                 [{'type': v, 'value': k} for k, v in self.destinationNetworks['literals'].items()]
+        if 'action' in self.__dict__:
+            if self.action not in self.VALID_FOR_ACTION:
+                logging.warning(f"Action {self.action} is not a valid action.")
+                logging.warning(f"\tValid actions are: {self.VALID_FOR_ACTION}.")
         return json_data
 
     def parse_kwargs(self, **kwargs):
@@ -95,22 +99,6 @@ class AccessRules(APIClassTemplate):
             else:
                 logging.warning(f"Action {kwargs['action']} is not a valid action.")
                 logging.warning(f"\tValid actions are: {self.VALID_FOR_ACTION}.")
-        if 'enabled' in kwargs:
-            self.enabled = kwargs['enabled']
-        else:
-            self.enabled = True
-        if 'logFiles' in kwargs:
-            self.logFiles = kwargs['logFiles']
-        else:
-            self.logFiles = False
-        if 'logBegin' in kwargs:
-            self.logBegin = kwargs['logBegin']
-        else:
-            self.logBegin = False
-        if 'logEnd' in kwargs:
-            self.logEnd = kwargs['logEnd']
-        else:
-            self.logEnd = False
         if 'sourceNetworks' in kwargs:
             self.sourceNetworks = {'objects': [], 'literals': {}}
             if kwargs['sourceNetworks'].get('objects'):
