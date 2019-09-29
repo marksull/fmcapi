@@ -26,7 +26,7 @@ class AccessRules(APIClassTemplate):
                        'sourcePorts', 'destinationPorts', 'ipsPolicy', 'urls', 'sourceZones', 'destinationZones',
                        'applications', 'filePolicy', 'sourceSecurityGroupTags', 'destinationSecurityGroupTags',
                        ]
-    VALID_FOR_KWARGS = VALID_JSON_DATA + ['acp_id', 'acp_name', 'insertBefore', 'insertAfter', 'section', 'dry_run']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['acp_id', 'acp_name', 'insertBefore', 'insertAfter', 'section']
     PREFIX_URL = '/policy/accesspolicies'
     REQUIRED_FOR_POST = ['name', 'acp_id']
     REQUIRED_FOR_GET = ['acp_id']
