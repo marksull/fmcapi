@@ -8,6 +8,8 @@ class URLs(APIClassTemplate):
     The URLs Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'url', 'description']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/urls'
     REQUIRED_FOR_POST = ['name', 'url']
 
@@ -15,25 +17,6 @@ class URLs(APIClassTemplate):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for URLs class.")
         self.parse_kwargs(**kwargs)
-
-    def format_data(self):
-        logging.debug("In format_data() for URLs class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'url' in self.__dict__:
-            json_data['url'] = self.url
-        if 'description' in self.__dict__:
-            json_data['description'] = self.description
-        return json_data
-
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for URLs class.")
-        if 'url' in kwargs:
-            self.url = kwargs['url']
 
 
 class URL(URLs):

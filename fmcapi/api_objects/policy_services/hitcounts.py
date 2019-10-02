@@ -1,6 +1,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .accesspolicies import AccessPolicies
-from fmcapi.api_objects.device_services.devicerecords import Device
+from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 from .prefilterpolicies import PreFilterPolicies
 import logging
 import warnings
@@ -11,6 +11,10 @@ class HitCounts(APIClassTemplate):
     The HitCounts Object in the FMC.
     """
 
+    VALID_JSON_DATA = []
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['acp_id', 'acp_name', 'device_id', 'device_name', 'fetchZeroHitcount',
+                                          'limit',
+                                          ]
     PREFIX_URL = '/policy/accesspolicies'
     REQUIRED_FOR_PUT = ['acp_id', 'device_id']
     REQUIRED_FOR_DELETE = ['acp_id', 'device_id']
@@ -75,12 +79,6 @@ class HitCounts(APIClassTemplate):
             self.device(id=kwargs['device_id'])
         if 'device_name' in kwargs:
             self.device(name=kwargs['device_name'])
-        if 'fetchZeroHitCount' in kwargs:
-            self.fetchZeroHitCount = kwargs['fetchZeroHitCount']
-        if 'limit' in kwargs:
-            self.limit = kwargs['limit']
-        else:
-            self.limit = self.fmc.limit
 
     def acp(self, name='', acp_id=''):
         # either name or id of the ACP should be given
@@ -109,7 +107,7 @@ class HitCounts(APIClassTemplate):
         if id != '':
             self.device_id = id
         elif name != '':
-            device1 = Device(fmc=self.fmc)
+            device1 = DeviceRecords(fmc=self.fmc)
             device1.get(name=name)
             if 'id' in device1.__dict__:
                 self.device_id = device1.id

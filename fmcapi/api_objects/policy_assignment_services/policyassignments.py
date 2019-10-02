@@ -1,6 +1,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.policy_services.accesspolicies import AccessPolicies
-from fmcapi.api_objects.device_services.devicerecords import Device
+from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 from fmcapi.api_objects.device_ha_pair_services.ftddevicehapairs import FTDDeviceHAPairs
 from fmcapi.api_objects.policy_services.ftdnatpolicies import FTDNatPolicies
 import logging
@@ -10,6 +10,8 @@ class PolicyAssignments(APIClassTemplate):
     """
     The PolicyAssignments Object in the FMC.
     """
+    VALID_JSON_DATA = ['id', 'name', 'type', 'targets', 'policy']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     REQUIRED_FOR_POST = ['targets', 'policy']
     REQUIRED_FOR_PUT = ['id', 'targets', 'policy']
     URL_SUFFIX = '/assignment/policyassignments'
@@ -20,29 +22,6 @@ class PolicyAssignments(APIClassTemplate):
         logging.debug("In __init__() for PolicyAssignments class.")
         self.parse_kwargs(**kwargs)
         self.type = "PolicyAssignment"
-
-    def format_data(self):
-        logging.debug("In format_data() for PolicyAssignments class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'targets' in self.__dict__:
-            json_data['targets'] = self.targets
-        if 'policy' in self.__dict__:
-            json_data['policy'] = self.policy
-        return json_data
-
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for PolicyAssignments class.")
-        if 'targets' in kwargs:
-            self.targets = kwargs['targets']
-        if 'policy' in kwargs:
-            self.policy = kwargs['policy']
 
     def ftd_natpolicy(self, name, devices):
         logging.debug("In ftd_natpolicy() for PolicyAssignments class.")
@@ -55,7 +34,7 @@ class PolicyAssignments(APIClassTemplate):
             logging.warning(f'FTD NAT Policy {name} not found.  Cannot set up PolicyAssignment.')
         for device in devices:
             if device["type"] == 'device':
-                dev1 = Device(fmc=self.fmc)
+                dev1 = DeviceRecords(fmc=self.fmc)
                 dev1.get(name=device['name'])
             elif device["type"] == 'deviceHAPair':
                 dev1 = FTDDeviceHAPairs(fmc=self.fmc)
@@ -78,7 +57,7 @@ class PolicyAssignments(APIClassTemplate):
             logging.warning(f'Access Control Policy {name} not found.  Cannot set up PolicyAssignment.')
         for device in devices:
             if device["type"] == 'device':
-                dev1 = Device(fmc=self.fmc)
+                dev1 = DeviceRecords(fmc=self.fmc)
                 dev1.get(name=device['name'])
             elif device["type"] == 'deviceHAPair':
                 dev1 = FTDDeviceHAPairs(fmc=self.fmc)

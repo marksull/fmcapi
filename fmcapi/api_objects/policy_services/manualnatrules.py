@@ -14,6 +14,14 @@ class ManualNatRules(APIClassTemplate):
     The ManualNatRules Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'originalSource', 'originalDestination', 'translatedSource',
+                       'translatedDestination', 'interfaceInTranslatedSource', 'interfaceInOriginalDestination',
+                       'natType', 'interfaceIpv6', 'fallThrough', 'dns', 'routeLookup', 'noProxyArp', 'netToNet',
+                       'sourceInterface', 'destinationInterface', 'originalSourcePort', 'translatedSourcePort',
+                       'originalDestinationPort', 'translatedDestinationPort', 'patOptions', 'unidirectional',
+                       'enabled',
+                       ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     PREFIX_URL = '/policy/ftdnatpolicies'
     REQUIRED_FOR_POST = ["nat_id"]
 
@@ -23,110 +31,15 @@ class ManualNatRules(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = "FTDManualNatRule"
 
-    def format_data(self):
-        logging.debug("In format_data() for ManualNatRules class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'originalSource' in self.__dict__:
-            json_data['originalSource'] = self.originalSource
-        if 'originalDestination' in self.__dict__:
-            json_data['originalDestination'] = self.originalDestination
-        if 'translatedSource' in self.__dict__:
-            json_data['translatedSource'] = self.translatedSource
-        if 'translatedDestination' in self.__dict__:
-            json_data['translatedDestination'] = self.translatedDestination
-        if 'interfaceInTranslatedSource' in self.__dict__:
-            json_data['interfaceInTranslatedSource'] = self.interfaceInTranslatedSource
-        if 'interfaceInOriginalDestination' in self.__dict__:
-            json_data['interfaceInOriginalDestination'] = self.interfaceInOriginalDestination
-        if 'natType' in self.__dict__:
-            json_data['natType'] = self.natType
-        if 'interfaceIpv6' in self.__dict__:
-            json_data['interfaceIpv6'] = self.interfaceIpv6
-        if 'fallThrough' in self.__dict__:
-            json_data['fallThrough'] = self.fallThrough
-        if 'dns' in self.__dict__:
-            json_data['dns'] = self.dns
-        if 'routeLookup' in self.__dict__:
-            json_data['routeLookup'] = self.routeLookup
-        if 'noProxyArp' in self.__dict__:
-            json_data['noProxyArp'] = self.noProxyArp
-        if 'netToNet' in self.__dict__:
-            json_data['netToNet'] = self.netToNet
-        if 'sourceInterface' in self.__dict__:
-            json_data['sourceInterface'] = self.sourceInterface
-        if 'destinationInterface' in self.__dict__:
-            json_data['destinationInterface'] = self.destinationInterface
-        if 'originalSourcePort' in self.__dict__:
-            json_data['originalSourcePort'] = self.originalSourcePort
-        if 'translatedSourcePort' in self.__dict__:
-            json_data['translatedSourcePort'] = self.translatedSourcePort
-        if 'originalDestinationPort' in self.__dict__:
-            json_data['originalDestinationPort'] = self.originalDestinationPort
-        if 'translatedDestinationPort' in self.__dict__:
-            json_data['translatedDestinationPort'] = self.translatedDestinationPort
-        if 'patOptions' in self.__dict__:
-            json_data['patOptions'] = self.patOptions
-        if 'unidirectional' in self.__dict__:
-            json_data['unidirectional'] = self.unidirectional
-        if 'enabled' in self.__dict__:
-            json_data['enabled'] = self.enabled
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for ManualNatRules class.")
-        if 'originalSource' in kwargs:
-            self.originalSource = kwargs['originalSource']
-        if 'originalDestination' in kwargs:
-            self.originalDestination = kwargs['originalDestination']
         if 'translatedSource' in kwargs and 'interfaceInTranslatedSource' is True:
             logging.warning("Cannot have both a translatedSource and interfaceInTranslatedSource")
         elif 'translatedSource' in kwargs:
             self.translatedSource = kwargs['translatedSource']
         elif 'interfaceInTranslatedSource' in kwargs:
             self.interfaceInTranslatedSource = kwargs['interfaceInTranslatedSource']
-        if 'translatedDestination' in kwargs:
-            self.translatedDestination = kwargs['translatedDestination']
-        if 'interfaceInOriginalDestination' in kwargs:
-            self.interfaceInOriginalDestination = kwargs['interfaceInOriginalDestination']
-        if 'natType' in kwargs:
-            self.natType = kwargs['natType']
-        if 'interfaceIpv6' in kwargs:
-            self.interfaceIpv6 = kwargs['interfaceIpv6']
-        if 'fallThrough' in kwargs:
-            self.fallThrough = kwargs['fallThrough']
-        if 'dns' in kwargs:
-            self.dns = kwargs['dns']
-        if 'routeLookup' in kwargs:
-            self.routeLookup = kwargs['routeLookup']
-        if 'noProxyArp' in kwargs:
-            self.noProxyArp = kwargs['noProxyArp']
-        if 'netToNet' in kwargs:
-            self.netToNet = kwargs['netToNet']
-        if 'sourceInterface' in kwargs:
-            self.sourceInterface = kwargs['sourceInterface']
-        if 'destinationInterface' in kwargs:
-            self.destinationInterface = kwargs['destinationInterface']
-        if 'originalSourcePort' in kwargs:
-            self.originalSourcePort = kwargs['originalSourcePort']
-        if 'translatedSourcePort' in kwargs:
-            self.translatedSourcePort = kwargs['translatedSourcePort']
-        if 'originalDestinationPort' in kwargs:
-            self.originalDestinationPort = kwargs['originalDestinationPort']
-        if 'translatedDestinationPort' in kwargs:
-            self.translatedDestinationPort = kwargs['translatedDestinationPort']
-        if 'patOptions' in kwargs:
-            self.patOptions = kwargs['patOptions']
-        if 'unidirectional' in kwargs:
-            self.unidirectional = kwargs['unidirectional']
-        if 'enabled' in kwargs:
-            self.enabled = kwargs['enabled']
 
     def nat_policy(self, name):
         logging.debug("In nat_policy() for ManualNatRules class.")

@@ -8,6 +8,8 @@ class Countries(APIClassTemplate):
     The Countries Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'iso2', 'iso3']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/countries'
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 
@@ -16,27 +18,6 @@ class Countries(APIClassTemplate):
         logging.debug("In __init__() for Countries class.")
         self.parse_kwargs(**kwargs)
         self.type = 'Country'
-
-    def format_data(self):
-        logging.debug("In format_data() for Countries class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'iso2' in self.__dict__:
-            json_data['iso2'] = self.iso2
-        if 'iso3' in self.__dict__:
-            json_data['iso3'] = self.iso3
-        return json_data
-
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for Countries class.")
-        if 'iso2' in kwargs:
-            self.iso2 = kwargs['iso2']
-        if 'iso3' in kwargs:
-            self.iso3 = kwargs['iso3']
 
     def post(self):
         logging.info('POST method for API for Countries not supported.')

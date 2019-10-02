@@ -9,6 +9,8 @@ class Networks(APIClassTemplate):
     The Networks Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'value', 'description']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/networks'
     REQUIRED_FOR_POST = ['name', 'value']
 
@@ -25,25 +27,6 @@ class Networks(APIClassTemplate):
                 self.value = kwargs['value']
             else:
                 logging.error(f"Provided value, {kwargs['value']}, has an error with the IP address(es).")
-
-    def format_data(self):
-        logging.debug("In format_data() for Networks class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'value' in self.__dict__:
-            json_data['value'] = self.value
-        if 'description' in self.__dict__:
-            json_data['description'] = self.description
-        return json_data
-
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for Networks class.")
-        if 'value' in kwargs:
-            self.value = kwargs['value']
 
 
 class IPNetwork(Networks):

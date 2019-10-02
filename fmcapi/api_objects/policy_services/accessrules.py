@@ -10,6 +10,7 @@ from fmcapi.api_objects.object_services.fqdns import FQDNS
 from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
 from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
 from fmcapi.api_objects.policy_services.filepolicies import FilePolicies
+from fmcapi.api_objects.object_services.isesecuritygrouptags import ISESecurityGroupTags
 from fmcapi.api_objects.helper_functions import get_networkaddress_type
 import logging
 import sys
@@ -20,6 +21,12 @@ class AccessRules(APIClassTemplate):
     """
     The AccessRules Object in the FMC.
     """
+    VALID_JSON_DATA = ['id', 'name', 'type', 'action', 'enabled', 'sendEventsToFMC', 'logFiles', 'logBegin', 'logEnd',
+                       'variableSet', 'originalSourceNetworks', 'vlanTags', 'sourceNetworks', 'destinationNetworks',
+                       'sourcePorts', 'destinationPorts', 'ipsPolicy', 'urls', 'sourceZones', 'destinationZones',
+                       'applications', 'filePolicy', 'sourceSecurityGroupTags', 'destinationSecurityGroupTags',
+                       ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['acp_id', 'acp_name', 'insertBefore', 'insertAfter', 'section']
     PREFIX_URL = '/policy/accesspolicies'
     REQUIRED_FOR_POST = ['name', 'acp_id']
     REQUIRED_FOR_GET = ['acp_id']
@@ -62,120 +69,9 @@ class AccessRules(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.URL = f'{self.URL}{self.URL_SUFFIX}'
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for AccessRules class.")
-        if 'action' in kwargs:
-            if kwargs['action'] in self.VALID_FOR_ACTION:
-                self.action = kwargs['action']
-            else:
-                logging.warning(f"Action {kwargs['action']} is not a valid action.")
-                logging.warning(f"\tValid actions are: {self.VALID_FOR_ACTION}.")
-        if 'acp_id' in kwargs:
-            self.acp(acp_id=kwargs['acp_id'])
-        if 'acp_name' in kwargs:
-            self.acp(name=kwargs['acp_name'])
-        if 'enabled' in kwargs:
-            self.enabled = kwargs['enabled']
-        else:
-            self.enabled = True
-        if 'sendEventsToFMC' in kwargs:
-            self.sendEventsToFMC = kwargs['sendEventsToFMC']
-        else:
-            self.sendEventsToFMC = True
-        if 'logFiles' in kwargs:
-            self.logFiles = kwargs['logFiles']
-        else:
-            self.logFiles = False
-        if 'logBegin' in kwargs:
-            self.logBegin = kwargs['logBegin']
-        else:
-            self.logBegin = False
-        if 'logEnd' in kwargs:
-            self.logEnd = kwargs['logEnd']
-        else:
-            self.logEnd = False
-        if 'originalSourceNetworks' in kwargs:
-            self.originalSourceNetworks = kwargs['originalSourceNetworks']
-        if 'sourceZones' in kwargs:
-            self.sourceZones = kwargs['sourceZones']
-        if 'destinationZones' in kwargs:
-            self.destinationZones = kwargs['destinationZones']
-        if 'variableSet' in kwargs:
-            self.variableSet = kwargs['variableSet']
-        if 'ipsPolicy' in kwargs:
-            self.ipsPolicy = kwargs['ipsPolicy']
-        if 'vlanTags' in kwargs:
-            self.vlanTags = kwargs['vlanTags']
-        if 'sourcePorts' in kwargs:
-            self.sourcePorts = kwargs['sourcePorts']
-        if 'destinationPorts' in kwargs:
-            self.destinationPorts = kwargs['destinationPorts']
-        if 'sourceNetworks' in kwargs:
-            self.sourceNetworks = {'objects': [], 'literals': {}}
-
-            if kwargs['sourceNetworks'].get('objects'):
-                self.sourceNetworks['objects'] = kwargs['sourceNetworks']['objects']
-
-            if kwargs['sourceNetworks'].get('literals'):
-                for literal in kwargs['sourceNetworks']['literals']:
-                    self.sourceNetworks['literals'][literal['value']] = literal['type']
-
-        if 'destinationNetworks' in kwargs:
-            self.destinationNetworks = {'objects': [], 'literals': {}}
-
-            if kwargs['destinationNetworks'].get('objects'):
-                self.destinationNetworks['objects'] = kwargs['destinationNetworks']['objects']
-
-            if kwargs['destinationNetworks'].get('literals'):
-                for literal in kwargs['destinationNetworks']['literals']:
-                    self.destinationNetworks['literals'][literal['value']] = literal['type']
-
-        if 'urls' in kwargs:
-            self.urls = kwargs['urls']
-        if 'applications' in kwargs:
-            self.applications = kwargs['applications']
-        if 'category' in kwargs:
-            self.category = kwargs['category']
-        if 'insertBefore' in kwargs:
-            self.insertBefore = kwargs['insertBefore']
-        if 'insertAfter' in kwargs:
-            self.insertAfter = kwargs['insertAfter']
-        if 'section' in kwargs:
-            self.section = kwargs['section']
-        if 'file_policy' in kwargs:
-            self.filePolicy = kwargs['file_policy']
-
-        # Check if suffix should be added to URL
-        # self.url_suffix()
-
     def format_data(self):
+        json_data = super().format_data()
         logging.debug("In format_data() for AccessRules class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'action' in self.__dict__:
-            json_data['action'] = self.action
-        if 'enabled' in self.__dict__:
-            json_data['enabled'] = self.enabled
-        if 'sendEventsToFMC' in self.__dict__:
-            json_data['sendEventsToFMC'] = self.sendEventsToFMC
-        if 'logFiles' in self.__dict__:
-            json_data['logFiles'] = self.logFiles
-        if 'logBegin' in self.__dict__:
-            json_data['logBegin'] = self.logBegin
-        if 'logEnd' in self.__dict__:
-            json_data['logEnd'] = self.logEnd
-        if 'variableSet' in self.__dict__:
-            json_data['variableSet'] = self.variableSet
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'originalSourceNetworks' in self.__dict__:
-            json_data['originalSourceNetworks'] = self.originalSourceNetworks
-        if 'vlanTags' in self.__dict__:
-            json_data['vlanTags'] = self.vlanTags
         if 'sourceNetworks' in self.__dict__:
             json_data['sourceNetworks'] = {'objects': self.sourceNetworks['objects']}
             json_data['sourceNetworks']['literals'] = \
@@ -184,24 +80,42 @@ class AccessRules(APIClassTemplate):
             json_data['destinationNetworks'] = {'objects': self.destinationNetworks['objects']}
             json_data['destinationNetworks']['literals'] = \
                 [{'type': v, 'value': k} for k, v in self.destinationNetworks['literals'].items()]
-        if 'sourcePorts' in self.__dict__:
-            json_data['sourcePorts'] = self.sourcePorts
-        if 'destinationPorts' in self.__dict__:
-            json_data['destinationPorts'] = self.destinationPorts
-        if 'ipsPolicy' in self.__dict__:
-            json_data['ipsPolicy'] = self.ipsPolicy
-        if 'urls' in self.__dict__:
-            json_data['urls'] = self.urls
-        if 'sourceZones' in self.__dict__:
-            json_data['sourceZones'] = self.sourceZones
-        if 'destinationZones' in self.__dict__:
-            json_data['destinationZones'] = self.destinationZones
-        if 'applications' in self.__dict__:
-            json_data['applications'] = self.applications
-        if 'filePolicy' in self.__dict__:
-            json_data['filePolicy'] = self.filePolicy
-
+        if 'action' in self.__dict__:
+            if self.action not in self.VALID_FOR_ACTION:
+                logging.warning(f"Action {self.action} is not a valid action.")
+                logging.warning(f"\tValid actions are: {self.VALID_FOR_ACTION}.")
         return json_data
+
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for AccessRules class.")
+        if 'acp_id' in kwargs:
+            self.acp(acp_id=kwargs['acp_id'])
+        if 'acp_name' in kwargs:
+            self.acp(name=kwargs['acp_name'])
+        if 'action' in kwargs:
+            if kwargs['action'] in self.VALID_FOR_ACTION:
+                self.action = kwargs['action']
+            else:
+                logging.warning(f"Action {kwargs['action']} is not a valid action.")
+                logging.warning(f"\tValid actions are: {self.VALID_FOR_ACTION}.")
+        if 'sourceNetworks' in kwargs:
+            self.sourceNetworks = {'objects': [], 'literals': {}}
+            if kwargs['sourceNetworks'].get('objects'):
+                self.sourceNetworks['objects'] = kwargs['sourceNetworks']['objects']
+            if kwargs['sourceNetworks'].get('literals'):
+                for literal in kwargs['sourceNetworks']['literals']:
+                    self.sourceNetworks['literals'][literal['value']] = literal['type']
+        if 'destinationNetworks' in kwargs:
+            self.destinationNetworks = {'objects': [], 'literals': {}}
+            if kwargs['destinationNetworks'].get('objects'):
+                self.destinationNetworks['objects'] = kwargs['destinationNetworks']['objects']
+            if kwargs['destinationNetworks'].get('literals'):
+                for literal in kwargs['destinationNetworks']['literals']:
+                    self.destinationNetworks['literals'][literal['value']] = literal['type']
+
+        # Check if suffix should be added to URL
+        # self.url_suffix()
 
     def acp(self, name='', acp_id=''):
         # either name or id of the ACP should be given
@@ -690,6 +604,108 @@ class AccessRules(APIClassTemplate):
             if 'destinationNetworks' in self.__dict__:
                 del self.destinationNetworks
                 logging.info('All Destination Networks removed from this AccessRules object.')
+
+    def source_sgt(self, action, name='', literal=None):
+        """
+        Adds Either object having name=name or literal with {value:<>, type:<>} to the sourceSecurityGroupTags
+        field of AccessRules object
+        Args:
+            action: the action to be done
+            name: name of the object in question
+            literal: the literal in question
+        Returns:
+            None
+        """
+        # using dict() as default value is dangerous here, any thoughts/workarounds on this?
+
+        logging.debug("In destination_network() for ACPRule class.")
+        if literal and name != '':
+            raise ValueError('Only one of literals or name (object name) should be set while creating a source network')
+
+        if not hasattr(self, 'sourceSecurityGroupTags'):
+            self.sourceSecurityGroupTags = {'objects': [], 'literals': {}}
+
+        if action == 'add':
+            if literal:
+                type_ = 'sourceSecurityGroupTags'  # This is probably wrong.
+                self.sourceSecurityGroupTags['literals'][literal] = type_
+                logging.info(f'Adding literal "{literal}" of type "{type_}" '
+                             f'to sourceSecurityGroupTags for this AccessRules.')
+            else:
+                # Query FMC for all SGTs and iterate through them to see if our name matches 1 of them.
+                sgt = ISESecurityGroupTags(fmc=self.fmc)
+                sgt.get(name=name)
+                if 'id' in sgt.__dict__:
+                    item = sgt
+                else:
+                    item = {}
+                new_sgt = None
+                if item['name'] == name:
+                    new_sgt = {'name': item['name'], 'tag': item['tag'], 'type': item['type']}
+                if new_sgt is None:
+                    logging.warning(f'SecurityGroupTag "{name}" is not found in FMC.  '
+                                    f'Cannot add to sourceSecurityGroupTags.')
+                else:
+                    if 'sourceSecurityGroupTags' in self.__dict__:
+                        # thus either some objects are already present in sourceSecurityGroupTags,
+                        # or only literals are present in sourceSecurityGroupTags
+                        if 'objects' in self.__dict__['sourceSecurityGroupTags']:
+                            # some objects are already present
+                            duplicate = False
+                            for obj in self.sourceSecurityGroupTags['objects']:
+                                if obj['name'] == new_sgt['name']:
+                                    duplicate = True
+                                    break
+                            if not duplicate:
+                                self.sourceSecurityGroupTags['objects'].append(new_sgt)
+                                logging.info(f'Adding "{name}" to sourceSecurityGroupTags for this AccessRules.')
+                        else:
+                            # this means no objects were present in sourceSecurityGroupTags,
+                            # and sourceSecurityGroupTags contains literals only
+                            self.sourceSecurityGroupTags.update({'objects': [new_sgt]})
+                            # So update the sourceSecurityGroupTags dict which contained 'literals' key initially
+                            # to have a 'objects' key as well
+                            logging.info(f'Adding "{name}" to sourceSecurityGroupTags for this AccessRules.')
+                    else:
+                        # None of literals or objects are present in sourceSecurityGroupTags,
+                        # so initialize it with objects and update the provided object
+                        self.sourceSecurityGroupTags = {'objects': [new_sgt]}
+                        logging.info(f'Adding "{name}" to sourceSecurityGroupTags for this AccessRules.')
+        elif action == 'remove':
+            if 'sourceSecurityGroupTags' in self.__dict__:
+                if name != '':
+                    # an object's name has been provided to be removed
+                    objects = []
+                    for obj in self.sourceSecurityGroupTags['objects']:
+                        if obj['name'] != name:
+                            objects.append(obj)
+                    if len(objects) == 0:
+                        # it was the last object which was deleted now
+                        del self.sourceSecurityGroupTags
+                        logging.info(f'Removed "{name}" from sourceSecurityGroupTags for this AccessRules')
+                        logging.info('All source security group tags are removed from this AccessRules object.')
+                    else:
+                        self.sourceSecurityGroupTags['objects'] = objects
+                        logging.info(f'Removed "{name}" from sourceSecurityGroupTags for this AccessRules.')
+                else:
+                    # a literal value has been provided to be removed
+                    type_ = self.sourceSecurityGroupTags['literals'].get(literal)
+                    if type_:
+                        self.sourceSecurityGroupTags['literals'].pop(literal)
+                        logging.info(f'Removed literal "{literal}" of '
+                                     f'type "{type_}" from sourceSecurityGroupTags for this AccessRules.')
+                    else:
+                        logging.info(f'Unable to removed literal "{literal}" '
+                                     f'from sourceSecurityGroupTags as it was not found')
+            else:
+                logging.info("No sourceSecurityGroupTags exist for this AccessRules.  Nothing to remove.")
+        elif action == 'clear':
+            if 'sourceSecurityGroupTags' in self.__dict__:
+                del self.sourceSecurityGroupTags
+                logging.info('All source security group tags are removed from this AccessRules object.')
+
+    def destination_sgt(self, action, name='', literal=None):
+        pass
 
 
 class ACPRule(AccessRules):

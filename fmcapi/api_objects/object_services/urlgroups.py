@@ -9,6 +9,8 @@ class URLGroups(APIClassTemplate):
     The URLGroups Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'objects', 'literals']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/urlgroups'
 
     # Technically you can have objects OR literals but I'm not set up for "OR" logic, yet.
@@ -19,29 +21,6 @@ class URLGroups(APIClassTemplate):
         logging.debug("In __init__() for URLGroups class.")
         self.parse_kwargs(**kwargs)
         self.type = 'URLGroup'
-
-    def format_data(self):
-        logging.debug("In format_data() for URLGroups class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'objects' in self.__dict__:
-            json_data['objects'] = self.objects
-        if 'literals' in self.__dict__:
-            json_data['literals'] = self.literals
-        return json_data
-
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for URLGroups class.")
-        if 'objects' in kwargs:
-            self.objects = kwargs['objects']
-        if 'literals' in kwargs:
-            self.literals = kwargs['literals']
 
     def named_urls(self, action, name=''):
         logging.debug("In named_urls() for URLGroups class.")

@@ -1,6 +1,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.object_services.securityzones import SecurityZones
-from fmcapi.api_objects.device_services.devicerecords import Device
+from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 import logging
 import warnings
 
@@ -9,6 +9,10 @@ class PhysicalInterfaces(APIClassTemplate):
     """
     The Physical Interface Object in the FMC.
     """
+    VALID_JSON_DATA = ['id', 'name', 'mode', 'enabled', 'hardware', 'MTU', 'managementOnly', 'ifname', 'securityZone',
+                       'type', 'ipv4', 'ipv6', 'activeMACAddress', 'standbyMACAddress',
+                       ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['device_name']
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-\/\. ]"""
     PREFIX_URL = '/devices/devicerecords'
     URL_SUFFIX = None
@@ -24,80 +28,31 @@ class PhysicalInterfaces(APIClassTemplate):
         logging.debug("In __init__() for PhysicalInterface class.")
         self.parse_kwargs(**kwargs)
 
-    def format_data(self):
-        logging.debug("In format_data() for PhysicalInterface class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'mode' in self.__dict__:
-            json_data['mode'] = self.mode
-        if 'enabled' in self.__dict__:
-            json_data['enabled'] = self.enabled
-        if 'hardware' in self.__dict__:
-            json_data['hardware'] = self.hardware
-        if 'MTU' in self.__dict__:
-            json_data['MTU'] = self.MTU
-        if 'managementOnly' in self.__dict__:
-            json_data['managementOnly'] = self.managementOnly
-        if 'ifname' in self.__dict__:
-            json_data['ifname'] = self.ifname
-        if 'securityZone' in self.__dict__:
-            json_data['securityZone'] = self.securityZone
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'ipv4' in self.__dict__:
-            json_data['ipv4'] = self.ipv4
-        if 'ipv6' in self.__dict__:
-            json_data['ipv6'] = self.ipv6
-        if 'activeMACAddress' in self.__dict__:
-            json_data['activeMACAddress'] = self.activeMACAddress
-        if 'standbyMACAddress' in self.__dict__:
-            json_data['standbyMACAddress'] = self.standbyMACAddress
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for PhysicalInterface class.")
+        if 'device_name' in kwargs:
+            self.device(device_name=kwargs['device_name'])
         if 'ipv4' in kwargs:
             if list(kwargs['ipv4'].keys())[0] in self.VALID_FOR_IPV4:
                 self.ipv4 = kwargs['ipv4']
             else:
                 logging.warning(f"Method {kwargs['ipv4']} is not a valid ipv4 type.")
-        if 'device_name' in kwargs:
-            self.device(device_name=kwargs['device_name'])
         if 'mode' in kwargs:
             if kwargs['mode'] in self.VALID_FOR_MODE:
                 self.mode = kwargs['mode']
             else:
                 logging.warning(f"Mode {kwargs['mode']} is not a valid mode.")
-        if 'hardware' in kwargs:
-            self.hardware = kwargs['hardware']
-        if 'securityZone' in kwargs:
-            self.securityZone = kwargs['securityZone']
-        if 'enabled' in kwargs:
-            self.enabled = kwargs['enabled']
         if 'MTU' in kwargs:
             if kwargs['MTU'] in self.VALID_FOR_MTU:
                 self.MTU = kwargs['MTU']
             else:
                 logging.warning(f"MTU {kwargs['MTU']} should be in the range 64-9000, setting to 1500.")
                 self.MTU = 1500
-        if 'managementOnly' in kwargs:
-            self.managementOnly = kwargs['managementOnly']
-        if 'ifname' in kwargs:
-            self.ifname = kwargs['ifname']
-        if 'ipv6' in kwargs:
-            self.ipv6 = kwargs['ipv6']
-        if 'activeMACAddress' in kwargs:
-            self.activeMACAddress = kwargs['activeMACAddress']
-        if 'standbyMACAddress' in kwargs:
-            self.standbyMACAddress = kwargs['standbyMACAddress']
 
     def device(self, device_name):
         logging.debug("In device() for PhysicalInterface class.")
-        device1 = Device(fmc=self.fmc)
+        device1 = DeviceRecords(fmc=self.fmc)
         device1.get(name=device_name)
         if 'id' in device1.__dict__:
             self.device_id = device1.id

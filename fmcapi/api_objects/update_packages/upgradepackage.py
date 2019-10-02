@@ -1,5 +1,5 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from fmcapi.api_objects.device_services.devicerecords import Device
+from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 from .upgradepackages import UpgradePackages
 import logging
 
@@ -12,6 +12,8 @@ class Upgrades(APIClassTemplate):
     We can rename this after we remove that deprecation... which will be a while from now.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'upgradePackage', 'targets', 'pushUpgradeFileOnly']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/updates/upgrades'
 
     def __init__(self, fmc, **kwargs):
@@ -20,33 +22,6 @@ class Upgrades(APIClassTemplate):
         self.type = 'Upgrade'
         self.URL = f'{self.fmc.platform_url}{self.URL_SUFFIX}'
         self.parse_kwargs(**kwargs)
-
-    def format_data(self):
-        logging.debug("In format_data() for Upgrades class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'upgradePackage' in self.__dict__:
-            json_data['upgradePackage'] = self.upgradePackage
-        if 'targets' in self.__dict__:
-            json_data['targets'] = self.targets
-        if 'pushUpgradeFileOnly' in self.__dict__:
-            json_data['pushUpgradeFileOnly'] = self.pushUpgradeFileOnly
-        return json_data
-
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for Upgrades class.")
-        if 'upgradePackage' in kwargs:
-            self.upgradePackage = kwargs['upgradePackage']
-        if 'targets' in kwargs:
-            self.targets = kwargs['targets']
-        if 'pushUpgradeFileOnly' in kwargs:
-            self.pushUpgradeFileOnly = kwargs['pushUpgradeFileOnly']
 
     def upgrade_package(self, package_name):
         logging.debug("In upgrade_package() for Upgrades class.")
@@ -60,7 +35,7 @@ class Upgrades(APIClassTemplate):
     def devices(self, devices):
         logging.debug("In devices() for Upgrades class.")
         for device in devices:
-            device1 = Device(fmc=self.fmc)
+            device1 = DeviceRecords(fmc=self.fmc)
             device1.get(name=device)
             if 'id' in device1.__dict__ and 'targets' in self.__dict__:
                 self.targets.append({"id": device1.id, "type": device1.type, "name": device1.name})

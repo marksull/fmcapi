@@ -9,7 +9,6 @@ class InterfaceObjects(APIClassTemplate):
     """
 
     URL_SUFFIX = '/object/interfaceobjects'
-    REQUIRED_FOR_POST = ['name', 'interfaceMode']
     FILTER_BY_NAME = True
 
     def __init__(self, fmc, **kwargs):

@@ -10,6 +10,8 @@ class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
     The FailoverInterfaceMACAddressConfigs Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'physicalInterface', 'failoverActiveMac','failoverStandbyMac']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['ha_name']
     PREFIX_URL = '/devicehapairs/ftddevicehapairs'
     REQUIRED_FOR_POST = ['physicalInterface', 'failoverActiveMac', 'failoverStandbyMac']
     REQUIRED_FOR_PUT = ['id']
@@ -19,32 +21,11 @@ class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
         logging.debug("In __init__() for FailoverInterfaceMACAddressConfigs class.")
         self.parse_kwargs(**kwargs)
 
-    def format_data(self):
-        logging.debug("In format_data() for FailoverInterfaceMACAddressConfigs class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'physicalInterface' in self.__dict__:
-            json_data['physicalInterface'] = self.physicalInterface
-        if 'failoverActiveMac' in self.__dict__:
-            json_data['failoverActiveMac'] = self.failoverActiveMac
-        if 'failoverStandbyMac' in self.__dict__:
-            json_data['failoverStandbyMac'] = self.failoverStandbyMac
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for FailoverInterfaceMACAddressConfigs class.")
         if 'ha_name' in kwargs:
             self.device_ha(ha_name=kwargs['ha_name'])
-        if 'physicalInterface' in kwargs:
-            self.physicalInterface = kwargs['physicalInterface']
-        if 'failoverActiveMac' in kwargs:
-            self.failoverActiveMac = kwargs['failoverActiveMac']
-        if 'failoverStandbyMac' in kwargs:
-            self.failoverStandbyMac = kwargs['failoverStandbyMac']
 
     def device_ha(self, ha_name):
         logging.debug("In device_ha() for FailoverInterfaceMACAddressConfigs class.")

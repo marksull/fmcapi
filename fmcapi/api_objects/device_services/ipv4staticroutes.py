@@ -1,5 +1,5 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from .devicerecords import Device
+from .devicerecords import DeviceRecords
 from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
 from fmcapi.api_objects.object_services.slamonitors import SLAMonitors
 from fmcapi.api_objects.object_services.hosts import Hosts
@@ -13,6 +13,10 @@ class IPv4StaticRoutes(APIClassTemplate):
     The IPv4StaticRoute Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'interfaceName', 'selectedNetworks', 'gateway', 'routeTracking', 'metricValue',
+                       'isTunneled',
+                       ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['device_name']
     PREFIX_URL = '/devices/devicerecords'
     URL_SUFFIX = None
     REQUIRED_FOR_POST = ['interfaceName', 'selectedNetworks', 'gateway']
@@ -24,48 +28,15 @@ class IPv4StaticRoutes(APIClassTemplate):
         self.type = 'IPv4StaticRoute'
         self.parse_kwargs(**kwargs)
 
-    def format_data(self):
-        logging.debug("In format_data() for IPv4StaticRoute class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'interfaceName' in self.__dict__:
-            json_data['interfaceName'] = self.interfaceName
-        if 'selectedNetworks' in self.__dict__:
-            json_data['selectedNetworks'] = self.selectedNetworks
-        if 'gateway' in self.__dict__:
-            json_data['gateway'] = self.gateway
-        if 'routeTracking' in self.__dict__:
-            json_data['routeTracking'] = self.routeTracking
-        if 'metricValue' in self.__dict__:
-            json_data['metricValue'] = self.metricValue
-        if 'isTunneled' in self.__dict__:
-            json_data['isTunneled'] = self.isTunneled
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for IPv4StaticRoute class.")
         if 'device_name' in kwargs:
             self.device(device_name=kwargs['device_name'])
-        if 'interfaceName' in kwargs:
-            self.interfaceName = kwargs['interfaceName']
-        if 'selectedNetworks' in kwargs:
-            self.selectedNetworks = kwargs['selectedNetworks']
-        if 'gateway' in kwargs:
-            self.gateway = kwargs['gateway']
-        if 'routeTracking' in kwargs:
-            self.routeTracking = kwargs['routeTracking']
-        if 'metricValue' in kwargs:
-            self.metricValue = kwargs['metricValue']
-        if 'isTunneled' in kwargs:
-            self.isTunneled = kwargs['isTunneled']
 
     def device(self, device_name):
         logging.debug("In device() for IPv4StaticRoute class.")
-        device1 = Device(fmc=self.fmc)
+        device1 = DeviceRecords(fmc=self.fmc)
         device1.get(name=device_name)
         if 'id' in device1.__dict__:
             self.device_id = device1.id

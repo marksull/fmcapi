@@ -1,5 +1,5 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from fmcapi.api_objects.device_services.devicerecords import Device
+from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 from fmcapi.api_objects.object_services.securityzones import SecurityZones
 from fmcapi.api_objects.device_services.physicalinterfaces import PhysicalInterfaces
 import logging
@@ -9,6 +9,12 @@ class SubInterfaces(APIClassTemplate):
     """
     The Subinterface Object in the FMC.
     """
+    VALID_JSON_DATA = ['id', 'name', 'type', 'mode', 'enabled', 'MTU', 'managementOnly', 'ipAddress', 'subIntfId',
+                       'vlanId', 'macLearn', 'ifname', 'securityZone', 'arpConfig', 'ipv4', 'ipv6', 'macTable',
+                       'enableAntiSpoofing', 'fragmentReassembly', 'enableDNSLookup', 'activeMACAddress',
+                       'standbyMACAddress',
+                       ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ['device_name']
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-\/\. ]"""
     PREFIX_URL = '/devices/devicerecords'
     URL_SUFFIX = None
@@ -24,114 +30,31 @@ class SubInterfaces(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = "SubInterface"
 
-    def format_data(self):
-        logging.debug("In format_data() for SubInterfaces class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'mode' in self.__dict__:
-            json_data['mode'] = self.mode
-        if 'enabled' in self.__dict__:
-            json_data['enabled'] = self.enabled
-        if 'MTU' in self.__dict__:
-            json_data['MTU'] = self.MTU
-        if 'managementOnly' in self.__dict__:
-            json_data['managementOnly'] = self.managementOnly
-        if 'ipAddress' in self.__dict__:
-            json_data['ipAddress'] = self.ipAddress
-        if 'subIntfId' in self.__dict__:
-            json_data['subIntfId'] = self.subIntfId
-        if 'vlanId' in self.__dict__:
-            json_data['vlanId'] = self.vlanId
-        if 'macLearn' in self.__dict__:
-            json_data['macLearn'] = self.macLearn
-        if 'ifname' in self.__dict__:
-            json_data['ifname'] = self.ifname
-        if 'securityZone' in self.__dict__:
-            json_data['securityZone'] = self.securityZone
-        if 'arpConfig' in self.__dict__:
-            json_data['arpConfig'] = self.arpConfig
-        if 'ipv4' in self.__dict__:
-            json_data['ipv4'] = self.ipv4
-        if 'ipv6' in self.__dict__:
-            json_data['ipv6'] = self.ipv6
-        if 'macTable' in self.__dict__:
-            json_data['macTable'] = self.macTable
-        if 'enableAntiSpoofing' in self.__dict__:
-            json_data['enableAntiSpoofing'] = self.enableAntiSpoofing
-        if 'fragmentReassembly' in self.__dict__:
-            json_data['fragmentReassembly'] = self.fragmentReassembly
-        if 'enableDNSLookup' in self.__dict__:
-            json_data['enableDNSLookup'] = self.enableDNSLookup
-        if 'activeMACAddress' in self.__dict__:
-            json_data['activeMACAddress'] = self.activeMACAddress
-        if 'standbyMACAddress' in self.__dict__:
-            json_data['standbyMACAddress'] = self.standbyMACAddress
-        return json_data
-
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for SubInterfaces class.")
-        if 'name' in kwargs:
-            self.name = kwargs['name']
+        if 'device_name' in kwargs:
+            self.device(device_name=kwargs['device_name'])
         if 'ipv4' in kwargs:
             if list(kwargs['ipv4'].keys())[0] in self.VALID_FOR_IPV4:
                 self.ipv4 = kwargs['ipv4']
             else:
                 logging.warning(f"""Method "{kwargs['ipv4']}" is not a valid ipv4 type.""")
-        if 'device_name' in kwargs:
-            self.device(device_name=kwargs['device_name'])
         if 'mode' in kwargs:
             if kwargs['mode'] in self.VALID_FOR_MODE:
                 self.mode = kwargs['mode']
             else:
                 logging.warning(f"""Mode "{kwargs['mode']}" is not a valid mode.""")
-        if 'securityZone' in kwargs:
-            self.securityZone = kwargs['securityZone']
-        if 'enabled' in kwargs:
-            self.enabled = kwargs['enabled']
         if 'MTU' in kwargs:
             if kwargs['MTU'] in self.VALID_FOR_MTU:
                 self.MTU = kwargs['MTU']
             else:
                 logging.warning(f"""MTU "{kwargs['MTU']}" should be in the range 64-9000.""")
                 self.MTU = 1500
-        if 'managementOnly' in kwargs:
-            self.managementOnly = kwargs['managementOnly']
-        if 'ipAddress' in kwargs:
-            self.ipAddress = kwargs['ipAddress']
-        if 'subIntfId' in kwargs:
-            self.subIntfId = kwargs['subIntfId']
-        if 'vlanId' in kwargs:
-            self.vlanId = kwargs['vlanId']
-        if 'macLearn' in kwargs:
-            self.macLearn = kwargs['macLearn']
-        if 'ifname' in kwargs:
-            self.ifname = kwargs['ifname']
-        if 'arpConfig' in kwargs:
-            self.arpConfig = kwargs['arpConfig']
-        if 'ipv6' in kwargs:
-            self.ipv6 = kwargs['ipv6']
-        if 'macTable' in kwargs:
-            self.macTable = kwargs['macTable']
-        if 'enableAntiSpoofing' in kwargs:
-            self.enableAntiSpoofing = kwargs['enableAntiSpoofing']
-        if 'fragmentReassembly' in kwargs:
-            self.fragmentReassembly = kwargs['fragmentReassembly']
-        if 'enableDNSLookup' in kwargs:
-            self.enableDNSLookup = kwargs['enableDNSLookup']
-        if 'activeMACAddress' in kwargs:
-            self.activeMACAddress = kwargs['activeMACAddress']
-        if 'standbyMACAddress' in kwargs:
-            self.standbyMACAddress = kwargs['standbyMACAddress']
 
     def device(self, device_name):
         logging.debug("In device() for SubInterfaces class.")
-        device1 = Device(fmc=self.fmc)
+        device1 = DeviceRecords(fmc=self.fmc)
         device1.get(name=device_name)
         if 'id' in device1.__dict__:
             self.device_id = device1.id

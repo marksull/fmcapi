@@ -188,8 +188,9 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                     headers = {'Content-Type': 'application/json', 'X-auth-access-token': self.mytoken.access_token}
                     status_code = 429
                 if status_code == 422:
-                    logging.warning("Payload too large.  FMC can only handle a payload of "
-                                    f"{self.FMC_MAX_PAYLOAD} bytes.")
+                    logging.warning("Either:\n\t1. Payload too large.  FMC can only handle a payload of "
+                                    f"{self.FMC_MAX_PAYLOAD} bytes.\n\t2.The payload contains an unprocessable or "
+                                    f"unreadable entity such as a invalid attribut name or incorrect JSON syntax ")
             json_response = json.loads(response.text)
             if status_code > 301 or 'error' in json_response:
                 response.raise_for_status()

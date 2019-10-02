@@ -8,6 +8,8 @@ class NatRules(APIClassTemplate):
     The NatRules Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     PREFIX_URL = '/policy/ftdnatpolicies'
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 
@@ -15,21 +17,6 @@ class NatRules(APIClassTemplate):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for NatRules class.")
         self.parse_kwargs(**kwargs)
-
-    def format_data(self):
-        logging.debug("In format_data() for NatRules class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        return json_data
-
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for NatRules class.")
 
     def nat_policy(self,name):
         logging.debug("In nat_policy() for NatRules class.")

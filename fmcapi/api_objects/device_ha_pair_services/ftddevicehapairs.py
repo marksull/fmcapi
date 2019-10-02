@@ -9,6 +9,8 @@ class FTDDeviceHAPairs(APIClassTemplate):
     The FTDDeviceHAPairs Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'primary', 'secondary', 'ftdHABootstrap', 'action', 'forceBreak']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/devicehapairs/ftddevicehapairs'
     REQUIRED_FOR_POST = ['primary', 'secondary', 'ftdHABootstrap']
     REQUIRED_FOR_PUT = ['id']
@@ -17,39 +19,6 @@ class FTDDeviceHAPairs(APIClassTemplate):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for FTDDeviceHAPairs class.")
         self.parse_kwargs(**kwargs)
-
-    def format_data(self):
-        logging.debug("In format_data() for FTDDeviceHAPairs class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'primary' in self.__dict__:
-            json_data['primary'] = self.primary
-        if 'secondary' in self.__dict__:
-            json_data['secondary'] = self.secondary
-        if 'ftdHABootstrap' in self.__dict__:
-            json_data['ftdHABootstrap'] = self.ftdHABootstrap
-        if 'action' in self.__dict__:
-            json_data['action'] = self.action
-        if 'forceBreak' in self.__dict__:
-            json_data['forceBreak'] = self.forceBreak
-        return json_data
-
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for FTDDeviceHAPairs class.")
-        if 'primary' in kwargs:
-            self.primary = kwargs['primary']
-        if 'secondary' in kwargs:
-            self.secondary = kwargs['secondary']
-        if 'ftdHABootstrap' in kwargs:
-            self.ftdHABootstrap = kwargs['ftdHABootstrap']
-        if 'action' in kwargs:
-            self.action = kwargs['action']
-        if 'forceBreak' in kwargs:
-            self.forceBreak = kwargs['forceBreak']
 
     def device(self, primary_name="", secondary_name=""):
         logging.debug("In device() for FTDDeviceHAPairs class.")

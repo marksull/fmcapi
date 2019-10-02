@@ -7,43 +7,22 @@ class IKEv2IpsecProposals(APIClassTemplate):
     The IKEv2IpsecProposals Object in the FMC.
     """
 
+    VALID_JSON_DATA = ['id', 'name', 'type', 'encryptionAlgorithms', 'integrityAlgorithms']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/object/ikev2ipsecproposals'
     REQUIRED_FOR_POST = ['name', 'encryptionAlgorithms', 'integrityAlgorithms']
     VALID_FOR_ENCRYPTION = ['DES', '3DES', 'AES', 'AES-192', 'AES-256', 'NULL', 'AES-GCM', 'AES-GCM-192',
-                            'AES-GCM-256', 'AES-GMAC', 'AES-GMAC-192', 'AES-GMAC-256']
+                            'AES-GCM-256', 'AES-GMAC', 'AES-GMAC-192', 'AES-GMAC-256',
+                            ]
     VALID_FOR_HASH = ['NULL', 'MD5', 'SHA-1', 'SHA-256', 'SHA-384', 'SHA-512']
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
     FIRST_SUPPORTED_FMC_VERSION = '6.3'
-
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for IKEv2IpsecProposals class.")
         self.parse_kwargs(**kwargs)
         self.type = 'IKEv2IPsecProposal'
-
-    def format_data(self):
-        logging.debug("In format_data() for IKEv2IpsecProposals class.")
-        json_data = {}
-        if 'id' in self.__dict__:
-            json_data['id'] = self.id
-        if 'name' in self.__dict__:
-            json_data['name'] = self.name
-        if 'type' in self.__dict__:
-            json_data['type'] = self.type
-        if 'encryptionAlgorithms' in self.__dict__:
-            json_data['encryptionAlgorithms'] = self.encryptionAlgorithms
-        if 'integrityAlgorithms' in self.__dict__:
-            json_data['integrityAlgorithms'] = self.integrityAlgorithms
-        return json_data
-
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for IKEv2IpsecProposals class.")
-        if 'encryptionAlgorithms' in kwargs:
-            self.encryptionAlgorithms = kwargs['encryptionAlgorithms']
-        if 'integrityAlgorithms' in kwargs:
-            self.integrityAlgorithms = kwargs['integrityAlgorithms']
 
     def encryption(self, action, algorithms=[]):
         logging.debug("In encryption() for IKEv2IpsecProposals class.")
