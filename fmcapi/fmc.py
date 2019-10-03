@@ -14,6 +14,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import logging
 from logging.handlers import RotatingFileHandler
 import warnings
+from .api_objects import AuditRecords
 
 # Disable annoying HTTP warnings
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -249,18 +250,10 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         self.serverversion()
 
     def auditrecords(self):
-        """
-        This API function supports filtering the GET query URL with: username, subsystem, source, starttime, and
-        endtime parameters.
-        :return: response
-        """
-        logging.debug('In the auditrecords method of FMC.')
-        url_parameters = 'expanded=true'
-        url_suffix = '/audit/auditrecords'
-        url = f'{self.platform_url}/domain/{self.uuid}{url_suffix}?{url_parameters}'
-
-        response = self.send_to_api(method='get', url=url)
-        return response
+        """Dispose of this method after 20210101."""
+        warnings.warn("Deprecated: fmc.auditrecords() should be called via auditrecords() instead.")
+        tmp = AuditRecords(fmc=self)
+        return tmp.get()
 
     def audit(self):
         """Dispose of this method after 20210101."""

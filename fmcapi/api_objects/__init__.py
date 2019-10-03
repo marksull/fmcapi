@@ -4,6 +4,8 @@ from .policy_services.accesspolicies import AccessControlPolicy  # Needs loaded 
 from .device_services.devicerecords import DeviceRecords  # Needs loaded early.
 from .device_services.devicerecords import Device  # Needs loaded early.
 
+from .audit_services.audit_records import AuditRecords
+
 from .device_ha_pair_services import FTDDeviceHAPairs
 from .device_ha_pair_services.ftddevicehapairs import DeviceHAPairs
 
