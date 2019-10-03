@@ -31,7 +31,7 @@ from .ip_range import test__ip_range
 from .ip_network import test__ip_network
 from .ip_host import test__ip_host
 from .variable_set import test__variable_set
-from .fmc_version import test__fmc_version
+from .server_version import test__fmc_version
 from .ip_addresses import test__ip_addresses
 from .network_group import test__network_group
 from .url_group import test__url_group
@@ -49,7 +49,7 @@ from .application import test__application
 from .application_tag import test__application_tag
 from .application_type import test__application_type
 
-from .auditrecords import test__auditrecords
+from .audit_records import test__audit_records
 from .deployabledevices import test__deployabledevices
 from .deploymentrequests import test__deploymentrequests
 from .devicegrouprecords import test__devicegrouprecords
@@ -64,7 +64,7 @@ from .ipv6staticroutes import test__ipv6staticroutes
 logging.debug("In the unit-tests __init__.py file.")
 
 __all__ = [
-    'test__auditrecords',
+    'test__audit_records',
     'test__deploymentrequests',
     'test__deployabledevices',
     'test__devicegrouprecords',

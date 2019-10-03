@@ -14,7 +14,7 @@ class ServerVersion(object):  # Can't import APIClassTemplate due to dependency 
     URL_SUFFIX = '/info/serverversion'
 
     def __init__(self, fmc):
-        logging.debug("In __init__() for APIClassTemplate class.")
+        logging.debug("In __init__() for ServerVersion class.")
 
         self.fmc = fmc
         self.URL = f'{self.fmc.platform_url}{self.URL_SUFFIX}'
