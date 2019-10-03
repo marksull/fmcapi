@@ -131,6 +131,8 @@ from .policy_assignment_services.policyassignments import PolicyAssignments
 
 from .status_services.taskstatuses import TaskStatuses
 
+from .system_information import ServerVersion
+
 from .update_packages.listapplicabledevices import ListApplicableDevices
 from .update_packages.listapplicabledevices import ApplicableDevices
 from .update_packages.upgradepackages import UpgradePackages
@@ -140,6 +142,7 @@ from .update_packages.upgradepackage import Upgrades
 logging.debug("In the api_objects __init__.py file.")
 
 __all__ = [
+    'ServerVersion',
     'AuditRecords',
     'DefaultActions',
     'DeviceGroupRecords',

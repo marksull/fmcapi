@@ -15,6 +15,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import warnings
 from .api_objects import AuditRecords
+from .api_objects import ServerVersion
 
 # Disable annoying HTTP warnings
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -116,8 +117,12 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                              verify_cert=self.VERIFY_CERT)
         self.uuid = self.mytoken.uuid
         self.build_urls()
-        self.serverversion()
+
+        version = ServerVersion(fmc=self)
+        version.get()
+        self.serverVersion = version.serverVersion
         logging.info(f"This FMC's version is {self.serverVersion}")
+
         return self
 
     def __exit__(self, *args):
@@ -224,30 +229,16 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             return json_response
 
     def serverversion(self):
-        """
-        Get the FMC's version information.  Set instance variables for each version info returned as well as return
-        the whole response text.
-        :return:
-        """
-        logging.debug("In the FMC version() class method.")
-        logging.info('Collecting version information from FMC.')
-
-        url_suffix = '/info/serverversion'
-        url = f'{self.platform_url}{url_suffix}'
-
-        response = self.send_to_api(method='get', url=url)
-        if 'items' in response:
-            logging.info('Populating vdbVersion, sruVersion, serverVersion, and geoVersion FMC instance variables.')
-            self.vdbVersion = response['items'][0]['vdbVersion']
-            self.sruVersion = response['items'][0]['sruVersion']
-            self.serverVersion = response['items'][0]['serverVersion']
-            self.geoVersion = response['items'][0]['geoVersion']
-        return response
+        """Dispose of this method after 20210101."""
+        warnings.warn("Deprecated: fmc.serverversion() should be called via ServerVersion() instead.")
+        tmp = ServerVersion(fmc=self)
+        return tmp.get()
 
     def version(self):
         """Dispose of this method after 20210101."""
-        warnings.warn("Deprecated: version() should be called via serverversion().")
-        self.serverversion()
+        warnings.warn("Deprecated: fmc.version() should be called via ServerVersion() instead.")
+        tmp = ServerVersion(fmc=self)
+        return tmp.get()
 
     def auditrecords(self):
         """Dispose of this method after 20210101."""
