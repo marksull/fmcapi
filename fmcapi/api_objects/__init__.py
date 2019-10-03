@@ -140,6 +140,7 @@ from .update_packages.upgradepackage import Upgrades
 logging.debug("In the api_objects __init__.py file.")
 
 __all__ = [
+    'AuditRecords',
     'DefaultActions',
     'DeviceGroupRecords',
     'DeviceGroups',

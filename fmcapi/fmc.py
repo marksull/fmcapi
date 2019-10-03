@@ -251,14 +251,15 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
 
     def auditrecords(self):
         """Dispose of this method after 20210101."""
-        warnings.warn("Deprecated: fmc.auditrecords() should be called via auditrecords() instead.")
+        warnings.warn("Deprecated: fmc.auditrecords() should be called via AuditRecords() instead.")
         tmp = AuditRecords(fmc=self)
         return tmp.get()
 
     def audit(self):
         """Dispose of this method after 20210101."""
-        warnings.warn("Deprecated: audit() should be called via auditrecords().")
-        self.auditrecords()
+        warnings.warn("Deprecated: fmc.audit() should be called via AuditRecords() instead.")
+        tmp = AuditRecords(fmc=self)
+        return tmp.get()
 
     def deployabledevices(self):
         """

@@ -1,7 +1,8 @@
 import logging
-
+import fmcapi
 
 def test__auditrecords(fmc):
-    logging.info('Testing fmc.auditrecords() method.')
-    logging.info(fmc.auditrecords())
-    logging.info('Testing fmc.auditrecords() method done.\n')
+    logging.info('Testing AuditRecords() class.')
+    tmp = fmcapi.AuditRecords(fmc=fmc)
+    logging.info(tmp.get())
+    logging.info('Testing AuditRecords() class done.\n')
