@@ -16,6 +16,7 @@ from logging.handlers import RotatingFileHandler
 import warnings
 from .api_objects import AuditRecords
 from .api_objects import ServerVersion
+from .api_objects import DeployableDevices
 
 # Disable annoying HTTP warnings
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -28,7 +29,6 @@ default logger.  This reduces the size of our log files.
 logging.getLogger("requests").setLevel(logging.WARNING)
 
 
-# noinspection SpellCheckingInspection
 class FMC(object):
     """
 The FMC class has a series of methods, lines that start with "def", that are used to interact with the Cisco FMC
@@ -103,6 +103,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         self.configuration_url = None
         self.platform_url = None
         self.page_counter = None
+        self.more_items = []
 
     def __enter__(self):
         """
@@ -149,7 +150,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         self.configuration_url = f"https://{self.host}/{self.API_CONFIG_VERSION}/domain/{self.uuid}"
         self.platform_url = f"https://{self.host}/{self.API_PLATFORM_VERSION}"
 
-    def send_to_api(self, method='', url='', headers='', json_data=None, more_items=[]):
+    def send_to_api(self, method='', url='', headers='', json_data=None, more_items=None):
         """
         Using the "method" type, send a request to the "url" with the "json_data" as the payload.
         :param method:
@@ -253,34 +254,16 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         return tmp.get()
 
     def deployabledevices(self):
-        """
-        Collect a list of FMC managed devices who's configuration is not up-to-date.
-        :return: List of devices needing updates.
-        """
-        logging.debug("In the FMC deployabledevices() class method.")
-
-        waittime = 15
-        logging.info(f"Waiting {waittime} seconds to allow the FMC to update the list of deployable devices.")
-        time.sleep(waittime)
-        logging.info("Getting a list of deployable devices.")
-        url_suffix = "/deployment/deployabledevices?expanded=true"
-        url = f'{self.configuration_url}{url_suffix}'
-        response = self.send_to_api(method='get', url=url)
-        # Now to parse the response list to get the UUIDs of each device.
-        if 'items' not in response:
-            return
-        uuids = []
-        for item in response['items']:
-            if not item['canBeDeployed']:
-                pass
-            else:
-                uuids.append(item)
-        return uuids
+        """Dispose of this method after 20210101."""
+        warnings.warn("Deprecated: fmc.deployabledevices() should be called via DeployableDevices() instead.")
+        tmp = DeployableDevices(fmc=self)
+        return tmp.get()
 
     def get_deployable_devices(self):
         """Dispose of this method after 20210101."""
-        warnings.warn("Deprecated: get_deployable_devices() should be called via deployabledevices().")
-        self.deployabledevices()
+        warnings.warn("Deprecated: fmc.get_deployable_devices() should be called via DeployableDevices() instead.")
+        tmp = DeployableDevices(fmc=self)
+        return tmp.get()
 
     def deploymentrequests(self):
         """
