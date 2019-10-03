@@ -7,6 +7,7 @@ from .device_services.devicerecords import Device  # Needs loaded early.
 from .audit_services.audit_records import AuditRecords
 
 from .deployment_services import DeployableDevices
+from .deployment_services import DeploymentRequests
 
 from .device_ha_pair_services import FTDDeviceHAPairs
 from .device_ha_pair_services.ftddevicehapairs import DeviceHAPairs
@@ -144,6 +145,7 @@ from .update_packages.upgradepackage import Upgrades
 logging.debug("In the api_objects __init__.py file.")
 
 __all__ = [
+    'DeploymentRequests',
     'DeployableDevices',
     'ServerVersion',
     'AuditRecords',

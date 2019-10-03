@@ -51,7 +51,7 @@ from .application_type import test__application_type
 
 from .audit_records import test__audit_records
 from .deployable_devices import test__deployable_devices
-from .deploymentrequests import test__deploymentrequests
+from .deployment_requests import test__deployment_requests
 from .devicegrouprecords import test__devicegrouprecords
 from .ftddevicehapairs import test__ftddevicehapairs
 from .failoverinterfacemacaddressconfigs import test__failoverinterfacemacaddressconfigs
@@ -65,7 +65,7 @@ logging.debug("In the unit-tests __init__.py file.")
 
 __all__ = [
     'test__audit_records',
-    'test__deploymentrequests',
+    'test__deployment_requests',
     'test__deployable_devices',
     'test__devicegrouprecords',
     'test__ftddevicehapairs',

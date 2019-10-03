@@ -17,6 +17,7 @@ import warnings
 from .api_objects import AuditRecords
 from .api_objects import ServerVersion
 from .api_objects import DeployableDevices
+from .api_objects import DeploymentRequests
 
 # Disable annoying HTTP warnings
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -135,7 +136,8 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         logging.debug("In the FMC __exit__() class method.")
 
         if self.autodeploy:
-            self.deploymentrequests()
+            tmp = DeploymentRequests(fmc=self)
+            tmp.post()
         else:
             logging.info("Auto deploy changes set to False.  "
                          "Use the Deploy button in FMC to push changes to FTDs.\n\n")
@@ -263,44 +265,19 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         """Dispose of this method after 20210101."""
         warnings.warn("Deprecated: fmc.get_deployable_devices() should be called via DeployableDevices() instead.")
         tmp = DeployableDevices(fmc=self)
-        return tmp.get()
+        return tmp.post()
 
     def deploymentrequests(self):
-        """
-        Iterate through the list of devices needing deployed and submit a request to the FMC to deploy changes to them.
-        :return:
-        """
-        logging.debug("In the deploymentrequests() class method.")
-
-        url_suffix = "/deployment/deploymentrequests"
-        url = f'{self.configuration_url}{url_suffix}'
-        devices = self.deployabledevices()
-        if not devices:
-            logging.info("No devices need deployed.\n\n")
-            return
-        json_data = {
-            'type': 'DeploymentRequest',
-            'forceDeploy': True,
-            'ignoreWarning': True,
-            'version': str(int(1000000 * datetime.datetime.utcnow().timestamp())),
-            'deviceList': []
-        }
-        for device in devices:
-            logging.info(f"Adding device {device} to deployment queue.")
-            json_data['deviceList'].append(device['device']['id'])
-            # From the list of deployable devices get the version value that is smallest.
-            if int(json_data['version']) > int(device['version']):
-                logging.info(f"Updating version to {device['version']}")
-                json_data['version'] = device['version']
-
-        logging.info("Deploying changes to devices.")
-        response = self.send_to_api(method='post', url=url, json_data=json_data)
-        return response['deviceList']
+        """Dispose of this method after 20210101."""
+        warnings.warn("Deprecated: fmc.deploymentrequests() should be called via DeploymentRequests() instead.")
+        tmp = DeploymentRequests(fmc=self)
+        return tmp.post()
 
     def deploy_changes(self):
         """Dispose of this method after 20210101."""
-        warnings.warn("Deprecated: deploy_changes() should be called via deploymentrequests().")
-        self.deploymentrequests()
+        warnings.warn("Deprecated: fmc.deploy_changes() should be called via DeploymentRequests() instead.")
+        tmp = DeploymentRequests(fmc=self)
+        return tmp.get()
 
 
 class Token(object):
