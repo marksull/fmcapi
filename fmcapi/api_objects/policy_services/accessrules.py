@@ -618,16 +618,16 @@ class AccessRules(APIClassTemplate):
         """
         # using dict() as default value is dangerous here, any thoughts/workarounds on this?
 
-        logging.debug("In destination_network() for ACPRule class.")
+        logging.debug("In source_sgt() for ACPRule class.")
         if literal and name != '':
-            raise ValueError('Only one of literals or name (object name) should be set while creating a source network')
+            raise ValueError('Only one of literals or name (object name) should be set while creating a source sgt')
 
         if not hasattr(self, 'sourceSecurityGroupTags'):
             self.sourceSecurityGroupTags = {'objects': [], 'literals': {}}
 
         if action == 'add':
             if literal:
-                type_ = 'sourceSecurityGroupTags'  # This is probably wrong.
+                type_ = 'ISESecurityGroupTag'  # This is probably wrong.
                 self.sourceSecurityGroupTags['literals'][literal] = type_
                 logging.info(f'Adding literal "{literal}" of type "{type_}" '
                              f'to sourceSecurityGroupTags for this AccessRules.')
