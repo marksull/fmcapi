@@ -58,8 +58,8 @@ def main():
         hq_acprule.destination_zone(action='add', name=sz_outside.name)
         hq_acprule.source_network(action='add', name=hq_lan.name)
         hq_acprule.destination_network(action='add', name='any-ipv4')
-        hq_acprule.logBegin = True
-        hq_acprule.logEnd = True
+        # hq_acprule.logBegin = True
+        # hq_acprule.logEnd = True
         hq_acprule.post()
 
         # Build NAT Policy
