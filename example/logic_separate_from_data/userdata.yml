@@ -2,7 +2,7 @@
 fmc:
   host: 10.0.0.10
   username: apiadmin
-  password: C1sco12345
+  password: Admin123
   autodeploy: True
   file_logging: fmcapi.log
   limit: 2000
@@ -94,9 +94,10 @@ device_records:
                 bitmask: 24
       routing:
         static:
-          - name: hq_default_route
-            networks: any-ipv4
-            gateway: hq-default-gateway
-            interface: GigabitEthernet0/1
-            metric: 1
+          ipv4:
+            - name: hq_default_route
+              networks: any-ipv4
+              gateway: hq-default-gateway
+              interface: GigabitEthernet0/1
+              metric: 1
       nat_policy: NAT Policy

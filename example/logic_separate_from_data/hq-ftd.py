@@ -58,10 +58,12 @@ def create_access_policies(fmc, acp_list):
         # Build access_rules associated with this acp.
         for rule in acp['access_rules']:
             acp_rule = fmcapi.AccessRules(fmc=fmc, acp_name=policy.name, name=rule['name'])
+            """  This is broken at the moment.
             if 'log_begin' in rule:
                 acp_rule.logBegin = rule['log_begin']
             if 'log_end' in rule:
                 acp_rule.logBegin = rule['log_end']
+            """
             if 'action' in rule:
                 acp_rule.action = rule['action']
             if 'source_networks' in rule:
@@ -105,16 +107,38 @@ def create_device_records(fmc, device_list):
         # Push to FMC to start device registration.
         ftd.post(post_wait_time=dr['wait_for_post'])
         # Registration done.  Time to configure it's interfaces.
-        for interface in dr['interfaces']:
-            int1 = fmcapi.PhysicalInterfaces(fmc=fmc, device_name=ftd.name)
-            int1.get(name=interface['name'])
-            int1.enabled = interface['enabled']
-            int1.ifname = interface['interface_name']
-            int1.sz(name=interface['security_zone'])
-            for v4 in interface['addresses']['ipv4']:
-                int1.static(ipv4addr=v4['ip'], ipv4mask=v4['bitmask'])
-            int1.put()
-            del int1
+        for interface_types in dr['interfaces']:
+            if 'physical' in interface_types:
+                for interface in interface_types['physical']:
+                    int1 = fmcapi.PhysicalInterfaces(fmc=fmc, device_name=ftd.name)
+                    int1.get(name=interface['name'])
+                    int1.enabled = interface['enabled']
+                    int1.ifname = interface['interface_name']
+                    int1.sz(name=interface['security_zone'])
+                    if 'static' in interface['addresses']['ipv4']:
+                        v4 = interface['addresses']['ipv4']['static']
+                        int1.static(ipv4addr=v4['ip'], ipv4mask=v4['bitmask'])
+                    elif 'dhcp' in interface['addresses']['ipv4']:
+                        v4 = interface['addresses']['ipv4']['dhcp']
+                        int1.dhcp(enableDefault=v4['enable_default'], routeMetric=v4['route_metric'])
+                    int1.put()
+                    del int1
+        for route_types in dr['routing']:
+            if 'static' in route_types:
+                for route in route_types['static']:
+                    rt = fmcapi.IPv4StaticRoutes(fmc=fmc,
+                                                 name=route['name'],
+                                                 gw=route['gateway'],
+                                                 interfaceName=route['interface'],
+                                                 metric=route['metric']
+                                                 )
+                    rt.networks(action='add', networks=route['networks'])
+                    rt.post()
+                    del rt
+        if 'nat_policy' in dr:
+            natp = fmcapi.PolicyAssignments(fmc=fmc)
+            natp.ftd_natpolicy(name=dr['nat_policy'], devices=[{'name': dr['name'], 'type': 'device'}])
+            natp.post()
         del ftd
 
 
