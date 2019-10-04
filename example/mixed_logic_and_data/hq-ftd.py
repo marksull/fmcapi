@@ -23,19 +23,17 @@ def main():
 
         # Create an ACP
         acp = fmcapi.AccessPolicies(fmc=fmc1, name='ACP Policy')
+        acp.defaultAction = 'BLOCK'
         # I intentially put a "space" in the ACP name to show that fmcapi will "fix" that for you.
         acp.post()
 
         # Create Security Zones
         sz_inside = fmcapi.SecurityZones(fmc=fmc1, name='inside', interfaceMode='ROUTED')
         sz_inside.post()
-        # sz_inside.get()
         sz_outside = fmcapi.SecurityZones(fmc=fmc1, name='outside', interfaceMode='ROUTED')
         sz_outside.post()
-        # sz_outside.get()
         sz_dmz = fmcapi.SecurityZones(fmc=fmc1, name='dmz', interfaceMode='ROUTED')
         sz_dmz.post()
-        # sz_dmz.get()
 
         # Create Network Objects
         hq_dfgw_gateway = fmcapi.Hosts(fmc=fmc1, name='hq-default-gateway', value='100.64.0.1')
@@ -60,6 +58,8 @@ def main():
         hq_acprule.destination_zone(action='add', name=sz_outside.name)
         hq_acprule.source_network(action='add', name=hq_lan.name)
         hq_acprule.destination_network(action='add', name='any-ipv4')
+        hq_acprule.logBegin = True
+        hq_acprule.logEnd = True
         hq_acprule.post()
 
         # Build NAT Policy

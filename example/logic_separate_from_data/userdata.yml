@@ -1,0 +1,102 @@
+---
+fmc:
+  host: 10.0.0.10
+  username: apiadmin
+  password: C1sco12345
+  autodeploy: True
+  file_logging: fmcapi.log
+  limit: 2000
+
+security_zones:
+  - name: inside
+  - name: outside
+  - name: dmz
+
+hosts:
+  - name: hq-default-gateway
+    value: 100.64.0.1
+  - name: hq_fmc
+    value: 10.0.0.10
+  - name: fmc_public_ip
+    value: 100.64.0.10
+
+networks:
+  - name: hq-lan
+    value: 10.0.0.0/24
+  - name: all-lans
+    value: 10.0.0.0/8
+
+access_policies:
+  - name: ACP Policy
+    default_action: BLOCK
+    access_rules:
+      - name: Permit HQ LAN
+        log_begin: True
+        log_end: True
+        action: ALLOW
+        source_security_zones:
+          - name: inside
+        destination_security_zones:
+          - name: outside
+        source_networks:
+          - name: hq-lan
+        destination_networks:
+          - name: any-ipv4
+
+nat_policies:
+  - name: NAT Policy
+    auto_nat_rules:
+      - nat_type: DYNAMIC
+        interface_in_translated_network: True
+        original_network: all-lans
+        source_interface: inside
+        destination_interface: outside
+    manual_nat_rules:
+      - nat_type: STATIC
+        original_source: hq_fmc
+        translated_source: fmc_public_ip
+        source_interface: inside
+        destination_interface: outside
+        enabled: True
+
+device_records:
+  - hostname: 10.0.0.254
+    name: hq-ftd
+    type: device
+    registration_key: cisco123
+    access_policy: ACP Policy
+    licenses:
+      - name: MALWARE
+      - name: VPN
+      - name: BASE
+      - name: THREAT
+      - name: URL
+    wait_for_post: 300
+    interfaces:
+      physical:
+        - name: GigabitEthernet0/0
+          enabled: True
+          interface_name: IN
+          security_zone: inside
+          addresses:
+            ipv4:
+              static:
+                ip: 10.0.0.1
+                bitmask: 24
+        - name: GigabitEthernet0/1
+          enabled: True
+          interface_name: OUT
+          security_zone: outside
+          addresses:
+            ipv4:
+              static:
+                ip: 100.64.0.200
+                bitmask: 24
+      routing:
+        static:
+          - name: hq_default_route
+            networks: any-ipv4
+            gateway: hq-default-gateway
+            interface: GigabitEthernet0/1
+            metric: 1
+      nat_policy: NAT Policy
