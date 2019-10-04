@@ -12,25 +12,40 @@ class AccessPolicies(APIClassTemplate):
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/policy/accesspolicies'
     REQUIRED_FOR_POST = ['name']
-    DEFAULT_ACTION_OPTIONS = ['BLOCK', 'NETWORK_DISCOVERY', 'IPS']  # Not implemented yet.
+    REQUIRED_FOR_PUT = ['id', 'defaultAction']
+    DEFAULT_ACTION_OPTIONS = ['BLOCK', 'TRUST', 'PERMIT', 'NETWORK_DISCOVERY', 'INHERIT_FROM_PARENT']
     FILTER_BY_NAME = True
+
+    @property
+    def defaultAction(self):
+        return {'action': self._defaultAction}
+
+    @defaultAction.setter
+    def defaultAction(self, action):
+        if action in self.DEFAULT_ACTION_OPTIONS:
+            self._defaultAction = action
+        else:
+            logging.error(f'action, {action}, is not a valid option.  Choose from {self.DEFAULT_ACTION_OPTIONS}.')
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for AccessPolicies class.")
         self.parse_kwargs(**kwargs)
+        self._defaultAction = None
+        self.defaultAction = 'BLOCK'
 
-    def parse_kwargs(self, **kwargs):
-        super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for AccessPolicies class.")
-        if 'defaultAction' in kwargs:
-            self.defaultAction = kwargs['defaultAction']
-        else:
-            self.defaultAction = {'action': 'BLOCK'}
+    def format_data(self):
+        json_data = super().format_data()
+        logging.debug("In format_data() for AccessPolicies class.")
+        json_data['defaultAction'] = self.defaultAction
+        return json_data
 
-    def put(self, **kwargs):
-        logging.info('The put() method for the AccessPolicies() class can work but I need to write a '
-                     'DefaultAction() class and accommodate for such before "putting".')
+    def put(self):
+        logging.info('PUT method for API for AccessPolicies not supported.')
+        pass
+
+    def delete(self):
+        logging.info('DELETE method for API for AccessPolicies not supported.')
         pass
 
 

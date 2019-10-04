@@ -15,6 +15,7 @@ password = 'Admin123'
 autodeploy = False
 logname = 'TestingUserScript.log'
 pagelimit = 500
+debug = False
 
 
 def main():
@@ -24,12 +25,14 @@ def main():
                     autodeploy=autodeploy,
                     limit=pagelimit,
                     file_logging=logname,
+                    debug=debug,
                     ) as fmc1:
         logging.info('# ### Mega Test Start!!! ### #')
         unit_tests.test__fmc_version(fmc=fmc1)
 
         '''
         # Working Tests
+        unit_tests.test__vlan_group_tag(fmc=fmc1)
         unit_tests.test__deployment_requests(fmc=fmc1)
         unit_tests.test__audit_records(fmc=fmc1)
         unit_tests.test__deployable_devices(fmc=fmc1)
@@ -47,7 +50,6 @@ def main():
         unit_tests.test__filepolicies(fmc=fmc1)
         unit_tests.test__continent(fmc=fmc1)
         unit_tests.test__dns_servers_group(fmc=fmc1)
-        unit_tests.test__vlan_group_tag(fmc=fmc1)
         unit_tests.test__url_group(fmc=fmc1)
         unit_tests.test__network_group(fmc=fmc1)
         unit_tests.test__ip_addresses(fmc=fmc1)

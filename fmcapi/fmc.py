@@ -66,8 +66,8 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         :param debug (bool): True to enable debug logging, default is False
         :param limit (int): Sets up max page of data to gather per "page".
         """
-
-        if debug:
+        self.debug = debug
+        if self.debug:
             logging_level = 'DEBUG'
         root_logger = logging.getLogger('')
         if logging_level.upper() == 'DEBUG':
@@ -139,8 +139,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             tmp = DeploymentRequests(fmc=self)
             tmp.post()
         else:
-            logging.info("Auto deploy changes set to False.  "
-                         "Use the Deploy button in FMC to push changes to FTDs.\n\n")
+            logging.info("Auto deploy changes set to False.  Use the Deploy button in FMC to push changes to FTDs.")
 
     def build_urls(self):
         """
@@ -173,6 +172,8 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         status_code = 429
         response = None
         json_response = None
+        logging.debug(f"Being sent to FMC's API:\n\tHEADERS={headers}\n\tURL={url}\n\tMETHOD={method}\n\t"
+                      f"MORE_ITEMS={more_items}\n\tJSON_DATA={json_data}")
         try:
             while status_code == 429:
                 if method == 'get':
@@ -186,6 +187,14 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                 else:
                     logging.error("No request method given.  Returning nothing.")
                     return
+                if self.debug:
+                    debug_msg = ["Response from FMC's API:"]
+                    for response_var in dir(response):
+                        if '__' not in response_var:
+                            tmp_var = getattr(response, response_var)
+                            debug_msg.append(f'\n\t{response_var}={tmp_var}')
+                    logging.debug("".join(debug_msg))
+
                 status_code = response.status_code
                 if status_code == 429:
                     logging.warning(f"Too many connections to the FMC.  Waiting {self.TOO_MANY_CONNECTIONS_TIMEOUT} "

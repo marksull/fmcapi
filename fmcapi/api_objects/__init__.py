@@ -12,7 +12,6 @@ from .deployment_services import DeploymentRequests
 from .device_ha_pair_services import FTDDeviceHAPairs
 from .device_ha_pair_services.ftddevicehapairs import DeviceHAPairs
 
-
 from .device_group_services import DeviceGroupRecords
 from .device_group_services import DeviceGroups
 
@@ -117,18 +116,21 @@ from .policy_services.accessrules import AccessRules
 from .policy_services.accessrules import ACPRule
 from .policy_services.accessrules import Bulk
 from .policy_services.autonatrules import AutoNatRules
+from .policy_services.defaultactions import DefaultActions
+from .policy_services.endpoints import Endpoints
 from .policy_services.filepolicies import FilePolicies
 from .policy_services.ftdnatpolicies import FTDNatPolicies
 from .policy_services.ftdnatpolicies import FTDNatPolicy
+from .policy_services.ftds2svpns import FTDS2SVPNs
 from .policy_services.hitcounts import HitCounts
 from .policy_services.hitcounts import HitCount
+from .policy_services.ikesettings import IKESettings
 from .policy_services.intrusionpolicies import IntrusionPolicies
 from .policy_services.intrusionpolicies import IntrusionPolicy
 from .policy_services.manualnatrules import ManualNatRules
 from .policy_services.natrules import NatRules
 from .policy_services.prefilterpolicies import PreFilterPolicies
 from .policy_services.prefilterpolicies import PreFilterPolicy
-from .policy_services.defaultactions import DefaultActions
 
 from .policy_assignment_services.policyassignments import PolicyAssignments
 
@@ -145,6 +147,9 @@ from .update_packages.upgradepackage import Upgrades
 logging.debug("In the api_objects __init__.py file.")
 
 __all__ = [
+    'Endpoints',
+    'FTDS2SVPNs',
+    'IKESettings',
     'DeploymentRequests',
     'DeployableDevices',
     'ServerVersion',
