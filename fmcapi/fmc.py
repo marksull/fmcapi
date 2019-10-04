@@ -139,8 +139,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             tmp = DeploymentRequests(fmc=self)
             tmp.post()
         else:
-            logging.info("Auto deploy changes set to False.  "
-                         "Use the Deploy button in FMC to push changes to FTDs.\n\n")
+            logging.info("Auto deploy changes set to False.  Use the Deploy button in FMC to push changes to FTDs.")
 
     def build_urls(self):
         """
@@ -163,6 +162,8 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         :return:
         """
         logging.debug("In the FMC send_to_api() class method.")
+        logging.debug(f"Being sent to FMC's API:\n\tHEADERS={headers}\n\tURL={url}\n\tMETHOD={method}\n\t"
+                      f"MORE_ITEMS={more_items}\n\tJSON_DATA={json_data}")
 
         if not more_items:
             self.more_items = []
@@ -186,6 +187,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                 else:
                     logging.error("No request method given.  Returning nothing.")
                     return
+                logging.debug(f"Response from FMC's API:\n\tRESPONSE={response}")
                 status_code = response.status_code
                 if status_code == 429:
                     logging.warning(f"Too many connections to the FMC.  Waiting {self.TOO_MANY_CONNECTIONS_TIMEOUT} "
