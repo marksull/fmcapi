@@ -30,7 +30,7 @@ class AccessPolicies(APIClassTemplate):
     def defaultAction(self):
         return self._defaultAction
 
-    @property.setter
+    @defaultAction.setter
     def defaultAction(self, action):
         self._defaultAction = {'action': action}
 
