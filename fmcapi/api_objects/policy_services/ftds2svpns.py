@@ -1,6 +1,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
+
 
 class FTDS2SVPNs(APIClassTemplate):
     """
@@ -8,7 +8,9 @@ class FTDS2SVPNs(APIClassTemplate):
     """
 
     VALID_JSON_DATA = ['id', 'name', 'type', 'ipsecSettings', 'endpoints', 'ikeSettings',
-                       'advancedSettings', 'description', 'ikeV2Enabled', 'ikeV1Enabled', 'topologyType', 'version']
+                       'advancedSettings', 'description', 'ikeV2Enabled', 'ikeV1Enabled',
+                       'topologyType', 'version',
+                       ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     FIRST_SUPPORTED_FMC_VERSION = '6.3'
     URL_SUFFIX = '/policy/ftds2svpns'

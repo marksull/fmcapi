@@ -5,13 +5,13 @@ from fmcapi.api_objects.object_services.ikev2policies import IKEv2Policies
 from fmcapi.api_objects.object_services.certenrollments import CertEnrollments
 import logging
 
+
 class IKESettings(APIClassTemplate):
 	"""
 	The IKESettings Object in the FMC.
 	"""
 
-	VALID_JSON_DATA = ['id', 'name', 'type', 'ikeV1Settings', 'ikeV2Settings', 'description', 'version'
-	                   ]
+	VALID_JSON_DATA = ['id', 'name', 'type', 'ikeV1Settings', 'ikeV2Settings', 'description', 'version']
 	VALID_FOR_KWARGS = VALID_JSON_DATA + []
 	FIRST_SUPPORTED_FMC_VERSION = '6.3'
 	PREFIX_URL = '/policy/ftds2svpns'
@@ -23,10 +23,6 @@ class IKESettings(APIClassTemplate):
 		self.parse_kwargs(**kwargs)
 		self.type = "IKESetting"
 
-	def parse_kwargs(self, **kwargs):
-	    super().parse_kwargs(**kwargs)
-	    logging.debug("In parse_kwargs() for IKESettings class.")
-
 	def vpn_policy(self, pol_name):
 		logging.debug("In vpn_policy() for IKESettings class.")
 		ftd_s2s = FTDS2SVPNs(fmc=self.fmc)
@@ -36,18 +32,18 @@ class IKESettings(APIClassTemplate):
 			self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.vpn_id}/ikesettings'
 			self.vpn_added_to_url = True
 		else:
-		    logging.warning(f'FTD S2S VPN Policy "{name}" not found.  Cannot set up IKESettings for FTDS2SVPNs Policy.')
+			logging.warning(f'FTD S2S VPN Policy "{name}" not found.  Cannot set up IKESettings for FTDS2SVPNs Policy.')
 
 	def ike_policy(self, pol_name, version=1):
 		# ikev1 and ikv2 policy names can overlap
 		logging.debug("In ike_policy() for IKESettings class.")
+		pol1 = None
 		if version == 1:
 			pol1 = IKEv1Policies(fmc=self.fmc)
 		elif version == 2:
 			pol1 = IKEv2Policies(fmc=self.fmc)
 		else:
-			logging.warning(
-			    "Invalid version type specified.  Must be between 1-2")
+			logging.warning("Invalid version type specified.  Must be between 1-2")
 		pol1.get(name=pol_name)
 
 		if 'id' in pol1.__dict__ and version == 1:
