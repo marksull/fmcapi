@@ -23,6 +23,7 @@ def main():
 
         # Create an ACP
         acp = fmcapi.AccessPolicies(fmc=fmc1, name='ACP Policy')
+        acp.defaultAction = 'BLOCK'
         # I intentially put a "space" in the ACP name to show that fmcapi will "fix" that for you.
         acp.post()
 

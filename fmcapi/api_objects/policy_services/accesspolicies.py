@@ -12,6 +12,7 @@ class AccessPolicies(APIClassTemplate):
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = '/policy/accesspolicies'
     REQUIRED_FOR_POST = ['name']
+    REQUIRED_FOR_PUT = ['id', 'defaultAction']
     DEFAULT_ACTION_OPTIONS = ['BLOCK', 'NETWORK_DISCOVERY', 'IPS']  # Not implemented yet.
     FILTER_BY_NAME = True
 
@@ -19,19 +20,19 @@ class AccessPolicies(APIClassTemplate):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for AccessPolicies class.")
         self.parse_kwargs(**kwargs)
+        self._defaultAction = {'action': 'BLOCK'}
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for AccessPolicies class.")
-        if 'defaultAction' in kwargs:
-            self.defaultAction = kwargs['defaultAction']
-        else:
-            self.defaultAction = {'action': 'BLOCK'}
 
-    def put(self, **kwargs):
-        logging.info('The put() method for the AccessPolicies() class can work but I need to write a '
-                     'DefaultAction() class and accommodate for such before "putting".')
-        pass
+    @property
+    def defaultAction(self):
+        return self._defaultAction
+
+    @property.setter
+    def defaultAction(self, action):
+        self._defaultAction = {'action': action}
 
 
 class AccessControlPolicy(AccessPolicies):
