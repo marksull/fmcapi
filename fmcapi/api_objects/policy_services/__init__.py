@@ -5,11 +5,15 @@ from .accessrules import AccessRules
 from .accessrules import ACPRule
 from .accessrules import Bulk
 from .autonatrules import AutoNatRules
+from .defaultactions import DefaultActions
+from .endpoints import Endpoints
 from .filepolicies import FilePolicies
 from .ftdnatpolicies import FTDNatPolicies
 from .ftdnatpolicies import FTDNatPolicy
+from .ftds2svpns import FTDS2SVPNs
 from .hitcounts import HitCounts
 from .hitcounts import HitCount
+from .ikesettings import IKESettings
 from .intrusionpolicies import IntrusionPolicies
 from .intrusionpolicies import IntrusionPolicy
 from .manualnatrules import ManualNatRules
@@ -21,6 +25,9 @@ from .defaultactions import DefaultActions
 logging.debug("In the object_services __init__.py file.")
 
 __all__ = [
+    'Endpoints',
+    'FTDS2SVPNs',
+    'IKESettings',
     'AccessPolicies',
     'AccessControlPolicy',
     'AccessRules',
@@ -38,5 +45,5 @@ __all__ = [
     'PreFilterPolicy',
     'HitCounts',
     'HitCount',
-    'DefaultActions'
+    'DefaultActions',
 ]
