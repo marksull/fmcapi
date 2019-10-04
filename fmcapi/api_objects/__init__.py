@@ -12,7 +12,6 @@ from .deployment_services import DeploymentRequests
 from .device_ha_pair_services import FTDDeviceHAPairs
 from .device_ha_pair_services.ftddevicehapairs import DeviceHAPairs
 
-
 from .device_group_services import DeviceGroupRecords
 from .device_group_services import DeviceGroups
 
