@@ -1,4 +1,6 @@
 ---
+version: 1
+
 fmc:
   host: 10.0.0.10
   username: apiadmin
@@ -29,11 +31,12 @@ networks:
 access_policies:
   - name: ACP Policy
     default_action: BLOCK
-    access_rules:
+    rules:
       - name: Permit HQ LAN
         log_begin: True
         log_end: True
         action: ALLOW
+        enabled: True
         source_security_zones:
           - name: inside
         destination_security_zones:
@@ -45,19 +48,20 @@ access_policies:
 
 nat_policies:
   - name: NAT Policy
-    auto_nat_rules:
-      - nat_type: DYNAMIC
-        interface_in_translated_network: True
-        original_network: all-lans
-        source_interface: inside
-        destination_interface: outside
-    manual_nat_rules:
-      - nat_type: STATIC
-        original_source: hq_fmc
-        translated_source: fmc_public_ip
-        source_interface: inside
-        destination_interface: outside
-        enabled: True
+    rules:
+      auto:
+        - nat_type: DYNAMIC
+          interface_in_translated_network: True
+          original_network: all-lans
+          source_interface: inside
+          destination_interface: outside
+      manual:
+        - nat_type: STATIC
+          original_source: hq_fmc
+          translated_source: fmc_public_ip
+          source_interface: inside
+          destination_interface: outside
+          enabled: True
 
 device_records:
   - hostname: 10.0.0.254
