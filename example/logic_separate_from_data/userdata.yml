@@ -8,6 +8,7 @@ fmc:
   autodeploy: True
   file_logging: fmcapi.log
   limit: 2000
+  debug: True
 
 security_zones:
   - name: inside
@@ -100,7 +101,8 @@ device_records:
         static:
           ipv4:
             - name: hq_default_route
-              networks: any-ipv4
+              networks:
+                - name: any-ipv4
               gateway: hq-default-gateway
               interface: GigabitEthernet0/1
               metric: 1
