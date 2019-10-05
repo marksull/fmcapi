@@ -48,16 +48,16 @@ access_policies:
           - name: any-ipv4
 
 nat_policies:
-  - name: NAT Policy
+  - name: NAT Policy1
     rules:
-      auto:
-        - nat_type: DYNAMIC
+        - rule_type: 'auto'
+          nat_type: DYNAMIC
           interface_in_translated_network: True
           original_network: all-lans
           source_interface: inside
           destination_interface: outside
-      manual:
-        - nat_type: STATIC
+        - rule_type: 'manual'
+          nat_type: STATIC
           original_source: hq_fmc
           translated_source: fmc_public_ip
           source_interface: inside

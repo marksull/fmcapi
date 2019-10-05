@@ -101,45 +101,41 @@ def create_nat_policies(fmc, nat_list):
     for natp in nat_list:
         policy = fmcapi.FTDNatPolicies(fmc=fmc, name=natp['name'])
         policy.post()
-        print("Sleeping for 10 seconds to see if this solves my problem.")
-        time.sleep(10)
 
         # Build nat_rules associated with this nat policy.
         if 'rules' in natp:
-            print("Am I here?")  # FIXME:  We don't ger here.  I don't know why yet.
-            for rule_type in natp['rules']:
-                if 'auto' in rule_type:
-                    autorule = rule_type['auto']
-                    autonat = fmcapi.AutoNatRules(fmc=fmc)
-                    if 'nat_type' in autorule:
-                        autonat.natType = autorule['nat_type']
-                    if 'interface_in_translated_network' in autorule:
-                        autonat.interfaceInTranslatedNetwork = autorule['interface_in_translated_network']
-                    if 'original_network' in autorule:
-                        autonat.original_network(autorule['original_network'])
-                    if 'source_interface' in autorule:
-                        autonat.source_intf(name=autorule['source_interface'])
-                    if 'destination_interface' in autorule:
-                        autonat.destination_intf(name=autorule['destination_interface'])
-                    autonat.nat_policy(name=natp['name'])
-                    autonat.post()
-                elif 'manual' in rule_type:
-                    manualrule = rule_type['manual']
-                    manualnat = fmcapi.ManualNatRules(fmc=fmc)
-                    if 'nat_type' in manualrule:
-                        manualnat.natType = manualrule['nat_type']
-                    if 'original_source' in manualrule:
-                        manualnat.original_source(manualrule['original_source'])
-                    if 'translated_source' in manualrule:
-                        manualnat.translated_source(manualrule['translated_source'])
-                    if 'source_interface' in manualrule:
-                        manualnat.source_intf(name=manualrule['source_interface'])
-                    if 'destination_interface' in manualrule:
-                        manualnat.destination_intf(name=manualrule['destination_interface'])
-                    if 'enabled' in manualrule:
-                        manualnat.enabled = manualrule['enabled']
-                    manualnat.nat_policy(name=natp['name'])
-                    manualnat.post()
+            for this_rule in natp['rules']:
+                if 'rule_type' in this_rule:
+                    if this_rule['rule_type'] == 'auto':
+                        autonat = fmcapi.AutoNatRules(fmc=fmc)
+                        if 'nat_type' in this_rule:
+                            autonat.natType = this_rule['nat_type']
+                        if 'interface_in_translated_network' in this_rule:
+                            autonat.interfaceInTranslatedNetwork = this_rule['interface_in_translated_network']
+                        if 'original_network' in this_rule:
+                            autonat.original_network(this_rule['original_network'])
+                        if 'source_interface' in this_rule:
+                            autonat.source_intf(name=this_rule['source_interface'])
+                        if 'destination_interface' in this_rule:
+                            autonat.destination_intf(name=this_rule['destination_interface'])
+                        autonat.nat_policy(name=natp['name'])
+                        autonat.post()
+                    elif this_rule['rule_type'] == 'manual':
+                        manualnat = fmcapi.ManualNatRules(fmc=fmc)
+                        if 'nat_type' in this_rule:
+                            manualnat.natType = this_rule['nat_type']
+                        if 'original_source' in this_rule:
+                            manualnat.original_source(this_rule['original_source'])
+                        if 'translated_source' in this_rule:
+                            manualnat.translated_source(this_rule['translated_source'])
+                        if 'source_interface' in this_rule:
+                            manualnat.source_intf(name=this_rule['source_interface'])
+                        if 'destination_interface' in this_rule:
+                            manualnat.destination_intf(name=this_rule['destination_interface'])
+                        if 'enabled' in this_rule:
+                            manualnat.enabled = this_rule['enabled']
+                        manualnat.nat_policy(name=natp['name'])
+                        manualnat.post()
 
 
 def create_device_records(fmc, device_list):
@@ -161,6 +157,7 @@ def create_device_records(fmc, device_list):
         # Push to FMC to start device registration.
         ftd.post(post_wait_time=dr['wait_for_post'])
 
+        #  Fixme: The YAML format is in a dict format.  We need to adjust the code below to match.
         # Time to configure interfaces.
         if 'interfaces' in dr:
             for interface_types in dr['interfaces']:
@@ -252,9 +249,10 @@ def program_fmc(data_vars):
                     create_device_records(fmc=fmc1, device_list=data_vars['device_records'])
                 else:
                     logging.info("'device_records' section not in YAML file.  Skipping.")
-        except:
+        except Exception as e:
             logging.error(f"Section 'fmc' does not have the right information (bad password?)"
                           f" to establish a connection to FMC:")
+            logging.error(f"Error is '{e}'")
     else:
         logging.warning(f"No 'fmc' section found in {YAML_FILE}")
 
