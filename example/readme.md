@@ -11,13 +11,13 @@ to the FMC some other way (maybe the Ansible FTD modules?).
 When we first started this example we would program the python script (the logic) and reference the data directly in the script.
 You can find that code in the 'mixed_logic_and_data' directory.
 Pros:
-*  Data added/gathered earlier in the python script can be referenced (less data duplication).
+*  Data added/gathered earlier in the python script can be referenced (less data duplication via reference).
 *  The script can be "read" and you can pretty much see when/where data is being used.
 Cons:
 *  Changing data can be tricky.  You have to "read" the code to find the places that need updated.
 *  Changing the logic of the code can be tricky as it is highly dependant (interwoven) with the data.
 *  Sharing the script with others exposes your data to them.
-*  Usually the code written is exclusive for the data provided.  This mean additional data probably needs more code.
+*  Usually the code written is exclusive for the data provided.  This means additional data probably needs more code.
 
 ### Separating logic and data
 The "new" way to write code is to separate the logic from the data.  This means importing a "data file" to be run against the code.
@@ -32,8 +32,7 @@ Cons:
 *  Data being referenced in different places could be required to be duplicated (YAML doesn't have a 'reference' ability).
 
 ## FTD at HQ
-We need to configure the FTD device at HQ prior to doing the branches because it is inline between the FMC and those 
-branch devices.
+We need to configure the FTD device at HQ prior to doing the branches because it is inline between the FMC and those branch devices.
 
 Using the hq-ftd.py script we will accomplish the following:
 * Creates ACP and associated ACP Rule.

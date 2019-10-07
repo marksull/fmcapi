@@ -6,7 +6,7 @@ fmc:
   username: apiadmin
   password: Admin123
   autodeploy: True
-  file_logging: fmcapi.log
+  file_logging: hq_deployment.log
   limit: 2000
   debug: True
 
@@ -48,16 +48,16 @@ access_policies:
           - name: any-ipv4
 
 nat_policies:
-  - name: NAT Policy1
+  - name: NAT Policy
     rules:
-        - rule_type: 'auto'
-          nat_type: DYNAMIC
+      auto:
+        - nat_type: DYNAMIC
           interface_in_translated_network: True
           original_network: all-lans
           source_interface: inside
           destination_interface: outside
-        - rule_type: 'manual'
-          nat_type: STATIC
+      manual:
+        - nat_type: STATIC
           original_source: hq_fmc
           translated_source: fmc_public_ip
           source_interface: inside
@@ -97,13 +97,13 @@ device_records:
               static:
                 ip: 100.64.0.200
                 bitmask: 24
-      routing:
-        static:
-          ipv4:
-            - name: hq_default_route
-              networks:
-                - name: any-ipv4
-              gateway: hq-default-gateway
-              interface: GigabitEthernet0/1
-              metric: 1
-      nat_policy: NAT Policy
+    routing:
+      static:
+        ipv4:
+          - name: hq_default_route
+            networks:
+              - name: any-ipv4
+            gateway: hq-default-gateway
+            interface_name: OUT
+            metric: 1
+    nat_policy: NAT Policy

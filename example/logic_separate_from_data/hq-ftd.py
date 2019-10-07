@@ -5,7 +5,6 @@ import fmcapi
 import logging
 from ruamel.yaml import YAML
 from pathlib import Path
-import time
 
 # User Modifiable Data
 YAML_CONFIGS_DIR = '.'
@@ -104,38 +103,38 @@ def create_nat_policies(fmc, nat_list):
 
         # Build nat_rules associated with this nat policy.
         if 'rules' in natp:
-            for this_rule in natp['rules']:
-                if 'rule_type' in this_rule:
-                    if this_rule['rule_type'] == 'auto':
-                        autonat = fmcapi.AutoNatRules(fmc=fmc)
-                        if 'nat_type' in this_rule:
-                            autonat.natType = this_rule['nat_type']
-                        if 'interface_in_translated_network' in this_rule:
-                            autonat.interfaceInTranslatedNetwork = this_rule['interface_in_translated_network']
-                        if 'original_network' in this_rule:
-                            autonat.original_network(this_rule['original_network'])
-                        if 'source_interface' in this_rule:
-                            autonat.source_intf(name=this_rule['source_interface'])
-                        if 'destination_interface' in this_rule:
-                            autonat.destination_intf(name=this_rule['destination_interface'])
-                        autonat.nat_policy(name=natp['name'])
-                        autonat.post()
-                    elif this_rule['rule_type'] == 'manual':
-                        manualnat = fmcapi.ManualNatRules(fmc=fmc)
-                        if 'nat_type' in this_rule:
-                            manualnat.natType = this_rule['nat_type']
-                        if 'original_source' in this_rule:
-                            manualnat.original_source(this_rule['original_source'])
-                        if 'translated_source' in this_rule:
-                            manualnat.translated_source(this_rule['translated_source'])
-                        if 'source_interface' in this_rule:
-                            manualnat.source_intf(name=this_rule['source_interface'])
-                        if 'destination_interface' in this_rule:
-                            manualnat.destination_intf(name=this_rule['destination_interface'])
-                        if 'enabled' in this_rule:
-                            manualnat.enabled = this_rule['enabled']
-                        manualnat.nat_policy(name=natp['name'])
-                        manualnat.post()
+            if 'auto' in natp['rules']:
+                for this_rule in natp['rules']['auto']:
+                    autonat = fmcapi.AutoNatRules(fmc=fmc)
+                    if 'nat_type' in this_rule:
+                        autonat.natType = this_rule['nat_type']
+                    if 'interface_in_translated_network' in this_rule:
+                        autonat.interfaceInTranslatedNetwork = this_rule['interface_in_translated_network']
+                    if 'original_network' in this_rule:
+                        autonat.original_network(this_rule['original_network'])
+                    if 'source_interface' in this_rule:
+                        autonat.source_intf(name=this_rule['source_interface'])
+                    if 'destination_interface' in this_rule:
+                        autonat.destination_intf(name=this_rule['destination_interface'])
+                    autonat.nat_policy(name=natp['name'])
+                    autonat.post()
+            if 'manual' in natp['rules']:
+                for this_rule in natp['rules']['manual']:
+                    manualnat = fmcapi.ManualNatRules(fmc=fmc)
+                    if 'nat_type' in this_rule:
+                        manualnat.natType = this_rule['nat_type']
+                    if 'original_source' in this_rule:
+                        manualnat.original_source(this_rule['original_source'])
+                    if 'translated_source' in this_rule:
+                        manualnat.translated_source(this_rule['translated_source'])
+                    if 'source_interface' in this_rule:
+                        manualnat.source_intf(name=this_rule['source_interface'])
+                    if 'destination_interface' in this_rule:
+                        manualnat.destination_intf(name=this_rule['destination_interface'])
+                    if 'enabled' in this_rule:
+                        manualnat.enabled = this_rule['enabled']
+                    manualnat.nat_policy(name=natp['name'])
+                    manualnat.post()
 
 
 def create_device_records(fmc, device_list):
@@ -157,65 +156,57 @@ def create_device_records(fmc, device_list):
         # Push to FMC to start device registration.
         ftd.post(post_wait_time=dr['wait_for_post'])
 
-        #  Fixme: The YAML format is in a dict format.  We need to adjust the code below to match.
         # Time to configure interfaces.
         if 'interfaces' in dr:
-            for interface_types in dr['interfaces']:
-                if 'physical' in interface_types:
-                    for interface in interface_types['physical']:
-                        int1 = fmcapi.PhysicalInterfaces(fmc=fmc, device_name=dr['name'])
-                        if 'name ' in interface:
-                            int1.get(name=interface['name'])
-                        if 'enabled' in interface:
-                            int1.enabled = interface['enabled']
-                        if 'interface_name' in interface:
-                            int1.ifname = interface['interface_name']
-                        if 'security_zone' in interface:
-                            int1.sz(name=interface['security_zone'])
-                        if 'ipv4' in interface:
+            if 'physical' in dr['interfaces']:
+                for interface in dr['interfaces']['physical']:
+                    int1 = fmcapi.PhysicalInterfaces(fmc=fmc, device_name=dr['name'])
+                    if 'name' in interface:
+                        int1.get(name=interface['name'])
+                    if 'enabled' in interface:
+                        int1.enabled = interface['enabled']
+                    if 'interface_name' in interface:
+                        int1.ifname = interface['interface_name']
+                    if 'security_zone' in interface:
+                        int1.sz(name=interface['security_zone'])
+                    if 'addresses' in interface:
+                        if 'ipv4' in interface['addresses']:
                             if 'static' in interface['addresses']['ipv4']:
                                 int1.static(ipv4addr=interface['addresses']['ipv4']['static']['ip'],
                                             ipv4mask=interface['addresses']['ipv4']['static']['bitmask'])
                             elif 'dhcp' in interface['addresses']['ipv4']:
                                 int1.dhcp(enableDefault=interface['addresses']['ipv4']['dhcp']['enable_default'],
                                           routeMetric=interface['addresses']['ipv4']['dhcp']['route_metric'])
-                        if 'ipv6' in interface:
+                        if 'ipv6' in interface['addresses']:
                             pass
-                        int1.put()
-                elif 'blah' in interface_types:
-                    pass
+                    int1.put()
 
         # Any routing related to this device.
         if 'routing' in dr:
-            for route_types in dr['routing']:
-                if 'static' in route_types:
-                    if 'ipv4' in route_types['static']:
-                        for route in route_types['static']['ipv4']:
-                            rt = fmcapi.IPv4StaticRoutes(fmc=fmc)
-                            if 'name' in route:
-                                rt.name = route['name']
-                            if 'device_name' in route:
-                                rt.device(device_name=route['device_name'])
-                            if 'networks' in route:
-                                for network in route['networks']:
-                                    if 'name' in network:
-                                        rt.networks(action='add', networks=network['name'])
-                            if 'gateway' in route:
-                                rt.gw(name=route['gateway'])
-                            if 'interface' in route:
-                                rt.interfaceName = route['interface']
-                            if 'metric' in route:
-                                rt.metricValue = route['metric']
-                            rt.post()
-                    if 'ipv6' in route_types['static']:
-                        pass
-                elif 'blah' in route_types:
+            if 'static' in dr['routing']:
+                if 'ipv4' in dr['routing']['static']:
+                    for route in dr['routing']['static']['ipv4']:
+                        rt = fmcapi.IPv4StaticRoutes(fmc=fmc, device_name=dr['name'])
+                        if 'name' in route:
+                            rt.name = route['name']
+                        if 'networks' in route:
+                            for network in route['networks']:
+                                if 'name' in network:
+                                    rt.networks(action='add', networks=[network['name']])
+                        if 'gateway' in route:
+                            rt.gw(name=route['gateway'])
+                        if 'interface_name' in route:
+                            rt.interfaceName = route['interface_name']
+                        if 'metric' in route:
+                            rt.metricValue = route['metric']
+                        rt.post()
+                if 'ipv6' in dr['routing']['static']:
                     pass
 
         # Any NAT Policy assigned to this device.
         if 'nat_policy' in dr:
             natp = fmcapi.PolicyAssignments(fmc=fmc)
-            natp.ftd_natpolicy(name=dr['nat_policy'], devices=[{'name': dr['name'], 'type': 'device'}])
+            natp.ftd_natpolicy(name=dr['nat_policy'], devices=[{'name': dr['name'], 'type': dr['type']}])
             natp.post()
 
 
