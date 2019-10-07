@@ -8,7 +8,7 @@ fmc:
   autodeploy: True
   file_logging: hq_deployment.log
   limit: 2000
-  debug: True
+  debug: False
 
 security_zones:
   - name: inside
