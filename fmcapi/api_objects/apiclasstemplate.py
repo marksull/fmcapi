@@ -64,6 +64,7 @@ class APIClassTemplate(object):
             return True
         for item in self.REQUIRED_FOR_GET:
             if item not in self.__dict__:
+                logging.info(f'Missing value "{item}" for GET request.')
                 return False
         return True
 
@@ -137,6 +138,7 @@ class APIClassTemplate(object):
         logging.debug("In valid_for_post() for APIClassTemplate class.")
         for item in self.REQUIRED_FOR_POST:
             if item not in self.__dict__:
+                logging.info(f'Missing value "{item}" for POST request.')
                 return False
         return True
 
@@ -174,6 +176,7 @@ class APIClassTemplate(object):
         logging.debug("In valid_for_put() for APIClassTemplate class.")
         for item in self.REQUIRED_FOR_PUT:
             if item not in self.__dict__:
+                logging.info(f'Missing value "{item}" for PUT request.')
                 return False
         return True
 
@@ -206,6 +209,7 @@ class APIClassTemplate(object):
         logging.debug("In valid_for_delete() for APIClassTemplate class.")
         for item in self.REQUIRED_FOR_DELETE:
             if item not in self.__dict__:
+                logging.info(f'Missing value "{item}" for DELETE request.')
                 return False
         return True
 
