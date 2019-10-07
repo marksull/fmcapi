@@ -4,6 +4,7 @@ from fmcapi.api_objects.object_services.fqdns import FQDNS
 from fmcapi.api_objects.object_services.hosts import Hosts
 from fmcapi.api_objects.object_services.networks import Networks
 from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
+from fmcapi.api_objects.object_services.extendedaccesslist import ExtendedAccessList
 from fmcapi.api_objects.device_ha_pair_services.ftddevicehapairs import FTDDeviceHAPairs
 from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 from fmcapi.api_objects.device_services.etherchannelinterfaces import EtherchannelInterfaces
@@ -20,7 +21,7 @@ class Endpoints(APIClassTemplate):
 
     VALID_JSON_DATA = ['id', 'name', 'type', 'device', 'interface', 'nattedInterfaceAddress',
                        'protectedNetworks', 'ipv6InterfaceAddress', 'connectionType',
-                       'peerType', 'extranet', 'extranetInfo', 'description', 'version',
+                       'peerType', 'extranet', 'extranetInfo', 'description', 'version'
                        ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     FIRST_SUPPORTED_FMC_VERSION = '6.3'
@@ -35,6 +36,10 @@ class Endpoints(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.type = "EndPoint"
 
+    def parse_kwargs(self, **kwargs):
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for Endpoints class.")
+
     def vpn_policy(self, pol_name):
         logging.debug("In vpn_policy() for Endpoints class.")
         ftd_s2s = FTDS2SVPNs(fmc=self.fmc)
@@ -45,8 +50,7 @@ class Endpoints(APIClassTemplate):
             self.vpn_added_to_url = True
             self.topology_type = ftd_s2s.topologyType
         else:
-            logging.warning(f'FTD S2S VPN Policy "{pol_name}" not found.  '
-                            f'Cannot set up Endpoints for FTDS2SVPNs Policy.')
+            logging.warning(f'FTD S2S VPN Policy "{name}" not found.  Cannot set up Endpoints for FTDS2SVPNs Policy.')
 
     def endpoint(self, action, device_name):
         logging.debug("In endpoint() for Endpoints class.")
@@ -109,8 +113,9 @@ class Endpoints(APIClassTemplate):
         host_json = Hosts(fmc=self.fmc).get()
         net_json = Networks(fmc=self.fmc).get()
         netg_json = NetworkGroups(fmc=self.fmc).get()
+        eacl_json = ExtendedAccessList(fmc=self.fmc).get()
         items = fqdns_json.get('items', []) + host_json.get('items', []) + \
-            net_json.get('items', []) + netg_json.get('items', [])
+            net_json.get('items', []) + netg_json.get('items', []) + eacl_json.get('items', [])
         new_network = None
 
         if action == 'add':
@@ -120,8 +125,7 @@ class Endpoints(APIClassTemplate):
                         new_network = {'id': item['id'], 'type': item['type']}
                         break
                 if new_network is None:
-                    logging.warning(f'FQDNS/Host/Network/Network Group"{name}" is not found in FMC.'
-                                    f'  Cannot add to protectedNetworks.')
+                    logging.warning(f'FQDNS/Host/Network/Network Group"{name}" is not found in FMC.  Cannot add to protectedNetworks.')
                 else:
                     if 'protectedNetworks' in self.__dict__:
                         self.protectedNetworks['networks'].append(new_network)
@@ -132,7 +136,8 @@ class Endpoints(APIClassTemplate):
         elif action == 'remove':
             if 'protectedNetworks' in self.__dict__:
                 for name in names:
-                    self.protectedNetworks = list(filter(lambda i: i["name"] != name, self.protectedNetworks))
+                    self.protectedNetworks = list(
+                        filter(lambda i: i["name"] != name, self.protectedNetworks))
             else:
                 logging.warning(
                     'protectedNetworks has no members.  Cannot remove network.')
