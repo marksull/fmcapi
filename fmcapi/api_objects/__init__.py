@@ -116,6 +116,7 @@ from .policy_services.accessrules import AccessRules
 from .policy_services.accessrules import ACPRule
 from .policy_services.accessrules import Bulk
 from .policy_services.autonatrules import AutoNatRules
+from .policy_services.advancedsettings import AdvancedSettings
 from .policy_services.defaultactions import DefaultActions
 from .policy_services.endpoints import Endpoints
 from .policy_services.filepolicies import FilePolicies
@@ -127,6 +128,7 @@ from .policy_services.hitcounts import HitCount
 from .policy_services.ikesettings import IKESettings
 from .policy_services.intrusionpolicies import IntrusionPolicies
 from .policy_services.intrusionpolicies import IntrusionPolicy
+from .policy_services.ipsecsettings import IPSecSettings
 from .policy_services.manualnatrules import ManualNatRules
 from .policy_services.natrules import NatRules
 from .policy_services.prefilterpolicies import PreFilterPolicies
@@ -147,6 +149,8 @@ from .update_packages.upgradepackage import Upgrades
 logging.debug("In the api_objects __init__.py file.")
 
 __all__ = [
+    'AdvancedSettings',
+    'IPSecSettings',
     'Endpoints',
     'FTDS2SVPNs',
     'IKESettings',

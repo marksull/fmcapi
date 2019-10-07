@@ -32,7 +32,7 @@ class IKESettings(APIClassTemplate):
 			self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.vpn_id}/ikesettings'
 			self.vpn_added_to_url = True
 		else:
-			logging.warning(f'FTD S2S VPN Policy "{name}" not found.  Cannot set up IKESettings for FTDS2SVPNs Policy.')
+			logging.warning(f'FTD S2S VPN Policy "{pol_name}" not found.  Cannot set up IKESettings for FTDS2SVPNs Policy.')
 
 	def ike_policy(self, pol_name, version=1):
 		# ikev1 and ikv2 policy names can overlap
@@ -47,9 +47,9 @@ class IKESettings(APIClassTemplate):
 		pol1.get(name=pol_name)
 
 		if 'id' in pol1.__dict__ and version == 1:
-			self.ikeV1Settings['policy'] = {'id': pol1.id, 'name': pol1.name,'type': pol1.type}
+			self.ikeV1Settings['policy'] = {'id': pol1.id, 'name': pol1.name, 'type': pol1.type}
 		elif 'id' in pol1.__dict__ and version == 2:
-			self.ikeV2Settings['policy'] = {'id': pol1.id, 'name': pol1.name,'type': pol1.type}
+			self.ikeV2Settings['policy'] = {'id': pol1.id, 'name': pol1.name, 'type': pol1.type}
 		else:
 			logging.warning(f'IKEv"{version}"Policy "{pol_name}" not found.  Cannot set up IKESettings Policy.')
 
