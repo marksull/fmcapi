@@ -59,9 +59,9 @@ class IKESettings(APIClassTemplate):
 		cert1.get(name=cert_name)
 		if 'id' in cert1.__dict__ and version == 1:
 			self.ikeV1Settings['authenticationType'] = "CERTIFICATE"
-			self.ikeV1Settings['certificateAuth'] = {'name': pol1['name'], 'id': pol1['id'], 'type': pol1['type']}
+			self.ikeV1Settings['certificateAuth'] = {'name': cert1.name, 'id': cert1.id, 'type': cert1.type}
 		elif 'id' in cert1.__dict__ and version == 2:
 			self.ikeV2Settings['authenticationType'] = "CERTIFICATE"
-			self.ikeV2Settings['certificateAuth'] = {'name': pol1['name'], 'id': pol1['id'], 'type': pol1['type']}
+			self.ikeV2Settings['certificateAuth'] = {'name': cert1.name, 'id': cert1.id, 'type': cert1.type}
 		else:
 			logging.warning(f'Certificate "{cert_name}" not found.  Cannot set up IKESettings Policy.')
