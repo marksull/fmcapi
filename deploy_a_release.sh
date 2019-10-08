@@ -2,7 +2,7 @@
 
 echo "Building a new release of fmcapi!"
 echo
-echo "Did you remember to run black???"
+echo "Did you remember to run black???  e.g.  `black fmcapi --diff --exclude \"venv|build\"`"
 echo
 
 echo "Clean up old build"
