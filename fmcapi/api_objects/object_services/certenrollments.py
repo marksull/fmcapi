@@ -8,9 +8,9 @@ class CertEnrollments(APIClassTemplate):
     The CertEnrollments Object in the FMC.
     """
 
-    VALID_JSON_DATA = ['id', 'name', 'type']
+    VALID_JSON_DATA = ["id", "name", "type"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
-    URL_SUFFIX = '/object/certenrollments'
+    URL_SUFFIX = "/object/certenrollments"
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
@@ -18,15 +18,15 @@ class CertEnrollments(APIClassTemplate):
         self.parse_kwargs(**kwargs)
 
     def post(self):
-        logging.info('POST method for API for CertEnrollments not supported.')
+        logging.info("POST method for API for CertEnrollments not supported.")
         pass
 
     def put(self):
-        logging.info('PUT method for API for CertEnrollments not supported.')
+        logging.info("PUT method for API for CertEnrollments not supported.")
         pass
 
     def delete(self):
-        logging.info('DELETE method for API for CertEnrollments not supported.')
+        logging.info("DELETE method for API for CertEnrollments not supported.")
         pass
 
 
@@ -35,5 +35,7 @@ class CertEnrollment(CertEnrollments):
 
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
-        warnings.warn("Deprecated: CertEnrollment() should be called via CertEnrollments().")
+        warnings.warn(
+            "Deprecated: CertEnrollment() should be called via CertEnrollments()."
+        )
         super().__init__(fmc, **kwargs)

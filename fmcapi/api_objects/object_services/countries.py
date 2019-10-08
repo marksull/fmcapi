@@ -8,27 +8,27 @@ class Countries(APIClassTemplate):
     The Countries Object in the FMC.
     """
 
-    VALID_JSON_DATA = ['id', 'name', 'iso2', 'iso3']
+    VALID_JSON_DATA = ["id", "name", "iso2", "iso3"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
-    URL_SUFFIX = '/object/countries'
+    URL_SUFFIX = "/object/countries"
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for Countries class.")
         self.parse_kwargs(**kwargs)
-        self.type = 'Country'
+        self.type = "Country"
 
     def post(self):
-        logging.info('POST method for API for Countries not supported.')
+        logging.info("POST method for API for Countries not supported.")
         pass
 
     def put(self):
-        logging.info('PUT method for API for Countries not supported.')
+        logging.info("PUT method for API for Countries not supported.")
         pass
 
     def delete(self):
-        logging.info('DELETE method for API for Countries not supported.')
+        logging.info("DELETE method for API for Countries not supported.")
         pass
 
 

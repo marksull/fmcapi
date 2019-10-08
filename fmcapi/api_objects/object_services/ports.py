@@ -7,7 +7,7 @@ class Ports(APIClassTemplate):
     The Ports Object in the FMC.
     """
 
-    URL_SUFFIX = '/object/ports'
+    URL_SUFFIX = "/object/ports"
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
@@ -15,13 +15,13 @@ class Ports(APIClassTemplate):
         self.parse_kwargs(**kwargs)
 
     def post(self):
-        logging.info('POST method for API for Ports not supported.')
+        logging.info("POST method for API for Ports not supported.")
         pass
 
     def put(self):
-        logging.info('PUT method for API for Ports not supported.')
+        logging.info("PUT method for API for Ports not supported.")
         pass
 
     def delete(self):
-        logging.info('DELETE method for API for Ports not supported.')
+        logging.info("DELETE method for API for Ports not supported.")
         pass
