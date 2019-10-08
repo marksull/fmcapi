@@ -1,5 +1,6 @@
 import fmcapi
 import time
+import logging
 
 
 def wait_for_task(fmc, task, wait_time=10):
