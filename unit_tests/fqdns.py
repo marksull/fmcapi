@@ -3,10 +3,10 @@ import fmcapi
 
 
 def test__fqdns(fmc):
-    logging.info('Test FQDNS.  Post, get, put, delete FQDNS Objects.')
+    logging.info("Test FQDNS.  Post, get, put, delete FQDNS Objects.")
 
     starttime = str(int(time.time()))
-    namer = f'_fmcapi_test_{starttime}'
+    namer = f"_fmcapi_test_{starttime}"
 
     obj1 = fmcapi.FQDNS(fmc=fmc)
     obj1.name = "_fqdns1" + namer
@@ -20,4 +20,4 @@ def test__fqdns(fmc):
 
     obj1.delete()
 
-    logging.info('FQDNS DNSServerGroups class done.\n')
+    logging.info("FQDNS DNSServerGroups class done.\n")

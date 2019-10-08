@@ -4,10 +4,12 @@ import time
 
 
 def test__subinterfaces(fmc):
-    logging.info('Test SubInterfaces.  get, post, put, delete SubInterfaces Objects. Requires registered device')
+    logging.info(
+        "Test SubInterfaces.  get, post, put, delete SubInterfaces Objects. Requires registered device"
+    )
 
     starttime = str(int(time.time()))
-    namer = f'_fmcapi_test_{starttime}'
+    namer = f"_fmcapi_test_{starttime}"
 
     sz1 = fmcapi.SecurityZones(fmc=fmc)
     sz1.name = "_sz1" + namer
@@ -19,8 +21,7 @@ def test__subinterfaces(fmc):
     time.sleep(1)
 
     sub1 = fmcapi.SubInterfaces(fmc=fmc, device_name="device_name")
-    sub1.p_interface(p_interface="GigabitEthernet0/3",
-                     device_name="device_name")
+    sub1.p_interface(p_interface="GigabitEthernet0/3", device_name="device_name")
     sub1.enabled = True
     sub1.ifname = "_sub1" + namer
     sub1.subIntfId = "300"
@@ -42,4 +43,4 @@ def test__subinterfaces(fmc):
     sz1.delete()
     sz2.delete()
 
-    logging.info('Testing SubInterfaces class done.\n')
+    logging.info("Testing SubInterfaces class done.\n")

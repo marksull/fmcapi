@@ -4,7 +4,9 @@ import time
 
 
 def test__phys_interfaces(fmc):
-    logging.info('Test PhysicalInterface.  get, put PhysicalInterface Objects. Requires registered device')
+    logging.info(
+        "Test PhysicalInterface.  get, put PhysicalInterface Objects. Requires registered device"
+    )
 
     sz1 = fmcapi.SecurityZones(fmc=fmc)
     sz1.name = "SZ-OUTSIDE1"
