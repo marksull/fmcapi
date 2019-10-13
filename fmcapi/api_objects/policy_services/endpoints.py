@@ -4,7 +4,6 @@ from fmcapi.api_objects.object_services.fqdns import FQDNS
 from fmcapi.api_objects.object_services.hosts import Hosts
 from fmcapi.api_objects.object_services.networks import Networks
 from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
-from fmcapi.api_objects.object_services.extendedaccesslist import ExtendedAccessList
 from fmcapi.api_objects.device_ha_pair_services.ftddevicehapairs import FTDDeviceHAPairs
 from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 from fmcapi.api_objects.device_services.etherchannelinterfaces import (

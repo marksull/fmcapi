@@ -61,6 +61,8 @@ from .staticroutes import test__staticroutes
 from .ipv4staticroutes import test__ipv4staticroutes
 from .ipv6staticroutes import test__ipv6staticroutes
 
+from .s2s_vpn import test__ftds2svpns
+
 logging.debug("In the unit-tests __init__.py file.")
 
 __all__ = [
