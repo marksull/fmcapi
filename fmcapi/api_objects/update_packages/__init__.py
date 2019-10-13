@@ -8,9 +8,9 @@ from .upgradepackage import Upgrades
 logging.debug("In the update_packages __init__.py file.")
 
 __all__ = [
-    'ListApplicableDevices',
-    'ApplicableDevices',
-    'UpgradePackages',
-    'UpgradePackage',
-    'Upgrades',
+    "ListApplicableDevices",
+    "ApplicableDevices",
+    "UpgradePackages",
+    "UpgradePackage",
+    "Upgrades",
 ]

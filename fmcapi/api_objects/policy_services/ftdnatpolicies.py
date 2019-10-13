@@ -8,9 +8,9 @@ class FTDNatPolicies(APIClassTemplate):
     The FTDNatPolicies Object in the FMC.
     """
 
-    VALID_JSON_DATA = ['id', 'name', 'type']
+    VALID_JSON_DATA = ["id", "name", "type"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
-    URL_SUFFIX = '/policy/ftdnatpolicies'
+    URL_SUFFIX = "/policy/ftdnatpolicies"
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 
     def __init__(self, fmc, **kwargs):
@@ -25,5 +25,7 @@ class FTDNatPolicy(FTDNatPolicies):
 
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
-        warnings.warn("Deprecated: FTDNatPolicy() should be called via FTDNatPolicies().")
+        warnings.warn(
+            "Deprecated: FTDNatPolicy() should be called via FTDNatPolicies()."
+        )
         super().__init__(fmc, **kwargs)

@@ -8,13 +8,26 @@ class SLAMonitors(APIClassTemplate):
     """
     The SLAMonitors Object in the FMC.
     """
-    VALID_JSON_DATA = ['id', 'name', 'type', 'timeout', 'threshold', 'frequency', 'slaId', 'dataSize', 'tos',
-                       'noOfPackets', 'monitorAddress', 'interfaceObjects', 'description'
-                       ]
+
+    VALID_JSON_DATA = [
+        "id",
+        "name",
+        "type",
+        "timeout",
+        "threshold",
+        "frequency",
+        "slaId",
+        "dataSize",
+        "tos",
+        "noOfPackets",
+        "monitorAddress",
+        "interfaceObjects",
+        "description",
+    ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
-    URL_SUFFIX = '/object/slamonitors'
-    REQUIRED_FOR_POST = ['name', 'slaId', 'monitorAddress', 'interfaceObjects', 'type']
-    REQUIRED_FOR_PUT = ['id', 'type']
+    URL_SUFFIX = "/object/slamonitors"
+    REQUIRED_FOR_POST = ["name", "slaId", "monitorAddress", "interfaceObjects", "type"]
+    REQUIRED_FOR_PUT = ["id", "type"]
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
@@ -29,15 +42,19 @@ class SLAMonitors(APIClassTemplate):
             # Supports passing list of str
             sz = SecurityZones(fmc=self.fmc)
             sz.get(name=name)
-            if 'id' in sz.__dict__:
-                zones.append({'name': sz.name, 'id': sz.id, 'type': sz.type})
+            if "id" in sz.__dict__:
+                zones.append({"name": sz.name, "id": sz.id, "type": sz.type})
             else:
-                logging.warning(f'Security Zone, "{name}", not found.  Cannot add to SLAMonitors.')
+                logging.warning(
+                    f'Security Zone, "{name}", not found.  Cannot add to SLAMonitors.'
+                )
         if len(zones) != 0:
             # Make sure we found at least one zone
             self.interfaceObjects = zones
         else:
-            logging.warning(f'No valid Security Zones found: "{names}".  Cannot add to SLAMonitosr.')
+            logging.warning(
+                f'No valid Security Zones found: "{names}".  Cannot add to SLAMonitosr.'
+            )
 
 
 class SLAMonitor(SLAMonitors):

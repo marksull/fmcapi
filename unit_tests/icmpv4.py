@@ -4,10 +4,10 @@ import time
 
 
 def test__icmpv4(fmc):
-    logging.info('Test ICMPv4Object.  Post, get, put, delete ICMPv4Object Objects.')
+    logging.info("Test ICMPv4Object.  Post, get, put, delete ICMPv4Object Objects.")
 
     starttime = str(int(time.time()))
-    namer = f'_fmcapi_test_{starttime}'
+    namer = f"_fmcapi_test_{starttime}"
 
     obj1 = fmcapi.ICMPv4Objects(fmc=fmc)
     obj1.name = "_icmpv4" + namer
@@ -21,4 +21,4 @@ def test__icmpv4(fmc):
 
     obj1.delete()
 
-    logging.info('ICMPv4Object class done.\n')
+    logging.info("ICMPv4Object class done.\n")

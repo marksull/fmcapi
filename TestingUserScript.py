@@ -9,28 +9,29 @@ import unit_tests
 
 # ### Set these variables to match your environment. ### #
 
-host = '10.0.0.10'
-username = 'apiadmin'
-password = 'Admin123'
+host = "10.0.0.10"
+username = "apiadmin"
+password = "Admin123"
 autodeploy = False
-logname = 'TestingUserScript.log'
+logname = "TestingUserScript.log"
 pagelimit = 500
 debug = False
 
 
 def main():
-    with fmcapi.FMC(host=host,
-                    username=username,
-                    password=password,
-                    autodeploy=autodeploy,
-                    limit=pagelimit,
-                    file_logging=logname,
-                    debug=debug,
-                    ) as fmc1:
-        logging.info('# ### Mega Test Start!!! ### #')
+    with fmcapi.FMC(
+        host=host,
+        username=username,
+        password=password,
+        autodeploy=autodeploy,
+        limit=pagelimit,
+        file_logging=logname,
+        debug=debug,
+    ) as fmc1:
+        logging.info("# ### Mega Test Start!!! ### #")
         unit_tests.test__fmc_version(fmc=fmc1)
 
-        '''
+        """
         # Working Tests
         unit_tests.test__vlan_group_tag(fmc=fmc1)
         unit_tests.test__deployment_requests(fmc=fmc1)
@@ -76,9 +77,9 @@ def main():
         unit_tests.test__ports(fmc=fmc1)
         unit_tests.test__autonat(fmc=fmc1)
         unit_tests.test__manualnat(fmc=fmc1)
-        '''
+        """
 
-        '''
+        """
         # Need FTD device to test
         unit_tests.test__ftddevicehapairs(fmc=fmc1)
         unit_tests.test__failoverinterfacemacaddressconfigs(fmc=fmc1)
@@ -94,7 +95,7 @@ def main():
         unit_tests.test__redundant_interfaces(fmc=fmc1)
         unit_tests.test__etherchannel_interfaces(fmc=fmc1)
         unit_tests.test__subinterfaces(fmc=fmc1)
-        '''
+        """
 
 
 if __name__ == "__main__":

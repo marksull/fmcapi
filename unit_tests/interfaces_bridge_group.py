@@ -5,11 +5,12 @@ import time
 
 def test__bridge_group_interfaces(fmc):
     logging.info(
-        'Test BridgeGroupInterfaces.  get, post, put, delete BridgeGroupInterfaces Objects. '
-        'Requires registered device')
+        "Test BridgeGroupInterfaces.  get, post, put, delete BridgeGroupInterfaces Objects. "
+        "Requires registered device"
+    )
 
     starttime = str(int(time.time()))
-    namer = f'_fmcapi_test_{starttime}'
+    namer = f"_fmcapi_test_{starttime}"
 
     sz1 = fmcapi.SecurityZones(fmc=fmc)
     sz1.name = "_sz1" + namer
@@ -21,7 +22,10 @@ def test__bridge_group_interfaces(fmc):
     time.sleep(1)
 
     br1 = fmcapi.BridgeGroupInterfaces(fmc=fmc, device_name="device_name")
-    br1.p_interfaces(p_interfaces=["GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="device_name")
+    br1.p_interfaces(
+        p_interfaces=["GigabitEthernet0/3", "GigabitEthernet0/5"],
+        device_name="device_name",
+    )
     br1.enabled = True
     br1.ifname = "_br1" + namer
     br1.bridgeGroupId = "1"
@@ -41,4 +45,4 @@ def test__bridge_group_interfaces(fmc):
     sz1.delete()
     sz2.delete()
 
-    logging.info('Testing BridgeGroupInterfaces class done.\n')
+    logging.info("Testing BridgeGroupInterfaces class done.\n")

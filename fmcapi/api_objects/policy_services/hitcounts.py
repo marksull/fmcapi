@@ -12,15 +12,20 @@ class HitCounts(APIClassTemplate):
     """
 
     VALID_JSON_DATA = []
-    VALID_FOR_KWARGS = VALID_JSON_DATA + ['acp_id', 'acp_name', 'device_id', 'device_name', 'fetchZeroHitcount',
-                                          'limit',
-                                          ]
-    PREFIX_URL = '/policy/accesspolicies'
-    REQUIRED_FOR_PUT = ['acp_id', 'device_id']
-    REQUIRED_FOR_DELETE = ['acp_id', 'device_id']
-    REQUIRED_FOR_GET = ['acp_id', 'device_id']
+    VALID_FOR_KWARGS = VALID_JSON_DATA + [
+        "acp_id",
+        "acp_name",
+        "device_id",
+        "device_name",
+        "fetchZeroHitcount",
+        "limit",
+    ]
+    PREFIX_URL = "/policy/accesspolicies"
+    REQUIRED_FOR_PUT = ["acp_id", "device_id"]
+    REQUIRED_FOR_DELETE = ["acp_id", "device_id"]
+    REQUIRED_FOR_GET = ["acp_id", "device_id"]
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
-    FIRST_SUPPORTED_FMC_VERSION = '6.4'
+    FIRST_SUPPORTED_FMC_VERSION = "6.4"
 
     @property
     def URL_SUFFIX(self):
@@ -30,21 +35,21 @@ class HitCounts(APIClassTemplate):
         filter_init = '?filter="'
         filter_string = filter_init
 
-        self.URL = self.URL.split('?')[0]
+        self.URL = self.URL.split("?")[0]
 
         if self.device_id:
-            filter_string += f'deviceId:{self.device_id};'
+            filter_string += f"deviceId:{self.device_id};"
         if self.prefilter_ids:
-            filter_string += f'ids:{self.prefilter_ids};'
+            filter_string += f"ids:{self.prefilter_ids};"
         if self.fetchZeroHitCount:
-            filter_string += f'fetchZeroHitCount:{self._fetchZeroHitCount};'
+            filter_string += f"fetchZeroHitCount:{self._fetchZeroHitCount};"
 
         if filter_string == filter_init:
             filter_string += '"'
         filter_string = f'{filter_string[:-1]}"&expanded=true'
 
-        if 'limit' in self.__dict__:
-            filter_string += f'&limit={self.limit}'
+        if "limit" in self.__dict__:
+            filter_string += f"&limit={self.limit}"
         return filter_string
 
     @property
@@ -55,8 +60,8 @@ class HitCounts(APIClassTemplate):
     def fetchZeroHitCount(self, value=False):
         self._fetchZeroHitCount = value
         # Rebuild the URL with possible new information
-        self.URL = self.URL.split('?')[0]
-        self.URL = f'{self.URL}{self.URL_SUFFIX}'
+        self.URL = self.URL.split("?")[0]
+        self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
     def __init__(self, fmc, **kwargs):
         logging.debug("In __init__() for HitCounts class.")
@@ -65,113 +70,133 @@ class HitCounts(APIClassTemplate):
         self.fetchZeroHitCount = False
         super().__init__(fmc, **kwargs)
         self.parse_kwargs(**kwargs)
-        self.type = 'HitCount'
-        self.URL = f'{self.URL}{self.URL_SUFFIX}'
+        self.type = "HitCount"
+        self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for HitCounts class.")
-        if 'acp_id' in kwargs:
-            self.acp(acp_id=kwargs['acp_id'])
-        if 'acp_name' in kwargs:
-            self.acp(name=kwargs['acp_name'])
-        if 'device_id' in kwargs:
-            self.device(id=kwargs['device_id'])
-        if 'device_name' in kwargs:
-            self.device(name=kwargs['device_name'])
+        if "acp_id" in kwargs:
+            self.acp(acp_id=kwargs["acp_id"])
+        if "acp_name" in kwargs:
+            self.acp(name=kwargs["acp_name"])
+        if "device_id" in kwargs:
+            self.device(id=kwargs["device_id"])
+        if "device_name" in kwargs:
+            self.device(name=kwargs["device_name"])
 
-    def acp(self, name='', acp_id=''):
+    def acp(self, name="", acp_id=""):
         # either name or id of the ACP should be given
         logging.debug("In acp() for HitCounts class.")
-        if acp_id != '':
+        if acp_id != "":
             self.acp_id = acp_id
-            self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.acp_id}/operational/hitcounts'
+            self.URL = f"{self.fmc.configuration_url}{self.PREFIX_URL}/{self.acp_id}/operational/hitcounts"
             self.acp_added_to_url = True
-        elif name != '':
+        elif name != "":
             acp1 = AccessPolicies(fmc=self.fmc)
             acp1.get(name=name)
-            if 'id' in acp1.__dict__:
+            if "id" in acp1.__dict__:
                 self.acp_id = acp1.id
-                self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.acp_id}/operational/hitcounts'
+                self.URL = f"{self.fmc.configuration_url}{self.PREFIX_URL}/{self.acp_id}/operational/hitcounts"
                 self.acp_added_to_url = True
             else:
-                logging.warning(f'Access Control Policy "{name}" not found.  Cannot configure acp for HitCounts.')
+                logging.warning(
+                    f'Access Control Policy "{name}" not found.  Cannot configure acp for HitCounts.'
+                )
         else:
-            logging.error('No accessPolicy name or id was provided.')
+            logging.error("No accessPolicy name or id was provided.")
         # Rebuild the URL with possible new information
-        self.URL = self.URL.split('?')[0]
-        self.URL = f'{self.URL}{self.URL_SUFFIX}'
+        self.URL = self.URL.split("?")[0]
+        self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
-    def device(self, name='', id=''):
+    def device(self, name="", id=""):
         logging.debug("In device() for HitCounts class")
-        if id != '':
+        if id != "":
             self.device_id = id
-        elif name != '':
+        elif name != "":
             device1 = DeviceRecords(fmc=self.fmc)
             device1.get(name=name)
-            if 'id' in device1.__dict__:
+            if "id" in device1.__dict__:
                 self.device_id = device1.id
             else:
-                logging.warning(f'Device "{name}" not found.  Cannot configure device for HitCounts.')
+                logging.warning(
+                    f'Device "{name}" not found.  Cannot configure device for HitCounts.'
+                )
         else:
-            logging.error('No device name or id was provided.')
+            logging.error("No device name or id was provided.")
         # Rebuild the URL with possible new information
-        self.URL = self.URL.split('?')[0]
-        self.URL = f'{self.URL}{self.URL_SUFFIX}'
+        self.URL = self.URL.split("?")[0]
+        self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
-    def prefilter_policies(self, action, name='', prefilter_id=''):
+    def prefilter_policies(self, action, name="", prefilter_id=""):
         logging.debug("In prefilter_policies_tags() for HitCounts class.")
-        if action == 'add':
+        if action == "add":
             ppolicy = PreFilterPolicies(fmc=self.fmc)
             if prefilter_id:
                 ppolicy.get(id=prefilter_id)
             elif name:
                 ppolicy.get(name=name)
-            if 'id' in ppolicy.__dict__:
+            if "id" in ppolicy.__dict__:
                 if self.prefilter_ids:
                     duplicate = False
-                    for obj in self.prefilter_ids.split(','):
+                    for obj in self.prefilter_ids.split(","):
                         if obj == ppolicy.id:
                             duplicate = True
-                            logging.warning(f'Id, {ppolicy.id}, already in prefilter_ids not duplicating.')
+                            logging.warning(
+                                f"Id, {ppolicy.id}, already in prefilter_ids not duplicating."
+                            )
                             break
                     if not duplicate:
                         self.prefilter_ids.append(ppolicy.id)
-                        logging.info(f'Adding "{ppolicy.id}" to prefilter_ids for this HitCounts.')
+                        logging.info(
+                            f'Adding "{ppolicy.id}" to prefilter_ids for this HitCounts.'
+                        )
                 else:
                     self.prefilter_ids.append(ppolicy.id)
-                    logging.info(f'Adding "{ppolicy.id}" to prefilter_ids for this HitCounts.')
+                    logging.info(
+                        f'Adding "{ppolicy.id}" to prefilter_ids for this HitCounts.'
+                    )
             else:
                 if name:
-                    logging.warning(f'Prefilter, "{name}", not found.  Cannot add to HitCounts.')
+                    logging.warning(
+                        f'Prefilter, "{name}", not found.  Cannot add to HitCounts.'
+                    )
                 elif prefilter_id:
-                    logging.warning(f'Prefilter, {prefilter_id}, not found.  Cannot add to HitCounts.')
-        elif action == 'remove':
+                    logging.warning(
+                        f"Prefilter, {prefilter_id}, not found.  Cannot add to HitCounts."
+                    )
+        elif action == "remove":
             ppolicy = PreFilterPolicies(fmc=self.fmc)
             if prefilter_id:
                 ppolicy.get(id=prefilter_id)
             elif name:
                 ppolicy.get(name=name)
-            if 'id' in ppolicy.__dict__:
+            if "id" in ppolicy.__dict__:
                 if self.prefilter_ids:
                     objects = []
                     for obj in self.prefilter_ids:
                         if obj != ppolicy.id:
                             objects.append(obj)
                     self.prefilter_ids = objects
-                    logging.info(f'Removed "{ppolicy.id}" from prefilter_ids for this HitCounts.')
+                    logging.info(
+                        f'Removed "{ppolicy.id}" from prefilter_ids for this HitCounts.'
+                    )
                 else:
-                    logging.info("prefilter_ids is empty for this HitCounts.  Nothing to remove.")
+                    logging.info(
+                        "prefilter_ids is empty for this HitCounts.  Nothing to remove."
+                    )
             else:
-                logging.warning(f'Prefilter Policy, {ppolicy.id}, not found.  Cannot remove from HitCounts.')
-        elif action == 'clear':
+                logging.warning(
+                    f"Prefilter Policy, {ppolicy.id}, not found.  Cannot remove from HitCounts."
+                )
+        elif action == "clear":
             if self.prefilter_ids:
                 self.prefilter_ids = []
-                logging.info('All prefilter_ids removed from this HitCounts object.')
+                logging.info("All prefilter_ids removed from this HitCounts object.")
 
         # Rebuild the URL with possible new information
-        self.URL = self.URL.split('?')[0]
-        self.URL = f'{self.URL}{self.URL_SUFFIX}'
+        self.URL = self.URL.split("?")[0]
+        self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
     def get(self, **kwargs):
         """
@@ -181,33 +206,43 @@ class HitCounts(APIClassTemplate):
         logging.debug("In get() for HitCount class.")
         self.parse_kwargs(**kwargs)
         if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
-            logging.error(f'Your FMC version, {self.fmc.serverVersion} does not support GET of this feature.')
-            return {'items': []}
+            logging.error(
+                f"Your FMC version, {self.fmc.serverVersion} does not support GET of this feature."
+            )
+            return {"items": []}
         if self.valid_for_get() and (self.device_id or self.prefilter_ids):
             if self.dry_run:
-                logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
-                logging.info('\tMethod = GET')
-                logging.info(f'\tURL = {self.URL}')
+                logging.info(
+                    "Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:"
+                )
+                logging.info("\tMethod = GET")
+                logging.info(f"\tURL = {self.URL}")
                 return False
-            response = self.fmc.send_to_api(method='get', url=self.URL)
+            response = self.fmc.send_to_api(method="get", url=self.URL)
             self.parse_kwargs(**response)
-            if 'items' not in response:
-                response['items'] = []
+            if "items" not in response:
+                response["items"] = []
             return response
         else:
-            logging.warning("get() method failed due to failure to pass valid_for_get() test.")
+            logging.warning(
+                "get() method failed due to failure to pass valid_for_get() test."
+            )
             return False
 
     def put(self, **kwargs):
-        logging.info('Though supported by FMC, API PUT method is not yet working for HitCounts in fmcapi.')
+        logging.info(
+            "Though supported by FMC, API PUT method is not yet working for HitCounts in fmcapi."
+        )
         pass
 
     def delete(self, **kwargs):
-        logging.info('Though supported by FMC, API DELETE method is not yet working for HitCounts in fmcapi.')
+        logging.info(
+            "Though supported by FMC, API DELETE method is not yet working for HitCounts in fmcapi."
+        )
         pass
 
     def post(self):
-        logging.info('API POST method for HitCounts not supported.')
+        logging.info("API POST method for HitCounts not supported.")
         pass
 
 

@@ -5,10 +5,11 @@ import time
 
 def test__redundant_interfaces(fmc):
     logging.info(
-        'Test RedundantInterfaces.  get, post, put, delete RedundantInterfaces Objects. Requires registered device')
+        "Test RedundantInterfaces.  get, post, put, delete RedundantInterfaces Objects. Requires registered device"
+    )
 
     starttime = str(int(time.time()))
-    namer = f'_fmcapi_test_{starttime}'
+    namer = f"_fmcapi_test_{starttime}"
 
     sz1 = fmcapi.SecurityZones(fmc=fmc)
     sz1.name = "_sz1" + namer
@@ -43,4 +44,4 @@ def test__redundant_interfaces(fmc):
     sz1.delete()
     sz2.delete()
 
-    logging.info('Testing RedundantInterfaces class done.\n')
+    logging.info("Testing RedundantInterfaces class done.\n")

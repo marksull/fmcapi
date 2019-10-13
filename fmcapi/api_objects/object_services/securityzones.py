@@ -8,10 +8,17 @@ class SecurityZones(APIClassTemplate):
     The SecurityZones Object in the FMC.
     """
 
-    VALID_JSON_DATA = ['id', 'name', 'type', 'description', 'interfaceMode', 'interfaces']
+    VALID_JSON_DATA = [
+        "id",
+        "name",
+        "type",
+        "description",
+        "interfaceMode",
+        "interfaces",
+    ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
-    URL_SUFFIX = '/object/securityzones'
-    REQUIRED_FOR_POST = ['name', 'interfaceMode']
+    URL_SUFFIX = "/object/securityzones"
+    REQUIRED_FOR_POST = ["name", "interfaceMode"]
     FILTER_BY_NAME = True
 
     def __init__(self, fmc, **kwargs):
@@ -22,10 +29,10 @@ class SecurityZones(APIClassTemplate):
     def parse_kwargs(self, **kwargs):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for SecurityZones class.")
-        if 'interfaceMode' in kwargs:
-            self.interfaceMode = kwargs['interfaceMode']
+        if "interfaceMode" in kwargs:
+            self.interfaceMode = kwargs["interfaceMode"]
         else:
-            self.interfaceMode = 'ROUTED'
+            self.interfaceMode = "ROUTED"
 
 
 class SecurityZone(SecurityZones):
@@ -33,5 +40,7 @@ class SecurityZone(SecurityZones):
 
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
-        warnings.warn("Deprecated: SecurityZone() should be called via SecurityZones().")
+        warnings.warn(
+            "Deprecated: SecurityZone() should be called via SecurityZones()."
+        )
         super().__init__(fmc, **kwargs)

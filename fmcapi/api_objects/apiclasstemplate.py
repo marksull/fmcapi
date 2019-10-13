@@ -10,17 +10,17 @@ class APIClassTemplate(object):
     This class is the base framework for all the objects in the FMC.
     """
 
-    REQUIRED_FOR_POST = ['name']
-    REQUIRED_FOR_PUT = ['id']
-    REQUIRED_FOR_DELETE = ['id']
-    REQUIRED_FOR_GET = ['']
+    REQUIRED_FOR_POST = ["name"]
+    REQUIRED_FOR_PUT = ["id"]
+    REQUIRED_FOR_DELETE = ["id"]
+    REQUIRED_FOR_GET = [""]
     FILTER_BY_NAME = False
-    URL = ''
-    URL_SUFFIX = ''
+    URL = ""
+    URL_SUFFIX = ""
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-]"""
-    FIRST_SUPPORTED_FMC_VERSION = '6.1'
+    FIRST_SUPPORTED_FMC_VERSION = "6.1"
     VALID_JSON_DATA = []
-    GLOBAL_VALID_FOR_KWARGS = ['dry_run']
+    GLOBAL_VALID_FOR_KWARGS = ["dry_run"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
 
     @property
@@ -32,13 +32,15 @@ class APIClassTemplate(object):
         self.VALID_FOR_KWARGS = self.VALID_FOR_KWARGS + self.GLOBAL_VALID_FOR_KWARGS
         self.fmc = fmc
         self.limit = self.fmc.limit
-        self.description = 'Created by fmcapi.'
+        self.description = "Created by fmcapi."
         self.overridable = False
         self.dry_run = False
-        self.URL = f'{self.fmc.configuration_url}{self.URL_SUFFIX}'
+        self.URL = f"{self.fmc.configuration_url}{self.URL_SUFFIX}"
         if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
-            logging.warning(f'This API feature was released in version {self.FIRST_SUPPORTED_FMC_VERSION}.  '
-                            f'Your FMC version is {self.fmc.serverVersion}.  Upgrade to use this feature.')
+            logging.warning(
+                f"This API feature was released in version {self.FIRST_SUPPORTED_FMC_VERSION}.  "
+                f"Your FMC version is {self.fmc.serverVersion}.  Upgrade to use this feature."
+            )
 
     def format_data(self):
         logging.debug("In format_data() for APIClassTemplate class.")
@@ -53,14 +55,18 @@ class APIClassTemplate(object):
         for key_value in self.VALID_FOR_KWARGS:
             if key_value in kwargs:
                 self.__dict__[key_value] = kwargs[key_value]
-        if 'name' in kwargs:
-            self.name = syntax_correcter(kwargs['name'], permitted_syntax=self.VALID_CHARACTERS_FOR_NAME)
-            if self.name != kwargs['name']:
-                logging.info(f"Adjusting name '{kwargs['name']}' to '{self.name}' due to invalid characters.")
+        if "name" in kwargs:
+            self.name = syntax_correcter(
+                kwargs["name"], permitted_syntax=self.VALID_CHARACTERS_FOR_NAME
+            )
+            if self.name != kwargs["name"]:
+                logging.info(
+                    f"Adjusting name '{kwargs['name']}' to '{self.name}' due to invalid characters."
+                )
 
     def valid_for_get(self):
         logging.debug("In valid_for_get() for APIClassTemplate class.")
-        if self.REQUIRED_FOR_GET == ['']:
+        if self.REQUIRED_FOR_GET == [""]:
             return True
         for item in self.REQUIRED_FOR_GET:
             if item not in self.__dict__:
@@ -77,61 +83,81 @@ class APIClassTemplate(object):
         logging.debug("In get() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
         if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
-            logging.error(f'Your FMC version, {self.fmc.serverVersion} does not support GET of this feature.')
-            return {'items': []}
+            logging.error(
+                f"Your FMC version, {self.fmc.serverVersion} does not support GET of this feature."
+            )
+            return {"items": []}
         if self.valid_for_get():
-            if 'id' in self.__dict__:
-                url = f'{self.URL}/{self.id}'
+            if "id" in self.__dict__:
+                url = f"{self.URL}/{self.id}"
                 if self.dry_run:
-                    logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
-                    logging.info('\tMethod = GET')
-                    logging.info(f'\tURL = {self.URL}')
+                    logging.info(
+                        "Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:"
+                    )
+                    logging.info("\tMethod = GET")
+                    logging.info(f"\tURL = {self.URL}")
                     return False
-                response = self.fmc.send_to_api(method='get', url=url)
+                response = self.fmc.send_to_api(method="get", url=url)
                 self.parse_kwargs(**response)
-                if 'name' in self.__dict__:
-                    logging.info(f'GET success. Object with name: "{self.name}" and id: "{self.id}" fetched from FMC.')
+                if "name" in self.__dict__:
+                    logging.info(
+                        f'GET success. Object with name: "{self.name}" and id: "{self.id}" fetched from FMC.'
+                    )
                 else:
-                    logging.info(f'GET success. Object with id: "{self.id}" fetched from FMC.')
-            elif 'name' in self.__dict__:
+                    logging.info(
+                        f'GET success. Object with id: "{self.id}" fetched from FMC.'
+                    )
+            elif "name" in self.__dict__:
                 if self.FILTER_BY_NAME:
-                    url = f'{self.URL}?name={self.name}&expanded=true'
+                    url = f"{self.URL}?name={self.name}&expanded=true"
                 else:
-                    url = f'{self.URL}?expanded=true'
-                    if 'limit' in self.__dict__:
-                        url = f'{url}&limit={self.limit}'
-                    if 'offset' in self.__dict__:
-                        url = f'{url}&offset={self.offset}'
-                response = self.fmc.send_to_api(method='get', url=url)
-                if 'items' not in response:
-                    response['items'] = []
-                for item in response['items']:
-                    if 'name' in item:
-                        if item['name'] == self.name:
-                            self.id = item['id']
+                    url = f"{self.URL}?expanded=true"
+                    if "limit" in self.__dict__:
+                        url = f"{url}&limit={self.limit}"
+                    if "offset" in self.__dict__:
+                        url = f"{url}&offset={self.offset}"
+                response = self.fmc.send_to_api(method="get", url=url)
+                if "items" not in response:
+                    response["items"] = []
+                for item in response["items"]:
+                    if "name" in item:
+                        if item["name"] == self.name:
+                            self.id = item["id"]
                             self.parse_kwargs(**item)
-                            logging.info(f'GET success. Object with name: "{self.name}" and id: "{self.id}" '
-                                         f'fetched from FMC.')
+                            logging.info(
+                                f'GET success. Object with name: "{self.name}" and id: "{self.id}" '
+                                f"fetched from FMC."
+                            )
                             return item
                     else:
-                        logging.warning(f'No "name" attribute associated with this item to check against {self.name}.')
-                if 'id' not in self.__dict__:
-                    logging.warning(f"\tGET query for {self.name} is not found.\n\t\tResponse: {json.dumps(response)}")
+                        logging.warning(
+                            f'No "name" attribute associated with this item to check against {self.name}.'
+                        )
+                if "id" not in self.__dict__:
+                    logging.warning(
+                        f"\tGET query for {self.name} is not found.\n\t\tResponse: {json.dumps(response)}"
+                    )
             else:
-                logging.info("GET query for object with no name or id set.  "
-                             "Returning full list of these object types instead.")
-                url = f'{self.URL}?expanded=true&limit={self.limit}'
+                logging.info(
+                    "GET query for object with no name or id set.  "
+                    "Returning full list of these object types instead."
+                )
+                url = f"{self.URL}?expanded=true&limit={self.limit}"
                 if self.dry_run:
-                    logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
-                    logging.info('\tMethod = GET')
-                    logging.info(f'\tURL = {self.URL}')
+                    logging.info(
+                        "Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:"
+                    )
+                    logging.info("\tMethod = GET")
+                    logging.info(f"\tURL = {self.URL}")
                     return False
-                response = self.fmc.send_to_api(method='get', url=url)
-            if 'items' not in response:
-                response['items'] = []
+                response = self.fmc.send_to_api(method="get", url=url)
+            if "items" not in response:
+                response["items"] = []
             return response
         else:
-            logging.warning("get() method failed due to failure to pass valid_for_get() test.")
+            logging.warning(
+                "get() method failed due to failure to pass valid_for_get() test."
+            )
             return False
 
     def valid_for_post(self):
@@ -145,31 +171,45 @@ class APIClassTemplate(object):
     def post(self, **kwargs):
         logging.debug("In post() for APIClassTemplate class.")
         if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
-            logging.error(f'Your FMC version, {self.fmc.serverVersion} does not support POST of this feature.')
+            logging.error(
+                f"Your FMC version, {self.fmc.serverVersion} does not support POST of this feature."
+            )
             return False
-        if 'id' in self.__dict__:
-            logging.info("ID value exists for this object.  Redirecting to put() method.")
+        if "id" in self.__dict__:
+            logging.info(
+                "ID value exists for this object.  Redirecting to put() method."
+            )
             self.put()
         else:
             if self.valid_for_post():
                 if self.dry_run:
-                    logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
-                    logging.info('\tMethod = POST')
-                    logging.info(f'\tURL = {self.URL}')
-                    logging.info(f'\tJSON = {self.format_data()}')
+                    logging.info(
+                        "Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:"
+                    )
+                    logging.info("\tMethod = POST")
+                    logging.info(f"\tURL = {self.URL}")
+                    logging.info(f"\tJSON = {self.format_data()}")
                     return False
-                response = self.fmc.send_to_api(method='post', url=self.URL, json_data=self.format_data())
+                response = self.fmc.send_to_api(
+                    method="post", url=self.URL, json_data=self.format_data()
+                )
                 if response:
                     self.parse_kwargs(**response)
-                    if 'name' in self.__dict__ and 'id' in self.__dict__:
-                        logging.info(f'POST success. Object with name: "{self.name}" and id: "{id}" created in FMC.')
+                    if "name" in self.__dict__ and "id" in self.__dict__:
+                        logging.info(
+                            f'POST success. Object with name: "{self.name}" and id: "{id}" created in FMC.'
+                        )
                     else:
-                        logging.info('POST success but no "id" or "name" values in API response.')
+                        logging.info(
+                            'POST success but no "id" or "name" values in API response.'
+                        )
                 else:
-                    logging.warning('POST failure.  No data in API response.')
+                    logging.warning("POST failure.  No data in API response.")
                 return response
             else:
-                logging.warning("post() method failed due to failure to pass valid_for_post() test.")
+                logging.warning(
+                    "post() method failed due to failure to pass valid_for_post() test."
+                )
                 return False
 
     def valid_for_put(self):
@@ -184,25 +224,37 @@ class APIClassTemplate(object):
         logging.debug("In put() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
         if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
-            logging.error(f'Your FMC version, {self.fmc.serverVersion} does not support PUT of this feature.')
+            logging.error(
+                f"Your FMC version, {self.fmc.serverVersion} does not support PUT of this feature."
+            )
             return False
         if self.valid_for_put():
-            url = f'{self.URL}/{self.id}'
+            url = f"{self.URL}/{self.id}"
             if self.dry_run:
-                logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
-                logging.info('\tMethod = PUT')
-                logging.info(f'\tURL = {self.URL}')
-                logging.info(f'\tJSON = {self.format_data()}')
+                logging.info(
+                    "Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:"
+                )
+                logging.info("\tMethod = PUT")
+                logging.info(f"\tURL = {self.URL}")
+                logging.info(f"\tJSON = {self.format_data()}")
                 return False
-            response = self.fmc.send_to_api(method='put', url=url, json_data=self.format_data())
+            response = self.fmc.send_to_api(
+                method="put", url=url, json_data=self.format_data()
+            )
             self.parse_kwargs(**response)
-            if 'name' in self.__dict__:
-                logging.info(f'PUT success. Object with name: "{self.name}" and id: "{self.id}" updated in FMC.')
+            if "name" in self.__dict__:
+                logging.info(
+                    f'PUT success. Object with name: "{self.name}" and id: "{self.id}" updated in FMC.'
+                )
             else:
-                logging.info(f'PUT success. Object with id: "{self.id}" updated in FMC.')
+                logging.info(
+                    f'PUT success. Object with id: "{self.id}" updated in FMC.'
+                )
             return response
         else:
-            logging.warning("put() method failed due to failure to pass valid_for_put() test.")
+            logging.warning(
+                "put() method failed due to failure to pass valid_for_put() test."
+            )
             return False
 
     def valid_for_delete(self):
@@ -217,25 +269,35 @@ class APIClassTemplate(object):
         logging.debug("In delete() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
         if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
-            logging.error(f'Your FMC version, {self.fmc.serverVersion} does not support DELETE of this feature.')
+            logging.error(
+                f"Your FMC version, {self.fmc.serverVersion} does not support DELETE of this feature."
+            )
             return False
         if self.valid_for_delete():
-            url = f'{self.URL}/{self.id}'
+            url = f"{self.URL}/{self.id}"
             if self.dry_run:
-                logging.info('Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:')
-                logging.info('\tMethod = DELETE')
-                logging.info(f'\tURL = {self.URL}')
-                logging.info(f'\tJSON = {self.format_data()}')
+                logging.info(
+                    "Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:"
+                )
+                logging.info("\tMethod = DELETE")
+                logging.info(f"\tURL = {self.URL}")
+                logging.info(f"\tJSON = {self.format_data()}")
                 return False
-            response = self.fmc.send_to_api(method='delete', url=url, json_data=self.format_data())
+            response = self.fmc.send_to_api(
+                method="delete", url=url, json_data=self.format_data()
+            )
             if not response:
                 return None
             self.parse_kwargs(**response)
-            if 'name' in self.name:
-                logging.info(f'DELETE success. Object with name: "{self.name}" and id: "{self.id}" deleted in FMC.')
+            if "name" in self.name:
+                logging.info(
+                    f'DELETE success. Object with name: "{self.name}" and id: "{self.id}" deleted in FMC.'
+                )
             else:
                 logging.info(f'DELETE success. Object id: "{self.id}" deleted in FMC.')
             return response
         else:
-            logging.warning("delete() method failed due to failure to pass valid_for_delete() test.")
+            logging.warning(
+                "delete() method failed due to failure to pass valid_for_delete() test."
+            )
             return False

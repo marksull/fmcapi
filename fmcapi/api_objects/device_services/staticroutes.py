@@ -8,9 +8,17 @@ class StaticRoutes(APIClassTemplate):
     The StaticRoutes Object in the FMC.
     """
 
-    VALID_JSON_DATA = ['id', 'name', 'type', 'continentId', 'continents', 'countries', 'continentUUID']
+    VALID_JSON_DATA = [
+        "id",
+        "name",
+        "type",
+        "continentId",
+        "continents",
+        "countries",
+        "continentUUID",
+    ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
-    PREFIX_URL = '/devices/devicerecords'
+    PREFIX_URL = "/devices/devicerecords"
     URL_SUFFIX = None
 
     def __init__(self, fmc, **kwargs):
@@ -22,21 +30,23 @@ class StaticRoutes(APIClassTemplate):
         logging.debug("In device() for StaticRoutes class.")
         device1 = DeviceRecords(fmc=self.fmc)
         device1.get(name=device_name)
-        if 'id' in device1.__dict__:
+        if "id" in device1.__dict__:
             self.device_id = device1.id
-            self.URL = f'{self.fmc.configuration_url}{self.PREFIX_URL}/{self.device_id}/routing/staticroutes'
+            self.URL = f"{self.fmc.configuration_url}{self.PREFIX_URL}/{self.device_id}/routing/staticroutes"
             self.device_added_to_url = True
         else:
-            logging.warning(f'Device "{device_name}" not found.  Cannot set up device for physicalInterface.')
+            logging.warning(
+                f'Device "{device_name}" not found.  Cannot set up device for physicalInterface.'
+            )
 
     def post(self):
-        logging.info('POST method for API for StaticRoutes not supported.')
+        logging.info("POST method for API for StaticRoutes not supported.")
         pass
 
     def put(self):
-        logging.info('PUT method for API for StaticRoutes not supported.')
+        logging.info("PUT method for API for StaticRoutes not supported.")
         pass
 
     def delete(self):
-        logging.info('DELETE method for API for StaticRoutes not supported.')
+        logging.info("DELETE method for API for StaticRoutes not supported.")
         pass

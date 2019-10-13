@@ -7,9 +7,17 @@ class EndPointDeviceTypes(APIClassTemplate):
     The EndPointDeviceTypes Object in the FMC.
     """
 
-    VALID_JSON_DATA = ['id', 'name', 'type', 'fqName', 'iseId', 'overrides', 'overridable']
+    VALID_JSON_DATA = [
+        "id",
+        "name",
+        "type",
+        "fqName",
+        "iseId",
+        "overrides",
+        "overridable",
+    ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
-    URL_SUFFIX = '/object/endpointdevicetypes'
+    URL_SUFFIX = "/object/endpointdevicetypes"
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
@@ -17,13 +25,13 @@ class EndPointDeviceTypes(APIClassTemplate):
         self.parse_kwargs(**kwargs)
 
     def post(self):
-        logging.info('POST method for API for EndPointDeviceTypes not supported.')
+        logging.info("POST method for API for EndPointDeviceTypes not supported.")
         pass
 
     def put(self):
-        logging.info('PUT method for API for EndPointDeviceTypes not supported.')
+        logging.info("PUT method for API for EndPointDeviceTypes not supported.")
         pass
 
     def delete(self):
-        logging.info('DELETE method for API for EndPointDeviceTypes not supported.')
+        logging.info("DELETE method for API for EndPointDeviceTypes not supported.")
         pass

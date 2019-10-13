@@ -4,7 +4,7 @@ from .accesspolicies import AccessControlPolicy
 from .accessrules import AccessRules
 from .accessrules import ACPRule
 from .accessrules import Bulk
-from . advancedsettings import AdvancedSettings
+from .advancedsettings import AdvancedSettings
 from .autonatrules import AutoNatRules
 from .defaultactions import DefaultActions
 from .endpoints import Endpoints
@@ -27,27 +27,27 @@ from .defaultactions import DefaultActions
 logging.debug("In the object_services __init__.py file.")
 
 __all__ = [
-    'AdvancedSettings',
-    'IPSecSettings',
-    'Endpoints',
-    'FTDS2SVPNs',
-    'IKESettings',
-    'AccessPolicies',
-    'AccessControlPolicy',
-    'AccessRules',
-    'ACPRule',
-    'Bulk',
-    'FilePolicies',
-    'FTDNatPolicies',
-    'FTDNatPolicy',
-    'AutoNatRules',
-    'ManualNatRules',
-    'NatRules',
-    'IntrusionPolicies',
-    'IntrusionPolicy',
-    'PreFilterPolicies',
-    'PreFilterPolicy',
-    'HitCounts',
-    'HitCount',
-    'DefaultActions',
+    "AdvancedSettings",
+    "IPSecSettings",
+    "Endpoints",
+    "FTDS2SVPNs",
+    "IKESettings",
+    "AccessPolicies",
+    "AccessControlPolicy",
+    "AccessRules",
+    "ACPRule",
+    "Bulk",
+    "FilePolicies",
+    "FTDNatPolicies",
+    "FTDNatPolicy",
+    "AutoNatRules",
+    "ManualNatRules",
+    "NatRules",
+    "IntrusionPolicies",
+    "IntrusionPolicy",
+    "PreFilterPolicies",
+    "PreFilterPolicy",
+    "HitCounts",
+    "HitCount",
+    "DefaultActions",
 ]

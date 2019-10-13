@@ -5,11 +5,12 @@ import time
 
 def test__ikev1(fmc):
     logging.info(
-        'Test IKEv1Policies and IKEv1IpsecProposals.'
-        '  Post, get, put, delete IKEv1Policies and IKEv1IpsecProposals Objects.')
+        "Test IKEv1Policies and IKEv1IpsecProposals."
+        "  Post, get, put, delete IKEv1Policies and IKEv1IpsecProposals Objects."
+    )
 
     starttime = str(int(time.time()))
-    namer = f'_fmcapi_test_{starttime}'
+    namer = f"_fmcapi_test_{starttime}"
 
     ipsec1 = fmcapi.IKEv1IpsecProposals(fmc=fmc)
     ipsec1.name = "_ipsec" + namer
@@ -38,4 +39,4 @@ def test__ikev1(fmc):
     ipsec1.delete()
     pol1.delete()
 
-    logging.info('Test IKEv1Policies and IKEv1IpsecProposals classes done.\n')
+    logging.info("Test IKEv1Policies and IKEv1IpsecProposals classes done.\n")

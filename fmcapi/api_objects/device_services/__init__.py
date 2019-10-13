@@ -16,17 +16,17 @@ from .subinterfaces import SubInterfaces
 logging.debug("In the device_services __init__.py file.")
 
 __all__ = [
-    'Device',
-    'DeviceRecords',
-    'StaticRoutes',
-    'IPv4StaticRoutes',
-    'IPv4StaticRoute',
-    'IPv6StaticRoutes',
-    'IPv6StaticRoute',
-    'PhysicalInterfaces',
-    'PhysicalInterface',
-    'BridgeGroupInterfaces',
-    'RedundantInterfaces',
-    'EtherchannelInterfaces',
-    'SubInterfaces'
+    "Device",
+    "DeviceRecords",
+    "StaticRoutes",
+    "IPv4StaticRoutes",
+    "IPv4StaticRoute",
+    "IPv6StaticRoutes",
+    "IPv6StaticRoute",
+    "PhysicalInterfaces",
+    "PhysicalInterface",
+    "BridgeGroupInterfaces",
+    "RedundantInterfaces",
+    "EtherchannelInterfaces",
+    "SubInterfaces",
 ]

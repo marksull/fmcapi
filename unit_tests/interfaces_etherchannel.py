@@ -5,11 +5,12 @@ import time
 
 def test__etherchannel_interfaces(fmc):
     logging.info(
-        'Test EtherchannelInterfaces.  get, post, put, delete EtherchannelInterfaces Objects. '
-        'Requires registered physical device')
+        "Test EtherchannelInterfaces.  get, post, put, delete EtherchannelInterfaces Objects. "
+        "Requires registered physical device"
+    )
 
     starttime = str(int(time.time()))
-    namer = f'_fmcapi_test_{starttime}'
+    namer = f"_fmcapi_test_{starttime}"
 
     sz1 = fmcapi.SecurityZones(fmc=fmc)
     sz1.name = "_sz1" + namer
@@ -21,7 +22,10 @@ def test__etherchannel_interfaces(fmc):
     time.sleep(1)
 
     eth1 = fmcapi.EtherchannelInterfaces(fmc=fmc, device_name="device_name")
-    eth1.p_interfaces(p_interfaces=["GigabitEthernet0/3", "GigabitEthernet0/5"], device_name="device_name")
+    eth1.p_interfaces(
+        p_interfaces=["GigabitEthernet0/3", "GigabitEthernet0/5"],
+        device_name="device_name",
+    )
     eth1.enabled = True
     eth1.ifname = "_eth1" + namer
     eth1.etherChannelId = "1"
@@ -45,4 +49,4 @@ def test__etherchannel_interfaces(fmc):
     sz1.delete()
     sz2.delete()
 
-    logging.info('Testing EtherchannelInterfaces class done.\n')
+    logging.info("Testing EtherchannelInterfaces class done.\n")
