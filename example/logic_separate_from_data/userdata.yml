@@ -34,8 +34,9 @@ access_policies:
     default_action: BLOCK
     rules:
       - name: Permit HQ LAN
-        log_begin: True
-        log_end: True
+        log_begin: False
+        log_end: False
+        send_events_to_fmc: False
         action: ALLOW
         enabled: True
         source_security_zones:
