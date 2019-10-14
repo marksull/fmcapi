@@ -828,7 +828,7 @@ class AccessRules(APIClassTemplate):
 
         if action == "add":
             if literal:
-                type_ = "ISESecurityGroupTag"  # This is probably wrong.
+                type_ = "ISESecurityGroupTag"
                 self.sourceSecurityGroupTags["literals"][literal] = type_
                 logging.info(
                     f'Adding literal "{literal}" of type "{type_}" '

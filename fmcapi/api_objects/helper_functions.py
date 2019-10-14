@@ -6,8 +6,52 @@ import re
 import ipaddress
 import json
 import logging
+from .status_services import TaskStatuses
+import time
 
 logging.debug(f"In the {__name__} module.")
+
+
+def wait_for_task(fmc, task, wait_time=10):
+    task_completed_states = ["Success", "SUCCESS", "COMPLETED"]
+    try:
+        status = TaskStatuses(fmc=fmc, id=task["id"])
+        current_status = status.get()
+        """
+        Task Status for new device registration behaves differently than other tasks
+        On new device registration, a task is sent for the initial registration. After completion 
+        the UUID is deleted without any change in task status. So we check to see if the object no longer exists
+        to assume the registration is complete.  After registration, discovery of the device begins, but there is
+        no way to check for this with a task status.  The device can't be modified during this time, but a new device
+        registration can begin.
+
+        OTOH, a device HA operation will update its status to "Success" on completion.  Hence the two different checks.
+        """
+        while (
+            current_status["status"] is not None
+            and current_status["status"] not in task_completed_states
+        ):
+            # Lot of inconsistencies with the type of data a task can return
+            if "taskType" in current_status.keys():
+                logging.info(
+                    "Task: %s %s %s"
+                    % (
+                        current_status["taskType"],
+                        current_status["status"],
+                        current_status["id"],
+                    )
+                )
+                time.sleep(wait_time)
+                current_status = status.get()
+            else:
+                logging.info(
+                    "Task: %s %s" % (current_status["status"], current_status["id"])
+                )
+                time.sleep(wait_time)
+                current_status = status.get()
+        logging.info("Task: %s %s" % (current_status["status"], current_status["id"]))
+    except Exception as e:
+        logging.info(type(e), e)
 
 
 def syntax_correcter(value, permitted_syntax="""[.\w\d_\-]""", replacer="_"):
@@ -125,12 +169,7 @@ def validate_vlans(start_vlan, end_vlan=""):
         end_vlan = start_vlan
     if int(end_vlan) < int(start_vlan):
         start_vlan, end_vlan = end_vlan, start_vlan
-    if (
-        int(start_vlan) > 0
-        and int(start_vlan) < 4095
-        and int(end_vlan) > 0
-        and int(end_vlan) < 4095
-    ):
+    if 0 < int(start_vlan) < 4095 and 0 < int(end_vlan) < 4095:
         return start_vlan, end_vlan
     else:
         return 1, 4094

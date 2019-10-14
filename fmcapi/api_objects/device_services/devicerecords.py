@@ -1,5 +1,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.policy_services.accesspolicies import AccessPolicies
+from fmcapi.api_objects.helper_functions import wait_for_task
 import time
 import logging
 import warnings
@@ -103,6 +104,8 @@ class DeviceRecords(APIClassTemplate):
     def post(self, **kwargs):
         logging.debug("In post() for DeviceRecords class.")
         response = super().post(**kwargs)
+        wait_for_task(response["metadata"]["task"], 30)
+        """  The old way
         if "post_wait_time" in kwargs:
             self.post_wait_time = kwargs["post_wait_time"]
         else:
@@ -112,6 +115,7 @@ class DeviceRecords(APIClassTemplate):
             f"Waiting {self.post_wait_time} seconds for it to complete."
         )
         time.sleep(self.post_wait_time)
+        """
         return response
 
 
