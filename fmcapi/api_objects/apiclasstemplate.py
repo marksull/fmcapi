@@ -1,5 +1,5 @@
 """Super class(es) that is inherited by all API objects."""
-from .helper_functions import *
+from .helper_functions import syntax_correcter
 import logging
 import json
 
@@ -99,7 +99,11 @@ class APIClassTemplate(object):
                     logging.info(f"\tURL = {self.URL}")
                     return False
                 response = self.fmc.send_to_api(method="get", url=url)
-                self.parse_kwargs(**response)
+                try:
+                    self.parse_kwargs(**response)
+                except TypeError as e:
+                    logging.error(f"Response from FMC GET with 'id', {self.id}, returned none."
+                                  f"That 'id' probably was deleted.  Error: {e}.")
                 if "name" in self.__dict__:
                     logging.info(
                         f'GET success. Object with name: "{self.name}" and id: "{self.id}" fetched from FMC.'
