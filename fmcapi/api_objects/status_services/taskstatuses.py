@@ -9,6 +9,7 @@ class TaskStatuses(APIClassTemplate):
 
     VALID_JSON_DATA = ["id", "name", "type"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
+    REQUIRED_FOR_GET = ["id"]
     URL_SUFFIX = "/job/taskstatuses"
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 
@@ -28,3 +29,4 @@ class TaskStatuses(APIClassTemplate):
     def delete(self):
         logging.info("DELETE method for API for TaskStatuses not supported.")
         pass
+
