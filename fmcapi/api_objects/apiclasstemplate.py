@@ -1,6 +1,7 @@
 """Super class(es) that is inherited by all API objects."""
 from .helper_functions import *
 import logging
+import json
 
 logging.debug(f"In the {__name__} module.")
 
@@ -25,7 +26,7 @@ class APIClassTemplate(object):
 
     @property
     def show_json(self):
-        return self.format_data()
+        return json.dumps(self.format_data())
 
     def __init__(self, fmc, **kwargs):
         logging.debug("In __init__() for APIClassTemplate class.")
@@ -188,7 +189,7 @@ class APIClassTemplate(object):
                     )
                     logging.info("\tMethod = POST")
                     logging.info(f"\tURL = {self.URL}")
-                    logging.info(f"\tJSON = {self.format_data()}")
+                    logging.info(f"\tJSON = {self.show_json()}")
                     return False
                 response = self.fmc.send_to_api(
                     method="post", url=self.URL, json_data=self.format_data()
@@ -236,7 +237,7 @@ class APIClassTemplate(object):
                 )
                 logging.info("\tMethod = PUT")
                 logging.info(f"\tURL = {self.URL}")
-                logging.info(f"\tJSON = {self.format_data()}")
+                logging.info(f"\tJSON = {self.show_json()}")
                 return False
             response = self.fmc.send_to_api(
                 method="put", url=url, json_data=self.format_data()
@@ -281,7 +282,7 @@ class APIClassTemplate(object):
                 )
                 logging.info("\tMethod = DELETE")
                 logging.info(f"\tURL = {self.URL}")
-                logging.info(f"\tJSON = {self.format_data()}")
+                logging.info(f"\tJSON = {self.show_json()}")
                 return False
             response = self.fmc.send_to_api(
                 method="delete", url=url, json_data=self.format_data()
