@@ -6,6 +6,7 @@ import re
 import ipaddress
 import json
 import logging
+import time
 
 logging.debug(f"In the {__name__} module.")
 
@@ -125,12 +126,7 @@ def validate_vlans(start_vlan, end_vlan=""):
         end_vlan = start_vlan
     if int(end_vlan) < int(start_vlan):
         start_vlan, end_vlan = end_vlan, start_vlan
-    if (
-        int(start_vlan) > 0
-        and int(start_vlan) < 4095
-        and int(end_vlan) > 0
-        and int(end_vlan) < 4095
-    ):
+    if 0 < int(start_vlan) < 4095 and 0 < int(end_vlan) < 4095:
         return start_vlan, end_vlan
     else:
         return 1, 4094

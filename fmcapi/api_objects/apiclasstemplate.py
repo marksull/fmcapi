@@ -1,6 +1,7 @@
 """Super class(es) that is inherited by all API objects."""
-from .helper_functions import *
+from .helper_functions import syntax_correcter
 import logging
+import json
 
 logging.debug(f"In the {__name__} module.")
 
@@ -25,7 +26,7 @@ class APIClassTemplate(object):
 
     @property
     def show_json(self):
-        return self.format_data()
+        return json.dumps(self.format_data())
 
     def __init__(self, fmc, **kwargs):
         logging.debug("In __init__() for APIClassTemplate class.")
@@ -98,7 +99,11 @@ class APIClassTemplate(object):
                     logging.info(f"\tURL = {self.URL}")
                     return False
                 response = self.fmc.send_to_api(method="get", url=url)
-                self.parse_kwargs(**response)
+                try:
+                    self.parse_kwargs(**response)
+                except TypeError as e:
+                    logging.error(f"Response from FMC GET with 'id', {self.id}, returned none."
+                                  f"That 'id' probably was deleted.  Error: {e}.")
                 if "name" in self.__dict__:
                     logging.info(
                         f'GET success. Object with name: "{self.name}" and id: "{self.id}" fetched from FMC.'
@@ -188,7 +193,7 @@ class APIClassTemplate(object):
                     )
                     logging.info("\tMethod = POST")
                     logging.info(f"\tURL = {self.URL}")
-                    logging.info(f"\tJSON = {self.format_data()}")
+                    logging.info(f"\tJSON = {self.show_json()}")
                     return False
                 response = self.fmc.send_to_api(
                     method="post", url=self.URL, json_data=self.format_data()
@@ -236,7 +241,7 @@ class APIClassTemplate(object):
                 )
                 logging.info("\tMethod = PUT")
                 logging.info(f"\tURL = {self.URL}")
-                logging.info(f"\tJSON = {self.format_data()}")
+                logging.info(f"\tJSON = {self.show_json()}")
                 return False
             response = self.fmc.send_to_api(
                 method="put", url=url, json_data=self.format_data()
@@ -281,7 +286,7 @@ class APIClassTemplate(object):
                 )
                 logging.info("\tMethod = DELETE")
                 logging.info(f"\tURL = {self.URL}")
-                logging.info(f"\tJSON = {self.format_data()}")
+                logging.info(f"\tJSON = {self.show_json()}")
                 return False
             response = self.fmc.send_to_api(
                 method="delete", url=url, json_data=self.format_data()

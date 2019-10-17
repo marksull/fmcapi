@@ -95,6 +95,7 @@ def main():
         unit_tests.test__redundant_interfaces(fmc=fmc1)
         unit_tests.test__etherchannel_interfaces(fmc=fmc1)
         unit_tests.test__subinterfaces(fmc=fmc1)
+        unit_tests.test__ftds2svpns(fms=fmc1)
         """
 
 

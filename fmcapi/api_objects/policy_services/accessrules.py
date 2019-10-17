@@ -828,7 +828,7 @@ class AccessRules(APIClassTemplate):
 
         if action == "add":
             if literal:
-                type_ = "ISESecurityGroupTag"  # This is probably wrong.
+                type_ = "ISESecurityGroupTag"
                 self.sourceSecurityGroupTags["literals"][literal] = type_
                 logging.info(
                     f'Adding literal "{literal}" of type "{type_}" '
@@ -843,11 +843,11 @@ class AccessRules(APIClassTemplate):
                 else:
                     item = {}
                 new_sgt = None
-                if item["name"] == name:
+                if item.name == name:
                     new_sgt = {
-                        "name": item["name"],
-                        "tag": item["tag"],
-                        "type": item["type"],
+                        "name": item.name,
+                        "tag": item.tag,
+                        "type": item.type,
                     }
                 if new_sgt is None:
                     logging.warning(
