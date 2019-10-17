@@ -263,7 +263,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
                 and self.page_counter <= self.MAX_PAGING_REQUESTS
             ):
                 self.more_items += json_response["items"]
-                logging.info(
+                logging.debug(
                     f"Paging:  Offset:{json_response['paging']['offset']}, "
                     f"Limit:{json_response['paging']['limit']}, "
                     f"Count:{json_response['paging']['count']}, "

@@ -117,18 +117,20 @@ class DeviceRecords(APIClassTemplate):
             OTOH, a device HA operation will update its status to "Success" on completion.  Hence the two different checks.
             """
             while (
-                    current_status["status"] is not None
-                    and current_status["status"] not in task_completed_states
+                current_status["status"] is not None
+                and current_status["status"] not in task_completed_states
             ):
                 # Lot of inconsistencies with the type of data a task can return
                 if "taskType" in current_status.keys():
                     logging.info(
-                        f"Task: {current_status['taskType']} {current_status['status']} {current_status['id']}")
+                        f"Task: {current_status['taskType']} {current_status['status']} {current_status['id']}"
+                    )
                     time.sleep(wait_time)
                     current_status = status.get()
                 else:
                     logging.info(
-                        f"Task: {current_status['status']} {current_status['id']}")
+                        f"Task: {current_status['status']} {current_status['id']}"
+                    )
                     time.sleep(wait_time)
                     current_status = status.get()
             logging.info(f"Task: {current_status['status']} {current_status['id']}")
@@ -138,7 +140,7 @@ class DeviceRecords(APIClassTemplate):
     def post(self, **kwargs):
         logging.debug("In post() for DeviceRecords class.")
         response = super().post(**kwargs)
-        #  self.wait_for_task(task=response["metadata"]["task"], wait_time=30)
+        #  self.wait_for_task(task=response["metadata"]["task"], wait_time=30)  # Doesn't work yet.
         if "post_wait_time" in kwargs:
             self.post_wait_time = kwargs["post_wait_time"]
         else:

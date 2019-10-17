@@ -71,7 +71,7 @@ class APIClassTemplate(object):
             return True
         for item in self.REQUIRED_FOR_GET:
             if item not in self.__dict__:
-                logging.info(f'Missing value "{item}" for GET request.')
+                logging.error(f'Missing value "{item}" for GET request.')
                 return False
         return True
 
@@ -102,8 +102,10 @@ class APIClassTemplate(object):
                 try:
                     self.parse_kwargs(**response)
                 except TypeError as e:
-                    logging.error(f"Response from FMC GET with 'id', {self.id}, returned none."
-                                  f"That 'id' probably was deleted.  Error: {e}.")
+                    logging.error(
+                        f"Response from FMC GET with 'id', {self.id}, returned none."
+                        f"That 'id' probably was deleted.  Error: {e}."
+                    )
                 if "name" in self.__dict__:
                     logging.info(
                         f'GET success. Object with name: "{self.name}" and id: "{self.id}" fetched from FMC.'
@@ -143,7 +145,7 @@ class APIClassTemplate(object):
                         f"\tGET query for {self.name} is not found.\n\t\tResponse: {json.dumps(response)}"
                     )
             else:
-                logging.info(
+                logging.debug(
                     "GET query for object with no name or id set.  "
                     "Returning full list of these object types instead."
                 )
@@ -169,7 +171,7 @@ class APIClassTemplate(object):
         logging.debug("In valid_for_post() for APIClassTemplate class.")
         for item in self.REQUIRED_FOR_POST:
             if item not in self.__dict__:
-                logging.info(f'Missing value "{item}" for POST request.')
+                logging.error(f'Missing value "{item}" for POST request.')
                 return False
         return True
 
@@ -205,7 +207,7 @@ class APIClassTemplate(object):
                             f'POST success. Object with name: "{self.name}" and id: "{id}" created in FMC.'
                         )
                     else:
-                        logging.info(
+                        logging.debug(
                             'POST success but no "id" or "name" values in API response.'
                         )
                 else:
@@ -221,7 +223,7 @@ class APIClassTemplate(object):
         logging.debug("In valid_for_put() for APIClassTemplate class.")
         for item in self.REQUIRED_FOR_PUT:
             if item not in self.__dict__:
-                logging.info(f'Missing value "{item}" for PUT request.')
+                logging.error(f'Missing value "{item}" for PUT request.')
                 return False
         return True
 
@@ -266,7 +268,7 @@ class APIClassTemplate(object):
         logging.debug("In valid_for_delete() for APIClassTemplate class.")
         for item in self.REQUIRED_FOR_DELETE:
             if item not in self.__dict__:
-                logging.info(f'Missing value "{item}" for DELETE request.')
+                logging.error(f'Missing value "{item}" for DELETE request.')
                 return False
         return True
 

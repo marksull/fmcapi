@@ -63,14 +63,12 @@ def create_access_policies(fmc, acp_list):
                 acp_rule = fmcapi.AccessRules(
                     fmc=fmc, acp_name=policy.name, name=rule["name"]
                 )
-                """  This is broken at the moment.
-                """
-                if 'log_begin' in rule:
-                    acp_rule.logBegin = rule['log_begin']
-                if 'log_end' in rule:
-                    acp_rule.logEnd = rule['log_end']
-                if 'send_events_to_fmc' in rule:
-                    acp_rule.sendEventsToFMC = rule['send_events_to_fmc']
+                if "log_begin" in rule:
+                    acp_rule.logBegin = rule["log_begin"]
+                if "log_end" in rule:
+                    acp_rule.logEnd = rule["log_end"]
+                if "send_events_to_fmc" in rule:
+                    acp_rule.sendEventsToFMC = rule["send_events_to_fmc"]
                 if "enabled" in rule:
                     acp_rule.enabled = rule["enabled"]
                 if "action" in rule:
