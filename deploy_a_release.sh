@@ -2,7 +2,7 @@
 
 echo "Building a new release of fmcapi!"
 echo
-echo "Did you remember to run black???  e.g.  black fmcapi --diff --exclude \"venv|build\""
+echo "Did you remember to run black???  e.g.  black fmcapi --exclude \"venv|build\""
 read -p "(y/n): " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
