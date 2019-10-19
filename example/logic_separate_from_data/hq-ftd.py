@@ -5,24 +5,71 @@ import fmcapi
 import logging
 from ruamel.yaml import YAML
 from pathlib import Path
-
-# User Modifiable Data
-YAML_CONFIGS_DIR = "."
-YAML_FILE = "userdata.yml"
+import argparse
 
 
-def main():
+def main(datafile):
     """Grab the data from the yaml file and send it to program_fmc()."""
     yaml = YAML(typ="safe")
-    path = Path(YAML_CONFIGS_DIR) / YAML_FILE
+    path = Path(datafile)
     with open(path, "r") as stream:
         try:
             my_data = yaml.load(stream)
             logging.info(f"Loading {path} file.")
-            program_fmc(my_data)
+            program_fmc(data_vars=my_data, path=path)
         except OSError:
             logging.error(f"An error has occurred trying to open {path}.")
             exit(1)
+
+
+def program_fmc(data_vars, path):
+    """Use values from YAML file to program the FMC. """
+    if "fmc" in data_vars:
+        # noinspection PyBroadException
+        try:
+            with fmcapi.FMC(**data_vars["fmc"]) as fmc1:
+                if "security_zones" in data_vars:
+                    create_security_zones(fmc=fmc1, sz_list=data_vars["security_zones"])
+                else:
+                    logging.info(
+                        "'security_zones' section not in YAML file.  Skipping."
+                    )
+                if "hosts" in data_vars:
+                    create_hosts(fmc=fmc1, na_list=data_vars["hosts"])
+                else:
+                    logging.info("'hosts' section not in YAML file.  Skipping.")
+                if "networks" in data_vars:
+                    create_networks(fmc=fmc1, network_list=data_vars["networks"])
+                else:
+                    logging.info("'networks' section not in YAML file.  Skipping.")
+                if "access_policies" in data_vars:
+                    create_access_policies(
+                        fmc=fmc1, acp_list=data_vars["access_policies"]
+                    )
+                else:
+                    logging.info(
+                        "'access_policies' section not in YAML file.  Skipping."
+                    )
+                if "nat_policies" in data_vars:
+                    create_nat_policies(fmc=fmc1, nat_list=data_vars["nat_policies"])
+                else:
+                    logging.info("'nat_policies' section not in YAML file.  Skipping.")
+                if "device_records" in data_vars:
+                    create_device_records(
+                        fmc=fmc1, device_list=data_vars["device_records"]
+                    )
+                else:
+                    logging.info(
+                        "'device_records' section not in YAML file.  Skipping."
+                    )
+        except Exception as e:
+            logging.error(
+                f"Section 'fmc' does not have the right information (bad password?)"
+                f" to establish a connection to FMC:"
+            )
+            logging.error(f"Error is '{e}'")
+    else:
+        logging.warning(f"No 'fmc' section found in {path}")
 
 
 def create_security_zones(fmc, sz_list):
@@ -238,55 +285,15 @@ def create_device_records(fmc, device_list):
             natp.post()
 
 
-def program_fmc(data_vars):
-    """Use values from YAML file to program the FMC. """
-    if "fmc" in data_vars:
-        # noinspection PyBroadException
-        try:
-            with fmcapi.FMC(**data_vars["fmc"]) as fmc1:
-                if "security_zones" in data_vars:
-                    create_security_zones(fmc=fmc1, sz_list=data_vars["security_zones"])
-                else:
-                    logging.info(
-                        "'security_zones' section not in YAML file.  Skipping."
-                    )
-                if "hosts" in data_vars:
-                    create_hosts(fmc=fmc1, na_list=data_vars["hosts"])
-                else:
-                    logging.info("'hosts' section not in YAML file.  Skipping.")
-                if "networks" in data_vars:
-                    create_networks(fmc=fmc1, network_list=data_vars["networks"])
-                else:
-                    logging.info("'networks' section not in YAML file.  Skipping.")
-                if "access_policies" in data_vars:
-                    create_access_policies(
-                        fmc=fmc1, acp_list=data_vars["access_policies"]
-                    )
-                else:
-                    logging.info(
-                        "'access_policies' section not in YAML file.  Skipping."
-                    )
-                if "nat_policies" in data_vars:
-                    create_nat_policies(fmc=fmc1, nat_list=data_vars["nat_policies"])
-                else:
-                    logging.info("'nat_policies' section not in YAML file.  Skipping.")
-                if "device_records" in data_vars:
-                    create_device_records(
-                        fmc=fmc1, device_list=data_vars["device_records"]
-                    )
-                else:
-                    logging.info(
-                        "'device_records' section not in YAML file.  Skipping."
-                    )
-        except Exception as e:
-            logging.error(
-                f"Section 'fmc' does not have the right information (bad password?)"
-                f" to establish a connection to FMC:"
-            )
-            logging.error(f"Error is '{e}'")
-    else:
-        logging.warning(f"No 'fmc' section found in {YAML_FILE}")
-
-
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description='Specify arguments to modify program.')
+    parser.add_argument("--datafile",
+                        metavar="-d",
+                        action="store",
+                        dest="datafile",
+                        type=str,
+                        help="Path and filename to YAML file containing data config to parse.",
+                        default="userdata.yml",
+                        )
+    args = parser.parse_args()
+    main(datafile=args.datafile)
