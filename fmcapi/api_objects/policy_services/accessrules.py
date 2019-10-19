@@ -844,11 +844,7 @@ class AccessRules(APIClassTemplate):
                     item = {}
                 new_sgt = None
                 if item.name == name:
-                    new_sgt = {
-                        "name": item.name,
-                        "tag": item.tag,
-                        "type": item.type,
-                    }
+                    new_sgt = {"name": item.name, "tag": item.tag, "type": item.type}
                 if new_sgt is None:
                     logging.warning(
                         f'SecurityGroupTag "{name}" is not found in FMC.  '

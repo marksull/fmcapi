@@ -1,3 +1,3 @@
-ruamel
+ruamel.yaml
 pathlib
 argparse

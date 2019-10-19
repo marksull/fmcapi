@@ -29,4 +29,3 @@ class TaskStatuses(APIClassTemplate):
     def delete(self):
         logging.info("DELETE method for API for TaskStatuses not supported.")
         pass
-

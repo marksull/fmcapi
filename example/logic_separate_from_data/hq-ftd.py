@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 """
 Program FMC and FTD using YAML file for user data.
 """
@@ -286,14 +287,15 @@ def create_device_records(fmc, device_list):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Specify arguments to modify program.')
-    parser.add_argument("--datafile",
-                        metavar="-d",
-                        action="store",
-                        dest="datafile",
-                        type=str,
-                        help="Path and filename to YAML file containing data config to parse.",
-                        default="userdata.yml",
-                        )
+    parser = argparse.ArgumentParser(description="Specify arguments to modify program.")
+    parser.add_argument(
+        "-d",
+        "--datafile",
+        action="store",
+        dest="datafile",
+        type=str,
+        help="Path and filename to YAML file containing data.",
+        default="datafile.yml",
+    )
     args = parser.parse_args()
     main(datafile=args.datafile)
