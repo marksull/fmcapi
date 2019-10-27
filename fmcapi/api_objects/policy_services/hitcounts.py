@@ -17,6 +17,7 @@ class HitCounts(APIClassTemplate):
         "acp_name",
         "device_id",
         "device_name",
+        "prefilter_id",
         "fetchZeroHitcount",
         "limit",
     ]
@@ -242,7 +243,7 @@ class HitCounts(APIClassTemplate):
         pass
 
     def post(self):
-        logging.info("API POST method for HitCounts not supported.")
+        logging.info("APIhit_count POST method for HitCounts not supported.")
         pass
 
 
