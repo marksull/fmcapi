@@ -2,11 +2,8 @@ import logging
 import fmcapi
 import time
 
-# Set your device's name for this test to work:
-device_name = ""
-prefilter_id = ""
 
-def test__hitcounts(fmc):
+def test__hitcounts(fmc, device_name="", prefilter_id=""):
     if not device_name and not prefilter_id:
         return f"Name of an actual device or prefilter ID is required for the HitCounts test to work... skipping test."
 
@@ -16,34 +13,38 @@ def test__hitcounts(fmc):
     starttime = str(int(time.time()))
     namer = f"test__hitcounts_{starttime}"
 
-    # Build an ACP Object
-    acp1 = fmcapi.AccessPolicies(fmc=fmc, name=namer)
-    acp1.post()
-    time.sleep(1)
-
-    # Build an ACP Rule Object
-    acprule1 = fmcapi.AccessRules(fmc=fmc, acp_name=acp1.name)
-    acprule1.name = namer
-    acprule1.action = "ALLOW"
-    acprule1.enabled = True
-    acprule1.variable_set(action="set", name="Default-Set")
-    acprule1.intrusion_policy(action="set", name="Security Over Connectivity")
-    acprule1.post()
-
-    # Device
-    device1 = fmcapi.DeviceRecords(fmc=fmc, device_name=device_name)
+    # Get the device
+    device1 = fmcapi.DeviceRecords(fmc=fmc, name=device_name)
     device1.get()
 
-    if device_name:
-        hitcounter1 = fmcapi.HitCounts(fmc=fmc, acp_name=acp1.name, device_name=device1.name)
-    elif prefilter_id:
-        hitcounter1 = fmcapi.HitCounts(fmc=fmc, acp_name=acp1.name, prefilter_id=prefilter_id)
-    print(hitcounter1)
+    # In case there is no ACP Rule build a temp one.
+    acprule1 = fmcapi.AccessRules(fmc=fmc, acp_id=device1.accessPolicy['id'])
+    # acprule1 = fmcapi.AccessRules(fmc=fmc, acp_name=device1.accessPolicy['name'])
+    acprule1.name = namer
+    acprule1.action = "ALLOW"
+    acprule1.post()
+    time.sleep(1)
+    acprule1.get()
 
-    logging.info("Test Hitcount done.")
+    hitcounter1 = None
+    if prefilter_id:
+        hitcounter1 = fmcapi.HitCounts(fmc=fmc, prefilter_id=prefilter_id, device_name=device_name)
+    else:
+        hitcounter1 = fmcapi.HitCounts(fmc=fmc, acp_id=device1.accessPolicy['id'], device_name=device_name)
+        """ 
+        Searching for AccessRule by name returns the "correct" ID for the rule but HitCount shows a completely
+        different ID so it doesn't match.
+        # hitcounter1.acp_rules(action="add", name="Permit HQ LAN")
+
+        If you know the ID that HitCount is looking for a specific rule:
+        # hitcounter1.acp_rules(action="add", acp_rule_id="005056B5-44E6-0ed3-0000-000268434433")
+        """
+    for result in hitcounter1.get():
+        print(result)
+
+    logging.info("Test HitCount done.")
 
     logging.info("Cleanup of testing HitCount methods.")
     acprule1.delete()
     time.sleep(1)
-    acp1.delete()
-    logging.info("Cleanup of objects for HitCount test done.\n")
+    logging.info("Cleanup of objects for HitCount test done.\n\n")
