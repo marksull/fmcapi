@@ -26,7 +26,7 @@ class APIClassTemplate(object):
 
     @property
     def show_json(self):
-        return json.dumps(self.format_data(filter_query='json'))
+        return json.dumps(self.format_data())
 
     def __init__(self, fmc, **kwargs):
         logging.debug("In __init__() for APIClassTemplate class.")
@@ -46,9 +46,9 @@ class APIClassTemplate(object):
     def format_data(self, filter_query=""):
         logging.debug("In format_data() for APIClassTemplate class.")
         json_data = {}
-        filter_list = self.VALID_FOR_KWARGS
-        if filter_query == 'json':
-            filter_list = self.VALID_JSON_DATA
+        filter_list = self.VALID_JSON_DATA
+        if filter_query == 'all':
+            filter_list = self.VALID_FOR_KWARGS
         for key_value in filter_list:
             if key_value in self.__dict__:
                 json_data[key_value] = self.__dict__[key_value]
