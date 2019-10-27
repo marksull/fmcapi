@@ -47,7 +47,7 @@ class APIClassTemplate(object):
         logging.debug("In format_data() for APIClassTemplate class.")
         json_data = {}
         filter_list = self.VALID_FOR_KWARGS
-        if filter_query = 'json':
+        if filter_query == 'json':
             filter_list = self.VALID_JSON_DATA
         for key_value in filter_list:
             if key_value in self.__dict__:
