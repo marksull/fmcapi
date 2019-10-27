@@ -28,7 +28,7 @@ def main():
         file_logging=logname,
         debug=debug,
     ) as fmc1:
-        logging.info("# ### Mega Test Start!!! ### #")
+        logging.info("# ### Mega Test Start!!! ### #\n\n")
         unit_tests.test__fmc_version(fmc=fmc1)
 
         """
@@ -81,6 +81,7 @@ def main():
 
         """
         # Need FTD device to test
+        unit_tests.test__hitcounts(fmc=fmc1, device_name='hq-ftd')
         unit_tests.test__ftddevicehapairs(fmc=fmc1)
         unit_tests.test__failoverinterfacemacaddressconfigs(fmc=fmc1)
         unit_tests.test__monitoredinterfaces(fmc=fmc1)
