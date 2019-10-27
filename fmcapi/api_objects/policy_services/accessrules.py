@@ -104,8 +104,8 @@ class AccessRules(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
-    def format_data(self):
-        json_data = super().format_data()
+    def format_data(self, filter_query=""):
+        json_data = super().format_data(filter_query=filter_query)
         logging.debug("In format_data() for AccessRules class.")
         if "sourceNetworks" in self.__dict__:
             json_data["sourceNetworks"] = {"objects": self.sourceNetworks["objects"]}
@@ -131,7 +131,7 @@ class AccessRules(APIClassTemplate):
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for AccessRules class.")
         if "acp_id" in kwargs:
-            self.acp(acp_id=kwargs["acp_id"])
+            self.acp(id=kwargs["acp_id"])
         if "acp_name" in kwargs:
             self.acp(name=kwargs["acp_name"])
         if "action" in kwargs:
@@ -162,20 +162,16 @@ class AccessRules(APIClassTemplate):
         # Check if suffix should be added to URL
         # self.url_suffix()
 
-    def acp(self, name="", acp_id=""):
+    def acp(self, name="", id=""):
         # either name or id of the ACP should be given
         logging.debug("In acp() for AccessRules class.")
-        if acp_id != "":
-            self.acp_id = acp_id
-            self.URL = f"{self.fmc.configuration_url}{self.PREFIX_URL}/{self.acp_id}/accessrules"
-            self.acp_added_to_url = True
+        if id != "":
+            self.URL = f"{self.fmc.configuration_url}{self.PREFIX_URL}/{id}/accessrules"
         elif name != "":
             acp1 = AccessPolicies(fmc=self.fmc)
             acp1.get(name=name)
             if "id" in acp1.__dict__:
-                self.acp_id = acp1.id
-                self.URL = f"{self.fmc.configuration_url}{self.PREFIX_URL}/{self.acp_id}/accessrules"
-                self.acp_added_to_url = True
+                self.URL = f"{self.fmc.configuration_url}{self.PREFIX_URL}/{acp1.id}/accessrules"
             else:
                 logging.warning(
                     f"Access Control Policy {name} not found.  Cannot set up accessPolicy for AccessRules."
