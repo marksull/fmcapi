@@ -26,7 +26,7 @@ class APIClassTemplate(object):
 
     @property
     def show_json(self):
-        return json.dumps(self.format_data())
+        return json.dumps(self.format_data(filter_query='json'))
 
     def __init__(self, fmc, **kwargs):
         logging.debug("In __init__() for APIClassTemplate class.")
@@ -43,10 +43,13 @@ class APIClassTemplate(object):
                 f"Your FMC version is {self.fmc.serverVersion}.  Upgrade to use this feature."
             )
 
-    def format_data(self):
+    def format_data(self, filter_query=""):
         logging.debug("In format_data() for APIClassTemplate class.")
         json_data = {}
-        for key_value in self.VALID_JSON_DATA:
+        filter_list = self.VALID_FOR_KWARGS
+        if filter_query = 'json':
+            filter_list = self.VALID_JSON_DATA
+        for key_value in filter_list:
             if key_value in self.__dict__:
                 json_data[key_value] = self.__dict__[key_value]
         return json_data
