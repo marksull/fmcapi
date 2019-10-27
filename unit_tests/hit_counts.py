@@ -18,7 +18,7 @@ def test__hitcounts(fmc, device_name="", prefilter_id=""):
     device1.get()
 
     # In case there is no ACP Rule build a temp one.
-    acprule1 = fmcapi.AccessRules(fmc=fmc, acp_id=device1.accessPolicy['id'])
+    acprule1 = fmcapi.AccessRules(fmc=fmc, acp_id=device1.accessPolicy["id"])
     # acprule1 = fmcapi.AccessRules(fmc=fmc, acp_name=device1.accessPolicy['name'])
     acprule1.name = namer
     acprule1.action = "ALLOW"
@@ -28,9 +28,13 @@ def test__hitcounts(fmc, device_name="", prefilter_id=""):
 
     hitcounter1 = None
     if prefilter_id:
-        hitcounter1 = fmcapi.HitCounts(fmc=fmc, prefilter_id=prefilter_id, device_name=device_name)
+        hitcounter1 = fmcapi.HitCounts(
+            fmc=fmc, prefilter_id=prefilter_id, device_name=device_name
+        )
     else:
-        hitcounter1 = fmcapi.HitCounts(fmc=fmc, acp_id=device1.accessPolicy['id'], device_name=device_name)
+        hitcounter1 = fmcapi.HitCounts(
+            fmc=fmc, acp_id=device1.accessPolicy["id"], device_name=device_name
+        )
         """ 
         Searching for AccessRule by name returns the "correct" ID for the rule but HitCount shows a completely
         different ID so it doesn't match.

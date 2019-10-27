@@ -147,7 +147,9 @@ class HitCounts(APIClassTemplate):
         if name:
             # Need the acp_id if searching for AccessRule by name.
             if not self.acp_id:
-                logging.error("Set AccessPolicy (acp_id or acp_name) prior to referencing acp_rules().")
+                logging.error(
+                    "Set AccessPolicy (acp_id or acp_name) prior to referencing acp_rules()."
+                )
                 return
             acp_rule = AccessRules(fmc=self.fmc, acp_id=self.acp_id)
             acp_rule.get(name=name)
@@ -156,18 +158,24 @@ class HitCounts(APIClassTemplate):
                 acp_rule_id = acp_rule.id
             else:
                 acp_rule_id = None
-                logging.warning(f'AccessRule, "{name}", not found.  Cannot add to HitCounts.')
+                logging.warning(
+                    f'AccessRule, "{name}", not found.  Cannot add to HitCounts.'
+                )
 
         # If id is sent directly (and not looked up via name) assuming that the id is a valid AccessRule ID
         if acp_rule_id:
             if action == "add":
                 if acp_rule_id not in self.acp_rule_ids:
                     self.acp_rule_ids.append(acp_rule_id)
-                    logging.info(f'Adding "{acp_rule_id}" to acp_rule_ids for this HitCounts.')
+                    logging.info(
+                        f'Adding "{acp_rule_id}" to acp_rule_ids for this HitCounts.'
+                    )
             elif action == "remove":
                 if acp_rule_id in self.acp_rule_ids:
                     self.acp_rule_ids.remove(acp_rule_id)
-                    logging.info(f'Removed "{acp_rule_id}" from acp_rule_ids for this HitCounts.')
+                    logging.info(
+                        f'Removed "{acp_rule_id}" from acp_rule_ids for this HitCounts.'
+                    )
             elif action == "clear":
                 self.acp_rule_ids = None
                 logging.info("All ids removed from acp_rule_ids.")
@@ -184,15 +192,19 @@ class HitCounts(APIClassTemplate):
         logging.debug("In prefilter_policy() for HitCounts class.")
         if prefilter_policy_id != "":
             self.prefilter_id = prefilter_policy_id
-            self.URL = f"{self.fmc.configuration_url}{self.PREFILTER_PREFIX_URL}/" \
-                       f"{self.prefilter_id}/operational/hitcounts"
+            self.URL = (
+                f"{self.fmc.configuration_url}{self.PREFILTER_PREFIX_URL}/"
+                f"{self.prefilter_id}/operational/hitcounts"
+            )
         elif name != "":
             ppolicy1 = PreFilterPolicies(fmc=self.fmc)
             ppolicy1.get(name=name)
             if "id" in ppolicy1.__dict__:
                 self.prefilter_id = ppolicy1.id
-                self.URL = f"{self.fmc.configuration_url}{self.PREFILTER_PREFIX_URL}/" \
-                           f"{self.prefilter_id}/operational/hitcounts"
+                self.URL = (
+                    f"{self.fmc.configuration_url}{self.PREFILTER_PREFIX_URL}/"
+                    f"{self.prefilter_id}/operational/hitcounts"
+                )
             else:
                 logging.warning(
                     f'Access Control Policy "{name}" not found.  Cannot configure acp for HitCounts.'
