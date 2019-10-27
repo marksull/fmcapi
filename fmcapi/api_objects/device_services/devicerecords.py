@@ -30,8 +30,14 @@ class DeviceRecords(APIClassTemplate):
         "modelType",
         "healthStatus",
         "healthPolicy",
-        "keepLocalEvents",
+        "type",
+        "version",
+        "sw_version",
+        "deviceGroup",
         "prohibitPacketTransfer",
+        "keepLocalEvents",
+        "ftdMode",
+        "keepLocalEvents",
     ]
     URL_SUFFIX = "/devices/devicerecords"
     REQUIRED_FOR_POST = ["accessPolicy", "hostName", "regKey"]
