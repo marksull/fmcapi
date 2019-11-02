@@ -21,7 +21,8 @@ Cons:
 
 ### Separating logic and data
 The "new" way to write code is to separate the logic from the data.  This means importing a "data file" to be run against the code.
-You can find that code example in the 'logic_separate_from_data' directory.
+You can find that code example in the 'logic_separate_from_data' directory.  (The program_logic.py is the Python script to run.  
+It references the userdata.yml file for it's content.)
 Pros:
 *  With data and logic separated the data can be "switched out" quickly with out having to read/modify the code.
 *  The logic and be updated and tested against a sample dataset and then ONLY the code can be shared with other users.
