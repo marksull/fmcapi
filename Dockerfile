@@ -8,3 +8,4 @@ ENV python_script TestingUserScript.py
 RUN pip install --no-cache-dir fmcapi
 
 CMD python $python_script
+
