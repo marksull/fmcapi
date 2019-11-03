@@ -53,6 +53,12 @@ an idea of what is possible.
 I recorded a quick "howto" video which can be accessed via:  (This is outdated and I need to make new videos.) 
 https://www.youtube.com/watch?v=4NIe3T-HjDw
 
+## Using in a Docker container
+There is a Docker image stored on DockerHub (dmickels/fmcapi) you can use to create Docker containers with.
+The syntax is as follows: ```docker run --name fmcapi --rm -e "python_script=YOUR_PYTHON_FILE" -v $(pwd):/usr/src/app 9b1974aae1fe```
+Note:  On Windows you'll need to change the ```$(pwd)``` to your local directory (full path) and you might need to enable sharing
+from within the Docker settings to get it to work.
+
 ## Notes
 * 1:  Check out the example directory's scripts for ideas on how to use fmcapi.
 * 2:  A lot of work has gone into making fmcapi easier to use and to develop on.  Doing this has forced us to
