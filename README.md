@@ -55,7 +55,7 @@ https://www.youtube.com/watch?v=4NIe3T-HjDw
 
 ## Using in a Docker container
 There is a Docker image stored on DockerHub (dmickels/fmcapi) you can use to create Docker containers with.
-The syntax is as follows: ```docker run --name fmcapi --rm -e "python_script=YOUR_PYTHON_FILE" -v $(pwd):/usr/src/app 9b1974aae1fe```
+The syntax is as follows: ```docker run --name fmcapi --rm -e "python_script=YOUR_PYTHON_FILE" -v $(pwd):/usr/src/app dmickels/fmcapi:latest```
 Note:  On Windows you'll need to change the ```$(pwd)``` to your local directory (full path) and you might need to enable sharing
 from within the Docker settings to get it to work.
 
