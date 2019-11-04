@@ -163,7 +163,9 @@ class AccessRules(APIClassTemplate):
             if kwargs["enabled"] in [True, False]:
                 self.enabled = kwargs["enabled"]
             else:
-                logging.warning(f"Invalid 'enabled' value '{kwargs['enabled']}'. Should be True or False")
+                logging.warning(
+                    f"Invalid 'enabled' value '{kwargs['enabled']}'. Should be True or False"
+                )
 
     def acp(self, name="", id=""):
         # either name or id of the ACP should be given
