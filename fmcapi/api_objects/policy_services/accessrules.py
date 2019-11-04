@@ -101,6 +101,7 @@ class AccessRules(APIClassTemplate):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for AccessRules class.")
         self.type = "AccessRule"
+        self.enabled = True
         self.parse_kwargs(**kwargs)
         self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
@@ -158,9 +159,11 @@ class AccessRules(APIClassTemplate):
                     self.destinationNetworks["literals"][literal["value"]] = literal[
                         "type"
                     ]
-
-        # Check if suffix should be added to URL
-        # self.url_suffix()
+        if "enabled" in kwargs:
+            if kwargs["enabled"] in [True, False]:
+                self.enabled = kwargs["enabled"]
+            else:
+                logging.warning(f"Invalid 'enabled' value '{kwargs['enabled']}'. Should be True or False")
 
     def acp(self, name="", id=""):
         # either name or id of the ACP should be given
