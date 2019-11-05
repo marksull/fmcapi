@@ -6,9 +6,24 @@ import re
 import ipaddress
 import json
 import logging
-import time
 
 logging.debug(f"In the {__name__} module.")
+
+
+def true_false_checker(value):
+    if type(value) == "str":
+        value = value.lower()
+        if value == "true":
+            return True
+        elif value == "false":
+            return False
+    elif type(value) == 'int':
+        if value == 1:
+            return True
+        elif value == 0:
+            return False
+    logging.warning(f"Invalid 'enabled' value '{value}'. Should be True or False")
+    return value
 
 
 def syntax_correcter(value, permitted_syntax="""[.\w\d_\-]""", replacer="_"):
