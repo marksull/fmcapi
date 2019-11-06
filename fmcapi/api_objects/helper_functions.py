@@ -19,10 +19,10 @@ def true_false_checker(value):
             return False
     elif type(value) is int:
         if value == 1:
-            logging.warning(f"Value should be True or False.  Assuming you meant True.")
+            logging.warning(f"Value, {value}, should be True or False.  Assuming you meant True.")
             return True
         elif value == 0:
-            logging.warning(f"Value should be True or False.  Assuming you meant False.")
+            logging.warning(f"Value, {value}, should be True or False.  Assuming you meant False.")
             return False
     elif type(value) is bool:
         return value
