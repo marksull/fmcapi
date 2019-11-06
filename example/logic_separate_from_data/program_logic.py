@@ -295,7 +295,7 @@ if __name__ == "__main__":
         dest="datafile",
         type=str,
         help="Path and filename to YAML file containing data.",
-        default="datafile.yml",
+        default="userdata.yml",
     )
     args = parser.parse_args()
     main(datafile=args.datafile)
