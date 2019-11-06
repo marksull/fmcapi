@@ -44,13 +44,9 @@ def program_fmc(data_vars, path):
                 else:
                     logging.info("'networks' section not in YAML file.  Skipping.")
                 if "access_policies" in data_vars:
-                    create_access_policies(
-                        fmc=fmc1, acp_list=data_vars["access_policies"]
-                    )
+                    create_access_policies(fmc=fmc1, acp_list=data_vars["access_policies"])
                 else:
-                    logging.info(
-                        "'access_policies' section not in YAML file.  Skipping."
-                    )
+                    logging.info("'access_policies' section not in YAML file.  Skipping.")
                 if "nat_policies" in data_vars:
                     create_nat_policies(fmc=fmc1, nat_list=data_vars["nat_policies"])
                 else:
@@ -109,7 +105,7 @@ def create_access_policies(fmc, acp_list):
         if "rules" in acp:
             for rule in acp["rules"]:
                 acp_rule = fmcapi.AccessRules(
-                    fmc=fmc, acp_name=policy.name, name=rule["name"]
+                    fmc=fmc, acp_id=policy.id, name=rule["name"]
                 )
                 if "log_begin" in rule:
                     acp_rule.logBegin = rule["log_begin"]
