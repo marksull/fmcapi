@@ -52,8 +52,8 @@ class APIClassTemplate(object):
         elif filter_query == 'kwargs':
             filter_list = self.VALID_FOR_KWARGS
         for key_value in filter_list:
-            if key_value in self.__dict__:
-                json_data[key_value] = self.__dict__[key_value]
+            if hasattr(self, key_value):
+                json_data[key_value] = getattr(self, key_value)
         return json_data
 
     def parse_kwargs(self, **kwargs):
