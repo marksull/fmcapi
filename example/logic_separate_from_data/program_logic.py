@@ -7,6 +7,7 @@ import logging
 from ruamel.yaml import YAML
 from pathlib import Path
 import argparse
+import time
 
 
 def main(datafile):
@@ -64,7 +65,7 @@ def program_fmc(data_vars, path):
                 f"Section 'fmc' does not have the right information (bad password?)"
                 f" to establish a connection to FMC:"
             )
-            logging.error(f"Error is '{e}'")
+            logging.error(f"\tError is '{e}'")
     else:
         logging.warning(f"No 'fmc' section found in {path}")
 
@@ -100,6 +101,8 @@ def create_access_policies(fmc, acp_list):
             fmc=fmc, name=acp["name"], defaultAction=acp["default_action"]
         )
         policy.post()
+        time.sleep(1)
+        policy.get()
 
         # Build access_rules associated with this acp.
         if "rules" in acp:
