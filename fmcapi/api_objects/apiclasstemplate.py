@@ -182,6 +182,7 @@ class APIClassTemplate(object):
 
     def post(self, **kwargs):
         logging.debug("In post() for APIClassTemplate class.")
+        self.parse_kwargs(**kwargs)
         if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
             logging.error(
                 f"Your FMC version, {self.fmc.serverVersion} does not support POST of this feature."
@@ -200,7 +201,7 @@ class APIClassTemplate(object):
                     )
                     logging.info("\tMethod = POST")
                     logging.info(f"\tURL = {self.URL}")
-                    logging.info(f"\tJSON = {self.show_json()}")
+                    logging.info(f"\tJSON = {self.show_json}")
                     return False
                 response = self.fmc.send_to_api(
                     method="post", url=self.URL, json_data=self.format_data()
@@ -248,7 +249,7 @@ class APIClassTemplate(object):
                 )
                 logging.info("\tMethod = PUT")
                 logging.info(f"\tURL = {self.URL}")
-                logging.info(f"\tJSON = {self.show_json()}")
+                logging.info(f"\tJSON = {self.show_json}")
                 return False
             response = self.fmc.send_to_api(
                 method="put", url=url, json_data=self.format_data()
@@ -293,7 +294,7 @@ class APIClassTemplate(object):
                 )
                 logging.info("\tMethod = DELETE")
                 logging.info(f"\tURL = {self.URL}")
-                logging.info(f"\tJSON = {self.show_json()}")
+                logging.info(f"\tJSON = {self.show_json}")
                 return False
             response = self.fmc.send_to_api(
                 method="delete", url=url, json_data=self.format_data()
