@@ -4,6 +4,7 @@ from fmcapi.api_objects.status_services import TaskStatuses
 import time
 import logging
 import warnings
+import re
 
 
 class DeviceRecords(APIClassTemplate):
@@ -42,7 +43,7 @@ class DeviceRecords(APIClassTemplate):
     URL_SUFFIX = "/devices/devicerecords"
     REQUIRED_FOR_POST = ["accessPolicy", "hostName", "regKey"]
     REQUIRED_FOR_PUT = ["id"]
-    LICENSES = ["BASE", "MALWARE", "URLFilter", "THREAT", "VPN", "URL"]
+    LICENSES = ["CONTROL", "PROTECT", "BASE", "MALWARE", "URLFilter", "THREAT", "VPN", "URL"]
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
@@ -142,6 +143,17 @@ class DeviceRecords(APIClassTemplate):
             logging.info(f"Task: {current_status['status']} {current_status['id']}")
         except Exception as e:
             logging.info(type(e), e)
+
+    def get(self, name:str):
+        logging.debug("In get() for DeviceRecords class.")
+        devices = super().get()
+        output = []
+        if name:
+            output = list(filter(lambda x: re.match(f".*{name}.*",x['name'],re.I), devices['items']))
+        else:
+            output = devices['items']
+
+        return output
 
     def post(self, **kwargs):
         logging.debug("In post() for DeviceRecords class.")
