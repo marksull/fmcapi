@@ -14,6 +14,7 @@ class PreFilterPolicies(APIClassTemplate):
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
     REQUIRED_FOR_POST = ["name"]
     DEFAULT_ACTION_OPTIONS = ["ANALYZE_TUNNELS", "BOCK_TUNNELS"]
+    FIRST_SUPPORTED_FMC_VERSION = "6.5"
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
