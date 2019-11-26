@@ -5,6 +5,8 @@ from fmcapi.api_objects.helper_functions import get_networkaddress_type
 from fmcapi.api_objects.object_services.fqdns import FQDNS
 from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
 from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
+from fmcapi.api_objects.object_services.protocolportobjects import ProtocolPortObjects
+from fmcapi.api_objects.object_services.portobjectgroups import PortObjectGroups
 import logging
 
 
@@ -21,6 +23,8 @@ class PreFilterRules(APIClassTemplate):
         "destinationNetworks",
         "sourceInterfaces",
         "destinationInterfaces",
+        "sourcePorts",
+        "destinationPorts",
         "ruleType",
         "type",
         "enabled",
@@ -223,6 +227,7 @@ class PreFilterRules(APIClassTemplate):
             raise ValueError(
                 "Adding source literal and object at the same time not supported"
             )
+            return
 
         if not hasattr(self, "sourceNetworks"):
             self.sourceNetworks = {"objects": [], "literals": []}
@@ -232,14 +237,25 @@ class PreFilterRules(APIClassTemplate):
             self.sourceNetworks["literals"].append(
                 {"type": literal_type, "value": literal}
             )
+            return
 
-        elif action == "add" and name:
+        if name:
             new_object = self.find_object(name)
 
+        if action == "add":
             # Check if object is already in the list and if not, then add it
             if new_object and new_object not in self.sourceNetworks["objects"]:
                 logging.info(f'Adding "{name}" to sourceNetworks for prefilter rule')
                 self.sourceNetworks["objects"].append(new_object)
+
+        elif action == "remove":
+            index = self.sourceNetworks["objects"].index(new_object)
+            logging.info(f'Removing "{new_object}" from sourceNetworks')
+            self.sourceNetworks["objects"].pop(index)
+
+        elif action == "clear":
+            logging.info("Clearing all destination networks")
+            del self.destinationNetworks
 
     def destination_network(self, action, name=None, literal=None):
         """
@@ -255,6 +271,7 @@ class PreFilterRules(APIClassTemplate):
             raise ValueError(
                 "Adding source literal and object at the same time not supported"
             )
+            return
 
         if not hasattr(self, "destinationNetworks"):
             self.destinationNetworks = {"objects": [], "literals": []}
@@ -264,16 +281,27 @@ class PreFilterRules(APIClassTemplate):
             self.destinationNetworks["literals"].append(
                 {"type": literal_type, "value": literal}
             )
+            return
 
-        elif action == "add" and name:
+        if name:
             new_object = self.find_object(name)
 
+        if action == "add":
             # Check if object is already in the list and if not, then add it
-            if new_object and new_object not in self.destinationNetworks["objects"]:
+            if new_object not in self.destinationNetworks["objects"]:
                 logging.info(
                     f'Adding "{name}" to destinationNetworks for prefilter rule'
                 )
                 self.destinationNetworks["objects"].append(new_object)
+
+        elif action == "remove":
+            index = self.destinationNetworks["objects"].index(new_object)
+            logging.info(f'Removing "{new_object}" from destinationNetworks')
+            self.destinationNetworks["objects"].pop(index)
+
+        elif action == "clear":
+            logging.info("Clearing all destination networks")
+            del self.destinationNetworks
 
     def find_object(self, name):
         """
@@ -363,3 +391,129 @@ class PreFilterRules(APIClassTemplate):
             logging.warning(
                 f'Rule type "{rule_type}" is not valid. Must be "PREFILTER" or "TUNNEL"'
             )
+
+    def source_port(self, action, name=None, literal=None):
+        """
+        Create the source protocol and ports
+        Args:
+            action (str): Add, delete or clear
+            name (str): Name of port object
+            literal (dict): Dictionary of protocol and port expressed as integers
+        """
+        logging.debug("In source_port for PreFilterRules")
+
+        if literal and name:
+            raise ValueError(
+                "Adding source literal and object at the same time not supported"
+            )
+            return
+
+        if not hasattr(self, "sourcePorts"):
+            self.sourcePorts = {"literals": [], "objects": []}
+
+        if action == "add" and literal:
+            if self._port_literal_verify(literal):
+                literal["type"] = "PortLiteral"
+                self.sourcePorts["literals"].append(literal)
+            return
+
+        if name:
+            port_object = self.find_port_object(name)
+
+        if action == "add":
+            if port_object and port_object not in self.sourcePorts["objects"]:
+                logging.info(f'Adding "{port_object}" to sourcePorts')
+                self.sourcePorts["objects"].append(port_object)
+
+        elif action == "remove":
+            index = self.sourcePorts["objects"].index(port_object)
+            logging.info(f'Removing "{port_object}" from sourcePorts')
+            self.sourcePorts["objects"].pop(index)
+
+        elif action == "clear":
+            del self.sourcePorts
+
+    def destination_port(self, action, name=None, literal=None):
+        """
+        Create the destination protocol and ports
+        Args:
+            action (str): Add, delete or clear
+            name (str): Name of port object
+            literal (dict): Dictionary of protocol and port expressed as integers
+        """
+        logging.debug("In destination_port for PreFilterRules")
+
+        if literal and name:
+            raise ValueError(
+                "Adding destination literal and object at the same time not supported"
+            )
+            return
+
+        if not hasattr(self, "destinationPorts"):
+            self.destinationPorts = {"literals": [], "objects": []}
+
+        if action == "add" and literal:
+            if self._port_literal_verify(literal):
+                literal["type"] = "PortLiteral"
+                self.destinationPorts["literals"].append(literal)
+            return
+
+        if name:
+            port_object = self.find_port_object(name)
+
+        if action == "add":
+            if port_object and port_object not in self.destinationPorts["objects"]:
+                logging.info(f'Adding "{port_object}" to destinationPorts')
+                self.destinationPorts["objects"].append(port_object)
+
+        elif action == "remove":
+            index = self.destinationPorts["objects"].index(port_object)
+            logging.info(f'Removing "{port_object}" from destinationPorts')
+            self.destinationPorts["objects"].pop(index)
+
+        elif action == "clear":
+            del self.destinationPorts
+
+    def find_port_object(self, name):
+        """
+        Find port object or port group object and return dictionary
+        Args:
+            name (str): Name of port object/port group object
+        Returns:
+            Dictionary of port object
+        """
+        protocol_port = ProtocolPortObjects(fmc=self.fmc, name=name)
+        resp = protocol_port.get()
+        if "id" in resp.keys():
+            return {"name": name, "id": resp["id"], "type": resp["type"]}
+
+        protocol_port_group = PortObjectGroups(fmc=self.fmc, name=name)
+        resp = protocol_port_group.get()
+        if "id" in resp.keys():
+            return {"name": name, "id": resp["id"], "type": resp["type"]}
+
+        return None
+
+    @staticmethod
+    def _port_literal_verify(literal):
+        """
+        Ensure that the literal is expressed as integers. It's too hard dealing with named protocols/ports.
+        Also check that protocol and ports keys are in the dictionary
+        Args:
+            literal (dict): Dictionary with protocol and ports
+        Returns:
+            Bool
+        """
+        if not isinstance(literal, dict):
+            logging.warning(
+                'Invalid port literal. Must be defined as a dictionary: "{"protocol": <protocol>, "port": <port}'
+            )
+            return False
+
+        if "protocol" not in literal.keys() and "port" not in literal.keys():
+            logging.warning(
+                '"protocol" and/or "port" missing from literal. You must specify both'
+            )
+            return False
+
+        return True

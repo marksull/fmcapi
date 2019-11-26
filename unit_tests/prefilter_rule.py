@@ -9,6 +9,8 @@ from fmcapi import (
     PreFilterPolicies,
     PreFilterRules,
     SecurityZones,
+    PortObjectGroups,
+    ProtocolPortObjects,
 )
 
 
@@ -38,6 +40,29 @@ def test__prefiler_rule(fmc):
         fmc=fmc, name=f"test_zone_2_{namer}", interfaceMode="ROUTED"
     )
     sec_zone_2.post()
+    port_1 = ProtocolPortObjects(
+        fmc=fmc, name=f"test_port_1{namer}", port="8443", protocol="TCP"
+    )
+    port_1.post()
+    port_2 = ProtocolPortObjects(
+        fmc=fmc, name=f"test_port_2{namer}", port="161", protocol="UDP"
+    )
+    port_2.post()
+    port_3 = ProtocolPortObjects(
+        fmc=fmc, name=f"test_port_3{namer}", port="0-1023", protocol="TCP"
+    )
+    port_3.post()
+    time.sleep(1)
+    port_group_1 = PortObjectGroups(fmc=fmc, name=f"port_group_1_{namer}")
+    port_group_1.named_ports(action="add", name=port_1.name)
+    port_group_1.named_ports(action="add", name=port_2.name)
+    port_group_1.named_ports(action="add", name=port_3.name)
+    port_group_1.post()
+
+    logging.info(f'Creating test prefiler "{namer}"')
+    prefilter = PreFilterPolicies(fmc=fmc, name=namer)
+    prefilter.post()
+    time.sleep(1)
 
     logging.info(f'Creating test prefiler "{namer}"')
     prefilter = PreFilterPolicies(fmc=fmc, name=namer)
@@ -55,7 +80,24 @@ def test__prefiler_rule(fmc):
     prefilter_rule_1.destination_network(action="add", name=f"test_net_1_{namer}")
     prefilter_rule_1.destination_network(action="add", name=f"test_range_1_{namer}")
     prefilter_rule_1.destination_network(action="add", name=f"test_fqdn_1_{namer}")
+    prefilter_rule_1.destination_network(action="remove", name=f"test_fqdn_1_{namer}")
     prefilter_rule_1.post()
+    time.sleep(1)
+
+    logging.info(f'Creating test prefiler rule "test_2"')
+    prefilter_rule_2 = PreFilterRules(fmc=fmc, prefilter_name=namer)
+    prefilter_rule_2.name = "test_2"
+    prefilter_rule_2.enabled = True
+    prefilter_rule_2.action = 'FASTPATH'
+    prefilter_rule_2.source_port(action='add', literal={'protocol': '6', 'port': '22'})
+    prefilter_rule_2.source_port(action='add', literal={'protocol': '6', 'port': '443'})
+    prefilter_rule_2.source_port(action='add', literal={'protocol': '17', 'port': '53'})
+    prefilter_rule_2.destination_port(action='add', name=f"test_port_1{namer}")
+    prefilter_rule_2.destination_port(action='add', name=f"test_port_2{namer}")
+    prefilter_rule_2.destination_port(action='add', name=f"test_port_3{namer}")
+    prefilter_rule_2.destination_port(action='remove', name=f"test_port_3{namer}")
+    prefilter_rule_2.destination_port(action='add', name=f'port_group_1_{namer}')
+    prefilter_rule_2.post()
     time.sleep(1)
 
     prefilter.delete()
@@ -66,3 +108,7 @@ def test__prefiler_rule(fmc):
     net_group_1.delete()
     sec_zone_1.delete()
     sec_zone_2.delete()
+    port_group_1.delete()
+    port_1.delete()
+    port_2.delete()
+    port_3.delete()
