@@ -11,6 +11,8 @@ from fmcapi import (
     SecurityZones,
     PortObjectGroups,
     ProtocolPortObjects,
+    VlanGroupTags,
+    VlanTags,
 )
 
 
@@ -58,6 +60,19 @@ def test__prefiler_rule(fmc):
     port_group_1.named_ports(action="add", name=port_2.name)
     port_group_1.named_ports(action="add", name=port_3.name)
     port_group_1.post()
+
+    vlan_tag_1 = VlanTags(fmc=fmc, name=f"vlan_tag_1_{namer}")
+    vlan_tag_1.vlans(start_vlan="1", end_vlan="9")
+    vlan_tag_1.post()
+    vlan_tag_2 = VlanTags(fmc=fmc, name=f"vlan_tag_2_{namer}")
+    vlan_tag_2.vlans(start_vlan="10", end_vlan="19")
+    vlan_tag_2.post()
+    vlan_tag_3 = VlanTags(fmc=fmc, name=f"vlan_tag_3_{namer}")
+    vlan_tag_3.vlans(start_vlan="20", end_vlan="29")
+    vlan_tag_3.post()
+    vlan_group_1 = VlanGroupTags(fmc=fmc, name=f"vlan_group_1_{namer}")
+    vlan_group_1.named_vlantags(action="add", name=f"vlan_tag_3_{namer}")
+    vlan_group_1.post()
 
     logging.info(f'Creating test prefiler "{namer}"')
     prefilter = PreFilterPolicies(fmc=fmc, name=namer)
@@ -118,3 +133,7 @@ def test__prefiler_rule(fmc):
     port_1.delete()
     port_2.delete()
     port_3.delete()
+    vlan_group_1.delete()
+    vlan_tag_1.delete()
+    vlan_tag_2.delete()
+    vlan_tag_3.delete()
