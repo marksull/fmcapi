@@ -41,15 +41,15 @@ def test__prefiler_rule(fmc):
     )
     sec_zone_2.post()
     port_1 = ProtocolPortObjects(
-        fmc=fmc, name=f"test_port_1{namer}", port="8443", protocol="TCP"
+        fmc=fmc, name=f"test_port_1_{namer}", port="8443", protocol="TCP"
     )
     port_1.post()
     port_2 = ProtocolPortObjects(
-        fmc=fmc, name=f"test_port_2{namer}", port="161", protocol="UDP"
+        fmc=fmc, name=f"test_port_2_{namer}", port="161", protocol="UDP"
     )
     port_2.post()
     port_3 = ProtocolPortObjects(
-        fmc=fmc, name=f"test_port_3{namer}", port="0-1023", protocol="TCP"
+        fmc=fmc, name=f"test_port_3_{namer}", port="0-1023", protocol="TCP"
     )
     port_3.post()
     time.sleep(1)
@@ -88,15 +88,21 @@ def test__prefiler_rule(fmc):
     prefilter_rule_2 = PreFilterRules(fmc=fmc, prefilter_name=namer)
     prefilter_rule_2.name = "test_2"
     prefilter_rule_2.enabled = True
-    prefilter_rule_2.action = 'FASTPATH'
-    prefilter_rule_2.source_port(action='add', literal={'protocol': '6', 'port': '22'})
-    prefilter_rule_2.source_port(action='add', literal={'protocol': '6', 'port': '443'})
-    prefilter_rule_2.source_port(action='add', literal={'protocol': '17', 'port': '53'})
-    prefilter_rule_2.destination_port(action='add', name=f"test_port_1{namer}")
-    prefilter_rule_2.destination_port(action='add', name=f"test_port_2{namer}")
-    prefilter_rule_2.destination_port(action='add', name=f"test_port_3{namer}")
-    prefilter_rule_2.destination_port(action='remove', name=f"test_port_3{namer}")
-    prefilter_rule_2.destination_port(action='add', name=f'port_group_1_{namer}')
+    prefilter_rule_2.action = "FASTPATH"
+    prefilter_rule_2.source_port(action="add", literal={"protocol": "6", "port": "22"})
+    prefilter_rule_2.source_port(action="add", literal={"protocol": "6", "port": "443"})
+    prefilter_rule_2.source_port(action="add", literal={"protocol": "17", "port": "53"})
+    prefilter_rule_2.destination_port(action="add", name=f"test_port_1_{namer}")
+    prefilter_rule_2.destination_port(action="add", name=f"test_port_2_{namer}")
+    prefilter_rule_2.destination_port(action="add", name=f"test_port_3_{namer}")
+    prefilter_rule_2.destination_port(action="remove", name=f"test_port_3{namer}")
+    prefilter_rule_2.destination_port(action="add", name=f"port_group_1_{namer}")
+    prefilter_rule_2.vlan_tags(action="add", literal="100-110")
+    prefilter_rule_2.vlan_tags(action="add", name=f"vlan_tag_1_{namer}")
+    prefilter_rule_2.vlan_tags(action="add", name=f"vlan_tag_2_{namer}")
+    prefilter_rule_2.vlan_tags(action="add", name=f"vlan_tag_3_{namer}")
+    prefilter_rule_2.vlan_tags(action="remove", name=f"vlan_tag_2_{namer}")
+    prefilter_rule_2.vlan_tags(action="add", name=f"vlan_group_1_{namer}")
     prefilter_rule_2.post()
     time.sleep(1)
 

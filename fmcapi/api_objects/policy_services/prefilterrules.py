@@ -7,6 +7,7 @@ from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
 from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
 from fmcapi.api_objects.object_services.protocolportobjects import ProtocolPortObjects
 from fmcapi.api_objects.object_services.portobjectgroups import PortObjectGroups
+from fmcapi.api_objects.object_services.vlangrouptags import VlanTags, VlanGroupTags
 import logging
 
 
@@ -25,6 +26,7 @@ class PreFilterRules(APIClassTemplate):
         "destinationInterfaces",
         "sourcePorts",
         "destinationPorts",
+        "vlanTags",
         "ruleType",
         "type",
         "enabled",
@@ -242,9 +244,12 @@ class PreFilterRules(APIClassTemplate):
         if name:
             new_object = self.find_object(name)
 
+        if not new_object:
+            return
+
         if action == "add":
             # Check if object is already in the list and if not, then add it
-            if new_object and new_object not in self.sourceNetworks["objects"]:
+            if new_object not in self.sourceNetworks["objects"]:
                 logging.info(f'Adding "{name}" to sourceNetworks for prefilter rule')
                 self.sourceNetworks["objects"].append(new_object)
 
@@ -286,6 +291,9 @@ class PreFilterRules(APIClassTemplate):
         if name:
             new_object = self.find_object(name)
 
+        if not new_object:
+            return
+
         if action == "add":
             # Check if object is already in the list and if not, then add it
             if new_object not in self.destinationNetworks["objects"]:
@@ -323,6 +331,7 @@ class PreFilterRules(APIClassTemplate):
         if object_id:
             return {"name": name, "id": object_id, "type": object_type}
 
+        logging.warning(f'Unable to find network object "{name}"')
         return None
 
     def find_network_object(self, name):
@@ -418,10 +427,13 @@ class PreFilterRules(APIClassTemplate):
             return
 
         if name:
-            port_object = self.find_port_object(name)
+            port_object = self._find_port_object(name)
+
+        if not port_object:
+            return
 
         if action == "add":
-            if port_object and port_object not in self.sourcePorts["objects"]:
+            if port_object not in self.sourcePorts["objects"]:
                 logging.info(f'Adding "{port_object}" to sourcePorts')
                 self.sourcePorts["objects"].append(port_object)
 
@@ -459,10 +471,13 @@ class PreFilterRules(APIClassTemplate):
             return
 
         if name:
-            port_object = self.find_port_object(name)
+            port_object = self._find_port_object(name)
+
+        if not port_object:
+            return
 
         if action == "add":
-            if port_object and port_object not in self.destinationPorts["objects"]:
+            if port_object not in self.destinationPorts["objects"]:
                 logging.info(f'Adding "{port_object}" to destinationPorts')
                 self.destinationPorts["objects"].append(port_object)
 
@@ -474,7 +489,7 @@ class PreFilterRules(APIClassTemplate):
         elif action == "clear":
             del self.destinationPorts
 
-    def find_port_object(self, name):
+    def _find_port_object(self, name):
         """
         Find port object or port group object and return dictionary
         Args:
@@ -492,6 +507,7 @@ class PreFilterRules(APIClassTemplate):
         if "id" in resp.keys():
             return {"name": name, "id": resp["id"], "type": resp["type"]}
 
+        logging.warning(f'Unable to find port object "{name}"')
         return None
 
     @staticmethod
@@ -517,3 +533,80 @@ class PreFilterRules(APIClassTemplate):
             return False
 
         return True
+
+    def vlan_tags(self, action, name=None, literal=None):
+        """
+        Add, remove or clear VLAN tags
+        Args:
+            action (str): Add, remove or clear
+            name (str): Name of VLAN tag object
+            literal (str): VLAN tag or range
+        """
+        logging.debug("In vlan_tags() for PreFilterRules")
+        if literal and name:
+            raise ValueError(
+                "Adding/Removing VLAN literal and object at the same time not supported"
+            )
+            return
+
+        if not hasattr(self, "vlanTags"):
+            self.vlanTags = {"literals": [], "objects": []}
+
+        if action == "add" and literal:
+            start_vlan, end_vlan = self._vlan_tag_check(literal)
+            self.vlanTags["literals"].append(
+                {"startTag": start_vlan, "endTag": end_vlan, "type": "VlanTagLiteral"}
+            )
+            return
+
+        if name:
+            vlan_object = self._find_vlan_object(name)
+
+        if not vlan_object:
+            return
+
+        if action == "add":
+            if vlan_object not in self.vlanTags["objects"]:
+                self.vlanTags["objects"].append(vlan_object)
+
+        if action == "remove":
+            index = self.vlanTags["objects"].index(vlan_object)
+            logging.info(f'Removing "{vlan_object}" from vlanTags')
+            self.vlanTags["objects"].pop(index)
+
+        elif action == "clear":
+            del self.vlanTags
+
+    @staticmethod
+    def _vlan_tag_check(literal):
+        """
+        Check if the VLAN tag literal is a range or not and returns start and end tag number
+        Args:
+            literal (str): VLAN tag literal
+        Returns:
+            start_vlan (str), end_vlan (str)
+        """
+        if "-" in literal:
+            vlans = literal.strip("-")
+            return vlans[0], vlans[1]
+        else:
+            return literal, literal
+
+    def _find_vlan_object(self, name):
+        """
+        Find the vlan or vlan group object by name
+        Args:
+            name (str): Object name
+        """
+        vlan_object = VlanTags(fmc=self.fmc, name=name)
+        resp = vlan_object.get()
+        if "id" in resp.keys():
+            return {"name": name, "id": resp["id"], "type": resp["type"]}
+
+        vlan_object = VlanGroupTags(fmc=self.fmc, name=name)
+        resp = vlan_object.get()
+        if "id" in resp.keys():
+            return {"name": name, "id": resp["id"], "type": resp["type"]}
+
+        logging.warning(f'Unable to find vlan object "{name}"')
+        return None
