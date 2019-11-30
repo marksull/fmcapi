@@ -139,6 +139,7 @@ from .policy_services.manualnatrules import ManualNatRules
 from .policy_services.natrules import NatRules
 from .policy_services.prefilterpolicies import PreFilterPolicies
 from .policy_services.prefilterpolicies import PreFilterPolicy
+from .policy_services.prefilterrules import PreFilterRules
 
 from .policy_assignment_services.policyassignments import PolicyAssignments
 
@@ -280,6 +281,7 @@ __all__ = [
     "IntrusionPolicy",
     "PreFilterPolicies",
     "PreFilterPolicy",
+    "PreFilterRules",
     "HitCounts",
     "HitCount",
     "TaskStatuses",
