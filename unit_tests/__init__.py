@@ -61,7 +61,8 @@ from .devicerecords import test__devicerecords
 from .staticroutes import test__staticroutes
 from .ipv4staticroutes import test__ipv4staticroutes
 from .ipv6staticroutes import test__ipv6staticroutes
-
+from .prefilter import test__prefilter_policy
+from .prefilter_rule import test__prefiler_rule
 from .s2s_vpn import test__ftds2svpns
 
 logging.debug("In the unit-tests __init__.py file.")
@@ -127,4 +128,5 @@ __all__ = [
     "test__acp_rule",
     "test__access_control_policy",
     "test__intrusion_policy",
+    "test__prefilter_policy",
 ]
