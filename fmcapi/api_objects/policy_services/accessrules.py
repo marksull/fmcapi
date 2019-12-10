@@ -99,7 +99,10 @@ class AccessRules(APIClassTemplate):
 
     def __init__(self, fmc, **kwargs):
         """
-        Initialize AccessRules object.  Set self.type to "AccessRule", parse the kwargs, and set up the self.URL.
+        Initialize AccessRules object.
+
+        Set self.type to "AccessRule", parse the kwargs, and set up the self.URL.
+
         :param fmc (object): FMC object
         :param **kwargs: Any other values passed during instantiation.
         :return: None
@@ -141,6 +144,7 @@ class AccessRules(APIClassTemplate):
     def parse_kwargs(self, **kwargs):
         """
         Parse the kwargs and set self variables to match.
+
         :return: None
         """
         super().parse_kwargs(**kwargs)
@@ -258,7 +262,8 @@ class AccessRules(APIClassTemplate):
 
     def vlan_tags(self, action, name=""):
         """
-        Add/modify name to vlanTags field of AccessRules object
+        Add/modify name to vlanTags field of AccessRules object.
+
         :param action: (str) 'add', 'remove', or 'clear'
         :param name: (str) Name of VLAN tag in FMC.
         :return: None

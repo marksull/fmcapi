@@ -1,6 +1,4 @@
-"""
-All Audit Services features are in the FMC class in the fmc.py file.
-"""
+"""Audit Services Classes."""
 
 import logging
 from .audit_records import AuditRecords

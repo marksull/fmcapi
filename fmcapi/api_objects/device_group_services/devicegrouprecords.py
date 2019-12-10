@@ -1,3 +1,5 @@
+"""DeviceGroupRecords class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 from fmcapi.api_objects.device_ha_pair_services.ftddevicehapairs import FTDDeviceHAPairs
@@ -6,21 +8,35 @@ import warnings
 
 
 class DeviceGroupRecords(APIClassTemplate):
-    """
-    The DeviceGroupRecords Object in the FMC.
-    """
+    """The DeviceGroupRecords Object in the FMC."""
 
     VALID_JSON_DATA = ["id", "name", "members"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = "/devicegroups/devicegrouprecords"
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize DeviceGroupRecords object.
+
+        Set self.type to "DeviceGroup" and parse the kwargs.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for DeviceGroupRecords class.")
         self.type = "DeviceGroup"
         self.parse_kwargs(**kwargs)
 
     def devices(self, action, members=[]):
+        """
+        Add/modify name to members field of DeviceGroupRecords object.
+
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param membres: (list) List of members in group.
+        :return: None
+        """
         logging.debug("In devices() for DeviceGroupRecords class.")
         if action == "add":
             for member in members:
@@ -93,7 +109,11 @@ class DeviceGroupRecords(APIClassTemplate):
 
 
 class DeviceGroups(DeviceGroupRecords):
-    """Dispose of this Class after 20210101."""
+    """
+    Dispose of this Class after 20210101.
+
+    Use DeviceGroupRecords() instead.
+    """
 
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()

@@ -1,3 +1,5 @@
+"""FailoverInterfaceMACAddressConfigs class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .ftddevicehapairs import FTDDeviceHAPairs
 from fmcapi.api_objects.device_services.physicalinterfaces import PhysicalInterfaces
@@ -6,9 +8,7 @@ import warnings
 
 
 class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
-    """
-    The FailoverInterfaceMACAddressConfigs Object in the FMC.
-    """
+    """The FailoverInterfaceMACAddressConfigs Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -23,17 +23,35 @@ class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
     REQUIRED_FOR_PUT = ["id"]
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize FailoverInterfaceMACAddressConfigs object.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for FailoverInterfaceMACAddressConfigs class.")
         self.parse_kwargs(**kwargs)
 
     def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+
+        :return: None
+        """
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for FailoverInterfaceMACAddressConfigs class.")
         if "ha_name" in kwargs:
             self.device_ha(ha_name=kwargs["ha_name"])
 
     def device_ha(self, ha_name):
+        """
+        Add deviceha_id to URL.
+
+        :param ha_name: (str) Name of Device HA.
+        :return: None
+        """
         logging.debug("In device_ha() for FailoverInterfaceMACAddressConfigs class.")
         deviceha1 = FTDDeviceHAPairs(fmc=self.fmc, name=ha_name)
         deviceha1.get()
@@ -51,6 +69,13 @@ class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
             )
 
     def p_interface(self, name, device_name):
+        """
+        Physical interface of device used for HA.
+
+        :param name: (str) Name of interface.
+        :param device_name (str) Name of device.
+        :return: None
+        """
         logging.debug("In p_interface() for FailoverInterfaceMACAddressConfigs class.")
         intf1 = PhysicalInterfaces(fmc=self.fmc)
         intf1.get(name=name, device_name=device_name)
@@ -67,6 +92,13 @@ class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
             )
 
     def edit(self, name, ha_name):
+        """
+        Edit existing device HA and change physical interface params.
+
+        :param name: (str)
+        :param ha_name: (str)
+        :return: None
+        """
         logging.debug("In edit() for FailoverInterfaceMACAddressConfigs class.")
         deviceha1 = FTDDeviceHAPairs(fmc=self.fmc, name=ha_name)
         deviceha1.get()
@@ -90,13 +122,16 @@ class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
                 break
         if found is False:
             logging.warning(
-                f'PhysicalInterface, "{name}", not found.  Cannot add to '
-                f"FailoverInterfaceMACAddressConfigs."
+                f'PhysicalInterface, "{name}", not found.  Cannot add to FailoverInterfaceMACAddressConfigs.'
             )
 
 
 class DeviceHAFailoverMAC(FailoverInterfaceMACAddressConfigs):
-    """Dispose of this Class after 20210101."""
+    """
+    Dispose of this Class after 20210101.
+
+    Use FailoverInterfaceMACAddressConfigs() instead.
+    """
 
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()

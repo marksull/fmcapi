@@ -7,9 +7,7 @@ logging.debug(f"In the {__name__} module.")
 
 
 class APIClassTemplate(object):
-    """
-    This class is the base framework for all/(most of) the objects in the FMC.
-    """
+    """The base framework for all/(most of) the objects in the FMC."""
 
     REQUIRED_FOR_POST = ["name"]
     REQUIRED_FOR_PUT = ["id"]
@@ -27,7 +25,8 @@ class APIClassTemplate(object):
     @property
     def show_json(self):
         """
-        json.dumps of format_data() info
+        json.dumps of format_data() info.
+
         :return (str)
         """
         return json.dumps(self.format_data())
@@ -35,6 +34,7 @@ class APIClassTemplate(object):
     def __init__(self, fmc, **kwargs):
         """
         Initialize an instances of object being created.
+
         :param fmc: (object) FMC object
         :param **kwargs: Passed variables that will be added to object being instantiated.
         :return: None
@@ -56,6 +56,7 @@ class APIClassTemplate(object):
     def format_data(self, filter_query=""):
         """
         Gather all the data in preparation for sending to API in JSON format.
+
         :param filter_query: (str) 'all' or 'kwargs'
         :return: (dict) json_data
         """
@@ -74,6 +75,7 @@ class APIClassTemplate(object):
     def parse_kwargs(self, **kwargs):
         """
         Parse the kwargs and set self variables to match.
+
         :return: None
         """
         logging.debug("In parse_kwargs() for APIClassTemplate class.")
@@ -92,6 +94,7 @@ class APIClassTemplate(object):
     def valid_for_get(self):
         """
         Use REQUIRED_FOR_GET to ensure all necessary variables exist prior to submitting to API.
+
         :return: (boolean)
         """
         logging.debug("In valid_for_get() for APIClassTemplate class.")
@@ -105,9 +108,12 @@ class APIClassTemplate(object):
 
     def get(self, **kwargs):
         """
-        Prepare to send GET call to FMC API.  If no self.name or self.id exists then return a full listing of all
+        Prepare to send GET call to FMC API.
+
+        If no self.name or self.id exists then return a full listing of all
         objects of this type otherwise return requested name/id values.  Set "expanded=true" results for specific object
         to gather additional detail.
+
         :return: requests response
         """
         logging.debug("In get() for APIClassTemplate class.")
@@ -199,6 +205,7 @@ class APIClassTemplate(object):
     def valid_for_post(self):
         """
         Use REQUIRED_FOR_POST to ensure all necessary variables exist prior to submitting to API.
+
         :return: (boolean)
         """
         logging.debug("In valid_for_post() for APIClassTemplate class.")
@@ -211,6 +218,7 @@ class APIClassTemplate(object):
     def post(self, **kwargs):
         """
         Prepare to send POST call to FMC API.
+
         :return: requests response
         """
         logging.debug("In post() for APIClassTemplate class.")
@@ -259,6 +267,7 @@ class APIClassTemplate(object):
     def valid_for_put(self):
         """
         Use REQUIRED_FOR_PUT to ensure all necessary variables exist prior to submitting to API.
+
         :return: (boolean)
         """
         logging.debug("In valid_for_put() for APIClassTemplate class.")
@@ -271,6 +280,7 @@ class APIClassTemplate(object):
     def put(self, **kwargs):
         """
         Prepare to send PUT call to FMC API.
+
         :return: requests response
         """
         logging.debug("In put() for APIClassTemplate class.")
@@ -312,6 +322,7 @@ class APIClassTemplate(object):
     def valid_for_delete(self):
         """
         Use REQUIRED_FOR_DELETE to ensure all necessary variables exist prior to submitting to API.
+
         :return: (boolean)
         """
         logging.debug("In valid_for_delete() for APIClassTemplate class.")
@@ -324,6 +335,7 @@ class APIClassTemplate(object):
     def delete(self, **kwargs):
         """
         Prepare to send DELETE call to FMC API.
+
         :return: requests response
         """
         logging.debug("In delete() for APIClassTemplate class.")

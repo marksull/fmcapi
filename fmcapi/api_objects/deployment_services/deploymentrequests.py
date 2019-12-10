@@ -1,6 +1,4 @@
-"""
-Moving the fmc.deploymentrequests to an actual api_object.
-"""
+"""Moving the fmc.deploymentrequests to an actual api_object."""
 
 import logging
 from .deployabledevices import DeployableDevices
@@ -12,6 +10,7 @@ class DeploymentRequests(
 ):  # Can't import APIClassTemplate due to dependency loop.
     """
     Iterate through the list of devices needing deployed and submit a request to the FMC to deploy changes to them.
+
     :return:
     """
 
@@ -20,6 +19,7 @@ class DeploymentRequests(
     def __init__(self, fmc):
         """
         Initialize DeploymentRequests object.
+
         :param fmc (object): FMC object
         :return: None
         """
@@ -30,14 +30,13 @@ class DeploymentRequests(
         self.uuids = None
 
     def get(self):
-        """
-        GET method for API for DeploymentRequests not supported.
-        """
+        """GET method for API for DeploymentRequests not supported."""
         logging.info("GET method for API for DeploymentRequests not supported.")
 
     def post(self):
         """
         Submit list of devices to FMC that need config changes pushed to them.
+
         :return: (list) List of devices.
         """
         logging.debug("In post() method for DeploymentRequests() class.")
@@ -67,15 +66,11 @@ class DeploymentRequests(
         return response["deviceList"]
 
     def put(self):
-        """
-        PUT method for API for DeploymentRequests not supported.
-        """
+        """PUT method for API for DeploymentRequests not supported."""
         logging.info("PUT method for API for DeploymentRequests not supported.")
         pass
 
     def delete(self):
-        """
-        DELETE method for API for DeploymentRequests not supported.
-        """
+        """DELETE method for API for DeploymentRequests not supported."""
         logging.info("DELETE method for API for DeploymentRequests not supported.")
         pass

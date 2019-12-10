@@ -1,3 +1,5 @@
+"""Device HA Pair Services Classes."""
+
 import logging
 from .ftddevicehapairs import FTDDeviceHAPairs
 from .ftddevicehapairs import DeviceHAPairs

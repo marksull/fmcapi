@@ -1,3 +1,5 @@
+"""Device Group Services Classes."""
+
 import logging
 from .devicegrouprecords import DeviceGroupRecords
 from .devicegrouprecords import DeviceGroups

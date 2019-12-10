@@ -1,6 +1,4 @@
-"""
-Misc methods/functions that are used by the fmcapi package's modules.
-"""
+"""Misc methods/functions that are used by the fmcapi package's modules."""
 
 import re
 import ipaddress
@@ -13,6 +11,7 @@ logging.debug(f"In the {__name__} module.")
 def syntax_correcter(value, permitted_syntax="""[.\w\d_\-]""", replacer="_"):
     """
     Check 'value' for invalid characters (identified by 'permitted_syntax') and replace them with 'replacer'.
+
     :param value:  (str) String to be checked.
     :param permitted_syntax: (str) regex of allowed characters.
     :param replacer: (str) character used to replace invalid characters.
@@ -31,6 +30,7 @@ def syntax_correcter(value, permitted_syntax="""[.\w\d_\-]""", replacer="_"):
 def get_networkaddress_type(value):
     """
     Check to see whether 'value' is a host, range, or network.
+
     :param value: (str) x.x.x.x, x.x.x.x/xx, or x.x.x.x-x.x.x.x
     :return: (str) 'host', 'network', or 'range'
     """
@@ -50,7 +50,8 @@ def get_networkaddress_type(value):
 
 def is_ip(ip):
     """
-    Checks to see whether the provided string is an IP address.
+    Check whether the provided string is an IP address.
+
     :param ip: (str) x.x.x.x
     :return: (boolean)
     """
@@ -65,8 +66,10 @@ def is_ip(ip):
 
 def is_ip_network(ip):
     """
-    Checks to see whether the provided string is a valid network address.  That is, it checks to see if the
-     provided IP/SM is the "network address" of the subnet.
+    Check whether provided string is a valid network address.
+
+    See if the provided IP/SM is the "network address" of the subnet.
+
     :param ip: (str) x.x.x.x/xx
     :return: (boolean)
     """
@@ -82,6 +85,7 @@ def is_ip_network(ip):
 def validate_ip_bitmask_range(value="", value_type=""):
     """
     We need to check the provided IP address (or range of addresses) and make sure the IPs are valid.
+
     :param value: (str) x.x.x.x, x.x.x.x/xx, or x.x.x.x-x.x.x.x
     :param value_type: (str) 'host', 'network', or 'range'
     :return: (dict) {value=value_fixed, valid=boolean}
@@ -101,7 +105,8 @@ def validate_ip_bitmask_range(value="", value_type=""):
 def mocked_requests_get(**kwargs):
     """
     Use to "mock up" a response from using the "requests" library to avoid actually using the "requests" library.
-    :param kwargs: 
+
+    :param kwargs:
     :return: (boolean)
     """
     logging.debug("In mocked_requests_get() helper_function.")
@@ -121,7 +126,8 @@ def mocked_requests_get(**kwargs):
 
 def validate_vlans(start_vlan, end_vlan=""):
     """
-    Validate that the start_vlan and end_vlan numbers are in 1 - 4094 range.  If not, then return 1, 4094
+    Validate that the start_vlan and end_vlan numbers are in 1 - 4094 range.  If not, then return 1, 4094.
+
     :param start_vlan: (int) Lower VLAN number in range.
     :param end_vlan: (int) Upper VLAN number in range.
     :return: (int) start_vlan, (int) end_vlan)

@@ -1,6 +1,4 @@
-"""
-All Deployment Services features are in the FMC class in the fmc.py file.
-"""
+"""Deployment Services Classes."""
 
 import logging
 from .deployabledevices import DeployableDevices
