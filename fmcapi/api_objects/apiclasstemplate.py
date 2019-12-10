@@ -8,7 +8,7 @@ logging.debug(f"In the {__name__} module.")
 
 class APIClassTemplate(object):
     """
-    This class is the base framework for all the objects in the FMC.
+    This class is the base framework for all/(most of) the objects in the FMC.
     """
 
     REQUIRED_FOR_POST = ["name"]
@@ -26,9 +26,19 @@ class APIClassTemplate(object):
 
     @property
     def show_json(self):
+        """
+        json.dumps of format_data() info
+        :return (str)
+        """
         return json.dumps(self.format_data())
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize an instances of object being created.
+        :param fmc: (object) FMC object
+        :param **kwargs: Passed variables that will be added to object being instantiated.
+        :return: None
+        """
         logging.debug("In __init__() for APIClassTemplate class.")
         self.VALID_FOR_KWARGS = self.VALID_FOR_KWARGS + self.GLOBAL_VALID_FOR_KWARGS
         self.fmc = fmc
@@ -62,6 +72,10 @@ class APIClassTemplate(object):
         return json_data
 
     def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+        :return: None
+        """
         logging.debug("In parse_kwargs() for APIClassTemplate class.")
         for key_value in self.VALID_FOR_KWARGS:
             if key_value in kwargs:
@@ -76,6 +90,10 @@ class APIClassTemplate(object):
                 )
 
     def valid_for_get(self):
+        """
+        Use REQUIRED_FOR_GET to ensure all necessary variables exist prior to submitting to API.
+        :return: (boolean)
+        """
         logging.debug("In valid_for_get() for APIClassTemplate class.")
         if self.REQUIRED_FOR_GET == [""]:
             return True
@@ -87,9 +105,10 @@ class APIClassTemplate(object):
 
     def get(self, **kwargs):
         """
-        If no self.name or self.id exists then return a full listing of all objects of this type.
-        Otherwise set "expanded=true" results for this specific object.
-        :return:
+        Prepare to send GET call to FMC API.  If no self.name or self.id exists then return a full listing of all
+        objects of this type otherwise return requested name/id values.  Set "expanded=true" results for specific object
+        to gather additional detail.
+        :return: requests response
         """
         logging.debug("In get() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
@@ -178,6 +197,10 @@ class APIClassTemplate(object):
             return False
 
     def valid_for_post(self):
+        """
+        Use REQUIRED_FOR_POST to ensure all necessary variables exist prior to submitting to API.
+        :return: (boolean)
+        """
         logging.debug("In valid_for_post() for APIClassTemplate class.")
         for item in self.REQUIRED_FOR_POST:
             if item not in self.__dict__:
@@ -186,6 +209,10 @@ class APIClassTemplate(object):
         return True
 
     def post(self, **kwargs):
+        """
+        Prepare to send POST call to FMC API.
+        :return: requests response
+        """
         logging.debug("In post() for APIClassTemplate class.")
         if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
             logging.error(
@@ -230,6 +257,10 @@ class APIClassTemplate(object):
                 return False
 
     def valid_for_put(self):
+        """
+        Use REQUIRED_FOR_PUT to ensure all necessary variables exist prior to submitting to API.
+        :return: (boolean)
+        """
         logging.debug("In valid_for_put() for APIClassTemplate class.")
         for item in self.REQUIRED_FOR_PUT:
             if item not in self.__dict__:
@@ -238,6 +269,10 @@ class APIClassTemplate(object):
         return True
 
     def put(self, **kwargs):
+        """
+        Prepare to send PUT call to FMC API.
+        :return: requests response
+        """
         logging.debug("In put() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
         if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
@@ -275,6 +310,10 @@ class APIClassTemplate(object):
             return False
 
     def valid_for_delete(self):
+        """
+        Use REQUIRED_FOR_DELETE to ensure all necessary variables exist prior to submitting to API.
+        :return: (boolean)
+        """
         logging.debug("In valid_for_delete() for APIClassTemplate class.")
         for item in self.REQUIRED_FOR_DELETE:
             if item not in self.__dict__:
@@ -283,6 +322,10 @@ class APIClassTemplate(object):
         return True
 
     def delete(self, **kwargs):
+        """
+        Prepare to send DELETE call to FMC API.
+        :return: requests response
+        """
         logging.debug("In delete() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
         if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
