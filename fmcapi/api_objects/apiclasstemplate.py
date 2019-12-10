@@ -44,6 +44,11 @@ class APIClassTemplate(object):
             )
 
     def format_data(self, filter_query=""):
+        """
+        Gather all the data in preparation for sending to API in JSON format.
+        :param filter_query: (str) 'all' or 'kwargs'
+        :return: (dict) json_data
+        """
         logging.debug("In format_data() for APIClassTemplate class.")
         json_data = {}
         filter_list = self.VALID_JSON_DATA

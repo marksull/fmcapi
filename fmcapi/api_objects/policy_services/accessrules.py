@@ -98,6 +98,12 @@ class AccessRules(APIClassTemplate):
         return url[:-1]
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize AccessRules object.  Set self.type to "AccessRule", parse the kwargs, and set up the self.URL.
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for AccessRules class.")
         self.type = "AccessRule"
@@ -105,6 +111,11 @@ class AccessRules(APIClassTemplate):
         self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
     def format_data(self, filter_query=""):
+        """
+        Gather all the data in preparation for sending to API in JSON format.
+        :param filter_query: (str) 'all' or 'kwargs'
+        :return: (dict) json_data
+        """
         json_data = super().format_data(filter_query=filter_query)
         logging.debug("In format_data() for AccessRules class.")
         if "sourceNetworks" in self.__dict__:
@@ -128,6 +139,10 @@ class AccessRules(APIClassTemplate):
         return json_data
 
     def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+        :return: None
+        """
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for AccessRules class.")
         if "acp_id" in kwargs:
@@ -163,6 +178,12 @@ class AccessRules(APIClassTemplate):
         # self.url_suffix()
 
     def acp(self, name="", id=""):
+        """
+        Associate an AccessPolicies object with this AccessRule object.
+        :param name: (str)  Name of ACP.
+        :param id: (str) ID of ACP.
+        :return: None
+        """
         # either name or id of the ACP should be given
         logging.debug("In acp() for AccessRules class.")
         if id != "":
@@ -180,6 +201,12 @@ class AccessRules(APIClassTemplate):
             logging.error("No accessPolicy name or ID was provided.")
 
     def intrusion_policy(self, action, name=""):
+        """
+        Add/remove name of ipsPolicy field of AccessRules object
+        :param action: (str) 'set', or 'clear'
+        :param name: (str) Name of intrusion policy in FMC.
+        :return: None
+        """
         logging.debug("In intrusion_policy() for AccessRules class.")
         if action == "clear":
             if "ipsPolicy" in self.__dict__:
@@ -194,6 +221,12 @@ class AccessRules(APIClassTemplate):
             )
 
     def variable_set(self, action, name="Default-Set"):
+        """
+        Add/remove name of variableSet field of AccessRules object
+        :param action: (str) 'set', or 'clear'
+        :param name: (str) Name of variable set in FMC.
+        :return: None
+        """
         logging.debug("In variable_set() for AccessRules class.")
         if action == "clear":
             if "variableSet" in self.__dict__:
@@ -206,6 +239,12 @@ class AccessRules(APIClassTemplate):
             logging.info(f'VariableSet set to "{name}" for this AccessRules object.')
 
     def file_policy(self, action, name="None"):
+        """
+        Add/remove name of filePolicy field of AccessRules object
+        :param action: (str) 'set', or 'clear'
+        :param name: (str) Name of file policy in FMC.
+        :return: None
+        """
         logging.debug("In file_policy() for ACPRule class.")
         if action == "clear":
             if "filePolicy" in self.__dict__:
@@ -218,6 +257,12 @@ class AccessRules(APIClassTemplate):
             logging.info(f'file_policy set to "{name}" for this AccessRules object.')
 
     def vlan_tags(self, action, name=""):
+        """
+        Add/modify name to vlanTags field of AccessRules object
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param name: (str) Name of VLAN tag in FMC.
+        :return: None
+        """
         logging.debug("In vlan_tags() for AccessRules class.")
         if action == "add":
             vlantag = VlanTags(fmc=self.fmc)
@@ -281,6 +326,12 @@ class AccessRules(APIClassTemplate):
                 logging.info("All VLAN Tags removed from this AccessRules object.")
 
     def source_zone(self, action, name=""):
+        """
+        Add/modify name to sourceZones field of AccessRules object
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param name: (str) Name of Security Zone in FMC.
+        :return: None
+        """
         logging.debug("In source_zone() for AccessRules class.")
         if action == "add":
             sz = SecurityZones(fmc=self.fmc)
@@ -336,6 +387,12 @@ class AccessRules(APIClassTemplate):
                 logging.info("All Source Zones removed from this AccessRules object.")
 
     def destination_zone(self, action, name=""):
+        """
+        Add/modify name to destinationZones field of AccessRules object
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param name: (str) Name of Security Zone in FMC.
+        :return: None
+        """
         logging.debug("In destination_zone() for AccessRules class.")
         if action == "add":
             sz = SecurityZones(fmc=self.fmc)
@@ -393,6 +450,12 @@ class AccessRules(APIClassTemplate):
                 )
 
     def source_port(self, action, name=""):
+        """
+        Add/modify name to sourcePorts field of AccessRules object
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param name: (str) Name of Port in FMC.
+        :return: None
+        """
         logging.debug("In source_port() for AccessRules class.")
         if action == "add":
             pport_json = ProtocolPortObjects(fmc=self.fmc)
@@ -464,6 +527,12 @@ class AccessRules(APIClassTemplate):
                 logging.info("All Source Ports removed from this AccessRules object.")
 
     def destination_port(self, action, name=""):
+        """
+        Add/modify name to destinationPorts field of AccessRules object
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param name: (str) Name of Port in FMC.
+        :return: None
+        """
         logging.debug("In destination_port() for AccessRules class.")
         if action == "add":
             pport_json = ProtocolPortObjects(fmc=self.fmc)
@@ -538,14 +607,11 @@ class AccessRules(APIClassTemplate):
 
     def source_network(self, action, name="", literal=None):
         """
-        Adds Either object having name=name or literal with {value:<>, type:<>} to the sourceNetworks
-        field of AccessRules object
-        Args:
-            action: the action to be done
-            name: name of the object in question
-            literal: the literal in question
-        Returns:
-            None
+        Add/modify name/literal to sourceNetworks field of AccessRules object
+        :param action: (str) the action to be done 'add', 'remove', 'clear'
+        :param name: (str) name of the object in question
+        :param literal: (dict) the literal in question {value:<>, type:<>}
+        :return: None
         """
         # using dict() as default value is dangerous here, any thoughts/workarounds on this?
         logging.debug("In source_network() for AccessRules class.")
@@ -668,14 +734,11 @@ class AccessRules(APIClassTemplate):
 
     def destination_network(self, action, name="", literal=None):
         """
-        Adds Either object having name=name or literal with {value:<>, type:<>} to the sourceNetworks
-        field of AccessRules object
-        Args:
-            action: the action to be done
-            name: name of the object in question
-            literal: the literal in question
-        Returns:
-            None
+        Add/modify name/literal to destinationNetworks field of AccessRules object
+        :param action: (str) the action to be done 'add', 'remove', 'clear'
+        :param name: (str) name of the object in question
+        :param literal: (dict) the literal in question {value:<>, type:<>}
+        :return: None
         """
         # using dict() as default value is dangerous here, any thoughts/workarounds on this?
 
@@ -802,14 +865,11 @@ class AccessRules(APIClassTemplate):
 
     def source_sgt(self, action, name="", literal=None):
         """
-        Adds Either object having name=name or literal with {value:<>, type:<>} to the sourceSecurityGroupTags
-        field of AccessRules object
-        Args:
-            action: the action to be done
-            name: name of the object in question
-            literal: the literal in question
-        Returns:
-            None
+        Add/modify name/literal to the sourceSecurityGroupTags field of AccessRules object
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param name: (str) Name of SGT in FMC.
+        :param literal: (dict) {value:<>, type:<>}
+        :return: None
         """
         # using dict() as default value is dangerous here, any thoughts/workarounds on this?
 
@@ -926,20 +986,30 @@ class AccessRules(APIClassTemplate):
                 )
 
     def destination_sgt(self, action, name="", literal=None):
+        """
+        Add/modify name/literal to the destinationSecurityGroupTags field of AccessRules object
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param name: (str) Name of SGT in FMC.
+        :param literal: (dict) {value:<>, type:<>}
+        :return: None
+        """
         pass
 
 
 class ACPRule(AccessRules):
-    """Dispose of this Class after 20210101."""
+    """Dispose of this Class after 20210101.  Use AccessRules() instead."""
 
     def __init__(self, fmc, **kwargs):
+        """
+        Deprecated: ACPRule() should be called via AccessRules().
+        """
         warnings.resetwarnings()
         warnings.warn("Deprecated: ACPRule() should be called via AccessRules().")
         super().__init__(fmc, **kwargs)
 
 
 class Bulk(object):
-    """Bulk Class"""
+    """Class used to send many JSON objects in one API call.  This is specific to the AccessRules() method."""
 
     MAX_SIZE_QTY = 1000
     MAX_SIZE_IN_BYTES = 2048000
@@ -949,6 +1019,7 @@ class Bulk(object):
     def URL_SUFFIX(self):
         """
         Add the URL suffixes for section, categories, insertBefore and insertAfter.
+        :return (str): url
         """
         url = "?"
 
@@ -966,6 +1037,12 @@ class Bulk(object):
         return url[:-1]
 
     def __init__(self, fmc, url="", **kwargs):
+        """
+        :param fmc (object):  FMC object
+        :param url (str): Base URL used for API action.
+        :param **kwargs: Pass any/all variables for self.
+        :return: None
+        """
         logging.debug("In __init__() for Bulk class.")
         self.fmc = fmc
         self.items = []
@@ -973,6 +1050,10 @@ class Bulk(object):
         self.parse_kwargs(**kwargs)
 
     def parse_kwargs(self, **kwargs):
+        """
+        Add/modify variables in self.
+        :return: None
+        """
         logging.debug("In parse_kwargs() for Bulk class.")
         if "category" in kwargs:
             self.category = kwargs["category"]
@@ -984,14 +1065,26 @@ class Bulk(object):
             self.section = kwargs["section"]
 
     def add(self, item):
+        """
+        :param item (str): Add JSON string to list of items to send to FMC.
+        :return: None
+        """
         self.items.append(item)
         logging.info(f"Adding {item} to bulk items list.")
 
     def clear(self):
+        """
+        Clear self.items (Empty out list of JSON strings to send to FMC.)
+        :return: None
+        """
         logging.info(f"Clearing bulk items list.")
         self.items = []
 
     def post(self):
+        """
+        Send list of self.items to FMC as a bulk import.
+        :return (str): requests response from FMC
+        """
         # Build URL
         self.URL = f"{self.URL}{self.URL_SUFFIX}&bulk=true"
 
