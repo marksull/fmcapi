@@ -32,8 +32,7 @@ logging.getLogger("requests").setLevel(logging.WARNING)
 
 class FMC(object):
     """
-The FMC class has a series of methods, lines that start with "def", that are used to interact with the Cisco FMC
-via its API.  Each method has its own DOCSTRING (like this triple quoted text here) describing its functionality.
+    Establish and maintain connection to Firepower Management Center.
     """
 
     logging.debug("In the FMC() class.")
@@ -59,15 +58,17 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
     ):
         """
         Instantiate some variables prior to calling the __enter__() method.
-        :param host:
-        :param username:
-        :param password:
-        :param autodeploy:
+        :param host (str): Hostname/IP of FMC (Default is 192.168.45.45)
+        :param username (str): Admin for FMC (Default is admin)
+        :param password (str): Admin Password (Default is Admin123)
+        :param domain (str): UUID of domain (Default is None which implies the Global domain)
+        :param autodeploy (bool): Deploy changes to affected FMC manage devices. (Default is True)
         :param file_logging (str): The filename (and optional path) of the output file if a file logger is required,
-        None if no file logger is required
-        :param logging_level (str): The desired logging level, INFO by default.
-        :param debug (bool): True to enable debug logging, default is False
-        :param limit (int): Sets up max page of data to gather per "page".
+        None if no file logger is required. (Default is None)
+        :param logging_level (str): The desired logging level. (Default is INFO)
+        :param debug (bool): True to enable debug logging. (Default is False)
+        :param limit (int): Sets up max data to gather per "page". (Default is 1000)
+        :return: None
         """
         self.debug = debug
         if self.debug:
@@ -118,7 +119,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
     def __enter__(self):
         """
         Get a token from the FMC as well as the Global UUID.  With this information set up the base_url variable.
-        :return:
+        :return: self
         """
         logging.debug("In the FMC __enter__() class method.")
         self.mytoken = Token(
@@ -140,9 +141,9 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
 
     def __exit__(self, *args):
         """
-        If autodeploy == True push changes to FMC upon exit of "with" contract.
+        If autodeploy == True, push changes to FMC upon exit of "with" contract.
         :param args:
-        :return:
+        :return: None
         """
         logging.debug("In the FMC __exit__() class method.")
 
@@ -156,8 +157,8 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
 
     def build_urls(self):
         """
-        The FMC APIs appear to use 2 base URLs, depending on what that API is for.  One for "configuration" and the
-        other for FMC "platform" things.
+        Build configuration_url and platform_url variables.
+        :return: None
         """
         logging.debug("In the FMC build_urls() class method.")
         logging.info("Building base to URLs.")
@@ -170,13 +171,13 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         self, method="", url="", headers="", json_data=None, more_items=None
     ):
         """
-        Using the "method" type, send a request to the "url" with the "json_data" as the payload.
-        :param method:
-        :param url:
-        :param headers:
-        :param json_data:
-        :param more_items:
-        :return:
+        Send API call to FMC.
+        :param method (str): GET, POST, PUT, or DELETE
+        :param url (str): URL for API call.
+        :param headers (str):  String of header variables.
+        :param json_data (str):  JSON formatted string as payload. (Default is None)
+        :param more_items (str):  Used for paging in query.
+        :return: JSON response from FMC
         """
         logging.debug("In the FMC send_to_api() class method.")
 
@@ -285,7 +286,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
             return json_response
 
     def serverversion(self):
-        """Dispose of this method after 20210101."""
+        """Dispose of this method after 20210101.  Use ServerVersion() instead."""
         warnings.warn(
             "Deprecated: fmc.serverversion() should be called via ServerVersion() instead."
         )
@@ -293,7 +294,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         return tmp.get()
 
     def version(self):
-        """Dispose of this method after 20210101."""
+        """Dispose of this method after 20210101.  Use ServerVersion() instead."""
         warnings.warn(
             "Deprecated: fmc.version() should be called via ServerVersion() instead."
         )
@@ -301,7 +302,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         return tmp.get()
 
     def auditrecords(self):
-        """Dispose of this method after 20210101."""
+        """Dispose of this method after 20210101.  Use AuditRecords() instead."""
         warnings.warn(
             "Deprecated: fmc.auditrecords() should be called via AuditRecords() instead."
         )
@@ -309,7 +310,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         return tmp.get()
 
     def audit(self):
-        """Dispose of this method after 20210101."""
+        """Dispose of this method after 20210101.  Use AuditRecords() instead."""
         warnings.warn(
             "Deprecated: fmc.audit() should be called via AuditRecords() instead."
         )
@@ -317,7 +318,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         return tmp.get()
 
     def deployabledevices(self):
-        """Dispose of this method after 20210101."""
+        """Dispose of this method after 20210101.  Use DeployableDevices() instead."""
         warnings.warn(
             "Deprecated: fmc.deployabledevices() should be called via DeployableDevices() instead."
         )
@@ -325,7 +326,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         return tmp.get()
 
     def get_deployable_devices(self):
-        """Dispose of this method after 20210101."""
+        """Dispose of this method after 20210101.  Use DeployableDevices() instead."""
         warnings.warn(
             "Deprecated: fmc.get_deployable_devices() should be called via DeployableDevices() instead."
         )
@@ -333,7 +334,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         return tmp.post()
 
     def deploymentrequests(self):
-        """Dispose of this method after 20210101."""
+        """Dispose of this method after 20210101.  Use DeploymentRequests() instead."""
         warnings.warn(
             "Deprecated: fmc.deploymentrequests() should be called via DeploymentRequests() instead."
         )
@@ -341,7 +342,7 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
         return tmp.post()
 
     def deploy_changes(self):
-        """Dispose of this method after 20210101."""
+        """Dispose of this method after 20210101.  Use DeploymentRequests() instead."""
         warnings.warn(
             "Deprecated: fmc.deploy_changes() should be called via DeploymentRequests() instead."
         )
@@ -352,7 +353,6 @@ via its API.  Each method has its own DOCSTRING (like this triple quoted text he
 class Token(object):
     """
     The token is the validation object used with the FMC.
-
     """
 
     logging.debug("In the Token class.")
@@ -374,10 +374,12 @@ class Token(object):
     ):
         """
         Initialize variables used in the Token class.
-        :param host:
-        :param username:
-        :param password:
-        :param verify_cert:
+        :param host (str):  FMC hostname/IP (Default is 192.168.45.45)
+        :param username (str): FMC Admin user (Default is admin)
+        :param password (str): FMC user's password (Default is Admin123)
+        :param domain (str):  UUID of domain.  Default is None which implies Global domain.
+        :param verify_cert (bool):  Validate cert  (Default is False)
+        :return: None
         """
         logging.debug("In the Token __init__() class method.")
 
@@ -395,8 +397,8 @@ class Token(object):
 
     def generate_tokens(self):
         """
-        Create new and refresh expired tokens.
-        :return:
+        Create new or refresh expired tokens.
+        :return: None
         """
         logging.debug("In the Token generate_tokens() class method.")
 
@@ -413,7 +415,7 @@ class Token(object):
             )
             response = requests.post(url, headers=headers, verify=self.verify_cert)
             logging.debug(
-                "Response from refreshtoken post:\n"
+                "Response from refreshtoken() post:\n"
                 f"\turl: {url}\n"
                 f"\theaders: {headers}\n"
                 f"\tresponse: {response}"
@@ -436,7 +438,7 @@ class Token(object):
                 verify=self.verify_cert,
             )
             logging.debug(
-                "Response from generatetoken post:\n"
+                "Response from generatetoken() post:\n"
                 f"\turl: {url}\n"
                 f"\theaders: {headers}\n"
                 f"\tresponse: {response}"
