@@ -8,9 +8,7 @@ import logging
 
 class AuditRecords(APIClassTemplate):
     """
-    This API function supports filtering the GET query URL with: username, subsystem, source, starttime, and
-    endtime parameters.
-    :return: response
+    The AuditRecords Object in the FMC.
     """
 
     VALID_JSON_DATA = []
@@ -26,6 +24,12 @@ class AuditRecords(APIClassTemplate):
     URL_SUFFIX = "/audit/auditrecords"
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize AuditRecords object.
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: requests response
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for AuditRecords class.")
         self.url_parameters = ""
@@ -33,6 +37,10 @@ class AuditRecords(APIClassTemplate):
         self.parse_kwargs(**kwargs)
 
     def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+        :return: None
+        """
         logging.debug("In parse_kwargs() for AuditRecords class.")
         tmp = self.url_parameters
         if "username" in kwargs:
@@ -52,17 +60,31 @@ class AuditRecords(APIClassTemplate):
         self.URL += self.url_parameters
 
     def get(self):
+        """
+        This API function supports filtering the GET query URL with: username, subsystem, source, starttime, and
+        endtime parameters.
+        :return: response
+        """
         logging.debug("GET method for API for AuditRecords.")
         return self.fmc.send_to_api(method="get", url=self.URL)
 
     def post(self):
+        """
+        POST method for API for AuditRecords not supported.
+        """
         logging.info("POST method for API for AuditRecords not supported.")
         pass
 
     def put(self):
+        """
+        PUT method for API for AuditRecords not supported.
+        """
         logging.info("PUT method for API for AuditRecords not supported.")
         pass
 
     def delete(self):
+        """
+        DELETE method for API for AuditRecords not supported.
+        """
         logging.info("DELETE method for API for AuditRecords not supported.")
         pass

@@ -1,9 +1,9 @@
 """
-This module (fmc.py) is designed to provide a "toolbox" of tools for interacting with the Cisco FMC API.
-The "toolbox" is the FMC class and the "tools" are its methods.
+Establish and manage connection to FMC.
 
-Note: There exists a "Quick Start Guide" for the Cisco FMC API too.  Just Google for it as it gets updated with each
- release of code.
+This module (fmc.py) is designed to provide a "toolbox" of tools for interacting with the Cisco FMC API.
+The "toolbox" is the FMC class and the "tools" are its methods.  Note: There exists a "Quick Start Guide" for the Cisco
+FMC API too.  Just Google for it as it gets updated with each release of code.
 """
 
 import datetime
@@ -23,17 +23,15 @@ from .api_objects import DeploymentRequests
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 """"
-The 'requests' package is very chatty on the INFO logging level.  Change its logging threshold sent to logger to 
-something greater than INFO (i.e. not INFO or DEBUG) will cause it to not log its INFO and DEBUG messages to the 
+The 'requests' package is very chatty on the INFO logging level.  Change its logging threshold sent to logger to
+something greater than INFO (i.e. not INFO or DEBUG) will cause it to not log its INFO and DEBUG messages to the
 default logger.  This reduces the size of our log files.
 """
 logging.getLogger("requests").setLevel(logging.WARNING)
 
 
 class FMC(object):
-    """
-    Establish and maintain connection to Firepower Management Center.
-    """
+    """Establish and maintain connection to Firepower Management Center."""
 
     logging.debug("In the FMC() class.")
 
@@ -58,6 +56,7 @@ class FMC(object):
     ):
         """
         Instantiate some variables prior to calling the __enter__() method.
+
         :param host (str): Hostname/IP of FMC (Default is 192.168.45.45)
         :param username (str): Admin for FMC (Default is admin)
         :param password (str): Admin Password (Default is Admin123)
@@ -119,6 +118,7 @@ class FMC(object):
     def __enter__(self):
         """
         Get a token from the FMC as well as the Global UUID.  With this information set up the base_url variable.
+
         :return: self
         """
         logging.debug("In the FMC __enter__() class method.")
@@ -142,6 +142,7 @@ class FMC(object):
     def __exit__(self, *args):
         """
         If autodeploy == True, push changes to FMC upon exit of "with" contract.
+
         :param args:
         :return: None
         """
@@ -158,6 +159,7 @@ class FMC(object):
     def build_urls(self):
         """
         Build configuration_url and platform_url variables.
+
         :return: None
         """
         logging.debug("In the FMC build_urls() class method.")
@@ -172,6 +174,7 @@ class FMC(object):
     ):
         """
         Send API call to FMC.
+
         :param method (str): GET, POST, PUT, or DELETE
         :param url (str): URL for API call.
         :param headers (str):  String of header variables.
@@ -351,9 +354,7 @@ class FMC(object):
 
 
 class Token(object):
-    """
-    The token is the validation object used with the FMC.
-    """
+    """The token is the validation object used with the FMC."""
 
     logging.debug("In the Token class.")
 
@@ -374,6 +375,7 @@ class Token(object):
     ):
         """
         Initialize variables used in the Token class.
+
         :param host (str):  FMC hostname/IP (Default is 192.168.45.45)
         :param username (str): FMC Admin user (Default is admin)
         :param password (str): FMC user's password (Default is Admin123)
@@ -398,6 +400,7 @@ class Token(object):
     def generate_tokens(self):
         """
         Create new or refresh expired tokens.
+
         :return: None
         """
         logging.debug("In the Token generate_tokens() class method.")
@@ -460,6 +463,7 @@ class Token(object):
     def get_token(self):
         """
         Check validity of current token.  If needed make a new or refresh.  Then return access_token.
+
         :return self.access_token
         """
         logging.debug("In the Token get_token() class method.")

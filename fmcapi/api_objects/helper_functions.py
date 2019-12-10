@@ -6,7 +6,6 @@ import re
 import ipaddress
 import json
 import logging
-import time
 
 logging.debug(f"In the {__name__} module.")
 
@@ -14,10 +13,10 @@ logging.debug(f"In the {__name__} module.")
 def syntax_correcter(value, permitted_syntax="""[.\w\d_\-]""", replacer="_"):
     """
     Check 'value' for invalid characters (identified by 'permitted_syntax') and replace them with 'replacer'.
-    :param value:  String to be checked.
-    :param permitted_syntax: (optional) regex of allowed characters.
-    :param replacer: (optional) character used to replace invalid characters.
-    :return: Modified string with "updated" characters.
+    :param value:  (str) String to be checked.
+    :param permitted_syntax: (str) regex of allowed characters.
+    :param replacer: (str) character used to replace invalid characters.
+    :return: (str) Modified string with "updated" characters.
     """
     logging.debug("In syntax_correcter() helper_function.")
     new_value = ""
@@ -32,8 +31,8 @@ def syntax_correcter(value, permitted_syntax="""[.\w\d_\-]""", replacer="_"):
 def get_networkaddress_type(value):
     """
     Check to see whether 'value' is a host, range, or network.
-    :param value: 
-    :return: 'host'/'network'/'range'
+    :param value: (str) x.x.x.x, x.x.x.x/xx, or x.x.x.x-x.x.x.x
+    :return: (str) 'host', 'network', or 'range'
     """
     logging.debug("In get_networkaddress_type() helper_function.")
     if "/" in value:
@@ -52,8 +51,8 @@ def get_networkaddress_type(value):
 def is_ip(ip):
     """
     Checks to see whether the provided string is an IP address.
-    :param ip: String
-    :return: True/False
+    :param ip: (str) x.x.x.x
+    :return: (boolean)
     """
     logging.debug("In is_ip() helper_function.")
     try:
@@ -68,8 +67,8 @@ def is_ip_network(ip):
     """
     Checks to see whether the provided string is a valid network address.  That is, it checks to see if the
      provided IP/SM is the "network address" of the subnet.
-    :param ip: String
-    :return: True/False
+    :param ip: (str) x.x.x.x/xx
+    :return: (boolean)
     """
     logging.debug("In is_ip_network() helper_function.")
     try:
@@ -83,9 +82,9 @@ def is_ip_network(ip):
 def validate_ip_bitmask_range(value="", value_type=""):
     """
     We need to check the provided IP address (or range of addresses) and make sure the IPs are valid.
-    :param value: IP, IP/Bitmask, or IP Range
-    :param value_type: 'host'/'network'/'range'
-    :return: dict {value=value_fixed, valid=boolean}
+    :param value: (str) x.x.x.x, x.x.x.x/xx, or x.x.x.x-x.x.x.x
+    :param value_type: (str) 'host', 'network', or 'range'
+    :return: (dict) {value=value_fixed, valid=boolean}
     """
     logging.debug("In validate_ip_bitmask_range() helper_function.")
     return_dict = {"value": value, "valid": False}
@@ -103,7 +102,7 @@ def mocked_requests_get(**kwargs):
     """
     Use to "mock up" a response from using the "requests" library to avoid actually using the "requests" library.
     :param kwargs: 
-    :return: 
+    :return: (boolean)
     """
     logging.debug("In mocked_requests_get() helper_function.")
 
@@ -121,6 +120,12 @@ def mocked_requests_get(**kwargs):
 
 
 def validate_vlans(start_vlan, end_vlan=""):
+    """
+    Validate that the start_vlan and end_vlan numbers are in 1 - 4094 range.  If not, then return 1, 4094
+    :param start_vlan: (int) Lower VLAN number in range.
+    :param end_vlan: (int) Upper VLAN number in range.
+    :return: (int) start_vlan, (int) end_vlan)
+    """
     logging.debug("In validate_vlans() helper_function.")
     if end_vlan == "":
         end_vlan = start_vlan

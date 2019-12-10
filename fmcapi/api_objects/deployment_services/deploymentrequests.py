@@ -18,6 +18,11 @@ class DeploymentRequests(
     URL_SUFFIX = "/deployment/deploymentrequests"
 
     def __init__(self, fmc):
+        """
+        Initialize DeploymentRequests object.
+        :param fmc (object): FMC object
+        :return: None
+        """
         logging.debug("In __init__ for DeploymentRequests() class.")
 
         self.fmc = fmc
@@ -25,9 +30,16 @@ class DeploymentRequests(
         self.uuids = None
 
     def get(self):
+        """
+        GET method for API for DeploymentRequests not supported.
+        """
         logging.info("GET method for API for DeploymentRequests not supported.")
 
     def post(self):
+        """
+        Submit list of devices to FMC that need config changes pushed to them.
+        :return: (list) List of devices.
+        """
         logging.debug("In post() method for DeploymentRequests() class.")
         devices = DeployableDevices(fmc=self.fmc)
         self.uuids = devices.get()
@@ -55,9 +67,15 @@ class DeploymentRequests(
         return response["deviceList"]
 
     def put(self):
+        """
+        PUT method for API for DeploymentRequests not supported.
+        """
         logging.info("PUT method for API for DeploymentRequests not supported.")
         pass
 
     def delete(self):
+        """
+        DELETE method for API for DeploymentRequests not supported.
+        """
         logging.info("DELETE method for API for DeploymentRequests not supported.")
         pass

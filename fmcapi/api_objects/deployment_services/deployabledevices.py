@@ -10,7 +10,7 @@ class DeployableDevices(
     object
 ):  # Can't import APIClassTemplate due to dependency loop.
     """
-    Collect a list of FMC managed devices who's configuration is not up-to-date.
+    Collect a list of FMC managed devices whose configuration is not up-to-date.
     :return: List of devices needing updates.
     """
 
@@ -18,6 +18,11 @@ class DeployableDevices(
     WAIT_TIME = 15
 
     def __init__(self, fmc):
+        """
+        Initialize DeployableDevices object.
+        :param fmc (object): FMC object
+        :return: None
+        """
         logging.debug("In __init__ for DeployableDevices() class.")
 
         logging.info(
@@ -29,6 +34,10 @@ class DeployableDevices(
         self.URL = f"{self.fmc.configuration_url}{self.URL_SUFFIX}"
 
     def get(self):
+        """
+        Use GET API call to query FMC for a list of devices that need configuration updates pushed to them.
+        :return: (list) uuids
+        """
         logging.debug("GET method for API for DeployableDevices.")
         logging.info("Getting a list of deployable devices.")
         response = self.fmc.send_to_api(method="get", url=self.URL)
@@ -44,13 +53,22 @@ class DeployableDevices(
         return uuids
 
     def post(self):
+        """
+        POST method for API for DeployableDevices not supported.
+        """
         logging.info("POST method for API for DeployableDevices not supported.")
         pass
 
     def put(self):
+        """
+        PUT method for API for DeployableDevices not supported.
+        """
         logging.info("PUT method for API for DeployableDevices not supported.")
         pass
 
     def delete(self):
+        """
+        DELETE method for API for DeployableDevices not supported.
+        """
         logging.info("DELETE method for API for DeployableDevices not supported.")
         pass
