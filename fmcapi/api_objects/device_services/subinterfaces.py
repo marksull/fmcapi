@@ -1,3 +1,5 @@
+"""Sub-interfaces Classes."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 from fmcapi.api_objects.object_services.securityzones import SecurityZones
@@ -6,9 +8,7 @@ import logging
 
 
 class SubInterfaces(APIClassTemplate):
-    """
-    The Subinterface Object in the FMC.
-    """
+    """The Subinterface Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -45,12 +45,26 @@ class SubInterfaces(APIClassTemplate):
     VALID_FOR_MTU = range(64, 9000)
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize SubInterfaces object.
+
+        Set self.type to "SubInterface" and parse the kwargs.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for SubInterfaces class.")
         self.parse_kwargs(**kwargs)
         self.type = "SubInterface"
 
     def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+
+        :return: None
+        """
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for SubInterfaces class.")
         if "device_name" in kwargs:
@@ -77,6 +91,12 @@ class SubInterfaces(APIClassTemplate):
                 self.MTU = 1500
 
     def device(self, device_name):
+        """
+        Associate device to this subinterface.
+
+        :param device_name: (str) Name of device.
+        :return: None
+        """
         logging.debug("In device() for SubInterfaces class.")
         device1 = DeviceRecords(fmc=self.fmc)
         device1.get(name=device_name)
@@ -90,6 +110,12 @@ class SubInterfaces(APIClassTemplate):
             )
 
     def sz(self, name):
+        """
+        Assign Security Zone to this subinterface.
+
+        :param name: (str) Name of Security Zone.
+        :return: None
+        """
         logging.debug("In sz() for SubInterfaces class.")
         sz = SecurityZones(fmc=self.fmc)
         sz.get(name=name)
@@ -102,10 +128,24 @@ class SubInterfaces(APIClassTemplate):
             )
 
     def static(self, ipv4addr, ipv4mask):
+        """
+        Assign static IP to this bridge subinterface.
+
+        :param ipv4addr: (str) x.x.x.x
+        :param ipv4mask: (str) bitmask
+        :return: None
+        """
         logging.debug("In static() for SubInterfaces class.")
         self.ipv4 = {"static": {"address": ipv4addr, "netmask": ipv4mask}}
 
     def dhcp(self, enableDefault=True, routeMetric=1):
+        """
+        Configure this subinterface with DHCP for addressing.
+
+        :param enableDefault: (bool) Accept, or not, a default route via DHCP.
+        :param routeMetric: (int) Set route metric.
+        :return: None
+        """
         logging.debug("In dhcp() for SubInterfaces class.")
         self.ipv4 = {
             "dhcp": {
@@ -115,6 +155,13 @@ class SubInterfaces(APIClassTemplate):
         }
 
     def p_interface(self, p_interface, device_name):
+        """
+        Define which physical interface on which device is a part of this subinterface.
+
+        :param p_interfaces: (str) Name of physical interface.
+        :param device_name: (str) Name of device with that interface.
+        :return: None
+        """
         logging.debug("In p_interface() for SubInterfaces class.")
         intf1 = PhysicalInterfaces(fmc=self.fmc)
         intf1.get(name=p_interface, device_name=device_name)

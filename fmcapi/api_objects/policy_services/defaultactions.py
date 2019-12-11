@@ -1,12 +1,12 @@
+"""Default Actions Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .accesspolicies import AccessPolicies
 import logging
 
 
 class DefaultActions(APIClassTemplate):
-    """
-    The DefaultActions Object in the FMC.
-    """
+    """The DefaultActions Object in the FMC."""
 
     VALID_JSON_DATA = []
     VALID_FOR_KWARGS = VALID_JSON_DATA + [
@@ -24,13 +24,28 @@ class DefaultActions(APIClassTemplate):
     VALID_ACTION = ["BLOCK", "TRUST", "PERMIT", "NETWORK_DISCOVERY"]
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize DefaultActions object.
+
+        Set self.type to "AccessPolicyDefaultAction", parse the kwargs, and set up the self.URL.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         logging.debug("In __init__() for DefaultActions class.")
         super().__init__(fmc, **kwargs)
         self.parse_kwargs(**kwargs)
         self.type = "AccessPolicyDefaultAction"
         self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
-    def format_data(self):
+    def format_data(self, filter_query=""):
+        """
+        Gather all the data in preparation for sending to API in JSON format.
+
+        :param filter_query: (str) 'all' or 'kwargs'
+        :return: (dict) json_data
+        """
         json_data = super().format_data()
         logging.debug("In format_data() for DefaultActions class.")
         if "action" in self.__dict__:
@@ -41,6 +56,11 @@ class DefaultActions(APIClassTemplate):
         return json_data
 
     def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+
+        :return: None
+        """
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for DefaultActions class.")
         if "acp_id" in kwargs:
@@ -59,6 +79,13 @@ class DefaultActions(APIClassTemplate):
             self.action = kwargs["action"]
 
     def acp(self, name="", acp_id=""):
+        """
+        Associate an AccessPolicies object with this DefaultAction object.
+
+        :param name: (str)  Name of ACP.
+        :param id: (str) ID of ACP.
+        :return: None
+        """
         # either name or id of the ACP should be given
         logging.debug("In acp() for DefaultActions class.")
         if acp_id != "":
@@ -79,10 +106,12 @@ class DefaultActions(APIClassTemplate):
         else:
             logging.error("No accessPolicy name or id was provided.")
 
-    def delete(self, **kwargs):
-        logging.info("API DELETE method for DefaultActions not supported.")
+    def post(self):
+        """POST method for DefaultActions not supported."""
+        logging.info("API POST method for DefaultActions not supported.")
         pass
 
-    def post(self):
-        logging.info("API POST method for DefaultActions not supported.")
+    def delete(self, **kwargs):
+        """DELETE method for DefaultActions not supported."""
+        logging.info("API DELETE method for DefaultActions not supported.")
         pass

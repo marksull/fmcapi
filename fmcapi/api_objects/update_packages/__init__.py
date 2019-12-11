@@ -1,3 +1,5 @@
+"""Update Packages Classes."""
+
 import logging
 from .listapplicabledevices import ListApplicableDevices
 from .listapplicabledevices import ApplicableDevices

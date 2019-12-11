@@ -1,3 +1,5 @@
+"""SLA Monitors Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .securityzones import SecurityZones
 import logging
@@ -5,9 +7,7 @@ import warnings
 
 
 class SLAMonitors(APIClassTemplate):
-    """
-    The SLAMonitors Object in the FMC.
-    """
+    """The SLAMonitors Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -30,12 +30,26 @@ class SLAMonitors(APIClassTemplate):
     REQUIRED_FOR_PUT = ["id", "type"]
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize SLAMonitors object.
+
+        Set self.type to "SLAMonitor" and parse the kwargs.
+
+        :param fmc: (object) FMC object
+        :param kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for SLAMonitors class.")
         self.parse_kwargs(**kwargs)
         self.type = "SLAMonitor"
 
     def interfaces(self, names):
+        """
+        Associate interfaces (AKA Security Zones).
+
+        :param names: (list) List of Security Zone names.
+        """
         logging.debug("In interfaces() for SLAMonitors class.")
         zones = []
         for name in names:
@@ -58,7 +72,11 @@ class SLAMonitors(APIClassTemplate):
 
 
 class SLAMonitor(SLAMonitors):
-    """Dispose of this Class after 20210101."""
+    """
+    Dispose of this Class after 20210101.
+
+    Use SLAMonitors() instead.
+    """
 
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()

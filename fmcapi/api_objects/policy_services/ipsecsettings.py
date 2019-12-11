@@ -1,3 +1,5 @@
+"""IPSec Settings Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .ftds2svpns import FTDS2SVPNs
 from fmcapi.api_objects.object_services.ikev1ipsecproposals import IKEv1IpsecProposals
@@ -6,9 +8,7 @@ import logging
 
 
 class IPSecSettings(APIClassTemplate):
-    """
-    The IPSecSettings Object in the FMC.
-    """
+    """The IPSecSettings Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -33,12 +33,27 @@ class IPSecSettings(APIClassTemplate):
     REQUIRED_FOR_POST = ["vpn_id"]
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize IPSecSettings object.
+
+        Set self.type to "IPSecSettings" and parse the kwargs.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for IPSecSettings class.")
         self.parse_kwargs(**kwargs)
         self.type = "IPSecSettings"
 
     def vpn_policy(self, pol_name):
+        """
+        Associate a VPN Policy.
+
+        :param pol_name: (str) Name of VPN Policy.
+        :return: None
+        """
         logging.debug("In vpn_policy() for IPSecSettings class.")
         ftd_s2s = FTDS2SVPNs(fmc=self.fmc)
         ftd_s2s.get(name=pol_name)
@@ -52,6 +67,13 @@ class IPSecSettings(APIClassTemplate):
             )
 
     def ipsec_policy(self, pol_name, version=1, action="add"):
+        """
+        Associate IPSec Policy.
+
+        :param pol_name: (str) Name of IPSec Policy.
+        :param version: (int) Version number.
+        :param action: (str) 'add', 'remove', or 'clear'.
+        """
         logging.debug("In ipsec_policy() for IPSecSettings class.")
         pol1 = None
         if version == 1:

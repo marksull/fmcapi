@@ -1,12 +1,12 @@
+"""NAT Rules Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .ftdnatpolicies import FTDNatPolicies
 import logging
 
 
 class NatRules(APIClassTemplate):
-    """
-    The NatRules Object in the FMC.
-    """
+    """The NatRules Object in the FMC."""
 
     VALID_JSON_DATA = ["id", "name", "type"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
@@ -14,11 +14,24 @@ class NatRules(APIClassTemplate):
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize NatRules object.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for NatRules class.")
         self.parse_kwargs(**kwargs)
 
     def nat_policy(self, name):
+        """
+        Associate NAT Policy.
+
+        :param name: (str) Name of NAT Policy.
+        :return: None
+        """
         logging.debug("In nat_policy() for NatRules class.")
         ftd_nat = FTDNatPolicies(fmc=self.fmc)
         ftd_nat.get(name=name)
@@ -34,13 +47,16 @@ class NatRules(APIClassTemplate):
             )
 
     def post(self):
+        """POST method for API for NatRules not supported."""
         logging.info("POST method for API for NatRules not supported.")
         pass
 
     def put(self):
+        """PUT method for API for NatRules not supported."""
         logging.info("PUT method for API for NatRules not supported.")
         pass
 
     def delete(self):
+        """DELETE method for API for NatRules not supported."""
         logging.info("DELETE method for API for NatRules not supported.")
         pass

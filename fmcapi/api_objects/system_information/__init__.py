@@ -1,6 +1,4 @@
-"""
-All System Information features are in the FMC class in the fmc.py file.
-"""
+"""System Information Classes."""
 
 import logging
 from .serverversion import ServerVersion

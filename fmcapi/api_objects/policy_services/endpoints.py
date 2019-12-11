@@ -1,3 +1,5 @@
+"""Endpoints Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .ftds2svpns import FTDS2SVPNs
 from fmcapi.api_objects.object_services.fqdns import FQDNS
@@ -16,9 +18,7 @@ import logging
 
 
 class Endpoints(APIClassTemplate):
-    """
-    The Endpoints Object in the FMC.
-    """
+    """The Endpoints Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -44,12 +44,27 @@ class Endpoints(APIClassTemplate):
     REQUIRED_FOR_POST = ["vpn_id"]
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize Endpoints object.
+
+        Set self.type to "Endpoint" and parse the kwargs.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for Endpoints class.")
         self.parse_kwargs(**kwargs)
         self.type = "EndPoint"
 
     def vpn_policy(self, pol_name):
+        """
+        Associate a VPN Policy.
+
+        :param pol_name: (str) Name of VPN Policy.
+        :return: None
+        """
         logging.debug("In vpn_policy() for Endpoints class.")
         ftd_s2s = FTDS2SVPNs(fmc=self.fmc)
         ftd_s2s.get(name=pol_name)
@@ -67,6 +82,12 @@ class Endpoints(APIClassTemplate):
             )
 
     def endpoint(self, action, device_name):
+        """
+        Associate an endpoint.
+
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param device_name: (str) Name of device.
+        """
         logging.debug("In endpoint() for Endpoints class.")
         device_json = DeviceRecords(fmc=self.fmc).get()
         device_ha_json = FTDDeviceHAPairs(fmc=self.fmc).get()
@@ -104,6 +125,12 @@ class Endpoints(APIClassTemplate):
                 del self.device
 
     def vpn_interface(self, device_name, ifname):
+        """
+        Associate an interface.
+
+        :param device_name: (str) Name of device.
+        :param ifname: (str) Name of interface.
+        """
         logging.debug("In vpn_interface() for Endpoints class.")
         ether_json = EtherchannelInterfaces(fmc=self.fmc, device_name=device_name).get()
         phys_json = PhysicalInterfaces(fmc=self.fmc, device_name=device_name).get()
@@ -129,6 +156,12 @@ class Endpoints(APIClassTemplate):
             logging.info(f'Interface "{ifname}" added.')
 
     def encryption_domain(self, action, names=[]):
+        """
+        Associate Encryption.
+
+        :param action: (str) 'add', 'remove', or 'clear'.
+        :param names: (list) List of Encryption names.
+        """
         logging.debug("In endpoint() for Endpoints class.")
         fqdns_json = FQDNS(fmc=self.fmc).get()
         host_json = Hosts(fmc=self.fmc).get()

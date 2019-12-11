@@ -1,3 +1,5 @@
+"""Hit Counts Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .accesspolicies import AccessPolicies
 from .accessrules import AccessRules
@@ -8,9 +10,7 @@ import warnings
 
 
 class HitCounts(APIClassTemplate):
-    """
-    The HitCounts Object in the FMC.
-    """
+    """The HitCounts Object in the FMC."""
 
     VALID_JSON_DATA = []
     VALID_FOR_KWARGS = VALID_JSON_DATA + [
@@ -38,9 +38,7 @@ class HitCounts(APIClassTemplate):
 
     @property
     def URL_SUFFIX(self):
-        """
-        Add the URL suffixes for filter.
-        """
+        """Add the URL suffixes for filter."""
         filter_init = '?filter="'
         filter_string = filter_init
 
@@ -63,16 +61,25 @@ class HitCounts(APIClassTemplate):
 
     @property
     def fetchZeroHitCount(self):
+        """Getter for fetchZeroHitCount."""
         return self._fetchZeroHitCount
 
     @fetchZeroHitCount.setter
     def fetchZeroHitCount(self, value=False):
+        """Setter for fetchZeroHitCount."""
         self._fetchZeroHitCount = value
         # Rebuild the URL with possible new information
         self.URL = self.URL.split("?")[0]
         self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize HitCounts object.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         logging.debug("In __init__() for HitCounts class.")
         self.device_id = None
         self.prefilter_id = None
@@ -85,6 +92,11 @@ class HitCounts(APIClassTemplate):
         self.URL = f"{self.URL}"
 
     def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+
+        :return: None
+        """
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for HitCounts class.")
         if "acp_id" in kwargs:
@@ -101,6 +113,14 @@ class HitCounts(APIClassTemplate):
             self.prefilter_policy(name=kwargs["prefilter_name"])
 
     def device(self, name="", device_id=""):
+        """
+        Associate a device with this HitCount.
+
+        Either the 'name' or the 'device_id' is required, not both.
+        :param name: (str) Name of device.
+        :param device_id: (str) UUID of device.
+        :return: None
+        """
         logging.debug("In device() for HitCounts class")
         if device_id != "":
             self.device_id = device_id
@@ -121,6 +141,13 @@ class HitCounts(APIClassTemplate):
         self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
     def acp(self, name="", acp_id=""):
+        """
+        Associate Access Control Policy with this HitCounts.
+
+        Either the 'name' or the 'acp_id' is required, not both.
+        :param name: (str) Name of ACP.
+        :param acp_id: (str) UUID of ACP.
+        """
         # either name or id of the ACP should be given
         logging.debug("In acp() for HitCounts class.")
         if acp_id != "":
@@ -143,6 +170,14 @@ class HitCounts(APIClassTemplate):
         self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
     def acp_rules(self, action=None, acp_rule_id=None, name=None):
+        """
+        Associate Access Rules to this HitCounts.
+
+        Either the ID or the Name is required, not both.
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param acp_rule_id: (str) UUID for Access Rule.
+        :param name: (str) Name of Access Rule.
+        """
         logging.debug("In acp_rules() for HitCounts class.")
         if name:
             # Need the acp_id if searching for AccessRule by name.
@@ -188,6 +223,13 @@ class HitCounts(APIClassTemplate):
         self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
     def prefilter_policy(self, name="", prefilter_policy_id=""):
+        """
+        Associate Pre-filter Policy with HitCount.
+
+        Either the Name or the ID is needed, not both.
+        :param name: (str) Name of PreFilter Policy.
+        :param prefilter_policy_id: (str) UUID of PreFilter Policy.
+        """
         # either name or id of the Prefilter Policy should be given
         logging.debug("In prefilter_policy() for HitCounts class.")
         if prefilter_policy_id != "":
@@ -218,7 +260,8 @@ class HitCounts(APIClassTemplate):
 
     def get(self, **kwargs):
         """
-        Get HitCounts based on filter criteria
+        Get HitCounts based on filter criteria.
+
         :return:
         """
         logging.debug("In get() for HitCount class.")
@@ -248,26 +291,33 @@ class HitCounts(APIClassTemplate):
             return False
 
     def put(self, **kwargs):
+        """Though supported by FMC, API PUT method is not yet working for HitCounts in fmcapi."""
         logging.info(
             "Though supported by FMC, API PUT method is not yet working for HitCounts in fmcapi."
         )
         pass
 
     def delete(self, **kwargs):
+        """Though supported by FMC, API DELETE method is not yet working for HitCounts in fmcapi."""
         logging.info(
             "Though supported by FMC, API DELETE method is not yet working for HitCounts in fmcapi."
         )
         pass
 
     def post(self):
+        """POST method for HitCounts not supported."""
         logging.info("POST method for HitCounts not supported.")
         pass
 
 
 class HitCount(HitCounts):
-    """Dispose of this Class after 20210101."""
+    """
+    Dispose of this Class after 20210101.
+
+    Use HitCounts() instead.
+    """
 
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()
-        warnings.warn("Deprecated: HitCount() should be called via HitCount().")
+        warnings.warn("Deprecated: HitCount() should be called via HitCounts().")
         super().__init__(fmc, **kwargs)

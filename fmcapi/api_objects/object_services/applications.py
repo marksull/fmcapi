@@ -1,12 +1,12 @@
+"""Applications Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
 import warnings
 
 
 class Applications(APIClassTemplate):
-    """
-    The Applications Object in the FMC.
-    """
+    """The Applications Object in the FMC."""
 
     VALID_JSON_DATA = ["id", "name", "type"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + [
@@ -23,8 +23,9 @@ class Applications(APIClassTemplate):
     def __init__(self, fmc, **kwargs):
         """
         Initialize Applications object.
-        :param fmc (object): FMC object
-        :param **kwargs: Any other values passed during instantiation.
+
+        :param fmc: (object) FMC object
+        :param kwargs: Any other values passed during instantiation.
         :return: None
         """
         super().__init__(fmc, **kwargs)
@@ -32,23 +33,17 @@ class Applications(APIClassTemplate):
         self.parse_kwargs(**kwargs)
 
     def post(self):
-        """
-        POST method for API for Applications not supported.
-        """
+        """POST method for API for Applications not supported."""
         logging.info("POST method for API for Applications not supported.")
         pass
 
     def put(self):
-        """
-        PUT method for API for Applications not supported.
-        """
+        """PUT method for API for Applications not supported."""
         logging.info("PUT method for API for Applications not supported.")
         pass
 
     def delete(self):
-        """
-        DELETE method for API for Applications not supported.
-        """
+        """DELETE method for API for Applications not supported."""
         logging.info("DELETE method for API for Applications not supported.")
         pass
 
@@ -56,6 +51,7 @@ class Applications(APIClassTemplate):
 class Application(Applications):
     """
     Dispose of this Class after 20210101.
+
     Use Applications() instead.
     """
 

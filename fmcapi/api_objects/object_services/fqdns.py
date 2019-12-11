@@ -1,11 +1,11 @@
+"""FQDNs Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
 
 
 class FQDNS(APIClassTemplate):
-    """
-    The FQDNS Object in the FMC.
-    """
+    """The FQDNS Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -24,6 +24,15 @@ class FQDNS(APIClassTemplate):
     FIRST_SUPPORTED_FMC_VERSION = "6.3.0"
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize FQDNS object.
+
+        Set self.type to "FQDNS" and parse the kwargs.
+
+        :param fmc: (object) FMC object
+        :param kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for FQDNS class.")
         self.parse_kwargs(**kwargs)
@@ -35,6 +44,12 @@ class FQDNS(APIClassTemplate):
             )
 
     def format_data(self):
+        """
+        Gather all the data in preparation for sending to API in JSON format.
+
+        :param filter_query: (str) 'all' or 'kwargs'
+        :return: (dict) json_data
+        """
         json_data = super().format_data()
         logging.debug("In format_data() for FQDNS class.")
         if "dnsResolution" in self.__dict__:
@@ -45,6 +60,11 @@ class FQDNS(APIClassTemplate):
         return json_data
 
     def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+
+        :return: None
+        """
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for FQDNS class.")
         if "dnsResolution" in kwargs:

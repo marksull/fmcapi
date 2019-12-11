@@ -1,12 +1,12 @@
+"""Advanced Settings Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .ftds2svpns import FTDS2SVPNs
 import logging
 
 
 class AdvancedSettings(APIClassTemplate):
-    """
-    The AdvancedSettings Object in the FMC.
-    """
+    """The AdvancedSettings Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -25,6 +25,7 @@ class AdvancedSettings(APIClassTemplate):
     def __init__(self, fmc, **kwargs):
         """
         Initialize AdvancedSettings object.
+
         :param fmc: (object) FMC object
         :param **kwargs: Set initial variables during instantiation of AdvancedSettings object.
         :return: None
@@ -37,6 +38,7 @@ class AdvancedSettings(APIClassTemplate):
     def vpn_policy(self, pol_name):
         """
         Associate a Policy with this VPN.
+
         :param pol_name: (str) Name of policy.
         :return: None
         """

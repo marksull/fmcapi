@@ -1,3 +1,5 @@
+"""List Applicable Devices Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .upgradepackages import UpgradePackages
 import logging
@@ -5,9 +7,7 @@ import warnings
 
 
 class ListApplicableDevices(APIClassTemplate):
-    """
-    The ListApplicableDevices Object in the FMC.
-    """
+    """The ListApplicableDevices Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -31,6 +31,7 @@ class ListApplicableDevices(APIClassTemplate):
     def __init__(self, fmc, **kwargs):
         """
         Initialize ListApplicableDevices object.
+
         Set self.type to "UpgradePackage", and parse the kwargs.
         :param fmc (object): FMC object
         :param **kwargs: Any other values passed during instantiation.
@@ -44,6 +45,7 @@ class ListApplicableDevices(APIClassTemplate):
     def upgrade_package(self, package_name):
         """
         Upgrade named package.
+
         :param package_name: (str) Name of package to upgrade
         :return: None
         """
@@ -60,23 +62,17 @@ class ListApplicableDevices(APIClassTemplate):
             )
 
     def post(self):
-        """
-        POST method for API for ListApplicableDevices not supported.
-        """
+        """POST method for API for ListApplicableDevices not supported."""
         logging.info("POST method for API for ListApplicableDevices not supported.")
         pass
 
     def put(self):
-        """
-        PUT method for API for ListApplicableDevices not supported.
-        """
+        """PUT method for API for ListApplicableDevices not supported."""
         logging.info("PUT method for API for ListApplicableDevices not supported.")
         pass
 
     def delete(self):
-        """
-        DELETE method for API for ListApplicableDevices not supported.
-        """
+        """DELETE method for API for ListApplicableDevices not supported."""
         logging.info("DELETE method for API for ListApplicableDevices not supported.")
         pass
 
@@ -84,6 +80,7 @@ class ListApplicableDevices(APIClassTemplate):
 class ApplicableDevices(ListApplicableDevices):
     """
     Dispose of this Class after 20210101.
+
     Use ListApplicableDevices() instead.
     """
 

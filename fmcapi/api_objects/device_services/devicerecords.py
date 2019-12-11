@@ -1,3 +1,5 @@
+"""Device Records Classes."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.policy_services.accesspolicies import AccessPolicies
 from fmcapi.api_objects.status_services import TaskStatuses
@@ -7,9 +9,7 @@ import warnings
 
 
 class DeviceRecords(APIClassTemplate):
-    """
-    The DeviceRecords Object in the FMC.
-    """
+    """The DeviceRecords Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -45,17 +45,36 @@ class DeviceRecords(APIClassTemplate):
     LICENSES = ["BASE", "MALWARE", "URLFilter", "THREAT", "VPN", "URL"]
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize DeviceRecords object.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for DeviceRecords class.")
         self.parse_kwargs(**kwargs)
 
     def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+
+        :return: None
+        """
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for DeviceRecords class.")
         if "acp_name" in kwargs:
             self.acp(name=kwargs["acp_name"])
 
     def licensing(self, action, name="BASE"):
+        """
+        Associate licenses with this device record.
+
+        :param action: (str) 'add', 'remove', 'clear'
+        :param name: (str) Value from LICENSES constant.
+        :return: None
+        """
         logging.debug("In licensing() for DeviceRecords class.")
         if action == "add":
             if name in self.LICENSES:
@@ -97,6 +116,12 @@ class DeviceRecords(APIClassTemplate):
                 logging.info("All licensing removed from this DeviceRecords object.")
 
     def acp(self, name=""):
+        """
+        Associate AccessPolicy with this device.
+
+        :param name: (str) Name of ACP.
+        :return: None
+        """
         logging.debug("In acp() for DeviceRecords class.")
         acp = AccessPolicies(fmc=self.fmc)
         acp.get(name=name)
@@ -108,19 +133,27 @@ class DeviceRecords(APIClassTemplate):
             )
 
     def wait_for_task(self, task, wait_time=10):
+        """
+        Pause configuration script and wait for device registration to complete.
+
+        :param task: (dict) task["id": (str)]
+        :param wait_time: (int) Seconds to wait before rechecking.
+        :return: None
+        """
         task_completed_states = ["Success", "SUCCESS", "COMPLETED"]
         try:
             status = TaskStatuses(fmc=self.fmc, id=task["id"])
             current_status = status.get()
             """
             Task Status for new device registration behaves differently than other tasks
-            On new device registration, a task is sent for the initial registration. After completion 
+            On new device registration, a task is sent for the initial registration. After completion
             the UUID is deleted without any change in task status. So we check to see if the object no longer exists
             to assume the registration is complete.  After registration, discovery of the device begins, but there is
-            no way to check for this with a task status.  The device can't be modified during this time, but a new device
-            registration can begin.
+            no way to check for this with a task status.  The device can't be modified during this time, but a new
+            device registration can begin.
 
-            OTOH, a device HA operation will update its status to "Success" on completion.  Hence the two different checks.
+            OTOH, a device HA operation will update its status to "Success" on completion.  Hence the two different
+            checks.
             """
             while (
                 current_status["status"] is not None
@@ -144,6 +177,7 @@ class DeviceRecords(APIClassTemplate):
             logging.info(type(e), e)
 
     def post(self, **kwargs):
+        """POST to FMC API."""
         logging.debug("In post() for DeviceRecords class.")
         response = super().post(**kwargs)
         #  self.wait_for_task(task=response["metadata"]["task"], wait_time=30)  # Doesn't work yet.
@@ -160,7 +194,11 @@ class DeviceRecords(APIClassTemplate):
 
 
 class Device(DeviceRecords):
-    """Dispose of this Class after 20210101."""
+    """
+    Dispose of this Class after 20210101.
+
+    Use DeviceRecords() instead.
+    """
 
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()

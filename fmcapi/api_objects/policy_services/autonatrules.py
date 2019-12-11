@@ -1,3 +1,5 @@
+"""Auto NAT Rules class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .ftdnatpolicies import FTDNatPolicies
 from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
@@ -7,9 +9,7 @@ import logging
 
 
 class AutoNatRules(APIClassTemplate):
-    """
-    The AutoNatRules Object in the FMC.
-    """
+    """The AutoNatRules Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -37,15 +37,29 @@ class AutoNatRules(APIClassTemplate):
     REQUIRED_FOR_POST = ["nat_id"]
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize AutoNatRules object.
+
+        Set self.type to "FTDAutoNatRule" and parse the kwargs.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for AutoNatRules class.")
         self.parse_kwargs(**kwargs)
         self.type = "FTDAutoNatRule"
 
     def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+
+        :return: None
+        """
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for AutoNatRules class.")
-        if "translatedNetwork" in kwargs and "interfaceInTranslatedNetwork" is True:
+        if ("translatedNetwork" in kwargs) and ("interfaceInTranslatedNetwork" is True):
             logging.warning(
                 "Cannot have both a translatedNetwork and interfaceInTranslatedNetwork"
             )
@@ -55,6 +69,12 @@ class AutoNatRules(APIClassTemplate):
             self.interfaceInTranslatedNetwork = kwargs["interfaceInTranslatedNetwork"]
 
     def nat_policy(self, name):
+        """
+        Associate NAT Policy with this rule.
+
+        :param name: (str) Name of NAT Policy.
+        :return: None
+        """
         logging.debug("In nat_policy() for AutoNatRules class.")
         ftd_nat = FTDNatPolicies(fmc=self.fmc)
         ftd_nat.get(name=name)
@@ -68,6 +88,12 @@ class AutoNatRules(APIClassTemplate):
             )
 
     def original_network(self, name):
+        """
+        Associate Network with this rule.
+
+        :param name: (str) Name of Network.
+        :return: None
+        """
         logging.debug("In original_network() for AutoNatRules class.")
         ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
         items = ipaddresses_json.get("items", [])
@@ -85,6 +111,12 @@ class AutoNatRules(APIClassTemplate):
             logging.info(f'Adding "{name}" to sourceNetworks for this AutoNatRule.')
 
     def translated_network(self, name):
+        """
+        Associate Network to this rule.
+
+        :param name: (str) Name of Network.
+        :return: None
+        """
         # Auto Nat rules can't use network group objects
         logging.debug("In translated_network() for AutoNatRules class.")
         ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
@@ -105,6 +137,12 @@ class AutoNatRules(APIClassTemplate):
             )
 
     def source_intf(self, name):
+        """
+        Associate interface to this rule.
+
+        :param name: (str) Name of interface.
+        :return: None
+        """
         logging.debug("In source_intf() for AutoNatRules class.")
         intf_obj = InterfaceObjects(fmc=self.fmc).get()
         items = intf_obj.get("items", [])
@@ -128,6 +166,12 @@ class AutoNatRules(APIClassTemplate):
                 logging.info(f'Interface Object "{name}" added to NAT Policy.')
 
     def destination_intf(self, name):
+        """
+        Associate interface to this rule.
+
+        :param name: (str) Name of interface.
+        :return: None
+        """
         logging.debug("In destination_intf() for AutoNatRules class.")
         intf_obj = InterfaceObjects(fmc=self.fmc).get()
         items = intf_obj.get("items", [])
@@ -151,6 +195,12 @@ class AutoNatRules(APIClassTemplate):
                 logging.info(f'Interface Object "{name}" added to NAT Policy.')
 
     def identity_nat(self, name):
+        """
+        Associate Network to this rule.
+
+        :param name: (str) Name of Network.
+        :return: None
+        """
         logging.debug("In identity_nat() for AutoNatRules class.")
         ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
         items = ipaddresses_json.get("items", [])
@@ -170,6 +220,13 @@ class AutoNatRules(APIClassTemplate):
             logging.info(f'Adding "{name}" to AutoNatRule.')
 
     def patPool(self, name, options={}):
+        """
+        Associate a PAT Pool with this rule.
+
+        :param name: (str) Name of PAT Pool.
+        :param options: (dict) Dictionary of options.
+        :return: None
+        """
         # Network Group Object permitted for patPool
         ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
         networkgroup_json = NetworkGroups(fmc=self.fmc).get()

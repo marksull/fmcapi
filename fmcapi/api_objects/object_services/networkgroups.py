@@ -1,3 +1,5 @@
+"""Network Groups Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.helper_functions import *
 from .networkaddresses import NetworkAddresses
@@ -6,9 +8,7 @@ import warnings
 
 
 class NetworkGroups(APIClassTemplate):
-    """
-    The NetworkGroups Object in the FMC.
-    """
+    """The NetworkGroups Object in the FMC."""
 
     VALID_JSON_DATA = ["id", "name", "type", "objects", "literals"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
@@ -18,12 +18,27 @@ class NetworkGroups(APIClassTemplate):
     REQUIRED_FOR_POST = ["name"]
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize NetworkGroups object.
+
+        Set self.type to "NetworkGroup" and parse the kwargs.
+
+        :param fmc: (object) FMC object
+        :param kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for NetworkGroups class.")
         self.parse_kwargs(**kwargs)
         self.type = "NetworkGroup"
 
     def named_networks(self, action, name=""):
+        """
+        Associate Named Networks.
+
+        :param action: (str) 'add', 'addgroup', 'remove', or 'clear'
+        :param name: (str) Name of network.
+        """
         logging.debug("In named_networks() for NetworkGroups class.")
         if action == "add":
             net1 = NetworkAddresses(fmc=self.fmc)
@@ -103,6 +118,12 @@ class NetworkGroups(APIClassTemplate):
                 logging.info("All named_networks removed from this NetworkGroups.")
 
     def unnamed_networks(self, action, value=""):
+        """
+        Associate Unnamed Networks.
+
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param value: (str) Network x.x.x.x/xx
+        """
         logging.debug("In unnamed_networks() for NetworkGroups class.")
         new_literal = []
         if action == "add":
@@ -154,7 +175,11 @@ class NetworkGroups(APIClassTemplate):
 
 
 class NetworkGroup(NetworkGroups):
-    """Dispose of this Class after 20210101."""
+    """
+    Dispose of this Class after 20210101.
+
+    Use NetworkGroups() instead.
+    """
 
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()

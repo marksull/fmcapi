@@ -1,11 +1,11 @@
+"""DNS Server Groups Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
 
 
 class DNSServerGroups(APIClassTemplate):
-    """
-    The DNSServerGroups Object in the FMC.
-    """
+    """The DNSServerGroups Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -22,12 +22,27 @@ class DNSServerGroups(APIClassTemplate):
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize DNSServerGroups object.
+
+        Set self.type to "DNSServerGroupObject" and parse the kwargs.
+
+        :param fmc: (object) FMC object
+        :param kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for DNSServerGroups class.")
         self.parse_kwargs(**kwargs)
         self.type = "DNSServerGroupObject"
 
     def servers(self, action, name_servers):
+        """
+        Associate DNS Servers.
+
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param name_servers: (str)  Name of DNS server.
+        """
         logging.debug("In servers() for DNSServerGroups class.")
         if action == "add":
             for name_server in name_servers:

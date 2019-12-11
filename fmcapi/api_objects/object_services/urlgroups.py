@@ -1,3 +1,5 @@
+"""URL Groups Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .urls import URLs
 import logging
@@ -5,9 +7,7 @@ import warnings
 
 
 class URLGroups(APIClassTemplate):
-    """
-    The URLGroups Object in the FMC.
-    """
+    """The URLGroups Object in the FMC."""
 
     VALID_JSON_DATA = ["id", "name", "type", "objects", "literals"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
@@ -17,12 +17,27 @@ class URLGroups(APIClassTemplate):
     REQUIRED_FOR_POST = ["name", "objects"]
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize URLGroups object.
+
+        Set self.type to "URLGroup" and parse the kwargs.
+
+        :param fmc: (object) FMC object
+        :param kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for URLGroups class.")
         self.parse_kwargs(**kwargs)
         self.type = "URLGroup"
 
     def named_urls(self, action, name=""):
+        """
+        Associate Named URLs.
+
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param name: (str) Name of URL.
+        """
         logging.debug("In named_urls() for URLGroups class.")
         if action == "add":
             url1 = URLs(fmc=self.fmc)
@@ -70,6 +85,12 @@ class URLGroups(APIClassTemplate):
                 logging.info("All named_urls removed from this URLGroups.")
 
     def unnamed_urls(self, action, value=""):
+        """
+        Associate Unnamed URLs.
+
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param value: (str) URL.
+        """
         logging.debug("In unnamed_urls() for URLGroups class.")
         if action == "add":
             if value == "":
@@ -108,7 +129,11 @@ class URLGroups(APIClassTemplate):
 
 
 class URLGroup(URLGroups):
-    """Dispose of this Class after 20210101."""
+    """
+    Dispose of this Class after 20210101.
+
+    Use URLGroups() instead.
+    """
 
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()

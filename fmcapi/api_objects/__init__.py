@@ -1,4 +1,4 @@
-"""Classes and methods to interact with FMC API services."""
+"""Update Packages Classes."""
 
 import logging
 from .policy_services.accesspolicies import AccessPolicies  # Needs loaded before Device

@@ -1,3 +1,5 @@
+"""Manual NAT Rules Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .ftdnatpolicies import FTDNatPolicies
 from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
@@ -10,9 +12,7 @@ import logging
 
 class ManualNatRules(APIClassTemplate):
     # Host,Network,NetworkGroup objects
-    """
-    The ManualNatRules Object in the FMC.
-    """
+    """The ManualNatRules Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -46,12 +46,26 @@ class ManualNatRules(APIClassTemplate):
     REQUIRED_FOR_POST = ["nat_id"]
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize ManualNatRules object.
+
+        Set self.type to "ManualNatRules" and parse the kwargs.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for ManualNatRules class.")
         self.parse_kwargs(**kwargs)
         self.type = "FTDManualNatRule"
 
     def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+
+        :return: None
+        """
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for ManualNatRules class.")
         if "translatedSource" in kwargs and "interfaceInTranslatedSource" is True:
@@ -64,6 +78,12 @@ class ManualNatRules(APIClassTemplate):
             self.interfaceInTranslatedSource = kwargs["interfaceInTranslatedSource"]
 
     def nat_policy(self, name):
+        """
+        Associate NAT Policy.
+
+        :param name: (str) Name of NAT Policy.
+        :return: None
+        """
         logging.debug("In nat_policy() for ManualNatRules class.")
         ftd_nat = FTDNatPolicies(fmc=self.fmc)
         ftd_nat.get(name=name)
@@ -77,9 +97,17 @@ class ManualNatRules(APIClassTemplate):
             )
 
     def original_source(self, name):
+        """
+        Associate Network to be used as Original Source.
+
+        :param name: (str) Name of Network.
+        :return: None
+        """
         logging.debug("In original_source() for ManualNatRules class.")
         ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
-        networkgroup_json = NetworkGroups(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroups(
+            fmc=self.fmc
+        ).get()  # FIXME, shouldn't this be a part of items?
         items = ipaddresses_json.get("items", [])
         new_net = None
         for item in items:
@@ -95,9 +123,17 @@ class ManualNatRules(APIClassTemplate):
             logging.info(f'Adding "{name}" to original_source for this ManualNatRule.')
 
     def translated_source(self, name):
+        """
+        Associate Network to be used as Translated Source.
+
+        :param name: (str) Name of Network.
+        :return: None
+        """
         logging.debug("In translated_source() for ManualNatRules class.")
         ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
-        networkgroup_json = NetworkGroups(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroups(
+            fmc=self.fmc
+        ).get()  # FIXME, shouldn't this be a part of items?
         items = ipaddresses_json.get("items", [])
         new_net = None
         for item in items:
@@ -115,9 +151,17 @@ class ManualNatRules(APIClassTemplate):
             )
 
     def original_destination(self, name):
+        """
+        Associate Network to be used as Original Destination.
+
+        :param name: (str) Name of Network.
+        :return: None
+        """
         logging.debug("In original_destination() for ManualNatRules class.")
         ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
-        networkgroup_json = NetworkGroups(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroups(
+            fmc=self.fmc
+        ).get()  # FIXME, shouldn't this be a part of items?
         items = ipaddresses_json.get("items", [])
         new_net = None
         for item in items:
@@ -135,9 +179,17 @@ class ManualNatRules(APIClassTemplate):
             )
 
     def translated_destination(self, name):
+        """
+        Associate Network to be used as Translated Destination.
+
+        :param name: (str) Name of Network.
+        :return: None
+        """
         logging.debug("In translated_destination() for ManualNatRules class.")
         ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
-        networkgroup_json = NetworkGroups(fmc=self.fmc).get()
+        networkgroup_json = NetworkGroups(
+            fmc=self.fmc
+        ).get()  # FIXME, shouldn't this be a part of items?
         items = ipaddresses_json.get("items", [])
         new_net = None
         for item in items:
@@ -155,6 +207,12 @@ class ManualNatRules(APIClassTemplate):
             )
 
     def original_source_port(self, name):
+        """
+        Associate Port to be used as Origin Source port.
+
+        :param name: (str) Name of Port.
+        :return: None
+        """
         logging.debug("In original_source_port() for ManualNatRules class.")
         ports_json = ProtocolPortObjects(fmc=self.fmc).get()
         portgroup_json = PortObjectGroups(fmc=self.fmc).get()
@@ -175,6 +233,12 @@ class ManualNatRules(APIClassTemplate):
             )
 
     def translated_source_port(self, name):
+        """
+        Associate Port to be used as Translated Source port.
+
+        :param name: (str) Name of Port.
+        :return: None
+        """
         logging.debug("In translated_source_port() for ManualNatRules class.")
         ports_json = ProtocolPortObjects(fmc=self.fmc).get()
         portgroup_json = PortObjectGroups(fmc=self.fmc).get()
@@ -195,6 +259,12 @@ class ManualNatRules(APIClassTemplate):
             )
 
     def original_destination_port(self, name):
+        """
+        Associate Port to be used as Origin Destination port.
+
+        :param name: (str) Name of Port.
+        :return: None
+        """
         logging.debug("In original_destination_port() for ManualNatRules class.")
         ports_json = ProtocolPortObjects(fmc=self.fmc).get()
         portgroup_json = PortObjectGroups(fmc=self.fmc).get()
@@ -215,6 +285,12 @@ class ManualNatRules(APIClassTemplate):
             )
 
     def translated_destination_port(self, name):
+        """
+        Associate Port to be used as Destination port.
+
+        :param name: (str) Name of Port.
+        :return: None
+        """
         logging.debug("In translated_destination_port() for ManualNatRules class.")
         ports_json = ProtocolPortObjects(fmc=self.fmc).get()
         portgroup_json = PortObjectGroups(fmc=self.fmc).get()
@@ -235,6 +311,12 @@ class ManualNatRules(APIClassTemplate):
             )
 
     def source_intf(self, name):
+        """
+        Associate source interface.
+
+        :param name: (str) Name of interface.
+        :return: None
+        """
         logging.debug("In source_intf() for ManualNatRules class.")
         intf_obj = InterfaceObjects(fmc=self.fmc).get()
         items = intf_obj.get("items", [])
@@ -252,6 +334,12 @@ class ManualNatRules(APIClassTemplate):
             logging.info(f'Interface Object "{name}" added to NAT Policy.')
 
     def destination_intf(self, name):
+        """
+        Associate destination interface.
+
+        :param name: (str) Name of interface.
+        :return: None
+        """
         logging.debug("In destination_intf() for ManualNatRules class.")
         intf_obj = InterfaceObjects(fmc=self.fmc).get()
         items = intf_obj.get("items", [])
@@ -269,6 +357,12 @@ class ManualNatRules(APIClassTemplate):
             logging.info(f'Interface Object "{name}" added to NAT Policy.')
 
     def identity_nat(self, name):
+        """
+        Associate an Identity Network.
+
+        :param name: (str) Name of Network.
+        :return: None
+        """
         logging.debug("In identity_nat() for ManualNatRules class.")
         ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
         networkgroup_json = NetworkGroups(fmc=self.fmc).get()
@@ -289,6 +383,13 @@ class ManualNatRules(APIClassTemplate):
             logging.info(f'Adding "{name}" to ManualNatRules.')
 
     def patPool(self, name, options={}):
+        """
+        Associate a PAT Pool.
+
+        :param name: (str) Name of PAT Pool.
+        :param options: (dict) key/value of options.
+        :return: None
+        """
         ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
         networkgroup_json = NetworkGroups(fmc=self.fmc).get()
         items = ipaddresses_json.get("items", []) + networkgroup_json.get("items", [])

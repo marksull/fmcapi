@@ -1,3 +1,5 @@
+"""Interface Groups Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.device_services.physicalinterfaces import PhysicalInterfaces
 import logging
@@ -5,9 +7,7 @@ import warnings
 
 
 class InterfaceGroups(APIClassTemplate):
-    """
-    The InterfaceGroups Object in the FMC.
-    """
+    """The InterfaceGroups Object in the FMC."""
 
     VALID_JSON_DATA = ["id", "name", "description", "interfaceMode", "interfaces"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
@@ -17,12 +17,26 @@ class InterfaceGroups(APIClassTemplate):
     FILTER_BY_NAME = True
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize InterfaceGroups object.
+
+        Set self.type to "InterfaceGroup" and parse the kwargs.
+
+        :param fmc: (object) FMC object
+        :param kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for InterfaceGroups class.")
         self.parse_kwargs(**kwargs)
         self.type = "InterfaceGroup"
 
     def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+
+        :return: None
+        """
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for InterfaceGroups class.")
         if "interfaceMode" in kwargs:
@@ -31,6 +45,13 @@ class InterfaceGroups(APIClassTemplate):
             self.interfaceMode = "ROUTED"
 
     def p_interface(self, device_name="", action="add", names=[]):
+        """
+        Associate Physical Interface.
+
+        :param device_name: (str) Name of device.
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param names: (list) List of interface names
+        """
         logging.debug("In interfaces() for InterfaceGroups class.")
         if action == "add":
             intfs = []
@@ -70,7 +91,7 @@ class InterfaceGroups(APIClassTemplate):
                 logging.warning(
                     "This InterfaceObject has no interfaces.  Nothing to remove."
                 )
-        elif action == "clear-all":
+        elif action == "clear" or action == "clear-all":
             if "interfaces" in self.__dict__:
                 del self.interfaces
                 logging.info(
@@ -79,7 +100,11 @@ class InterfaceGroups(APIClassTemplate):
 
 
 class InterfaceGroup(InterfaceGroups):
-    """Dispose of this Class after 20210101."""
+    """
+    Dispose of this Class after 20210101.
+
+    Use InterfaceGroups() instead.
+    """
 
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()

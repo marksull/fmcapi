@@ -1,3 +1,5 @@
+"""Physical Interfaces Classes."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.object_services.securityzones import SecurityZones
 from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
@@ -6,9 +8,7 @@ import warnings
 
 
 class PhysicalInterfaces(APIClassTemplate):
-    """
-    The Physical Interface Object in the FMC.
-    """
+    """The Physical Interface Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -46,11 +46,23 @@ class PhysicalInterfaces(APIClassTemplate):
     VALID_FOR_HARDWARE_DUPLEX = ["AUTO", "FULL", "HALF"]
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize PhysicalInterfaces object.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for PhysicalInterface class.")
         self.parse_kwargs(**kwargs)
 
     def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+
+        :return: None
+        """
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for PhysicalInterface class.")
         if "device_name" in kwargs:
@@ -75,6 +87,12 @@ class PhysicalInterfaces(APIClassTemplate):
                 self.MTU = 1500
 
     def device(self, device_name):
+        """
+        Associate device to this interface.
+
+        :param device_name: (str) Name of device.
+        :return: None
+        """
         logging.debug("In device() for PhysicalInterface class.")
         device1 = DeviceRecords(fmc=self.fmc)
         device1.get(name=device_name)
@@ -88,6 +106,12 @@ class PhysicalInterfaces(APIClassTemplate):
             )
 
     def sz(self, name):
+        """
+        Assign Security Zone to this interface.
+
+        :param name: (str) Name of Security Zone.
+        :return: None
+        """
         logging.debug("In sz() for PhysicalInterface class.")
         sz = SecurityZones(fmc=self.fmc)
         sz.get(name=name)
@@ -100,10 +124,24 @@ class PhysicalInterfaces(APIClassTemplate):
             )
 
     def static(self, ipv4addr, ipv4mask):
+        """
+        Assign static IP to this interface.
+
+        :param ipv4addr: (str) x.x.x.x
+        :param ipv4mask: (str) bitmask
+        :return: None
+        """
         logging.debug("In static() for PhysicalInterface class.")
         self.ipv4 = {"static": {"address": ipv4addr, "netmask": ipv4mask}}
 
     def dhcp(self, enableDefault=True, routeMetric=1):
+        """
+        Configure this interface with DHCP for addressing.
+
+        :param enableDefault: (bool) Accept, or not, a default route via DHCP.
+        :param routeMetric: (int) Set route metric.
+        :return: None
+        """
         logging.debug("In dhcp() for PhysicalInterface class.")
         self.ipv4 = {
             "dhcp": {
@@ -113,6 +151,12 @@ class PhysicalInterfaces(APIClassTemplate):
         }
 
     def hwmode(self, mode):
+        """
+        Set the hardware mode for this interface.
+
+        :param mode: (str) Use VALID_FOR_MODE constant values.
+        :return: None
+        """
         logging.debug("In hwmode() for PhysicalInterface class.")
         if mode in self.VALID_FOR_MODE:
             self.mode = mode
@@ -120,6 +164,13 @@ class PhysicalInterfaces(APIClassTemplate):
             logging.warning(f"Mode {mode} is not a valid mode.")
 
     def hardware(self, speed, duplex="FULL"):
+        """
+        Define hardware characteristics.
+
+        :param speed: (str) Speed of interface.
+        :param duplex: (str) FULL or HALF.
+        :return: None
+        """
         # There are probably some incompatibilities that need to be accounted for
         logging.debug("In hardware() for PhysicalInterface class.")
         if (
@@ -132,7 +183,11 @@ class PhysicalInterfaces(APIClassTemplate):
 
 
 class PhysicalInterface(PhysicalInterfaces):
-    """Dispose of this Class after 20210101."""
+    """
+    Dispose of this Class after 20210101.
+
+    Use PhysicalInterfaces() instead.
+    """
 
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()

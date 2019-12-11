@@ -1,3 +1,5 @@
+"""PreFilter Rules Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.policy_services.prefilterpolicies import PreFilterPolicies
 from fmcapi.api_objects.object_services.securityzones import SecurityZones
@@ -12,9 +14,7 @@ import logging
 
 
 class PreFilterRules(APIClassTemplate):
-    """
-    The PreFilterRules object in the FMC
-    """
+    """The PreFilterRules object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -38,6 +38,15 @@ class PreFilterRules(APIClassTemplate):
     REQUIRED_FOR_GET = ["prefilter_id"]
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize PreFilterRules object.
+
+        Set self.type to "PreFilterRule", parse the kwargs, and set up the self.URL.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for PreFilterRules class.")
         self.type = "PreFilterRules"
@@ -53,7 +62,8 @@ class PreFilterRules(APIClassTemplate):
     @property
     def URL_SUFFIX(self):
         """
-        Add the URL suffixes for insertBefore and insertAfter
+        Add the URL suffixes for insertBefore and insertAfter.
+
         NOTE: You must specify these at the time of the object is initialized
         for this to work correctly. Example:
             This works:
@@ -73,9 +83,10 @@ class PreFilterRules(APIClassTemplate):
 
     def parse_kwargs(self, **kwargs):
         """
-        Parse the kwargs and load into object properties
-        Args:
-            kwargs (dict): Keyword arguments
+        Parse the kwargs and load into object properties.
+
+        :param kwargs: (dict)
+        :return: None
         """
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for PreFilterRules class")
@@ -90,10 +101,11 @@ class PreFilterRules(APIClassTemplate):
     def prefilter(self, name=None, prefilter_id=None):
         """
         If the name has been supplied, go and pull the prefilter ID. If ID has been specified, add it to self.
+
         Also create the URL for prefilter policy
-        Args:
-            name (str): Prefilter name
-            prefilter_id (str): UUID of prefilter
+        :param name: (str) Prefilter name
+        :param prefilter_id: (str) UUID of prefilter
+        :return: None
         """
         logging.debug("In prefilter() for PreFilterRules")
         if not name and not prefilter_id:
@@ -117,9 +129,10 @@ class PreFilterRules(APIClassTemplate):
 
     def validate_action(self, action):
         """
-        Checks the provided action is valid and sets property
-        Args:
-            action (str): Prefilter rule action
+        Validate action against VALID_FOR_ACTION and sets property.
+
+        :param action: (str): Prefilter rule action via VALID_FOR_ACTION constant.
+        :return: None
         """
         if action in self.VALID_FOR_ACTION:
             self.action = action
@@ -130,10 +143,11 @@ class PreFilterRules(APIClassTemplate):
 
     def source_interface(self, action, name=""):
         """
-        Set the source interface (zone) information
-        Args:
-            action (str): "add" or "remove"
-            name (str): Name of interface zone object
+        Set the source interface (zone) information.
+
+        :param action: (str) "add" or "remove"
+        :param name: (str) Name of interface zone object
+        :return: None
         """
         logging.debug("In source_zone() for PreFilterRules class.")
         if action == "clear":
@@ -150,10 +164,11 @@ class PreFilterRules(APIClassTemplate):
 
     def destination_interface(self, action, name=""):
         """
-        Set the destination interface (zone) information
-        Args:
-            action (str): "add" or "remove"
-            name (str): Name of interface zone object
+        Set the destination interface (zone) information.
+
+        :param action: (str) "add" or "remove"
+        :param name: (str) Name of interface zone object
+        :return: None
         """
         logging.debug("In source_zone() for PreFilterRules class.")
         if action == "clear":
@@ -170,12 +185,10 @@ class PreFilterRules(APIClassTemplate):
 
     def get_zone_id(self, name):
         """
-        Pull the ID for a security zone
-        Args:
-            name (str): Name of interface zone object
+        Pull the ID for a security zone.
 
-        Returns:
-            UUID of zone object (str)
+        :param name: (str) Name of interface zone object
+        :return: (str) UUID of zone object
         """
         sec_zone = SecurityZones(fmc=self.fmc)
         sec_zone.get(name=name)
@@ -186,15 +199,15 @@ class PreFilterRules(APIClassTemplate):
 
     def add_zone(self, target, name, id, zone_type):
         """
-        Check if zone is already on object, skip if it is, add if it isn't and create sourceZone if that object
-        attribute doesn't exist at all
-        Args:
-            target (str): "sourceZones" or "destinationZones"
-            name (str): Name of zone object
-            id (str): UUID of zone object
-            zone_type (str): Security zone type
-        """
+        Check if zone is already on object.
 
+        Skip if it is, add if it isn't.  Create sourceZone if that object attribute doesn't exist at all.
+        :param target: (str) "sourceZones" or "destinationZones"
+        :param name: (str) Name of zone object
+        :param id: (str) UUID of zone object
+        :param zone_type: (str) Security zone type
+        :return: None
+        """
         if target in self.__dict__:
 
             # Look through existing zones, if present, for the zone name. Skip if it's already there
@@ -217,12 +230,12 @@ class PreFilterRules(APIClassTemplate):
 
     def source_network(self, action, name=None, literal=None):
         """
-        Adds either an object (name) or a literal to sourceNetworks
-        Args:
-            action (str): Action to be done on this object
-            name (str): Object name
-            literal (str): Host, network or range
+        Add either an object or a literal to sourceNetworks.
 
+        :param action: (str) Action to be done on this object
+        :param name: (str) Object name
+        :param literal: (str) Host, network or range
+        :return: None
         """
         logging.debug("In source_network() for PreFilterRules class.")
         if literal and name:
@@ -264,12 +277,12 @@ class PreFilterRules(APIClassTemplate):
 
     def destination_network(self, action, name=None, literal=None):
         """
-        Adds either an object (name) or a literal to destinationNetworks
-        Args:
-            action (str): Action to be done on this object
-            name (str): Object name
-            literal (str): Host, network or range
+        Add either an object or a literal to destinationNetworks.
 
+        :param action: (str) Action to be done on this object
+        :param name: (str) Object name
+        :param literal: (str) Host, network or range
+        :return: None
         """
         logging.debug("In destination_network() for PreFilterRules class.")
         if literal and name:
@@ -313,11 +326,10 @@ class PreFilterRules(APIClassTemplate):
 
     def find_object(self, name):
         """
-        Search through IP net objects, network group objects and FQDN objects by name
-        Args:
-            name (str): Name of object
-        Returns:
-            Object details (dict) or None
+        Search through IP net objects, network group objects and FQDN objects by name.
+
+        :param name: (str) Name of object
+        :return: (dict) Object details or None
         """
         object_id, object_type = self.find_network_object(name)
         if object_id:
@@ -336,11 +348,10 @@ class PreFilterRules(APIClassTemplate):
 
     def find_network_object(self, name):
         """
-        Search for network object by name
-        Args:
-            name (str): Name of network object
-        Returns:
-            id (str), type (str) or None None
+        Search for network object by name.
+
+        :param name: (str) Name of network object
+        :return: id (str), type (str) or None None
         """
         network_object = NetworkAddresses(fmc=self.fmc, name=name)
         resp = network_object.get()
@@ -349,11 +360,10 @@ class PreFilterRules(APIClassTemplate):
 
     def find_group_object(self, name):
         """
-        Search for group object by name
-        Args:
-            name (str): Name of group object
-        Returns:
-            id (str), type (str) or None None
+        Search for group object by name.
+
+        :param name: (str) Name of group object
+        :return: id (str), type (str) or None None
         """
         group_object = NetworkGroups(fmc=self.fmc, name=name)
         resp = group_object.get()
@@ -362,11 +372,10 @@ class PreFilterRules(APIClassTemplate):
 
     def find_fqdn_object(self, name):
         """
-        Search for group object by name
-        Args:
-            name (str): Name of group object
-        Returns:
-            id (str), type (str) or None None
+        Search for group object by name.
+
+        :param name: (str) Name of group object
+        :return: id (str), type (str) or None None
         """
         fqdn_object = FQDNS(fmc=self.fmc, name=name)
         resp = fqdn_object.get()
@@ -376,12 +385,10 @@ class PreFilterRules(APIClassTemplate):
     @staticmethod
     def _return_id_type(resp):
         """
-        Check dict for ID and return ID and type if present
-        Args:
-            resp (dict): Response from NetworkGroup, NetworkAddress or FQDNS GET
-        Returns:
-            Returns:
-            id (str), type (str) or None None
+        Check dict for ID and return ID and type if present.
+
+        :param resp: (dict) Response from NetworkGroup, NetworkAddress or FQDNS GET
+        :return: id (str), type (str) or None None
         """
         if "id" in resp.keys():
             return resp["id"], resp["type"]
@@ -390,9 +397,10 @@ class PreFilterRules(APIClassTemplate):
 
     def rule_type(self, rule_type):
         """
-        Set the rule type attribute
-        Args:
-            rule_type (str): PREFITLER or TUNNEL
+        Set the rule type attribute.
+
+        :param rule_type: (str) 'PREFILTER' or 'TUNNEL'
+        :return: None
         """
         if rule_type in self.VALID_FOR_RULETYPE:
             self.ruleType = rule_type
@@ -403,11 +411,11 @@ class PreFilterRules(APIClassTemplate):
 
     def source_port(self, action, name=None, literal=None):
         """
-        Create the source protocol and ports
-        Args:
-            action (str): Add, delete or clear
-            name (str): Name of port object
-            literal (dict): Dictionary of protocol and port expressed as integers
+        Create the source protocol and ports.
+
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param name: (str) Name of port object
+        :param literal: (dict) Dictionary of protocol and port expressed as integers
         """
         logging.debug("In source_port for PreFilterRules")
 
@@ -447,11 +455,11 @@ class PreFilterRules(APIClassTemplate):
 
     def destination_port(self, action, name=None, literal=None):
         """
-        Create the destination protocol and ports
-        Args:
-            action (str): Add, delete or clear
-            name (str): Name of port object
-            literal (dict): Dictionary of protocol and port expressed as integers
+        Create the destination protocol and ports.
+
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param name: (str) Name of port object
+        :param literal: (dict) Dictionary of protocol and port expressed as integers
         """
         logging.debug("In destination_port for PreFilterRules")
 
@@ -491,11 +499,10 @@ class PreFilterRules(APIClassTemplate):
 
     def _find_port_object(self, name):
         """
-        Find port object or port group object and return dictionary
-        Args:
-            name (str): Name of port object/port group object
-        Returns:
-            Dictionary of port object
+        Find port object or port group object and return dictionary.
+
+        :param name: (str) Name of port object/port group object
+        :return: (dict) Port object
         """
         protocol_port = ProtocolPortObjects(fmc=self.fmc, name=name)
         resp = protocol_port.get()
@@ -513,12 +520,12 @@ class PreFilterRules(APIClassTemplate):
     @staticmethod
     def _port_literal_verify(literal):
         """
-        Ensure that the literal is expressed as integers. It's too hard dealing with named protocols/ports.
-        Also check that protocol and ports keys are in the dictionary
-        Args:
-            literal (dict): Dictionary with protocol and ports
-        Returns:
-            Bool
+        Ensure that the literal is expressed as integers.
+
+        It's too hard dealing with named protocols/ports.  Check that protocol and ports keys are in the dictionary.
+
+        :param literal: (dict) Dictionary with protocol and ports
+        :return: (bool)
         """
         if not isinstance(literal, dict):
             logging.warning(
@@ -536,11 +543,12 @@ class PreFilterRules(APIClassTemplate):
 
     def vlan_tags(self, action, name=None, literal=None):
         """
-        Add, remove or clear VLAN tags
-        Args:
-            action (str): Add, remove or clear
-            name (str): Name of VLAN tag object
-            literal (str): VLAN tag or range
+        Add, remove or clear VLAN tags.
+
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param name: (str) Name of VLAN tag object
+        :param literal: (str) VLAN tag or range
+        :return: None
         """
         logging.debug("In vlan_tags() for PreFilterRules")
         if literal and name:
@@ -580,11 +588,10 @@ class PreFilterRules(APIClassTemplate):
     @staticmethod
     def _vlan_tag_check(literal):
         """
-        Check if the VLAN tag literal is a range or not and returns start and end tag number
-        Args:
-            literal (str): VLAN tag literal
-        Returns:
-            start_vlan (str), end_vlan (str)
+        Check if the VLAN tag literal is a range or not and returns start and end tag number.
+
+        :param literal: (str) VLAN tag literal
+        :return: start_vlan (str), end_vlan (str)
         """
         if "-" in literal:
             vlans = literal.strip("-")
@@ -594,9 +601,9 @@ class PreFilterRules(APIClassTemplate):
 
     def _find_vlan_object(self, name):
         """
-        Find the vlan or vlan group object by name
-        Args:
-            name (str): Object name
+        Find the vlan or vlan group object by name.
+
+        :param name: (str) Object name
         """
         vlan_object = VlanTags(fmc=self.fmc, name=name)
         resp = vlan_object.get()

@@ -1,3 +1,5 @@
+"""Redundant Interfaces Classes."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .devicerecords import DeviceRecords
 from fmcapi.api_objects.object_services.securityzones import SecurityZones
@@ -6,9 +8,7 @@ import logging
 
 
 class RedundantInterfaces(APIClassTemplate):
-    """
-    The Bridge Group Interface Object in the FMC.
-    """
+    """The Bridge Group Interface Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -46,12 +46,26 @@ class RedundantInterfaces(APIClassTemplate):
     VALID_FOR_MTU = range(64, 9000)
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize RedundantInterfaces object.
+
+        Set self.type to "RedundantInterface" and parse the kwargs.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for RedundantInterfaces class.")
         self.parse_kwargs(**kwargs)
         self.type = "RedundantInterface"
 
     def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+
+        :return: None
+        """
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for RedundantInterfaces class.")
         if "device_name" in kwargs:
@@ -74,6 +88,12 @@ class RedundantInterfaces(APIClassTemplate):
                 self.MTU = 1500
 
     def device(self, device_name):
+        """
+        Associate device to this redundant interface.
+
+        :param device_name: (str) Name of device.
+        :return: None
+        """
         logging.debug("In device() for RedundantInterfaces class.")
         device1 = DeviceRecords(fmc=self.fmc)
         device1.get(name=device_name)
@@ -87,6 +107,12 @@ class RedundantInterfaces(APIClassTemplate):
             )
 
     def sz(self, name):
+        """
+        Assign Security Zone to this redundant interface.
+
+        :param name: (str) Name of Security Zone.
+        :return: None
+        """
         logging.debug("In sz() for RedundantInterfaces class.")
         sz = SecurityZones(fmc=self.fmc)
         sz.get(name=name)
@@ -99,10 +125,24 @@ class RedundantInterfaces(APIClassTemplate):
             )
 
     def static(self, ipv4addr, ipv4mask):
+        """
+        Assign static IP to this redundant interface.
+
+        :param ipv4addr: (str) x.x.x.x
+        :param ipv4mask: (str) bitmask
+        :return: None
+        """
         logging.debug("In static() for RedundantInterfaces class.")
         self.ipv4 = {"static": {"address": ipv4addr, "netmask": ipv4mask}}
 
     def dhcp(self, enableDefault=True, routeMetric=1):
+        """
+        Configure this redundant interface with DHCP for addressing.
+
+        :param enableDefault: (bool) Accept, or not, a default route via DHCP.
+        :param routeMetric: (int) Set route metric.
+        :return: None
+        """
         logging.debug("In dhcp() for RedundantInterfaces class.")
         self.ipv4 = {
             "dhcp": {
@@ -112,6 +152,13 @@ class RedundantInterfaces(APIClassTemplate):
         }
 
     def primary(self, p_interface, device_name):
+        """
+        Primary interface.
+
+        :param p_interface: (str) Name of physical interface.
+        :param device_name: (str) Name of device with interface.
+        :return: None
+        """
         logging.debug("In primary() for RedundantInterfaces class.")
         intf1 = PhysicalInterfaces(fmc=self.fmc)
         intf1.get(name=p_interface, device_name=device_name)
@@ -129,6 +176,13 @@ class RedundantInterfaces(APIClassTemplate):
             )
 
     def secondary(self, p_interface, device_name):
+        """
+        Secondary interface.
+
+        :param p_interface: (str) Name of physical interface.
+        :param device_name: (str) Name of device with interface.
+        :return: None
+        """
         logging.debug("In primary() for RedundantInterfaces class.")
         intf1 = PhysicalInterfaces(fmc=self.fmc)
         intf1.get(name=p_interface, device_name=device_name)

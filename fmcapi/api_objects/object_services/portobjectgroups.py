@@ -1,3 +1,5 @@
+"""Port Object Groups Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .ports import Ports
 import logging
@@ -5,9 +7,7 @@ import warnings
 
 
 class PortObjectGroups(APIClassTemplate):
-    """
-    The PortObjectGroups Object in the FMC.
-    """
+    """The PortObjectGroups Object in the FMC."""
 
     VALID_JSON_DATA = ["id", "name", "type", "objects", "literals"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
@@ -17,12 +17,27 @@ class PortObjectGroups(APIClassTemplate):
     REQUIRED_FOR_POST = ["name", "objects"]
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize PortObjectGroups object.
+
+        Set self.type to "PortObjectGroup" and parse the kwargs.
+
+        :param fmc: (object) FMC object
+        :param kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for PortObjectGroups class.")
         self.parse_kwargs(**kwargs)
         self.type = "NetworkGroup"
 
     def named_ports(self, action, name=""):
+        """
+        Associate Named Ports.
+
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param name: (str) Name of port.
+        """
         logging.debug("In named_ports() for PortObjectGroups class.")
         if action == "add":
             port1 = Ports(fmc=self.fmc)
@@ -73,7 +88,11 @@ class PortObjectGroups(APIClassTemplate):
 
 
 class PortObjectGroup(PortObjectGroups):
-    """Dispose of this Class after 20210101."""
+    """
+    Dispose of this Class after 20210101.
+
+    Use PortObjectGroups() instead.
+    """
 
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()

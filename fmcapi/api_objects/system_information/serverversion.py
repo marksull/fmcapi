@@ -1,20 +1,26 @@
-"""
-Moving the fmc.serverversion to an actual api_object.
-"""
+"""Server Version Class."""
 
 import logging
 
 
 class ServerVersion(object):  # Can't import APIClassTemplate due to dependency loop.
     """
-    Get the FMC's version information.  Set instance variables for each version info returned as well as return
-    the whole response text.
-    :return:
+    Get the FMC's version information.
+
+    Set instance variables for each version info returned as well as return the whole response text.
+    :return: requests' response.text
     """
 
     URL_SUFFIX = "/info/serverversion"
 
     def __init__(self, fmc):
+        """
+        Initialize ServerVersion object.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         logging.debug("In __init__() for ServerVersion class.")
 
         self.fmc = fmc
@@ -25,6 +31,11 @@ class ServerVersion(object):  # Can't import APIClassTemplate due to dependency 
         self.geoVersion = None
 
     def get(self):
+        """
+        Send GET to FMC.
+
+        :return: requests response
+        """
         logging.debug("GET method for API for ServerVersion.")
         response = self.fmc.send_to_api(method="get", url=self.URL)
         if "items" in response:
@@ -38,13 +49,16 @@ class ServerVersion(object):  # Can't import APIClassTemplate due to dependency 
         return response
 
     def post(self):
+        """POST method for API for ServerVersion not supported."""
         logging.info("POST method for API for ServerVersion not supported.")
         pass
 
     def put(self):
+        """PUT method for API for ServerVersion not supported."""
         logging.info("PUT method for API for ServerVersion not supported.")
         pass
 
     def delete(self):
+        """DELETE method for API for ServerVersion not supported."""
         logging.info("DELETE method for API for ServerVersion not supported.")
         pass

@@ -1,3 +1,5 @@
+"""BridgeGroupInterfaces class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.object_services.securityzones import SecurityZones
 from .devicerecords import DeviceRecords
@@ -6,9 +8,7 @@ import logging
 
 
 class BridgeGroupInterfaces(APIClassTemplate):
-    """
-    The Bridge Group Interface Object in the FMC.
-    """
+    """The Bridge Group Interface Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -45,12 +45,26 @@ class BridgeGroupInterfaces(APIClassTemplate):
     VALID_FOR_MTU = range(64, 9000)
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize BridgeGroupInterfaces object.
+
+        Set self.type to "BridgeGroupInterface" and parse the kwargs.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for BridgeGroupInterfaces class.")
         self.parse_kwargs(**kwargs)
         self.type = "BridgeGroupInterface"
 
     def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+
+        :return: None
+        """
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for BridgeGroupInterfaces class.")
         if "device_name" in kwargs:
@@ -73,6 +87,12 @@ class BridgeGroupInterfaces(APIClassTemplate):
                 self.MTU = 1500
 
     def device(self, device_name):
+        """
+        Associate device to this group.
+
+        :param device_name: (str) Name of device.
+        :return: None
+        """
         logging.debug("In device() for BridgeGroupInterfaces class.")
         device1 = DeviceRecords(fmc=self.fmc)
         device1.get(name=device_name)
@@ -86,6 +106,12 @@ class BridgeGroupInterfaces(APIClassTemplate):
             )
 
     def sz(self, name):
+        """
+        Assign Security Zone to this group.
+
+        :param name: (str) Name of Security Zone.
+        :return: None
+        """
         logging.debug("In sz() for BridgeGroupInterfaces class.")
         sz = SecurityZones(fmc=self.fmc)
         sz.get(name=name)
@@ -98,10 +124,24 @@ class BridgeGroupInterfaces(APIClassTemplate):
             )
 
     def static(self, ipv4addr, ipv4mask):
+        """
+        Assign static IP to this bridge group.
+
+        :param ipv4addr: (str) x.x.x.x
+        :param ipv4mask: (str) bitmask
+        :return: None
+        """
         logging.debug("In static() for BridgeGroupInterfaces class.")
         self.ipv4 = {"static": {"address": ipv4addr, "netmask": ipv4mask}}
 
     def dhcp(self, enableDefault=True, routeMetric=1):
+        """
+        Configure this group with DHCP for addressing.
+
+        :param enableDefault: (bool) Accept, or not, a default route via DHCP.
+        :param routeMetric: (int) Set route metric.
+        :return: None
+        """
         logging.debug("In dhcp() for BridgeGroupInterfaces class.")
         self.ipv4 = {
             "dhcp": {
@@ -111,6 +151,13 @@ class BridgeGroupInterfaces(APIClassTemplate):
         }
 
     def p_interfaces(self, p_interfaces, device_name):
+        """
+        Define which physical interface on which device is a part of this bridge group.
+
+        :param p_interfaces: (str) Name of physical interface.
+        :param device_name: (str) Name of device with that interface.
+        :return: None
+        """
         logging.debug("In p_interface() for BridgeGroupInterfaces class.")
         list1 = []
         for p_intf in p_interfaces:

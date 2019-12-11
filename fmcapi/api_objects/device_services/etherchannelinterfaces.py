@@ -1,3 +1,5 @@
+"""Etherchannel Interfaces Classes."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .devicerecords import DeviceRecords
 from fmcapi.api_objects.object_services.securityzones import SecurityZones
@@ -6,9 +8,7 @@ import logging
 
 
 class EtherchannelInterfaces(APIClassTemplate):
-    """
-    The EtherchannelInterfaces Interface Object in the FMC.
-    """
+    """The EtherchannelInterfaces Interface Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -56,12 +56,26 @@ class EtherchannelInterfaces(APIClassTemplate):
     )  # Not sure what to put here but it was an unresolved variable later in this code.
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize EtherchannelInterfaces object.
+
+        Set self.type to "RedundantInterface" and parse the kwargs.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for RedundantInterfaces class.")
         self.parse_kwargs(**kwargs)
         self.type = "RedundantInterface"
 
     def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+
+        :return: None
+        """
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for EtherchannelInterfaces class.")
         if "device_name" in kwargs:
@@ -96,6 +110,12 @@ class EtherchannelInterfaces(APIClassTemplate):
                 )
 
     def device(self, device_name):
+        """
+        Associate device to EtherChannel.
+
+        :param device_name: (str) Name of device.
+        :return: None
+        """
         logging.debug("In device() for EtherchannelInterfaces class.")
         device1 = DeviceRecords(fmc=self.fmc)
         device1.get(name=device_name)
@@ -109,6 +129,12 @@ class EtherchannelInterfaces(APIClassTemplate):
             )
 
     def sz(self, name):
+        """
+        Assign Security Zone to EtherChannel.
+
+        :param name: (str) Name of Security Zone.
+        :return: None
+        """
         logging.debug("In sz() for EtherchannelInterfaces class.")
         sz = SecurityZones(fmc=self.fmc)
         sz.get(name=name)
@@ -121,10 +147,24 @@ class EtherchannelInterfaces(APIClassTemplate):
             )
 
     def static(self, ipv4addr, ipv4mask):
+        """
+        Assign static IP to this EtherChannel.
+
+        :param ipv4addr: (str) x.x.x.x
+        :param ipv4mask: (str) bitmask
+        :return: None
+        """
         logging.debug("In static() for EtherchannelInterfaces class.")
         self.ipv4 = {"static": {"address": ipv4addr, "netmask": ipv4mask}}
 
     def dhcp(self, enableDefault=True, routeMetric=1):
+        """
+        Configure this EtherChannel with DHCP for addressing.
+
+        :param enableDefault: (bool) Accept, or not, a default route via DHCP.
+        :param routeMetric: (int) Set route metric.
+        :return: None
+        """
         logging.debug("In dhcp() for EtherchannelInterfaces class.")
         self.ipv4 = {
             "dhcp": {
@@ -134,6 +174,13 @@ class EtherchannelInterfaces(APIClassTemplate):
         }
 
     def p_interfaces(self, p_interfaces, device_name):
+        """
+        Define which physical interface on which device is a part of this EtherChannel.
+
+        :param p_interfaces: (str) Name of physical interface.
+        :param device_name: (str) Name of device with that interface.
+        :return: None
+        """
         logging.debug("In p_interfaces() for EtherchannelInterfaces class.")
         list1 = []
         for p_intf in p_interfaces:

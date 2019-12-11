@@ -1,3 +1,5 @@
+"""Access Rules Classes."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.policy_services.accesspolicies import AccessPolicies
 from fmcapi.api_objects.policy_services.intrusionpolicies import IntrusionPolicies
@@ -18,9 +20,7 @@ import warnings
 
 
 class AccessRules(APIClassTemplate):
-    """
-    The AccessRules Object in the FMC.
-    """
+    """The AccessRules Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -72,7 +72,8 @@ class AccessRules(APIClassTemplate):
     @property
     def URL_SUFFIX(self):
         """
-        Add the URL suffixes for categories, insertBefore and insertAfter
+        Add the URL suffixes for categories, insertBefore and insertAfter.
+
         NOTE: You must specify these at the time the object is initialized (created) for this feature
         to work correctly. Example:
             This works:
@@ -103,8 +104,8 @@ class AccessRules(APIClassTemplate):
 
         Set self.type to "AccessRule", parse the kwargs, and set up the self.URL.
 
-        :param fmc (object): FMC object
-        :param **kwargs: Any other values passed during instantiation.
+        :param fmc: (object) FMC object
+        :param kwargs: Any other values passed during instantiation.
         :return: None
         """
         super().__init__(fmc, **kwargs)
@@ -116,6 +117,7 @@ class AccessRules(APIClassTemplate):
     def format_data(self, filter_query=""):
         """
         Gather all the data in preparation for sending to API in JSON format.
+
         :param filter_query: (str) 'all' or 'kwargs'
         :return: (dict) json_data
         """
@@ -184,6 +186,7 @@ class AccessRules(APIClassTemplate):
     def acp(self, name="", id=""):
         """
         Associate an AccessPolicies object with this AccessRule object.
+
         :param name: (str)  Name of ACP.
         :param id: (str) ID of ACP.
         :return: None
@@ -206,7 +209,8 @@ class AccessRules(APIClassTemplate):
 
     def intrusion_policy(self, action, name=""):
         """
-        Add/remove name of ipsPolicy field of AccessRules object
+        Add/remove name of ipsPolicy field of AccessRules object.
+
         :param action: (str) 'set', or 'clear'
         :param name: (str) Name of intrusion policy in FMC.
         :return: None
@@ -226,7 +230,8 @@ class AccessRules(APIClassTemplate):
 
     def variable_set(self, action, name="Default-Set"):
         """
-        Add/remove name of variableSet field of AccessRules object
+        Add/remove name of variableSet field of AccessRules object.
+
         :param action: (str) 'set', or 'clear'
         :param name: (str) Name of variable set in FMC.
         :return: None
@@ -244,7 +249,8 @@ class AccessRules(APIClassTemplate):
 
     def file_policy(self, action, name="None"):
         """
-        Add/remove name of filePolicy field of AccessRules object
+        Add/remove name of filePolicy field of AccessRules object.
+
         :param action: (str) 'set', or 'clear'
         :param name: (str) Name of file policy in FMC.
         :return: None
@@ -332,7 +338,8 @@ class AccessRules(APIClassTemplate):
 
     def source_zone(self, action, name=""):
         """
-        Add/modify name to sourceZones field of AccessRules object
+        Add/modify name to sourceZones field of AccessRules object.
+
         :param action: (str) 'add', 'remove', or 'clear'
         :param name: (str) Name of Security Zone in FMC.
         :return: None
@@ -393,7 +400,8 @@ class AccessRules(APIClassTemplate):
 
     def destination_zone(self, action, name=""):
         """
-        Add/modify name to destinationZones field of AccessRules object
+        Add/modify name to destinationZones field of AccessRules object.
+
         :param action: (str) 'add', 'remove', or 'clear'
         :param name: (str) Name of Security Zone in FMC.
         :return: None
@@ -456,7 +464,8 @@ class AccessRules(APIClassTemplate):
 
     def source_port(self, action, name=""):
         """
-        Add/modify name to sourcePorts field of AccessRules object
+        Add/modify name to sourcePorts field of AccessRules object.
+
         :param action: (str) 'add', 'remove', or 'clear'
         :param name: (str) Name of Port in FMC.
         :return: None
@@ -533,7 +542,8 @@ class AccessRules(APIClassTemplate):
 
     def destination_port(self, action, name=""):
         """
-        Add/modify name to destinationPorts field of AccessRules object
+        Add/modify name to destinationPorts field of AccessRules object.
+
         :param action: (str) 'add', 'remove', or 'clear'
         :param name: (str) Name of Port in FMC.
         :return: None
@@ -612,7 +622,8 @@ class AccessRules(APIClassTemplate):
 
     def source_network(self, action, name="", literal=None):
         """
-        Add/modify name/literal to sourceNetworks field of AccessRules object
+        Add/modify name/literal to sourceNetworks field of AccessRules object.
+
         :param action: (str) the action to be done 'add', 'remove', 'clear'
         :param name: (str) name of the object in question
         :param literal: (dict) the literal in question {value:<>, type:<>}
@@ -739,7 +750,8 @@ class AccessRules(APIClassTemplate):
 
     def destination_network(self, action, name="", literal=None):
         """
-        Add/modify name/literal to destinationNetworks field of AccessRules object
+        Add/modify name/literal to destinationNetworks field of AccessRules object.
+
         :param action: (str) the action to be done 'add', 'remove', 'clear'
         :param name: (str) name of the object in question
         :param literal: (dict) the literal in question {value:<>, type:<>}
@@ -870,7 +882,8 @@ class AccessRules(APIClassTemplate):
 
     def source_sgt(self, action, name="", literal=None):
         """
-        Add/modify name/literal to the sourceSecurityGroupTags field of AccessRules object
+        Add/modify name/literal to the sourceSecurityGroupTags field of AccessRules object.
+
         :param action: (str) 'add', 'remove', or 'clear'
         :param name: (str) Name of SGT in FMC.
         :param literal: (dict) {value:<>, type:<>}
@@ -992,7 +1005,8 @@ class AccessRules(APIClassTemplate):
 
     def destination_sgt(self, action, name="", literal=None):
         """
-        Add/modify name/literal to the destinationSecurityGroupTags field of AccessRules object
+        Add/modify name/literal to the destinationSecurityGroupTags field of AccessRules object.
+
         :param action: (str) 'add', 'remove', or 'clear'
         :param name: (str) Name of SGT in FMC.
         :param literal: (dict) {value:<>, type:<>}
@@ -1002,19 +1016,24 @@ class AccessRules(APIClassTemplate):
 
 
 class ACPRule(AccessRules):
-    """Dispose of this Class after 20210101.  Use AccessRules() instead."""
+    """
+    Dispose of this Class after 20210101.
+
+    Use AccessRules() instead.
+    """
 
     def __init__(self, fmc, **kwargs):
-        """
-        Deprecated: ACPRule() should be called via AccessRules().
-        """
         warnings.resetwarnings()
         warnings.warn("Deprecated: ACPRule() should be called via AccessRules().")
         super().__init__(fmc, **kwargs)
 
 
 class Bulk(object):
-    """Class used to send many JSON objects in one API call.  This is specific to the AccessRules() method."""
+    """
+    Send many JSON objects in one API call.
+
+    This is specific to the AccessRules() method.
+    """
 
     MAX_SIZE_QTY = 1000
     MAX_SIZE_IN_BYTES = 2048000
@@ -1024,6 +1043,7 @@ class Bulk(object):
     def URL_SUFFIX(self):
         """
         Add the URL suffixes for section, categories, insertBefore and insertAfter.
+
         :return (str): url
         """
         url = "?"
@@ -1043,6 +1063,8 @@ class Bulk(object):
 
     def __init__(self, fmc, url="", **kwargs):
         """
+        Initialize Bulk object.
+
         :param fmc (object):  FMC object
         :param url (str): Base URL used for API action.
         :param **kwargs: Pass any/all variables for self.
@@ -1057,6 +1079,7 @@ class Bulk(object):
     def parse_kwargs(self, **kwargs):
         """
         Add/modify variables in self.
+
         :return: None
         """
         logging.debug("In parse_kwargs() for Bulk class.")
@@ -1071,7 +1094,8 @@ class Bulk(object):
 
     def add(self, item):
         """
-        :param item (str): Add JSON string to list of items to send to FMC.
+        :param item: (str) Add JSON string to list of items to send to FMC.
+
         :return: None
         """
         self.items.append(item)
@@ -1079,7 +1103,8 @@ class Bulk(object):
 
     def clear(self):
         """
-        Clear self.items (Empty out list of JSON strings to send to FMC.)
+        Clear self.items -- Empty out list of JSON strings to send to FMC.
+
         :return: None
         """
         logging.info(f"Clearing bulk items list.")
@@ -1088,7 +1113,8 @@ class Bulk(object):
     def post(self):
         """
         Send list of self.items to FMC as a bulk import.
-        :return (str): requests response from FMC
+
+        :return: (str) requests response from FMC
         """
         # Build URL
         self.URL = f"{self.URL}{self.URL_SUFFIX}&bulk=true"

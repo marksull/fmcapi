@@ -1,12 +1,12 @@
+"""PreFilter Policies Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
 import warnings
 
 
 class PreFilterPolicies(APIClassTemplate):
-    """
-    The PreFilterPolicies Object in the FMC.
-    """
+    """The PreFilterPolicies Object in the FMC."""
 
     VALID_JSON_DATA = ["id", "name", "type", "description", "defaultAction"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
@@ -17,6 +17,15 @@ class PreFilterPolicies(APIClassTemplate):
     FIRST_SUPPORTED_FMC_VERSION = "6.5"
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize PreFilterPolicies object.
+
+        Set self.type to "PreFilterPolicy" and parse the kwargs.
+
+        :param fmc (object): FMC object
+        :param **kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for PreFilterPolicies class.")
         self.parse_kwargs(**kwargs)
@@ -26,10 +35,16 @@ class PreFilterPolicies(APIClassTemplate):
 
     @property
     def defaultAction(self):
+        """
+        Getter for defaultAction.
+
+        :return: {"type": "PrefilterPolicyDefaultAction", "action": self._defaultAction}
+        """
         return {"type": "PrefilterPolicyDefaultAction", "action": self._defaultAction}
 
     @defaultAction.setter
     def defaultAction(self, action):
+        """Setter for defaultAction."""
         if action in self.DEFAULT_ACTION_OPTIONS:
             self._defaultAction = action
         else:
@@ -38,18 +53,29 @@ class PreFilterPolicies(APIClassTemplate):
             )
 
     def format_data(self):
+        """
+        Gather all the data in preparation for sending to API in JSON format.
+
+        :param filter_query: (str) 'all' or 'kwargs'
+        :return: (dict) json_data
+        """
         json_data = super().format_data()
         logging.debug("In format_data() for AccessPolicies class.")
         json_data["defaultAction"] = self.defaultAction
         return json_data
 
     def put(self):
+        """PUT method for API for PreFilterPolicies not supported."""
         logging.info("PUT method for API for PreFilterPolicies not supported.")
         pass
 
 
 class PreFilterPolicy(PreFilterPolicies):
-    """Dispose of this Class after 20210101."""
+    """
+    Dispose of this Class after 20210101.
+
+    Use PreFilterPolicies() instead.
+    """
 
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()

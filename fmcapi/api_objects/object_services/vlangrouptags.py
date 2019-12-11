@@ -1,3 +1,5 @@
+"""VLAN Group Tags Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .vlantags import VlanTags
 from fmcapi.api_objects.helper_functions import validate_vlans
@@ -6,9 +8,7 @@ import warnings
 
 
 class VlanGroupTags(APIClassTemplate):
-    """
-    The VlanGroupTags Object in the FMC.
-    """
+    """The VlanGroupTags Object in the FMC."""
 
     VALID_JSON_DATA = ["id", "name", "type", "description", "objects", "literals"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
@@ -18,12 +18,26 @@ class VlanGroupTags(APIClassTemplate):
     REQUIRED_FOR_POST = ["name", "objects"]
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize VlanGroupTags object.
+
+        Set self.type to VlanGroupTag and parse kwargs.
+        :param fmc: (object) FMC object
+        :param kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for VlanGroupTags class.")
         self.parse_kwargs(**kwargs)
         self.type = "VlanGroupTag"
 
     def named_vlantags(self, action, name=""):
+        """
+        Associate Named VLAN Tags.
+
+        :param action: (str) 'add', 'remove', or 'clear'.
+        :param name: (str) Name of VLAN Tags.
+        """
         logging.debug("In named_vlantags() for VlanGroupTags class.")
         if action == "add":
             vlan1 = VlanTags(fmc=self.fmc)
@@ -73,6 +87,13 @@ class VlanGroupTags(APIClassTemplate):
                 logging.info("All named_vlantags removed from this VlanGroupTags.")
 
     def unnamed_vlantags(self, action, startvlan="", endvlan=""):
+        """
+        Associate Unnamed VLAN Tags.
+
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param startvlan: (int) Lower VLAN.
+        :param endvlan: (int) Upper VLAN.
+        """
         logging.debug("In unnamed_vlantags() for VlanGroupTags class.")
         if action == "add":
             startvlan, endvlan = validate_vlans(start_vlan=startvlan, end_vlan=endvlan)
@@ -112,7 +133,11 @@ class VlanGroupTags(APIClassTemplate):
 
 
 class VlanGroupTag(VlanGroupTags):
-    """Dispose of this Class after 20210101."""
+    """
+    Dispose of this Class after 20210101.
+
+    Use VlanGroupTags() instead.
+    """
 
     def __init__(self, fmc, **kwargs):
         warnings.resetwarnings()

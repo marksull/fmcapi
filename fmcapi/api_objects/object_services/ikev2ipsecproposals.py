@@ -1,11 +1,11 @@
+"""IKE v2 IPSec Proposals Class."""
+
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
 
 
 class IKEv2IpsecProposals(APIClassTemplate):
-    """
-    The IKEv2IpsecProposals Object in the FMC.
-    """
+    """The IKEv2IpsecProposals Object in the FMC."""
 
     VALID_JSON_DATA = [
         "id",
@@ -36,12 +36,28 @@ class IKEv2IpsecProposals(APIClassTemplate):
     FIRST_SUPPORTED_FMC_VERSION = "6.3"
 
     def __init__(self, fmc, **kwargs):
+        """
+        Initialize IKEv2IpsecProposals object.
+
+        Set self.type to "IKEv2IpsecProposal" and parse the kwargs.
+
+        :param fmc: (object) FMC object
+        :param kwargs: Any other values passed during instantiation.
+        :return: None
+        """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for IKEv2IpsecProposals class.")
         self.parse_kwargs(**kwargs)
         self.type = "IKEv2IPsecProposal"
 
     def encryption(self, action, algorithms=[]):
+        """
+        Associate encryption.
+
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param algorithms: (list) List of algorithms.
+        :return: None
+        """
         logging.debug("In encryption() for IKEv2IpsecProposals class.")
         if action == "add":
             for algorithm in algorithms:
@@ -76,6 +92,13 @@ class IKEv2IpsecProposals(APIClassTemplate):
                 )
 
     def hash(self, action, algorithms=[]):
+        """
+        Associate hash.
+
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param algorithms: (list) List of algorithms.
+        :return: None
+        """
         logging.debug("In hash() for IKEv2IpsecProposals class.")
         if action == "add":
             for algorithm in algorithms:
