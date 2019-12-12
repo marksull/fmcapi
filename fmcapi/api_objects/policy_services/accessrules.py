@@ -194,11 +194,13 @@ class AccessRules(APIClassTemplate):
         # either name or id of the ACP should be given
         logging.debug("In acp() for AccessRules class.")
         if id != "":
+            self.acp_id = id
             self.URL = f"{self.fmc.configuration_url}{self.PREFIX_URL}/{id}/accessrules"
         elif name != "":
             acp1 = AccessPolicies(fmc=self.fmc)
             acp1.get(name=name)
             if "id" in acp1.__dict__:
+                self.acp_id = acp1.id
                 self.URL = f"{self.fmc.configuration_url}{self.PREFIX_URL}/{acp1.id}/accessrules"
             else:
                 logging.warning(
