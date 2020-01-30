@@ -27,7 +27,7 @@ if list_of_scripts:
     qty_of_scripts = len(list_of_scripts)
     try:
         choice = int(input(f'Select 0-{qty_of_scripts - 1}: '))
-        if 0 <= choice <= qty_of_scripts - 1:
+        if 0 <= choice < qty_of_scripts - 1:
             # A valid choice has been made.
             os.system(f"/usr/bin/python3 {os.path.join(script_dir, list_of_scripts[choice])}")
     except ValueError:
