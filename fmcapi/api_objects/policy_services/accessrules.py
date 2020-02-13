@@ -47,6 +47,7 @@ class AccessRules(APIClassTemplate):
         "filePolicy",
         "sourceSecurityGroupTags",
         "destinationSecurityGroupTags",
+        "enableSyslog",
     ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + [
         "acp_id",
