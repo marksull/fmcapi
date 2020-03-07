@@ -449,7 +449,6 @@ class Token(object):
         self.access_token = response.headers.get("X-auth-access-token")
         self.refresh_token = response.headers.get("X-auth-refresh-token")
         self.uuid = response.headers.get("DOMAIN_UUID")
-        """
         all_domain = json.loads(response.headers.get("DOMAINS"))
         if self.__domain is not None:
             for domain in all_domain:
@@ -460,7 +459,6 @@ class Token(object):
                     logging.info(
                         "Domain name entered not found in FMC, falling back to Global"
                     )
-        """
 
     def get_token(self):
         """
