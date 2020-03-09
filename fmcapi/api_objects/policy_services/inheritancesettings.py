@@ -15,8 +15,9 @@ class InheritanceSettings(APIClassTemplate):
         "device_name",
     ]
     PREFIX_URL = "/policy/accesspolicies"
-    REQUIRED_FOR_PUT = ["acp_id", "id", "action"]
+    REQUIRED_FOR_PUT = ["acp_id", "id"]
     REQUIRED_FOR_GET = ["acp_id"]
+    FIRST_SUPPORTED_FMC_VERSION = "6.5"
 
     def __init__(self, fmc, **kwargs):
         """
@@ -41,7 +42,7 @@ class InheritanceSettings(APIClassTemplate):
         :return: None
         """
         super().parse_kwargs(**kwargs)
-        logging.debug("In parse_kwargs() for DefaultActions class.")
+        logging.debug("In parse_kwargs() for InheritanceSettings class.")
         if "acp_id" in kwargs:
             self.acp(acp_id=kwargs["acp_id"])
         if "acp_name" in kwargs:
@@ -50,6 +51,34 @@ class InheritanceSettings(APIClassTemplate):
             self.device(id=kwargs["device_id"])
         if "device_name" in kwargs:
             self.device(name=kwargs["device_name"])
+
+    def acp(self, name="", acp_id=""):
+        """
+        Associate an AccessPolicies object with this InheritanceSettings object.
+
+        :param name: (str)  Name of ACP.
+        :param id: (str) ID of ACP.
+        :return: None
+        """
+        # either name or id of the ACP should be given
+        logging.debug("In acp() for InheritanceSettings class.")
+        if acp_id != "":
+            self.acp_id = acp_id
+            self.URL = f"{self.fmc.configuration_url}{self.PREFIX_URL}/{self.acp_id}/inheritancesettings"
+            self.acp_added_to_url = True
+        elif name != "":
+            acp1 = AccessPolicies(fmc=self.fmc)
+            acp1.get(name=name)
+            if "id" in acp1.__dict__:
+                self.acp_id = acp1.id
+                self.URL = f"{self.fmc.configuration_url}{self.PREFIX_URL}/{self.acp_id}/inheritancesettings"
+                self.acp_added_to_url = True
+            else:
+                logging.warning(
+                    f'Access Control Policy "{name}" not found.  Cannot configure acp for InheritanceSettings.'
+                )
+        else:
+            logging.error("No accessPolicy name or id was provided.")
 
     def post(self):
         """POST method for InheritanceSettings not supported."""
