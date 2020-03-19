@@ -24,6 +24,7 @@ from .manualnatrules import ManualNatRules
 from .natrules import NatRules
 from .prefilterpolicies import PreFilterPolicies
 from .prefilterpolicies import PreFilterPolicy
+from .inheritancesettings import InheritanceSettings
 
 logging.debug("In the object_services __init__.py file.")
 
@@ -51,4 +52,5 @@ __all__ = [
     "HitCounts",
     "HitCount",
     "DefaultActions",
+    "InheritanceSettings",
 ]
