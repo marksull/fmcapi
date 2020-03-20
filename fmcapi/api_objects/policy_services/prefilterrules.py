@@ -36,6 +36,13 @@ class PreFilterRules(APIClassTemplate):
     VALID_FOR_RULETYPE = ["TUNNEL", "PREFILTER"]
     REQUIRED_FOR_POST = ["prefilter_id"]
     REQUIRED_FOR_GET = ["prefilter_id"]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + [
+        "prefilter_id",
+        "prefilter_name",
+        "insertBefore",
+        "insertAfter",
+        "section",
+    ]
 
     def __init__(self, fmc, **kwargs):
         """
@@ -49,7 +56,7 @@ class PreFilterRules(APIClassTemplate):
         """
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for PreFilterRules class.")
-        self.type = "PreFilterRules"
+        # self.type = "PreFilterRules"
         self.prefilter_id = None
         self.prefilter_added_to_url = False
         self.action = "FASTPATH"
@@ -120,7 +127,7 @@ class PreFilterRules(APIClassTemplate):
                 prefilter_id = pre1.id
             else:
                 logging.warning(
-                    f"Prefilter policy {name} not found. Cannot setup perfilter policy for PreFilterRules"
+                    f"Prefilter policy {name} not found. Cannot setup prefilter policy for PreFilterRules"
                 )
 
         self.prefilter_id = prefilter_id
