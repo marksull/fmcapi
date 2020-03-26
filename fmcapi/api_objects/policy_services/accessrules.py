@@ -469,7 +469,7 @@ class AccessRules(APIClassTemplate):
         """
         Add/modify name to sourcePorts field of AccessRules object.
 
-        :param action: (str) 'add', 'remove', or 'clear'
+        :param action: (str) 'add', 'addgroup', 'remove', or 'clear'
         :param name: (str) Name of Port in FMC.
         :return: None
         """
@@ -579,7 +579,7 @@ class AccessRules(APIClassTemplate):
         """
         Add/modify name to destinationPorts field of AccessRules object.
 
-        :param action: (str) 'add', 'remove', or 'clear'
+        :param action: (str) 'add', 'addgroup', 'remove', or 'clear'
         :param name: (str) Name of Port in FMC.
         :return: None
         """
