@@ -650,7 +650,7 @@ class AccessRules(APIClassTemplate):
                     )
             else:
                 logging.warning(
-                    f'Protocol Port or Protocol Port Group: "{name}", '
+                    f'Protocol Port Port Group: "{name}", '
                     f"not found.  Cannot add to AccessRules."
                 )
         elif action == "remove":
