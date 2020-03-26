@@ -177,6 +177,9 @@ class APIClassTemplate(object):
                         )
                 if "id" not in self.__dict__:
                     logging.warning(
+                        f"\tGET query for {self.name} is not found."
+                    )
+                    logging.debug(
                         f"\tGET query for {self.name} is not found.\n\t\tResponse: {json.dumps(response)}"
                     )
             else:

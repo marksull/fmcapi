@@ -511,6 +511,38 @@ class AccessRules(APIClassTemplate):
                     f'Protocol Port or Protocol Port Group: "{name}", '
                     f"not found.  Cannot add to AccessRules."
                 )
+        elif action == "addgroup":
+            item = PortObjectGroups(fmc=self.fmc)
+            item.get(name=name)
+            if "id" in item.__dict__:
+                if "sourcePorts" in self.__dict__:
+                    new_port = {"name": item.name, "id": item.id, "type": item.type}
+                    duplicate = False
+                    if "objects" not in self.sourcePorts:
+                        self.__dict__["sourcePorts"]["objects"] = []
+                    for obj in self.sourcePorts["objects"]:
+                        if obj["name"] == new_port["name"]:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.sourcePorts["objects"].append(new_port)
+                        logging.info(
+                            f'Adding "{name}" to sourcePorts for this AccessRules.'
+                        )
+                else:
+                    self.sourcePorts = {
+                        "objects": [
+                            {"name": item.name, "id": item.id, "type": item.type}
+                        ]
+                    }
+                    logging.info(
+                        f'Adding "{name}" to sourcePorts for this AccessRules.'
+                    )
+            else:
+                logging.warning(
+                    f'Protocol Port Port Group: "{name}", '
+                    f"not found.  Cannot add to AccessRules."
+                )
         elif action == "remove":
             pport_json = ProtocolPortObjects(fmc=self.fmc)
             pport_json.get(name=name)
@@ -560,6 +592,38 @@ class AccessRules(APIClassTemplate):
             else:
                 item = PortObjectGroups(fmc=self.fmc)
                 item.get(name=name)
+            if "id" in item.__dict__:
+                if "destinationPorts" in self.__dict__:
+                    new_port = {"name": item.name, "id": item.id, "type": item.type}
+                    duplicate = False
+                    if "objects" not in self.destinationPorts:
+                        self.__dict__["destinationPorts"]["objects"] = []
+                    for obj in self.destinationPorts["objects"]:
+                        if obj["name"] == new_port["name"]:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.destinationPorts["objects"].append(new_port)
+                        logging.info(
+                            f'Adding "{name}" to destinationPorts for this AccessRules.'
+                        )
+                else:
+                    self.destinationPorts = {
+                        "objects": [
+                            {"name": item.name, "id": item.id, "type": item.type}
+                        ]
+                    }
+                    logging.info(
+                        f'Adding "{name}" to destinationPorts for this AccessRules.'
+                    )
+            else:
+                logging.warning(
+                    f'Protocol Port or Protocol Port Group: "{name}", '
+                    f"not found.  Cannot add to AccessRules."
+                )
+        if action == "addgroup":
+            item = PortObjectGroups(fmc=self.fmc)
+            item.get(name=name)
             if "id" in item.__dict__:
                 if "destinationPorts" in self.__dict__:
                     new_port = {"name": item.name, "id": item.id, "type": item.type}
