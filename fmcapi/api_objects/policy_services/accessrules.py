@@ -14,6 +14,8 @@ from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
 from fmcapi.api_objects.policy_services.filepolicies import FilePolicies
 from fmcapi.api_objects.object_services.isesecuritygrouptags import ISESecurityGroupTags
 from fmcapi.api_objects.helper_functions import get_networkaddress_type
+from fmcapi.api_objects.object_services.applications import Applications
+from fmcapi.api_objects.object_services.applicationfilters import ApplicationFilters
 import logging
 import sys
 import warnings
@@ -1081,6 +1083,125 @@ class AccessRules(APIClassTemplate):
         """
         pass
 
+    def application(self, action, name=""):
+        """
+        Add/modify name to applications field of AccessRules object.
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param name: (str) Name of Application in FMC.
+        :return: None
+        """
+        logging.debug("In application() for AccessRules class.")
+        if action == "add":
+            app = Applications(fmc=self.fmc)
+            app.get(name=name)
+            if "id" in app.__dict__:
+                if "applications" in self.__dict__:
+                    new_app = {"name": app.name, "id": app.id, "type": app.type}
+                    duplicate = False
+                    if "applications" not in self.applications:
+                        self.__dict__["applications"]["applications"] = []
+                    for obj in self.applications["applications"]:
+                        if obj["name"] == new_app["name"]:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.applications["applications"].append(new_app)
+                        logging.info(
+                            f'Adding "{name}" to applications for this AccessRules.'
+                        )
+                else:
+                    self.applications = {
+                        "applications": [
+                            {"name": app.name, "id": app.id, "type": app.type}
+                        ]
+                    }
+                    logging.info(
+                        f'Adding "{name}" to applications for this AccessRules.'
+                    )
+            else:
+                logging.warning(
+                    f'Application: "{name}", '
+                    f"not found.  Cannot add to AccessRules."
+                )
+        elif action == "addappfilter":
+             app = ApplicationFilters(fmc=self.fmc)
+             app.get(name=name)
+             if "id" in app.__dict__:
+                if "applicationFilters" in self.__dict__:
+                    new_app = {"name": app.name, "id": app.id, "type": app.type}
+                    duplicate = False
+                    if "applicationFilters" not in self.applications:
+                        self.__dict__["applicationFilters"]["applicationFilters"] = []
+                    for obj in self.applications["applicationFilters"]:
+                        if obj["name"] == new_app["name"]:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.applications["applicationFilters"].append(new_app)
+                        logging.info(
+                            f'Adding "{name}" to applications for this AccessRules.'
+                        )
+                else:
+                    self.applications = {
+                        "applicationFilters": [
+                            {"name": app.name, "id": app.id, "type": app.type}
+                        ]
+                    }
+                    logging.info(
+                        f'Adding "{name}" application filter to applications for this AccessRules.'
+                    )
+             else:
+                logging.warning(
+                    f'Application Filter: "{name}", '
+                    f"not found.  Cannot add to AccessRules."
+                )                
+        elif action == "remove":
+            app = Applications(fmc=self.fmc)
+            app.get(name=name)
+            if "id" in app.__dict__:
+                if "applicationFilters" in self.__dict__:
+                    applications = []
+                    for obj in self.applications["applications"]:
+                        if obj["name"] != name:
+                            applications.append(obj)
+                    self.applications["applicationFilters"] = applications
+                    logging.info(
+                            f'Removed "{name}" from applications for this AccessRules.'
+                        )
+                else:
+                     logging.info(
+                        "Application doesn't exist for this AccessRules.  Nothing to remove."
+                    )
+            else:
+                logging.warning(
+                    f"Application, {name}, not found.  Cannot remove from AccessRules."
+                )
+        elif action == "removeappfilter":
+            app = ApplicationFilters(fmc=self.fmc)
+            app.get(name=name)
+            if "id" in app.__dict__:
+                if "applications" in self.__dict__:
+                    applications = []
+                    for obj in self.applications["applicationFilters"]:
+                        if obj["name"] != name:
+                            applications.append(obj)
+                    self.applications["applicationFilters"] = applications
+                    logging.info(
+                            f'Removed "{name}" application filter from applications for this AccessRules.'
+                        )
+                else:
+                     logging.info(
+                        "Application filter doesn't exist for this AccessRules.  Nothing to remove."
+                    )
+            else:
+                logging.warning(
+                    f"Application filter, {name}, not found.  Cannot remove from AccessRules."
+                )
+
+        elif action == "clear":
+            if "applications" in self.__dict__:
+                del self.applications
+                logging.info("All Applications removed from this AccessRules object.")
 
 class ACPRule(AccessRules):
     """
