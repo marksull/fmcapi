@@ -82,6 +82,23 @@ class InheritanceSettings(APIClassTemplate):
         else:
             logging.error("No accessPolicy name or id was provided.")
 
+    def format_data(self, filter_query=""):
+        """
+        Gather all the data in preparation for sending to API in JSON format.
+
+        :param filter_query: (str) 'all' or 'kwargs'
+        :return: (dict) json_data
+        """
+        logging.debug("In format_data() for InheritanceSettings class.")
+        return {
+            "type": "AccessPolicyInheritanceSetting",
+            "id": self.acp_id,
+            "basePolicy": {
+                "type": "AccessPolicy",
+                "id": self.base_policy_id
+            }
+        }
+
     def post(self):
         """POST method for InheritanceSettings not supported."""
         logging.info("API POST method for InheritanceSettings not supported.")
