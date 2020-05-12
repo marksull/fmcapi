@@ -9,13 +9,15 @@ class InheritanceSettings(APIClassTemplate):
 
     VALID_JSON_DATA = []
     VALID_FOR_KWARGS = VALID_JSON_DATA + [
+        "id",
         "acp_id",
         "acp_name",
         "device_id",
         "device_name",
+        "base_policy_id",
     ]
     PREFIX_URL = "/policy/accesspolicies"
-    REQUIRED_FOR_PUT = ["acp_id", "id"]
+    REQUIRED_FOR_PUT = ["acp_id", "id", "base_policy_id"]
     REQUIRED_FOR_GET = ["acp_id"]
     FIRST_SUPPORTED_FMC_VERSION = "6.5"
 
