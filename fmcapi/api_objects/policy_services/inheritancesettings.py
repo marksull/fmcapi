@@ -9,13 +9,15 @@ class InheritanceSettings(APIClassTemplate):
 
     VALID_JSON_DATA = []
     VALID_FOR_KWARGS = VALID_JSON_DATA + [
+        "id",
         "acp_id",
         "acp_name",
         "device_id",
         "device_name",
+        "base_policy_id",
     ]
     PREFIX_URL = "/policy/accesspolicies"
-    REQUIRED_FOR_PUT = ["acp_id", "id"]
+    REQUIRED_FOR_PUT = ["acp_id", "id", "base_policy_id"]
     REQUIRED_FOR_GET = ["acp_id"]
     FIRST_SUPPORTED_FMC_VERSION = "6.5"
 
@@ -24,6 +26,24 @@ class InheritanceSettings(APIClassTemplate):
         Initialize InheritanceSettings object.
 
         Set self.type to "AccessPolicyInheritanceSettings", parse the kwargs, and set up the self.URL.
+
+        Note: The InheritanceSettings API is a bit of a weird API. The construction of the API URI needs two IDs.
+        According to the API documentation you need the ContainerID and the objectId where the later is defined as
+        "Unique identifier of the Access Policy Inheritance Setting". These two values are actually the same value,
+        specifically the ID of the ACP for which you are changing the inheritance.
+
+        The third ID that is required for this API, which we have called the base_policy_id to align with the API
+        documentation, is the ID of ACP that you want to be the parent.
+
+        An example of use would be:
+
+        fmc_integrate = InheritanceSettings(
+            fmc=fmc_session,
+            acp_id=child_policy["id"],
+            id=child_policy["id"],
+            base_policy_id=parent_policy["id"],
+        )
+        fmc_integrate.put()
 
         :param fmc (object): FMC object
         :param **kwargs: Any other values passed during instantiation.
@@ -79,6 +99,23 @@ class InheritanceSettings(APIClassTemplate):
                 )
         else:
             logging.error("No accessPolicy name or id was provided.")
+
+    def format_data(self, filter_query=""):
+        """
+        Gather all the data in preparation for sending to API in JSON format.
+
+        :param filter_query: (str) 'all' or 'kwargs'
+        :return: (dict) json_data
+        """
+        logging.debug("In format_data() for InheritanceSettings class.")
+        return {
+            "type": "AccessPolicyInheritanceSetting",
+            "id": self.acp_id,
+            "basePolicy": {
+                "type": "AccessPolicy",
+                "id": self.base_policy_id
+            }
+        }
 
     def post(self):
         """POST method for InheritanceSettings not supported."""
