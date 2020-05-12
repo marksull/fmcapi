@@ -111,10 +111,7 @@ class InheritanceSettings(APIClassTemplate):
         return {
             "type": "AccessPolicyInheritanceSetting",
             "id": self.acp_id,
-            "basePolicy": {
-                "type": "AccessPolicy",
-                "id": self.base_policy_id
-            }
+            "basePolicy": {"type": "AccessPolicy", "id": self.base_policy_id},
         }
 
     def post(self):

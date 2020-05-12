@@ -1120,13 +1120,12 @@ class AccessRules(APIClassTemplate):
                     )
             else:
                 logging.warning(
-                    f'Application: "{name}", '
-                    f"not found.  Cannot add to AccessRules."
+                    f'Application: "{name}", ' f"not found.  Cannot add to AccessRules."
                 )
         elif action == "addappfilter":
-             app = ApplicationFilters(fmc=self.fmc)
-             app.get(name=name)
-             if "id" in app.__dict__:
+            app = ApplicationFilters(fmc=self.fmc)
+            app.get(name=name)
+            if "id" in app.__dict__:
                 if "applicationFilters" in self.__dict__:
                     new_app = {"name": app.name, "id": app.id, "type": app.type}
                     duplicate = False
@@ -1150,11 +1149,11 @@ class AccessRules(APIClassTemplate):
                     logging.info(
                         f'Adding "{name}" application filter to applications for this AccessRules.'
                     )
-             else:
+            else:
                 logging.warning(
                     f'Application Filter: "{name}", '
                     f"not found.  Cannot add to AccessRules."
-                )                
+                )
         elif action == "remove":
             app = Applications(fmc=self.fmc)
             app.get(name=name)
@@ -1166,10 +1165,10 @@ class AccessRules(APIClassTemplate):
                             applications.append(obj)
                     self.applications["applicationFilters"] = applications
                     logging.info(
-                            f'Removed "{name}" from applications for this AccessRules.'
-                        )
+                        f'Removed "{name}" from applications for this AccessRules.'
+                    )
                 else:
-                     logging.info(
+                    logging.info(
                         "Application doesn't exist for this AccessRules.  Nothing to remove."
                     )
             else:
@@ -1187,10 +1186,10 @@ class AccessRules(APIClassTemplate):
                             applications.append(obj)
                     self.applications["applicationFilters"] = applications
                     logging.info(
-                            f'Removed "{name}" application filter from applications for this AccessRules.'
-                        )
+                        f'Removed "{name}" application filter from applications for this AccessRules.'
+                    )
                 else:
-                     logging.info(
+                    logging.info(
                         "Application filter doesn't exist for this AccessRules.  Nothing to remove."
                     )
             else:
@@ -1202,6 +1201,7 @@ class AccessRules(APIClassTemplate):
             if "applications" in self.__dict__:
                 del self.applications
                 logging.info("All Applications removed from this AccessRules object.")
+
 
 class ACPRule(AccessRules):
     """
