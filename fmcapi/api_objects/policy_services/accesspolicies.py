@@ -71,16 +71,6 @@ class AccessPolicies(APIClassTemplate):
         json_data["defaultAction"] = self.defaultAction
         return json_data
 
-    def put(self):
-        """PUT method for API for AccessPolicies not supported."""
-        logging.info("PUT method for API for AccessPolicies not supported.")
-        pass
-
-    def delete(self):
-        """DELETE method for API for AccessPolicies not supported."""
-        logging.info("DELETE method for API for AccessPolicies not supported.")
-        pass
-
 
 class AccessControlPolicy(AccessPolicies):
     """

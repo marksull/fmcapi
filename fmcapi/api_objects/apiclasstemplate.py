@@ -68,8 +68,8 @@ class APIClassTemplate(object):
         elif filter_query == "kwargs":
             filter_list = self.VALID_FOR_KWARGS
         for key_value in filter_list:
-            if key_value in self.__dict__:
-                json_data[key_value] = self.__dict__[key_value]
+            if hasattr(self, key_value):
+                json_data[key_value] = getattr(self, key_value)
         return json_data
 
     def parse_kwargs(self, **kwargs):
@@ -223,6 +223,7 @@ class APIClassTemplate(object):
         :return: requests response
         """
         logging.debug("In post() for APIClassTemplate class.")
+        self.parse_kwargs(**kwargs)
         if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
             logging.error(
                 f"Your FMC version, {self.fmc.serverVersion} does not support POST of this feature."
@@ -241,7 +242,7 @@ class APIClassTemplate(object):
                     )
                     logging.info("\tMethod = POST")
                     logging.info(f"\tURL = {self.URL}")
-                    logging.info(f"\tJSON = {self.show_json()}")
+                    logging.info(f"\tJSON = {self.show_json}")
                     return False
                 response = self.fmc.send_to_api(
                     method="post", url=self.URL, json_data=self.format_data()
@@ -299,7 +300,7 @@ class APIClassTemplate(object):
                 )
                 logging.info("\tMethod = PUT")
                 logging.info(f"\tURL = {self.URL}")
-                logging.info(f"\tJSON = {self.show_json()}")
+                logging.info(f"\tJSON = {self.show_json}")
                 return False
             response = self.fmc.send_to_api(
                 method="put", url=url, json_data=self.format_data()
@@ -354,7 +355,7 @@ class APIClassTemplate(object):
                 )
                 logging.info("\tMethod = DELETE")
                 logging.info(f"\tURL = {self.URL}")
-                logging.info(f"\tJSON = {self.show_json()}")
+                logging.info(f"\tJSON = {self.show_json}")
                 return False
             response = self.fmc.send_to_api(
                 method="delete", url=url, json_data=self.format_data()

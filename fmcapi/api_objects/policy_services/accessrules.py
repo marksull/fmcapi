@@ -13,7 +13,10 @@ from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
 from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
 from fmcapi.api_objects.policy_services.filepolicies import FilePolicies
 from fmcapi.api_objects.object_services.isesecuritygrouptags import ISESecurityGroupTags
-from fmcapi.api_objects.helper_functions import get_networkaddress_type
+from fmcapi.api_objects.helper_functions import (
+    get_networkaddress_type,
+    true_false_checker,
+)
 from fmcapi.api_objects.object_services.applications import Applications
 from fmcapi.api_objects.object_services.applicationfilters import ApplicationFilters
 import logging
@@ -101,6 +104,38 @@ class AccessRules(APIClassTemplate):
 
         return url[:-1]
 
+    @property
+    def enabled(self):
+        return self._enabled
+
+    @enabled.setter
+    def enabled(self, value=False):
+        self._enabled = true_false_checker(value)
+
+    @property
+    def logBegin(self):
+        return self._logBegin
+
+    @logBegin.setter
+    def logBegin(self, value=False):
+        self._logBegin = true_false_checker(value)
+
+    @property
+    def logEnd(self):
+        return self._logEnd
+
+    @logEnd.setter
+    def logEnd(self, value=False):
+        self._logEnd = true_false_checker(value)
+
+    @property
+    def sendEventsToFMC(self):
+        return self._sendEventsToFMC
+
+    @sendEventsToFMC.setter
+    def sendEventsToFMC(self, value=False):
+        self._sendEventsToFMC = true_false_checker(value)
+
     def __init__(self, fmc, **kwargs):
         """
         Initialize AccessRules object.
@@ -114,6 +149,10 @@ class AccessRules(APIClassTemplate):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for AccessRules class.")
         self.type = "AccessRule"
+        self.enabled = False
+        self.logBegin = False
+        self.logEnd = False
+        self.sendEventsToFMC = False
         self.parse_kwargs(**kwargs)
         self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
@@ -182,7 +221,6 @@ class AccessRules(APIClassTemplate):
                     self.destinationNetworks["literals"][literal["value"]] = literal[
                         "type"
                     ]
-
         # Check if suffix should be added to URL
         # self.url_suffix()
 
