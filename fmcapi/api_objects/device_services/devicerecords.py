@@ -42,7 +42,16 @@ class DeviceRecords(APIClassTemplate):
     URL_SUFFIX = "/devices/devicerecords"
     REQUIRED_FOR_POST = ["accessPolicy", "hostName", "regKey"]
     REQUIRED_FOR_PUT = ["id"]
-    LICENSES = ["BASE", "THREAT", "URLFilter", "MALWARE", "APEX", "PLUS", "VPNOnly", "INSTANCE"]
+    LICENSES = [
+        "BASE",
+        "THREAT",
+        "URLFilter",
+        "MALWARE",
+        "APEX",
+        "PLUS",
+        "VPNOnly",
+        "INSTANCE",
+    ]
 
     def __init__(self, fmc, **kwargs):
         """

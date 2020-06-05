@@ -11,7 +11,10 @@ from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
 from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
 from fmcapi.api_objects.policy_services.filepolicies import FilePolicies
 from fmcapi.api_objects.object_services.isesecuritygrouptags import ISESecurityGroupTags
-from fmcapi.api_objects.helper_functions import get_networkaddress_type, true_false_checker
+from fmcapi.api_objects.helper_functions import (
+    get_networkaddress_type,
+    true_false_checker,
+)
 import logging
 import sys
 import warnings
