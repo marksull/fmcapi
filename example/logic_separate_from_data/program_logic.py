@@ -7,6 +7,7 @@ import logging
 from ruamel.yaml import YAML
 from pathlib import Path
 import argparse
+import time
 
 
 def main(datafile):
@@ -44,13 +45,9 @@ def program_fmc(data_vars, path):
                 else:
                     logging.info("'networks' section not in YAML file.  Skipping.")
                 if "access_policies" in data_vars:
-                    create_access_policies(
-                        fmc=fmc1, acp_list=data_vars["access_policies"]
-                    )
+                    create_access_policies(fmc=fmc1, acp_list=data_vars["access_policies"])
                 else:
-                    logging.info(
-                        "'access_policies' section not in YAML file.  Skipping."
-                    )
+                    logging.info("'access_policies' section not in YAML file.  Skipping.")
                 if "nat_policies" in data_vars:
                     create_nat_policies(fmc=fmc1, nat_list=data_vars["nat_policies"])
                 else:
@@ -68,7 +65,7 @@ def program_fmc(data_vars, path):
                 f"Section 'fmc' does not have the right information (bad password?)"
                 f" to establish a connection to FMC:"
             )
-            logging.error(f"Error is '{e}'")
+            logging.error(f"\tError is '{e}'")
     else:
         logging.warning(f"No 'fmc' section found in {path}")
 
@@ -104,12 +101,14 @@ def create_access_policies(fmc, acp_list):
             fmc=fmc, name=acp["name"], defaultAction=acp["default_action"]
         )
         policy.post()
+        time.sleep(1)
+        policy.get()
 
         # Build access_rules associated with this acp.
         if "rules" in acp:
             for rule in acp["rules"]:
                 acp_rule = fmcapi.AccessRules(
-                    fmc=fmc, acp_name=policy.name, name=rule["name"]
+                    fmc=fmc, acp_id=policy.id, name=rule["name"]
                 )
                 if "log_begin" in rule:
                     acp_rule.logBegin = rule["log_begin"]
@@ -295,7 +294,7 @@ if __name__ == "__main__":
         dest="datafile",
         type=str,
         help="Path and filename to YAML file containing data.",
-        default="datafile.yml",
+        default="userdata.yml",
     )
     args = parser.parse_args()
     main(datafile=args.datafile)
