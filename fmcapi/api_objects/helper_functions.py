@@ -8,6 +8,31 @@ import logging
 logging.debug(f"In the {__name__} module.")
 
 
+def true_false_checker(value):
+    if type(value) is str:
+        value = value.lower()
+        if value == "true":
+            return True
+        elif value == "false":
+            return False
+    elif type(value) is int:
+        if value == 1:
+            logging.warning(
+                f"Value, {value}, should be True or False.  Assuming you meant True."
+            )
+            return True
+        elif value == 0:
+            logging.warning(
+                f"Value, {value}, should be True or False.  Assuming you meant False."
+            )
+            return False
+    elif type(value) is bool:
+        return value
+
+    logging.warning(f"Invalid value: '{value}'. Should be True or False")
+    return value
+
+
 def syntax_correcter(value, permitted_syntax="""[.\w\d_\-]""", replacer="_"):
     """
     Check 'value' for invalid characters (identified by 'permitted_syntax') and replace them with 'replacer'.

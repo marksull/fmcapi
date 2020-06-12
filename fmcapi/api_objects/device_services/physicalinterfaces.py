@@ -15,7 +15,6 @@ class PhysicalInterfaces(APIClassTemplate):
         "name",
         "mode",
         "enabled",
-        "hardware",
         "MTU",
         "managementOnly",
         "ifname",
@@ -26,7 +25,7 @@ class PhysicalInterfaces(APIClassTemplate):
         "activeMACAddress",
         "standbyMACAddress",
     ]
-    VALID_FOR_KWARGS = VALID_JSON_DATA + ["device_name"]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ["device_name", "hardware"]
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-\/\. ]"""
     PREFIX_URL = "/devices/devicerecords"
     URL_SUFFIX = None
