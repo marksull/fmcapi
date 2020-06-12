@@ -19,6 +19,9 @@ from fmcapi.api_objects.helper_functions import (
 )
 from fmcapi.api_objects.object_services.applications import Applications
 from fmcapi.api_objects.object_services.applicationfilters import ApplicationFilters
+from fmcapi.api_objects.object_services.urlgroups import URLGroups
+from fmcapi.api_objects.object_services.urls import URLs
+from fmcapi.api_objects.object_services.urlcategories import URLCategories
 import logging
 import sys
 import warnings
@@ -1241,6 +1244,85 @@ class AccessRules(APIClassTemplate):
                 del self.applications
                 logging.info("All Applications removed from this AccessRules object.")
 
+    def urls_info(self, action, name=""):
+            """
+            Add/modify name to URLs field of AccessRules object.
+            :param action: (str) 'add', 'remove', or 'clear'
+            :param name: (str) Name of URLs in FMC.
+            :return: None
+            """
+            logging.debug("In urls() for AccessRules class.")
+            if action == "add":
+               urlobj_json = URLs(fmc=self.fmc)
+               urlobj_json.get(name=name)
+               if "id" in urlobj_json.__dict__:
+                    item = urlobj_json
+               else:
+                    item = URLGroups(fmc=self.fmc)
+                    item.get(name=name)
+               if "id" in item.__dict__:	
+                   if "urls" in self.__dict__:
+                       new_url = {"name": item.name, "id": item.id}
+                       duplicate = False
+                       if "objects" not in self.urls:
+                           self.__dict__["urls"]["objects"] = []
+                       for obj in self.urls["objects"]:
+                           if obj["name"] == new_url["name"]:
+                               duplicate = True
+                               break
+                       if not duplicate:
+                          self.urls["objects"].append(new_url)
+                          logging.info(
+                                f'Adding URLs "{name}" to URLs for this AccessRules.'
+                            )
+                   else:
+                        self.urls = {
+                           "objects": [
+                                {"name": item.name, "id": item.id}
+                            ]
+                        }
+                        logging.info(
+                            f'Adding URLs "{name}" to URLs for this AccessRules.'
+                        )
+               else:
+                    logging.warning(
+                        f'URL Object or URL Object Group: "{name}", '
+                        f"not found.  Cannot add to AccessRules."
+                    )
+            elif action == "remove":
+                 urlobj_json = URLs(fmc=self.fmc)
+                 urlobj_json.get(name=name)
+                 if "id" in urlobj_json.__dict__:
+                     item = urlobj_json
+                 else:
+                     item = URLGroups(fmc=self.fmc)
+                     item.get(name=name)
+                 if "id" in item.__dict__:	
+                     if "urls" in self.__dict__:
+                            objects = []
+                     for obj in self.urls["objects"]:
+                            if obj["name"] != name:
+                                objects.append(obj)
+                            self.urls["objects"] = objects
+                            logging.info(
+                                f'Removed URLs "{name}" from URLs for this AccessRules.'
+                            )
+                     else:
+                        logging.info(
+                            "URLs doesn't exist for this AccessRules.  Nothing to remove."
+                        )
+                 else:
+                    logging.warning(
+                        f'URL Object or URL Object Group: "{name}", '
+                        f"not found.  Cannot add to AccessRules."
+                    )
+            elif action == "clear":
+                  if "urls" in self.__dict__:
+                      del self.urls
+                      logging.info(
+                            "All URLs removed from this AccessRules object."
+                        )
+                                
 
 class ACPRule(AccessRules):
     """
