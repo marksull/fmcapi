@@ -101,7 +101,7 @@ def test__acp_rule(fmc):
     acprule1.destination_network(action="add", name=ipnet1.name)
     acprule1.destination_network(action="add", name=iprange1.name)
     acprule1.destination_network(action="add", name=fqdns1.name)
-    acprule1.urls(action="add",name=url1.name)
+    acprule1.urls_info(action="add",name=url1.name)
     # acprule1.file_policy(action='set', name=fp.name)
     acprule1.post()
 
