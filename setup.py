@@ -39,7 +39,7 @@ setup(
     keywords="fmcapi fmc ftd security cisco ngfw api firepower",
     packages=find_packages(exclude=["docs", "tests*"]),
     install_requires=["requests", "datetime", "ipaddress"],
-    python_requires=">=3",
+    python_requires=">=3.6",
     package_data={},
     data_files=None,
 )
