@@ -65,6 +65,7 @@ class AccessRules(APIClassTemplate):
         "insertBefore",
         "insertAfter",
         "section",
+        "category",
     ]
     PREFIX_URL = "/policy/accesspolicies"
     REQUIRED_FOR_POST = ["name", "acp_id"]

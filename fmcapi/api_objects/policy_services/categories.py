@@ -1,5 +1,3 @@
 """
-Not yet implemented.
-
-added FMC v6.5.0
+Category functions are embedded into the AccessRules class.
 """
