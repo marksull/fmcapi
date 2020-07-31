@@ -155,6 +155,8 @@ from .update_packages.upgradepackages import UpgradePackages
 from .update_packages.upgradepackages import UpgradePackage
 from .update_packages.upgradepackage import Upgrades
 
+from .policy_services.loggingsettings import LoggingSettings
+
 logging.debug("In the api_objects __init__.py file.")
 
 __all__ = [
@@ -292,4 +294,5 @@ __all__ = [
     "UpgradePackages",
     "UpgradePackage",
     "Upgrades",
+    "LoggingSettings"
 ]
