@@ -294,5 +294,5 @@ __all__ = [
     "UpgradePackages",
     "UpgradePackage",
     "Upgrades",
-    "LoggingSettings"
+    "LoggingSettings",
 ]

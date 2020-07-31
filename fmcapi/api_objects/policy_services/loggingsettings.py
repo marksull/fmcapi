@@ -24,13 +24,14 @@ class LoggingSettings(APIClassTemplate):
     """
     The LoggingSettings object in the FMC
     """
+
     VALID_JSON_DATA = [
         "enableFileAndMalwareSyslog",
         "fileAndMalwareSyslogSeverity",
         "syslogConfigFromPlatformSetting",
         "severityForPlatformSettingSyslogConfig",
         "type",
-        "id"
+        "id",
     ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     VALID_SEVERITY = [
@@ -41,7 +42,7 @@ class LoggingSettings(APIClassTemplate):
         "ERR",
         "INFO",
         "NOTICE",
-        "WARNING"
+        "WARNING",
     ]
     REQUIRED_FOR_PUT = ["id", "type"]
     REQUIRED_FOR_GET = ["acp_id"]
@@ -73,7 +74,8 @@ class LoggingSettings(APIClassTemplate):
                 self.acp_id = acp.id
             else:
                 logging.warning(
-                    f"Access Control Policy {kwargs['name']} not found.  Cannot set up logging for ACP.")
+                    f"Access Control Policy {kwargs['name']} not found.  Cannot set up logging for ACP."
+                )
         else:
             logging.error("No accessPolicy name or ID was provided.")
 
@@ -86,7 +88,9 @@ class LoggingSettings(APIClassTemplate):
     def get(self):
         for item in self.REQUIRED_FOR_GET:
             if not hasattr(self, item):
-                logging.warning(f"Unable to perform operation due to missing attribute: {item}")
+                logging.warning(
+                    f"Unable to perform operation due to missing attribute: {item}"
+                )
                 return
         self.set_url()
         response = self.fmc.send_to_api(method="get", url=self.URL)
