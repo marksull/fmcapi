@@ -141,6 +141,14 @@ class AccessRules(APIClassTemplate):
     def sendEventsToFMC(self, value=False):
         self._sendEventsToFMC = true_false_checker(value)
 
+    @property
+    def enableSyslog(self):
+        return self._enableSyslog
+
+    @enableSyslog.setter
+    def enableSyslog(self, value=False):
+        self._enableSyslog = true_false_checker(value)
+
     def __init__(self, fmc, **kwargs):
         """
         Initialize AccessRules object.
@@ -154,10 +162,11 @@ class AccessRules(APIClassTemplate):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for AccessRules class.")
         self.type = "AccessRule"
-        self.enabled = False
-        self.logBegin = False
-        self.logEnd = False
-        self.sendEventsToFMC = False
+        self._enabled = False
+        self._logBegin = False
+        self._logEnd = False
+        self._sendEventsToFMC = False
+        self._enableSyslog = False
         self.parse_kwargs(**kwargs)
         self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
@@ -226,8 +235,16 @@ class AccessRules(APIClassTemplate):
                     self.destinationNetworks["literals"][literal["value"]] = literal[
                         "type"
                     ]
-        # Check if suffix should be added to URL
-        # self.url_suffix()
+        if "enableSyslog" in kwargs:
+            self.enableSyslog = kwargs["enableSyslog"]
+        if "logBegin" in kwargs:
+            self.logBegin = kwargs["logBegin"]
+        if "logEnd" in kwargs:
+            self.logEnd = kwargs["logEnd"]
+        if "enabled" in kwargs:
+            self.enableSyslog = kwargs["enabled"]
+        if "sendEventsToFMC" in kwargs:
+            self.sendEventsToFMC = kwargs["sendEventsToFMC"]
 
     def acp(self, name="", id=""):
         """
