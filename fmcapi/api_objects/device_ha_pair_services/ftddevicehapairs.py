@@ -1,7 +1,7 @@
 """FTDDeviceHAPairs Classes."""
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
-from fmcapi.api_objects.device_services.devicerecords import Device
+from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 import logging
 import warnings
 
@@ -44,9 +44,9 @@ class FTDDeviceHAPairs(APIClassTemplate):
         :return: None
         """
         logging.debug("In device() for FTDDeviceHAPairs class.")
-        primary = Device(fmc=self.fmc)
+        primary = DeviceRecords(fmc=self.fmc)
         primary.get(name=primary_name)
-        secondary = Device(fmc=self.fmc)
+        secondary = DeviceRecords(fmc=self.fmc)
         secondary.get(name=secondary_name)
         if "id" in primary.__dict__:
             self.primary_id = primary.id
@@ -69,7 +69,7 @@ class FTDDeviceHAPairs(APIClassTemplate):
         :return: None
         """
         logging.debug("In primary() for FTDDeviceHAPairs class.")
-        primary = Device(fmc=self.fmc)
+        primary = DeviceRecords(fmc=self.fmc)
         primary.get(name=name)
         if "id" in primary.__dict__:
             self.primary = {"id": primary.id}
@@ -86,7 +86,7 @@ class FTDDeviceHAPairs(APIClassTemplate):
         :return: None
         """
         logging.debug("In secondary() for DeviceHAPairs class.")
-        secondary = Device(fmc=self.fmc)
+        secondary = DeviceRecords(fmc=self.fmc)
         secondary.get(name=name)
         if "id" in secondary.__dict__:
             self.secondary = {"id": secondary.id}
