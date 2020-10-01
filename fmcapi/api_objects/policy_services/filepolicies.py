@@ -7,7 +7,7 @@ import logging
 class FilePolicies(APIClassTemplate):
     """The File Policy Object in the FMC."""
 
-    VALID_JSON_DATA = ["id", "name"]
+    VALID_JSON_DATA = ["id", "name", "type"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = "/policy/filepolicies"
 
