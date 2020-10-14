@@ -58,6 +58,8 @@ class AccessRules(APIClassTemplate):
         "sourceSecurityGroupTags",
         "destinationSecurityGroupTags",
         "enableSyslog",
+        "newComments",
+        "commentHistoryList"
     ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + [
         "acp_id",
@@ -149,6 +151,10 @@ class AccessRules(APIClassTemplate):
     def enableSyslog(self, value=False):
         self._enableSyslog = true_false_checker(value)
 
+    @property
+    def newComments(self):
+        return self._newComments
+
     def __init__(self, fmc, **kwargs):
         """
         Initialize AccessRules object.
@@ -167,6 +173,7 @@ class AccessRules(APIClassTemplate):
         self._logEnd = False
         self._sendEventsToFMC = False
         self._enableSyslog = False
+        self._newComments = []
         self.parse_kwargs(**kwargs)
         self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
@@ -245,6 +252,8 @@ class AccessRules(APIClassTemplate):
             self.enableSyslog = kwargs["enabled"]
         if "sendEventsToFMC" in kwargs:
             self.sendEventsToFMC = kwargs["sendEventsToFMC"]
+        if "commentHistoryList" in kwargs:
+            self.commentHistoryList = kwargs["commentHistoryList"]
 
     def acp(self, name="", id=""):
         """
@@ -1332,6 +1341,20 @@ class AccessRules(APIClassTemplate):
             if "urls" in self.__dict__:
                 del self.urls
                 logging.info("All URLs removed from this AccessRules object.")
+
+    def new_comments(self, action, value):
+        """
+        Add a comment to the comment list
+        Args:
+            action (str): Add, remove or clear
+            value (str): Comment value to add
+        """
+        if action == "add":
+            self._newComments.append(value)
+        if action == "remove":
+            self._newComments.remove(value)
+        if action == "clear":
+            self._newComments = []
 
 
 class ACPRule(AccessRules):
