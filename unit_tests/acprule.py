@@ -101,8 +101,12 @@ def test__acp_rule(fmc):
     acprule1.destination_network(action="add", name=ipnet1.name)
     acprule1.destination_network(action="add", name=iprange1.name)
     acprule1.destination_network(action="add", name=fqdns1.name)
-    acprule1.urls_info(action="add",name=url1.name)
-    # acprule1.file_policy(action='set', name=fp.name)
+    acprule1.urls_info(action="add", name=url1.name)
+
+    # To set a comment on an ACP rule, you use the new_comments function which sets "newComments" in the API POST call
+    # To read comments, you read the "commentHistoryList" from the API GET call
+    # Just another one of those strange quirks of the FMC API
+    acprule1.new_comments(action="add", value="comment-1")
     acprule1.post()
 
     logging.info("Test ACPRule done.\n")
