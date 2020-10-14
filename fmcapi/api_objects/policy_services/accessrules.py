@@ -59,7 +59,7 @@ class AccessRules(APIClassTemplate):
         "destinationSecurityGroupTags",
         "enableSyslog",
         "newComments",
-        "commentHistoryList"
+        "commentHistoryList",
     ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + [
         "acp_id",
