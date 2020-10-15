@@ -249,7 +249,7 @@ class AccessRules(APIClassTemplate):
         if "logEnd" in kwargs:
             self.logEnd = kwargs["logEnd"]
         if "enabled" in kwargs:
-            self.enableSyslog = kwargs["enabled"]
+            self.enabled = kwargs["enabled"]
         if "sendEventsToFMC" in kwargs:
             self.sendEventsToFMC = kwargs["sendEventsToFMC"]
         if "commentHistoryList" in kwargs:
