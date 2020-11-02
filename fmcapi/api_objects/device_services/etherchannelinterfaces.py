@@ -50,7 +50,7 @@ class EtherchannelInterfaces(APIClassTemplate):
     VALID_FOR_IPV4 = ["static", "dhcp", "pppoe"]
     VALID_FOR_MODE = ["INLINE", "PASSIVE", "TAP", "ERSPAN", "NONE"]
     VALID_FOR_LACP_MODE = ["ACTIVE", "PASSIVE", "ON"]
-    VALID_FOR_MTU = range(64, 9000)
+    VALID_FOR_MTU = range(64, 9085)
     VALID_FOR_LOAD_BALANCING = (
         []
     )  # Not sure what to put here but it was an unresolved variable later in this code.
