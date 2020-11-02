@@ -42,7 +42,7 @@ class BridgeGroupInterfaces(APIClassTemplate):
     REQUIRED_FOR_PUT = ["id", "device_id"]
     VALID_FOR_IPV4 = ["static", "dhcp", "pppoe"]
     VALID_FOR_MODE = ["INLINE", "PASSIVE", "TAP", "ERSPAN", "NONE"]
-    VALID_FOR_MTU = range(64, 9000)
+    VALID_FOR_MTU = range(64, 9085)
 
     def __init__(self, fmc, **kwargs):
         """
