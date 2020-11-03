@@ -155,6 +155,10 @@ class AccessRules(APIClassTemplate):
     def newComments(self):
         return self._newComments
 
+    @property
+    def commentHistoryList(self):
+        return self._commentHistoryList
+
     def __init__(self, fmc, **kwargs):
         """
         Initialize AccessRules object.
@@ -174,6 +178,7 @@ class AccessRules(APIClassTemplate):
         self._sendEventsToFMC = False
         self._enableSyslog = False
         self._newComments = []
+        self._commentHistoryList = []
         self.parse_kwargs(**kwargs)
         self.URL = f"{self.URL}{self.URL_SUFFIX}"
 
@@ -252,8 +257,10 @@ class AccessRules(APIClassTemplate):
             self.enabled = kwargs["enabled"]
         if "sendEventsToFMC" in kwargs:
             self.sendEventsToFMC = kwargs["sendEventsToFMC"]
+        if "newComments" in kwargs:
+            self._newComments = kwargs["newComments"]
         if "commentHistoryList" in kwargs:
-            self.commentHistoryList = kwargs["commentHistoryList"]
+            self._commentHistoryList = kwargs["commentHistoryList"]
 
     def acp(self, name="", id=""):
         """
