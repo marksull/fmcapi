@@ -257,6 +257,8 @@ class AccessRules(APIClassTemplate):
             self.enabled = kwargs["enabled"]
         if "sendEventsToFMC" in kwargs:
             self.sendEventsToFMC = kwargs["sendEventsToFMC"]
+        if "newComments" in kwargs:
+            self._newComments = kwargs["newComments"]
         if "commentHistoryList" in kwargs:
             self._commentHistoryList = kwargs["commentHistoryList"]
 
