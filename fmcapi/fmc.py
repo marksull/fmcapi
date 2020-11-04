@@ -281,7 +281,7 @@ class FMC(object):
                     more_items=self.more_items,
                 )
             else:
-                json_response["items"] += self.more_items
+                json_response["items"] = self.more_items + json_response["items"]
                 self.more_items = []
                 return json_response
         except KeyError:
