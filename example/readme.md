@@ -9,7 +9,8 @@ to the FMC some other way (maybe the Ansible FTD modules?).
 ## Logic and Data
 ### Mixing logic (aka code) and data
 When we first started this example we would program the python script (the logic) and reference the data directly in the script.
-You can find that code in the 'mixed_logic_and_data' directory.
+You can find that code in the [mixed_logic_and_data](https://github.com/daxm/example/mixed_logic_and_data/readme.md
+) directory.
 Pros:
 *  Data added/gathered earlier in the python script can be referenced (less data duplication via reference).
 *  The script can be "read" and you can pretty much see when/where data is being used.
@@ -21,7 +22,9 @@ Cons:
 
 ### Separating logic and data
 The "new" way to write code is to separate the logic from the data.  This means importing a "data file" to be run against the code.
-You can find that code example in the 'logic_separate_from_data' directory.  (The program_logic.py is the Python script to run.  
+You can find that code example in the [logic_separate_from_data](./logic_separate_from_data/readme.md)
+) directory.  (The program_logic.py is the Python
+ script to run.  
 It references the userdata.yml file for it's content.)
 Pros:
 *  With data and logic separated the data can be "switched out" quickly with out having to read/modify the code.
