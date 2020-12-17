@@ -141,9 +141,7 @@ class FMC(object):
 
             return self
         else:
-            logging.info(
-                "User authentication failed."
-            )
+            logging.info("User authentication failed.")
             exit(1)
 
     def __exit__(self, *args):
@@ -476,10 +474,14 @@ class Token(object):
         :return self.access_token
         """
         logging.debug("In the Token get_token() class method.")
-        if datetime.datetime.now() > (
-            self.token_creation_time
-            + datetime.timedelta(seconds=self.TOKEN_REFRESH_TIME)
-        ) or self.access_token == None:
+        if (
+            datetime.datetime.now()
+            > (
+                self.token_creation_time
+                + datetime.timedelta(seconds=self.TOKEN_REFRESH_TIME)
+            )
+            or self.access_token == None
+        ):
             logging.info("Token expired.  Generating a new token.")
             self.token_refreshes = 0
             self.access_token = None

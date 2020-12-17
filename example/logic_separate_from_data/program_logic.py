@@ -45,9 +45,13 @@ def program_fmc(data_vars, path):
                 else:
                     logging.info("'networks' section not in YAML file.  Skipping.")
                 if "access_policies" in data_vars:
-                    create_access_policies(fmc=fmc1, acp_list=data_vars["access_policies"])
+                    create_access_policies(
+                        fmc=fmc1, acp_list=data_vars["access_policies"]
+                    )
                 else:
-                    logging.info("'access_policies' section not in YAML file.  Skipping.")
+                    logging.info(
+                        "'access_policies' section not in YAML file.  Skipping."
+                    )
                 if "nat_policies" in data_vars:
                     create_nat_policies(fmc=fmc1, nat_list=data_vars["nat_policies"])
                 else:
