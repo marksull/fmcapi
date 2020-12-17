@@ -18,6 +18,7 @@ from .api_objects import AuditRecords
 from .api_objects import ServerVersion
 from .api_objects import DeployableDevices
 from .api_objects import DeploymentRequests
+from sys import exit
 
 # Disable annoying HTTP warnings
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -130,14 +131,20 @@ class FMC(object):
             verify_cert=self.VERIFY_CERT,
         )
         self.uuid = self.mytoken.uuid
-        self.build_urls()
+        if self.mytoken.access_token:
+            self.build_urls()
 
-        version = ServerVersion(fmc=self)
-        version.get()
-        self.serverVersion = version.serverVersion
-        logging.info(f"This FMC's version is {self.serverVersion}")
+            version = ServerVersion(fmc=self)
+            version.get()
+            self.serverVersion = version.serverVersion
+            logging.info(f"This FMC's version is {self.serverVersion}")
 
-        return self
+            return self
+        else:
+            logging.info(
+                "User authentication failed."
+            )
+            exit(1)
 
     def __exit__(self, *args):
         """
@@ -238,6 +245,7 @@ class FMC(object):
                     time.sleep(self.TOO_MANY_CONNECTIONS_TIMEOUT)
                 if status_code == 401:
                     logging.warning("Token has expired. Trying to refresh.")
+                    self.mytoken.access_token = None
                     self.mytoken.access_token = self.mytoken.get_token()
                     headers = {
                         "Content-Type": "application/json",
@@ -449,16 +457,17 @@ class Token(object):
         self.access_token = response.headers.get("X-auth-access-token")
         self.refresh_token = response.headers.get("X-auth-refresh-token")
         self.uuid = response.headers.get("DOMAIN_UUID")
-        all_domain = json.loads(response.headers.get("DOMAINS"))
-        if self.__domain is not None:
-            for domain in all_domain:
-                if "global/" + self.__domain.lower() == domain["name"].lower():
-                    logging.info(f"Domain set to {domain['name']}")
-                    self.uuid = domain["uuid"]
-                else:
-                    logging.info(
-                        "Domain name entered not found in FMC, falling back to Global"
-                    )
+        if self.access_token:
+            all_domain = json.loads(response.headers.get("DOMAINS"))
+            if self.__domain is not None:
+                for domain in all_domain:
+                    if "global/" + self.__domain.lower() == domain["name"].lower():
+                        logging.info(f"Domain set to {domain['name']}")
+                        self.uuid = domain["uuid"]
+                    else:
+                        logging.info(
+                            "Domain name entered not found in FMC, falling back to Global"
+                        )
 
     def get_token(self):
         """
@@ -470,7 +479,7 @@ class Token(object):
         if datetime.datetime.now() > (
             self.token_creation_time
             + datetime.timedelta(seconds=self.TOKEN_REFRESH_TIME)
-        ):
+        ) or self.access_token == None:
             logging.info("Token expired.  Generating a new token.")
             self.token_refreshes = 0
             self.access_token = None
