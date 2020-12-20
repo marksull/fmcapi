@@ -21,10 +21,8 @@ from fmcapi.api_objects.object_services.applications import Applications
 from fmcapi.api_objects.object_services.applicationfilters import ApplicationFilters
 from fmcapi.api_objects.object_services.urlgroups import URLGroups
 from fmcapi.api_objects.object_services.urls import URLs
-from fmcapi.api_objects.object_services.urlcategories import URLCategories
 import logging
 import sys
-import warnings
 
 
 class AccessRules(APIClassTemplate):
@@ -1362,19 +1360,6 @@ class AccessRules(APIClassTemplate):
             self._newComments.remove(value)
         if action == "clear":
             self._newComments = []
-
-
-class ACPRule(AccessRules):
-    """
-    Dispose of this Class after 20210101.
-
-    Use AccessRules() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn("Deprecated: ACPRule() should be called via AccessRules().")
-        super().__init__(fmc, **kwargs)
 
 
 class Bulk(object):

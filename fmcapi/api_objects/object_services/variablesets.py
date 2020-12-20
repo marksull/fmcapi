@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class VariableSets(APIClassTemplate):
@@ -38,16 +37,3 @@ class VariableSets(APIClassTemplate):
         """DELETE method for API for VariableSets not supported."""
         logging.info("DELETE method for API for VariableSets not supported.")
         pass
-
-
-class VariableSet(VariableSets):
-    """
-    Dispose of this Class after 20210101.
-
-    Use VariableSets() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn("Deprecated: VariableSet() should be called via VariableSets().")
-        super().__init__(fmc, **kwargs)

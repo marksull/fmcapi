@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class ApplicationProductivities(APIClassTemplate):
@@ -41,18 +40,3 @@ class ApplicationProductivities(APIClassTemplate):
             "DELETE method for API for ApplicationProductivities not supported."
         )
         pass
-
-
-class ApplicationProductivity(ApplicationProductivities):
-    """
-    Dispose of this Class after 20210101.
-
-    Use ApplicationProductivities() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: ApplicationProductivity() should be called via ApplicationProductivities()."
-        )
-        super().__init__(fmc, **kwargs)

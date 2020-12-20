@@ -6,7 +6,6 @@ from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
 from fmcapi.api_objects.object_services.hosts import Hosts
 from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
 import logging
-import warnings
 
 
 class IPv6StaticRoutes(APIClassTemplate):
@@ -175,18 +174,3 @@ class IPv6StaticRoutes(APIClassTemplate):
             logging.warning(
                 f'Network "{name}" not found.  Cannot set up device for IPv6StaticRoute.'
             )
-
-
-class IPv6StaticRoute(IPv6StaticRoutes):
-    """
-    Dispose of this Class after 20210101.
-
-    Use IPv6StaticRoutes() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: IPv6StaticRoute() should be called via IPv6StaticRoutes()."
-        )
-        super().__init__(fmc, **kwargs)

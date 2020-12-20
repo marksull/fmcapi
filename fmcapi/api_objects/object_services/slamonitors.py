@@ -3,7 +3,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .securityzones import SecurityZones
 import logging
-import warnings
 
 
 class SLAMonitors(APIClassTemplate):
@@ -69,16 +68,3 @@ class SLAMonitors(APIClassTemplate):
             logging.warning(
                 f'No valid Security Zones found: "{names}".  Cannot add to SLAMonitosr.'
             )
-
-
-class SLAMonitor(SLAMonitors):
-    """
-    Dispose of this Class after 20210101.
-
-    Use SLAMonitors() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn("Deprecated: SLAMonitor() should be called via SLAMonitors().")
-        super().__init__(fmc, **kwargs)

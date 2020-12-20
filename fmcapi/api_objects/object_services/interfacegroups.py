@@ -3,7 +3,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.device_services.physicalinterfaces import PhysicalInterfaces
 import logging
-import warnings
 
 
 class InterfaceGroups(APIClassTemplate):
@@ -97,18 +96,3 @@ class InterfaceGroups(APIClassTemplate):
                 logging.info(
                     "All PhysicalInterfaces removed from this InterfaceGroups."
                 )
-
-
-class InterfaceGroup(InterfaceGroups):
-    """
-    Dispose of this Class after 20210101.
-
-    Use InterfaceGroups() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: InterfaceGroup() should be called via InterfaceGroups()."
-        )
-        super().__init__(fmc, **kwargs)

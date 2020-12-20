@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class Countries(APIClassTemplate):
@@ -42,16 +41,3 @@ class Countries(APIClassTemplate):
         """DELETE method for API for Countries not supported."""
         logging.info("DELETE method for API for Countries not supported.")
         pass
-
-
-class Country(Countries):
-    """
-    Dispose of this Class after 20210101.
-
-    Use Countries() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn("Deprecated: Country() should be called via Countries().")
-        super().__init__(fmc, **kwargs)

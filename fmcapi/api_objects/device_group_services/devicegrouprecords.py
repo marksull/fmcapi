@@ -4,7 +4,6 @@ from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 from fmcapi.api_objects.device_ha_pair_services.ftddevicehapairs import FTDDeviceHAPairs
 import logging
-import warnings
 
 
 class DeviceGroupRecords(APIClassTemplate):
@@ -106,18 +105,3 @@ class DeviceGroupRecords(APIClassTemplate):
                 logging.info(
                     "All device records removed from this DeviceGroupRecords object."
                 )
-
-
-class DeviceGroups(DeviceGroupRecords):
-    """
-    Dispose of this Class after 20210101.
-
-    Use DeviceGroupRecords() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: DeviceGroups() should be called via DeviceGroupRecords()."
-        )
-        super().__init__(fmc, **kwargs)

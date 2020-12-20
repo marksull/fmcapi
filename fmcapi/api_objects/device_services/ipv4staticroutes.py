@@ -7,7 +7,6 @@ from fmcapi.api_objects.object_services.slamonitors import SLAMonitors
 from fmcapi.api_objects.object_services.hosts import Hosts
 from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
 import logging
-import warnings
 
 
 class IPv4StaticRoutes(APIClassTemplate):
@@ -197,18 +196,3 @@ class IPv4StaticRoutes(APIClassTemplate):
             logging.warning(
                 f"Object {name} not found.  Cannot set up device for IPv4StaticRoute."
             )
-
-
-class IPv4StaticRoute(IPv4StaticRoutes):
-    """
-    Dispose of this Class after 20210101.
-
-    Use IPv4StaticRoutes() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: IPv4StaticRoute() should be called via IPv4StaticRoutes()."
-        )
-        super().__init__(fmc, **kwargs)

@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class SecurityZones(APIClassTemplate):
@@ -45,18 +44,3 @@ class SecurityZones(APIClassTemplate):
             self.interfaceMode = kwargs["interfaceMode"]
         else:
             self.interfaceMode = "ROUTED"
-
-
-class SecurityZone(SecurityZones):
-    """
-    Dispose of this Class after 20210101.
-
-    Use SecurityZones() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: SecurityZone() should be called via SecurityZones()."
-        )
-        super().__init__(fmc, **kwargs)

@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class ProtocolPortObjects(APIClassTemplate):
@@ -24,18 +23,3 @@ class ProtocolPortObjects(APIClassTemplate):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for ProtocolPortObjects class.")
         self.parse_kwargs(**kwargs)
-
-
-class ProtocolPort(ProtocolPortObjects):
-    """
-    Dispose of this Class after 20210101.
-
-    Use ProtocolPortObjects() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: ProtocolPort() should be called via ProtocolPortObjects()."
-        )
-        super().__init__(fmc, **kwargs)

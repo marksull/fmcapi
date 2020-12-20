@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class PreFilterPolicies(APIClassTemplate):
@@ -68,18 +67,3 @@ class PreFilterPolicies(APIClassTemplate):
         """PUT method for API for PreFilterPolicies not supported."""
         logging.info("PUT method for API for PreFilterPolicies not supported.")
         pass
-
-
-class PreFilterPolicy(PreFilterPolicies):
-    """
-    Dispose of this Class after 20210101.
-
-    Use PreFilterPolicies() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: PreFilterPolicy() should be called via PreFilterPolicies()."
-        )
-        super().__init__(fmc, **kwargs)

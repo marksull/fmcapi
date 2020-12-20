@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class CertEnrollments(APIClassTemplate):
@@ -38,18 +37,3 @@ class CertEnrollments(APIClassTemplate):
         """DELETE method for API for CertEnrollments not supported."""
         logging.info("DELETE method for API for CertEnrollments not supported.")
         pass
-
-
-class CertEnrollment(CertEnrollments):
-    """
-    Dispose of this Class after 20210101.
-
-    Use CertEnrollments() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: CertEnrollment() should be called via CertEnrollments()."
-        )
-        super().__init__(fmc, **kwargs)

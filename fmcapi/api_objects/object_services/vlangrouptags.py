@@ -4,7 +4,6 @@ from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .vlantags import VlanTags
 from fmcapi.api_objects.helper_functions import validate_vlans
 import logging
-import warnings
 
 
 class VlanGroupTags(APIClassTemplate):
@@ -130,18 +129,3 @@ class VlanGroupTags(APIClassTemplate):
             if "literals" in self.__dict__:
                 del self.literals
                 logging.info("All unnamed_vlantags removed from this VlanGroupTags.")
-
-
-class VlanGroupTag(VlanGroupTags):
-    """
-    Dispose of this Class after 20210101.
-
-    Use VlanGroupTags() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: VlanGroupTag() should be called via VlanGroupTags()."
-        )
-        super().__init__(fmc, **kwargs)

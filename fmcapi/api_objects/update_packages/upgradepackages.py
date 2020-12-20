@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class UpgradePackages(APIClassTemplate):
@@ -37,18 +36,3 @@ class UpgradePackages(APIClassTemplate):
         """PUT method for API for UpgradePackages not supported."""
         logging.info("PUT method for API for UpgradePackages not supported.")
         pass
-
-
-class UpgradePackage(UpgradePackages):
-    """
-    Dispose of this Class after 20210101.
-
-    Use UpgradePackages() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: UpgradePackage() should be called via UpgradePackages()."
-        )
-        super().__init__(fmc, **kwargs)

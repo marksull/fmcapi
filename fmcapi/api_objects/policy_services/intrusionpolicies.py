@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class IntrusionPolicies(APIClassTemplate):
@@ -39,18 +38,3 @@ class IntrusionPolicies(APIClassTemplate):
         """DELETE method for API for IntrusionPolicies not supported."""
         logging.info("DELETE method for API for IntrusionPolicies not supported.")
         pass
-
-
-class IntrusionPolicy(IntrusionPolicies):
-    """
-    Dispose of this Class after 20210101.
-
-    Use IntrusionPolicies() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: IntrusionPolicy() should be called via IntrusionPolicies()."
-        )
-        super().__init__(fmc, **kwargs)

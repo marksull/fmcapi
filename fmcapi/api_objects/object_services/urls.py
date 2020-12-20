@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class URLs(APIClassTemplate):
@@ -24,16 +23,3 @@ class URLs(APIClassTemplate):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for URLs class.")
         self.parse_kwargs(**kwargs)
-
-
-class URL(URLs):
-    """
-    Dispose of this Class after 20210101.
-
-    Use URLs() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn("Deprecated: URL() should be called via URLs().")
-        super().__init__(fmc, **kwargs)

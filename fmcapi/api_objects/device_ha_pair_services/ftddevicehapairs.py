@@ -3,7 +3,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 import logging
-import warnings
 
 
 class FTDDeviceHAPairs(APIClassTemplate):
@@ -151,18 +150,3 @@ class FTDDeviceHAPairs(APIClassTemplate):
         # Attempting to "Deploy" during Device registration causes issues.
         self.fmc.autodeploy = False
         return super().put(**kwargs)
-
-
-class DeviceHAPairs(FTDDeviceHAPairs):
-    """
-    Dispose of this Class after 20210101.
-
-    Use FTDDeviceHAPairs() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: DeviceHAPairs() should be called via FTDDeviceHAPairs()."
-        )
-        super().__init__(fmc, **kwargs)

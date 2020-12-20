@@ -5,7 +5,6 @@ from fmcapi.api_objects.policy_services.accesspolicies import AccessPolicies
 from fmcapi.api_objects.status_services import TaskStatuses
 import time
 import logging
-import warnings
 
 
 class DeviceRecords(APIClassTemplate):
@@ -200,16 +199,3 @@ class DeviceRecords(APIClassTemplate):
         )
         time.sleep(self.post_wait_time)
         return response
-
-
-class Device(DeviceRecords):
-    """
-    Dispose of this Class after 20210101.
-
-    Use DeviceRecords() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn("Deprecated: Device() should be called via DeviceRecords().")
-        super().__init__(fmc, **kwargs)

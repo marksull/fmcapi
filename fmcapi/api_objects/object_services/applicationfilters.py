@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class ApplicationFilters(APIClassTemplate):
@@ -46,18 +45,3 @@ class ApplicationFilters(APIClassTemplate):
         """DELETE method for API for ApplicationFilters not supported."""
         logging.info("DELETE method for API for ApplicationFilters not supported.")
         pass
-
-
-class ApplicationFilter(ApplicationFilters):
-    """
-    Dispose of this Class after 20210101.
-
-    Use ApplicationFilters() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: ApplicationFilter() should be called via ApplicationFilters()."
-        )
-        super().__init__(fmc, **kwargs)

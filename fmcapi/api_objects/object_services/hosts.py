@@ -3,7 +3,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.helper_functions import *
 import logging
-import warnings
 
 
 class Hosts(APIClassTemplate):
@@ -48,16 +47,3 @@ class Hosts(APIClassTemplate):
                 logging.error(
                     f"Provided value, {kwargs['value']}, has an error with the IP address(es)."
                 )
-
-
-class IPHost(Hosts):
-    """
-    Dispose of this Class after 20210101.
-
-    Use Hosts() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn("Deprecated: IPHost() should be called via Hosts().")
-        super().__init__(fmc, **kwargs)

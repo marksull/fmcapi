@@ -13,10 +13,7 @@ import json
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import logging
 from logging.handlers import RotatingFileHandler
-import warnings
-from .api_objects import AuditRecords
 from .api_objects import ServerVersion
-from .api_objects import DeployableDevices
 from .api_objects import DeploymentRequests
 from sys import exit
 
@@ -293,70 +290,6 @@ class FMC(object):
         except KeyError:
             # Used only when the response only has "one page" of results.
             return json_response
-
-    def serverversion(self):
-        """Dispose of this method after 20210101.  Use ServerVersion() instead."""
-        warnings.warn(
-            "Deprecated: fmc.serverversion() should be called via ServerVersion() instead."
-        )
-        tmp = ServerVersion(fmc=self)
-        return tmp.get()
-
-    def version(self):
-        """Dispose of this method after 20210101.  Use ServerVersion() instead."""
-        warnings.warn(
-            "Deprecated: fmc.version() should be called via ServerVersion() instead."
-        )
-        tmp = ServerVersion(fmc=self)
-        return tmp.get()
-
-    def auditrecords(self):
-        """Dispose of this method after 20210101.  Use AuditRecords() instead."""
-        warnings.warn(
-            "Deprecated: fmc.auditrecords() should be called via AuditRecords() instead."
-        )
-        tmp = AuditRecords(fmc=self)
-        return tmp.get()
-
-    def audit(self):
-        """Dispose of this method after 20210101.  Use AuditRecords() instead."""
-        warnings.warn(
-            "Deprecated: fmc.audit() should be called via AuditRecords() instead."
-        )
-        tmp = AuditRecords(fmc=self)
-        return tmp.get()
-
-    def deployabledevices(self):
-        """Dispose of this method after 20210101.  Use DeployableDevices() instead."""
-        warnings.warn(
-            "Deprecated: fmc.deployabledevices() should be called via DeployableDevices() instead."
-        )
-        tmp = DeployableDevices(fmc=self)
-        return tmp.get()
-
-    def get_deployable_devices(self):
-        """Dispose of this method after 20210101.  Use DeployableDevices() instead."""
-        warnings.warn(
-            "Deprecated: fmc.get_deployable_devices() should be called via DeployableDevices() instead."
-        )
-        tmp = DeployableDevices(fmc=self)
-        return tmp.post()
-
-    def deploymentrequests(self):
-        """Dispose of this method after 20210101.  Use DeploymentRequests() instead."""
-        warnings.warn(
-            "Deprecated: fmc.deploymentrequests() should be called via DeploymentRequests() instead."
-        )
-        tmp = DeploymentRequests(fmc=self)
-        return tmp.post()
-
-    def deploy_changes(self):
-        """Dispose of this method after 20210101.  Use DeploymentRequests() instead."""
-        warnings.warn(
-            "Deprecated: fmc.deploy_changes() should be called via DeploymentRequests() instead."
-        )
-        tmp = DeploymentRequests(fmc=self)
-        return tmp.get()
 
 
 class Token(object):

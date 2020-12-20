@@ -6,7 +6,6 @@ from .accessrules import AccessRules
 from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 from .prefilterpolicies import PreFilterPolicies
 import logging
-import warnings
 
 
 class HitCounts(APIClassTemplate):
@@ -308,16 +307,3 @@ class HitCounts(APIClassTemplate):
         """POST method for HitCounts not supported."""
         logging.info("POST method for HitCounts not supported.")
         pass
-
-
-class HitCount(HitCounts):
-    """
-    Dispose of this Class after 20210101.
-
-    Use HitCounts() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn("Deprecated: HitCount() should be called via HitCounts().")
-        super().__init__(fmc, **kwargs)

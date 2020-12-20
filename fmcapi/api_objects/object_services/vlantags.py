@@ -3,7 +3,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.helper_functions import validate_vlans
 import logging
-import warnings
 
 
 class VlanTags(APIClassTemplate):
@@ -38,16 +37,3 @@ class VlanTags(APIClassTemplate):
         logging.debug("In vlans() for VlanTags class.")
         start_vlan, end_vlan = validate_vlans(start_vlan=start_vlan, end_vlan=end_vlan)
         self.data = {"startTag": start_vlan, "endTag": end_vlan}
-
-
-class VlanTag(VlanTags):
-    """
-    Dispose of this Class after 20210101.
-
-    Use VlanTags() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn("Deprecated: VlanTag() should be called via VlanTags().")
-        super().__init__(fmc, **kwargs)

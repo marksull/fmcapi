@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class ApplicationTypes(APIClassTemplate):
@@ -38,18 +37,3 @@ class ApplicationTypes(APIClassTemplate):
         """DELETE method for API for ApplicationTypes not supported."""
         logging.info("DELETE method for API for ApplicationTypes not supported.")
         pass
-
-
-class ApplicationType(ApplicationTypes):
-    """
-    Dispose of this Class after 20210101.
-
-    Use ApplicationTypes() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: ApplicationType() should be called via ApplicationTypes()."
-        )
-        super().__init__(fmc, **kwargs)

@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class NetworkAddresses(APIClassTemplate):
@@ -36,18 +35,3 @@ class NetworkAddresses(APIClassTemplate):
         """DELETE method for API for NetworkAddresses not supported."""
         logging.info("DELETE method for API for NetworkAddresses not supported.")
         pass
-
-
-class IPAddresses(NetworkAddresses):
-    """
-    Dispose of this Class after 20210101.
-
-    Use NetworkAddresses() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: IPAddresses() should be called via NetworkAddresses()."
-        )
-        super().__init__(fmc, **kwargs)

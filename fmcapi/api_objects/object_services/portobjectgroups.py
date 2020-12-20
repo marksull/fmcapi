@@ -3,7 +3,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .ports import Ports
 import logging
-import warnings
 
 
 class PortObjectGroups(APIClassTemplate):
@@ -85,18 +84,3 @@ class PortObjectGroups(APIClassTemplate):
             if "objects" in self.__dict__:
                 del self.objects
                 logging.info("All named_ports removed from this PortObjectGroups.")
-
-
-class PortObjectGroup(PortObjectGroups):
-    """
-    Dispose of this Class after 20210101.
-
-    Use PortObjectGroups() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: PortObjectGroup() should be called via PortObjectGroups()."
-        )
-        super().__init__(fmc, **kwargs)

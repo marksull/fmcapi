@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class ICMPv6Objects(APIClassTemplate):
@@ -36,18 +35,3 @@ class ICMPv6Objects(APIClassTemplate):
         logging.debug("In __init__() for ICMPv6Objects class.")
         self.parse_kwargs(**kwargs)
         self.type = "ICMPV6Object"
-
-
-class ICMPv6Object(ICMPv6Objects):
-    """
-    Dispose of this Class after 20210101.
-
-    Use ICMPv6Objects() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: ICMPv6Object() should be called via ICMPv6Objects()."
-        )
-        super().__init__(fmc, **kwargs)

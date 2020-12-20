@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class ApplicationTags(APIClassTemplate):
@@ -39,18 +38,3 @@ class ApplicationTags(APIClassTemplate):
         """DELETE method for API for ApplicationTags not supported."""
         logging.info("DELETE method for API for ApplicationTags not supported.")
         pass
-
-
-class ApplicationTag(ApplicationTags):
-    """
-    Dispose of this Class after 20210101.
-
-    Use ApplicationTags() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: ApplicationTag() should be called via ApplicationTags()."
-        )
-        super().__init__(fmc, **kwargs)

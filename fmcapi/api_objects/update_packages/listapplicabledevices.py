@@ -3,7 +3,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .upgradepackages import UpgradePackages
 import logging
-import warnings
 
 
 class ListApplicableDevices(APIClassTemplate):
@@ -75,18 +74,3 @@ class ListApplicableDevices(APIClassTemplate):
         """DELETE method for API for ListApplicableDevices not supported."""
         logging.info("DELETE method for API for ListApplicableDevices not supported.")
         pass
-
-
-class ApplicableDevices(ListApplicableDevices):
-    """
-    Dispose of this Class after 20210101.
-
-    Use ListApplicableDevices() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: ApplicableDevices() should be called via ListApplicableDevices()."
-        )
-        super().__init__(fmc, **kwargs)

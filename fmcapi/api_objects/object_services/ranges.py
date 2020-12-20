@@ -3,7 +3,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.helper_functions import *
 import logging
-import warnings
 
 
 class Ranges(APIClassTemplate):
@@ -47,16 +46,3 @@ class Ranges(APIClassTemplate):
                 logging.error(
                     f"Provided value, {kwargs['value']}, has an error with the IP address(es)."
                 )
-
-
-class IPRange(Ranges):
-    """
-    Dispose of this Class after 20210101.
-
-    Use Ranges() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn("Deprecated: IPRange() should be called via Ranges().")
-        super().__init__(fmc, **kwargs)

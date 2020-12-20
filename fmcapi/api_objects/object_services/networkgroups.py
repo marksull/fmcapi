@@ -4,7 +4,6 @@ from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.helper_functions import *
 from .networkaddresses import NetworkAddresses
 import logging
-import warnings
 
 
 class NetworkGroups(APIClassTemplate):
@@ -172,18 +171,3 @@ class NetworkGroups(APIClassTemplate):
             if "literals" in self.__dict__:
                 del self.literals
                 logging.info("All unnamed_networks removed from this NetworkGroups.")
-
-
-class NetworkGroup(NetworkGroups):
-    """
-    Dispose of this Class after 20210101.
-
-    Use NetworkGroups() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: NetworkGroup() should be called via NetworkGroups()."
-        )
-        super().__init__(fmc, **kwargs)

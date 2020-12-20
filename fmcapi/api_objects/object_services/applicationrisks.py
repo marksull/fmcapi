@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class ApplicationRisks(APIClassTemplate):
@@ -39,18 +38,3 @@ class ApplicationRisks(APIClassTemplate):
         """DELETE method for API for ApplicationRisks not supported."""
         logging.info("DELETE method for API for ApplicationRisks not supported.")
         pass
-
-
-class ApplicationRisk(ApplicationRisks):
-    """
-    Dispose of this Class after 20210101.
-
-    Use ApplicationRisks() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: ApplicationRisk() should be called via ApplicationRisks()."
-        )
-        super().__init__(fmc, **kwargs)

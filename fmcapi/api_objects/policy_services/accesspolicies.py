@@ -1,6 +1,5 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class AccessPolicies(APIClassTemplate):
@@ -47,14 +46,3 @@ class AccessPolicies(APIClassTemplate):
         logging.debug("In format_data() for AccessPolicies class.")
         json_data["defaultAction"] = self.defaultAction
         return json_data
-
-
-class AccessControlPolicy(AccessPolicies):
-    """Dispose of this Class after 20210101."""
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: AccessControlPolicy() should be called via AccessPolicies()."
-        )
-        super().__init__(fmc, **kwargs)

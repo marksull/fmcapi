@@ -4,7 +4,6 @@ from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.object_services.securityzones import SecurityZones
 from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 import logging
-import warnings
 
 
 class PhysicalInterfaces(APIClassTemplate):
@@ -179,18 +178,3 @@ class PhysicalInterfaces(APIClassTemplate):
             self.hardware = {"duplex": duplex, "speed": speed}
         else:
             logging.warning(f"Speed {speed} or Duplex {duplex} is not a valid mode.")
-
-
-class PhysicalInterface(PhysicalInterfaces):
-    """
-    Dispose of this Class after 20210101.
-
-    Use PhysicalInterfaces() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: PhysicalInterface() should be called via PhysicalInterfaces()."
-        )
-        super().__init__(fmc, **kwargs)

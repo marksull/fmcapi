@@ -2,7 +2,6 @@
 
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
-import warnings
 
 
 class FTDNatPolicies(APIClassTemplate):
@@ -27,18 +26,3 @@ class FTDNatPolicies(APIClassTemplate):
         logging.debug("In __init__() for FTDNatPolicies class.")
         self.parse_kwargs(**kwargs)
         self.type = "FTDNatPolicy"
-
-
-class FTDNatPolicy(FTDNatPolicies):
-    """
-    Dispose of this Class after 20210101.
-
-    Use FTDNatPolicies() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: FTDNatPolicy() should be called via FTDNatPolicies()."
-        )
-        super().__init__(fmc, **kwargs)

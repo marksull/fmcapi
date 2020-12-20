@@ -3,7 +3,6 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .urls import URLs
 import logging
-import warnings
 
 
 class URLGroups(APIClassTemplate):
@@ -126,16 +125,3 @@ class URLGroups(APIClassTemplate):
             if "literals" in self.__dict__:
                 del self.literals
                 logging.info("All unnamed_urls removed from this URLGroups.")
-
-
-class URLGroup(URLGroups):
-    """
-    Dispose of this Class after 20210101.
-
-    Use URLGroups() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn("Deprecated: URLGroup() should be called via URLGroups().")
-        super().__init__(fmc, **kwargs)

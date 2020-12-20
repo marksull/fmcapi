@@ -4,7 +4,6 @@ from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from .ftddevicehapairs import FTDDeviceHAPairs
 from fmcapi.api_objects.device_services.physicalinterfaces import PhysicalInterfaces
 import logging
-import warnings
 
 
 class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
@@ -124,18 +123,3 @@ class FailoverInterfaceMACAddressConfigs(APIClassTemplate):
             logging.warning(
                 f'PhysicalInterface, "{name}", not found.  Cannot add to FailoverInterfaceMACAddressConfigs.'
             )
-
-
-class DeviceHAFailoverMAC(FailoverInterfaceMACAddressConfigs):
-    """
-    Dispose of this Class after 20210101.
-
-    Use FailoverInterfaceMACAddressConfigs() instead.
-    """
-
-    def __init__(self, fmc, **kwargs):
-        warnings.resetwarnings()
-        warnings.warn(
-            "Deprecated: DeviceHAFailoverMAC() should be called via FailoverInterfaceMACAddressConfigs()."
-        )
-        super().__init__(fmc, **kwargs)
