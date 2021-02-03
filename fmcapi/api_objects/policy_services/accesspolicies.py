@@ -10,6 +10,7 @@ class AccessPolicies(APIClassTemplate):
 
     VALID_JSON_DATA = ["id", "name", "type", "description", "defaultAction"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
+    VALID_CHARACTERS_FOR_NAME = """[ .\w\d_\-]"""
     URL_SUFFIX = "/policy/accesspolicies"
     REQUIRED_FOR_POST = ["name"]
     REQUIRED_FOR_PUT = ["id", "defaultAction"]
