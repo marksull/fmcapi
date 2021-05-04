@@ -121,6 +121,21 @@ def test__prefiler_rule(fmc):
     prefilter_rule_2.post()
     time.sleep(1)
 
+    logging.info(f'Creating test tunnel rule "test_3"')
+    prefilter_rule_3 = PreFilterRules(fmc=fmc, prefilter_name=namer)
+    prefilter_rule_3.name = "test_3"
+    prefilter_rule_3.enabled = True
+    prefilter_rule_3.action = "FASTPATH"
+    prefilter_rule_3.rule_type("TUNNEL")
+    prefilter_rule_3.bidirectional = True
+    prefilter_rule_3.encapsulation_port(action="clear")
+    prefilter_rule_3.encapsulation_port(action="add", value="GRE")
+    prefilter_rule_3.encapsulation_port(action="add", value="IP_IN_IP")
+    prefilter_rule_3.encapsulation_port(action="add", value="TEREDO")
+    prefilter_rule_3.encapsulation_port(action="remove", value="TEREDO")
+    prefilter_rule_3.post()
+    time.sleep(1)
+
     prefilter.delete()
     ip_host_1.delete()
     ip_net_1.delete()
