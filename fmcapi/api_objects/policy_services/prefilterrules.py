@@ -30,10 +30,13 @@ class PreFilterRules(APIClassTemplate):
         "ruleType",
         "type",
         "enabled",
+        "bidirectional",
+        "encapsulationPorts",
     ]
     PREFIX_URL = "/policy/prefilterpolicies"
     VALID_FOR_ACTION = ["FASTPATH", "ANALYZE", "BLOCK"]
     VALID_FOR_RULETYPE = ["TUNNEL", "PREFILTER"]
+    VALID_FOR_ENCAPSULATIONPORTS = ["GRE", "IP_IN_IP", "IPV6_IN_IP", "TEREDO"]
     REQUIRED_FOR_POST = ["prefilter_id"]
     REQUIRED_FOR_GET = ["prefilter_id"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + [
@@ -60,9 +63,10 @@ class PreFilterRules(APIClassTemplate):
         self.prefilter_id = None
         self.prefilter_added_to_url = False
         self.action = "FASTPATH"
+        self.ruleType = "PREFILTER"
+        self.bidirectional = False
         self.parse_kwargs(**kwargs)
         self.URL = f"{self.URL}{self.URL_SUFFIX}"
-        self.ruleType = "PREFILTER"
         self.type = "PrefilterRule"
         self.enabled = False
 
@@ -104,6 +108,10 @@ class PreFilterRules(APIClassTemplate):
             self.prefilter(name=kwargs["prefilter_name"])
         if "action" in kwargs:
             self.validate_action(kwargs["action"])
+        if "encapsulationPorts" in kwargs:
+            self.validate_encapsulation_ports(kwargs["encapsulationPorts"])
+        if "ruleType" in kwargs:
+            self.rule_type(kwargs["ruleType"])
 
     def prefilter(self, name=None, prefilter_id=None):
         """
@@ -146,6 +154,22 @@ class PreFilterRules(APIClassTemplate):
         else:
             logging.warning(
                 f"Action {action} is not a valid option\nValid actions are: {self.VALID_FOR_ACTION}"
+            )
+
+    def validate_encapsulation_ports(self, encapsulation_ports):
+        """
+        Validate encapsulation_ports against VALID_FOR_ENCAPSULATIONPORTS and sets property.
+
+        :param encapsulation_ports: (list): Prefilter rule type via VALID_FOR_ENCAPSULATIONPORTS constant.
+        :return: None
+        """
+        if all(
+            port in self.VALID_FOR_ENCAPSULATIONPORTS for port in encapsulation_ports
+        ):
+            self.encapsulationPorts = encapsulation_ports
+        else:
+            logging.warning(
+                f"Invalid protocol. Valid encapsulation ports are: {self.VALID_FOR_ENCAPSULATIONPORTS}"
             )
 
     def source_interface(self, action, name=""):
@@ -547,6 +571,28 @@ class PreFilterRules(APIClassTemplate):
             return False
 
         return True
+
+    def encapsulation_port(self, action, value=None):
+        """
+        Set the encapsulation port for the tunnel rule.
+
+        :param action: (str) "add", "remove" or "clear"
+        :param value: (str) Name of encapsulation port
+        :return: None
+        """
+        logging.debug("In encapsulation_port() for PreFilterRules class.")
+        if not hasattr(self, "encapsulationPorts"):
+            self.encapsulationPorts = []
+
+        if action == "add":
+            self.encapsulationPorts.append(value)
+
+        elif action == "remove":
+            self.encapsulationPorts.remove(value)
+
+        elif action == "clear":
+            del self.encapsulationPorts
+            logging.info(f"Removed encapsulation ports from the prefilter rule")
 
     def vlan_tags(self, action, name=None, literal=None):
         """
