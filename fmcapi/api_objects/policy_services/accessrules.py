@@ -1278,11 +1278,11 @@ class AccessRules(APIClassTemplate):
 
     def urls_info(self, action, name=""):
         """
-            Add/modify name to URLs field of AccessRules object.
-            :param action: (str) 'add', 'remove', or 'clear'
-            :param name: (str) Name of URLs in FMC.
-            :return: None
-            """
+        Add/modify name to URLs field of AccessRules object.
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param name: (str) Name of URLs in FMC.
+        :return: None
+        """
         logging.debug("In urls() for AccessRules class.")
         if action == "add":
             urlobj_json = URLs(fmc=self.fmc)
