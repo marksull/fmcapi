@@ -261,7 +261,7 @@ class FMC(object):
             logging.error(f"json_response -->\t{json_response}")
             if response:
                 response.close()
-            return None
+            return json_response
         if response:
             response.close()
         try:
