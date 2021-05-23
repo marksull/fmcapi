@@ -112,6 +112,7 @@ class FMC(object):
         self.platform_url = None
         self.page_counter = None
         self.more_items = []
+        self.error_response = None
 
     def __enter__(self):
         """
@@ -259,6 +260,7 @@ class FMC(object):
         except requests.exceptions.HTTPError as err:
             logging.error(f"Error in POST operation --> {str(err)}")
             logging.error(f"json_response -->\t{json_response}")
+            self.error_response = json_response
             if response:
                 response.close()
             return None
