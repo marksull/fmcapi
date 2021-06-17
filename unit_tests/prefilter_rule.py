@@ -88,6 +88,10 @@ def test__prefiler_rule(fmc):
     prefilter_rule_1 = PreFilterRules(fmc=fmc, prefilter_name=namer)
     prefilter_rule_1.name = "test_1"
     prefilter_rule_1.enabled = True
+    prefilter_rule_1.sendEventsToFMC = True
+    prefilter_rule_1.logBegin = True
+    prefilter_rule_1.logEnd = True
+    prefilter_rule_1.enableSyslog = True
     prefilter_rule_1.source_interface(action="add", name=f"test_zone_1_{namer}")
     prefilter_rule_1.destination_interface(action="add", name=f"test_zone_2_{namer}")
     prefilter_rule_1.source_network(action="add", literal="10.1.1.1")
@@ -96,6 +100,9 @@ def test__prefiler_rule(fmc):
     prefilter_rule_1.destination_network(action="add", name=f"test_range_1_{namer}")
     prefilter_rule_1.destination_network(action="add", name=f"test_fqdn_1_{namer}")
     prefilter_rule_1.destination_network(action="remove", name=f"test_fqdn_1_{namer}")
+    prefilter_rule_1.new_comments(action="add", value="comment-1")
+    prefilter_rule_1.new_comments(action="add", value="comment-2")
+    prefilter_rule_1.new_comments(action="remove", value="comment-2")
     prefilter_rule_1.post()
     time.sleep(1)
 

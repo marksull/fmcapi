@@ -32,6 +32,12 @@ class PreFilterRules(APIClassTemplate):
         "enabled",
         "bidirectional",
         "encapsulationPorts",
+        "enableSyslog",
+        "logBegin",
+        "logEnd",
+        "sendEventsToFMC",
+        "newComments",
+        "commentHistoryList",
     ]
     PREFIX_URL = "/policy/prefilterpolicies"
     VALID_FOR_ACTION = ["FASTPATH", "ANALYZE", "BLOCK"]
@@ -65,10 +71,16 @@ class PreFilterRules(APIClassTemplate):
         self.action = "FASTPATH"
         self.ruleType = "PREFILTER"
         self.bidirectional = False
+        self.enableSyslog = False
+        self.logBegin = False
+        self.logEnd = False
+        self.sendEventsToFMC = False
+        self.enabled = False
+        self.newComments = []
+        self.commentHistoryList = []
         self.parse_kwargs(**kwargs)
         self.URL = f"{self.URL}{self.URL_SUFFIX}"
         self.type = "PrefilterRule"
-        self.enabled = False
 
     @property
     def URL_SUFFIX(self):
@@ -112,6 +124,20 @@ class PreFilterRules(APIClassTemplate):
             self.validate_encapsulation_ports(kwargs["encapsulationPorts"])
         if "ruleType" in kwargs:
             self.rule_type(kwargs["ruleType"])
+        if "enableSyslog" in kwargs:
+            self.enableSyslog = kwargs["enableSyslog"]
+        if "logBegin" in kwargs:
+            self.logBegin = kwargs["logBegin"]
+        if "logEnd" in kwargs:
+            self.logEnd = kwargs["logEnd"]
+        if "sendEventsToFMC" in kwargs:
+            self.sendEventsToFMC = kwargs["sendEventsToFMC"]
+        if "enabled" in kwargs:
+            self.enabled = kwargs["enabled"]
+        if "newComments" in kwargs:
+            self.newComments = kwargs["newComments"]
+        if "commentHistoryList" in kwargs:
+            self.commentHistoryList = kwargs["commentHistoryList"]
 
     def prefilter(self, name=None, prefilter_id=None):
         """
@@ -171,6 +197,20 @@ class PreFilterRules(APIClassTemplate):
             logging.warning(
                 f"Invalid protocol. Valid encapsulation ports are: {self.VALID_FOR_ENCAPSULATIONPORTS}"
             )
+
+    def new_comments(self, action, value):
+        """
+        Add a comment to the comment list
+        Args:
+            action (str): Add, remove or clear
+            value (str): Comment value to add
+        """
+        if action == "add":
+            self.newComments.append(value)
+        if action == "remove":
+            self.newComments.remove(value)
+        if action == "clear":
+            self.newComments = []
 
     def source_interface(self, action, name=""):
         """
