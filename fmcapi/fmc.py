@@ -211,19 +211,33 @@ class FMC(object):
             while status_code == 429:
                 if method == "get":
                     response = requests.get(
-                        url, headers=headers, verify=self.VERIFY_CERT, timeout=self.timeout
+                        url,
+                        headers=headers,
+                        verify=self.VERIFY_CERT,
+                        timeout=self.timeout,
                     )
                 elif method == "post":
                     response = requests.post(
-                        url, json=json_data, headers=headers, verify=self.VERIFY_CERT, timeout=self.timeout
+                        url,
+                        json=json_data,
+                        headers=headers,
+                        verify=self.VERIFY_CERT,
+                        timeout=self.timeout,
                     )
                 elif method == "put":
                     response = requests.put(
-                        url, json=json_data, headers=headers, verify=self.VERIFY_CERT, timeout=self.timeout
+                        url,
+                        json=json_data,
+                        headers=headers,
+                        verify=self.VERIFY_CERT,
+                        timeout=self.timeout,
                     )
                 elif method == "delete":
                     response = requests.delete(
-                        url, headers=headers, verify=self.VERIFY_CERT, timeout=self.timeout
+                        url,
+                        headers=headers,
+                        verify=self.VERIFY_CERT,
+                        timeout=self.timeout,
                     )
                 else:
                     logging.error("No request method given.  Returning nothing.")
@@ -317,7 +331,7 @@ class Token(object):
         password="Admin123",
         domain=None,
         verify_cert=False,
-        timeout=5
+        timeout=5,
     ):
         """
         Initialize variables used in the Token class.
@@ -364,7 +378,9 @@ class Token(object):
                 f"Refreshing tokens, {self.token_refreshes} out of {self.MAX_REFRESHES} refreshes, "
                 f"from {url}."
             )
-            response = requests.post(url, headers=headers, verify=self.verify_cert, timeout=self.timeout)
+            response = requests.post(
+                url, headers=headers, verify=self.verify_cert, timeout=self.timeout
+            )
             logging.debug(
                 "Response from refreshtoken() post:\n"
                 f"\turl: {url}\n"
