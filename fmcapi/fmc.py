@@ -387,6 +387,7 @@ class Token(object):
                 headers=headers,
                 auth=requests.auth.HTTPBasicAuth(self.__username, self.__password),
                 verify=self.verify_cert,
+                timeout=self.timeout,
             )
             logging.debug(
                 "Response from generatetoken() post:\n"
