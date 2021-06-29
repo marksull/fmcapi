@@ -51,6 +51,7 @@ class FMC(object):
         logging_level="INFO",
         debug=False,
         limit=1000,
+        timeout=5,
     ):
         """
         Instantiate some variables prior to calling the __enter__() method.
@@ -65,6 +66,7 @@ class FMC(object):
         :param logging_level (str): The desired logging level. (Default is INFO)
         :param debug (bool): True to enable debug logging. (Default is False)
         :param limit (int): Sets up max data to gather per "page". (Default is 1000)
+        :param timeout (int):  Maximum seconds to establish connection (Default is 5)
         :return: None
         """
         self.debug = debug
@@ -104,6 +106,7 @@ class FMC(object):
         self.domain = domain
         self.autodeploy = autodeploy
         self.limit = limit
+        self.timeout = timeout
         self.vdbVersion = None
         self.sruVersion = None
         self.serverVersion = None
@@ -127,6 +130,7 @@ class FMC(object):
             password=self.password,
             domain=self.domain,
             verify_cert=self.VERIFY_CERT,
+            timeout=self.timeout,
         )
         self.uuid = self.mytoken.uuid
         if self.mytoken.access_token:
@@ -207,19 +211,19 @@ class FMC(object):
             while status_code == 429:
                 if method == "get":
                     response = requests.get(
-                        url, headers=headers, verify=self.VERIFY_CERT
+                        url, headers=headers, verify=self.VERIFY_CERT, timeout=self.timeout
                     )
                 elif method == "post":
                     response = requests.post(
-                        url, json=json_data, headers=headers, verify=self.VERIFY_CERT
+                        url, json=json_data, headers=headers, verify=self.VERIFY_CERT, timeout=self.timeout
                     )
                 elif method == "put":
                     response = requests.put(
-                        url, json=json_data, headers=headers, verify=self.VERIFY_CERT
+                        url, json=json_data, headers=headers, verify=self.VERIFY_CERT, timeout=self.timeout
                     )
                 elif method == "delete":
                     response = requests.delete(
-                        url, headers=headers, verify=self.VERIFY_CERT
+                        url, headers=headers, verify=self.VERIFY_CERT, timeout=self.timeout
                     )
                 else:
                     logging.error("No request method given.  Returning nothing.")
@@ -313,6 +317,7 @@ class Token(object):
         password="Admin123",
         domain=None,
         verify_cert=False,
+        timeout=5
     ):
         """
         Initialize variables used in the Token class.
@@ -322,6 +327,7 @@ class Token(object):
         :param password (str): FMC user's password (Default is Admin123)
         :param domain (str):  UUID of domain.  Default is None which implies Global domain.
         :param verify_cert (bool):  Validate cert  (Default is False)
+        :param timeout (int):  Maximum seconds to establish connection (Default is 5)
         :return: None
         """
         logging.debug("In the Token __init__() class method.")
@@ -332,6 +338,7 @@ class Token(object):
         self.__domain = domain
         self.uuid = None
         self.verify_cert = verify_cert
+        self.timeout = timeout
         self.token_refreshes = 0
         self.access_token = None
         self.refresh_token = None
@@ -357,7 +364,7 @@ class Token(object):
                 f"Refreshing tokens, {self.token_refreshes} out of {self.MAX_REFRESHES} refreshes, "
                 f"from {url}."
             )
-            response = requests.post(url, headers=headers, verify=self.verify_cert)
+            response = requests.post(url, headers=headers, verify=self.verify_cert, timeout=self.timeout)
             logging.debug(
                 "Response from refreshtoken() post:\n"
                 f"\turl: {url}\n"
@@ -380,6 +387,7 @@ class Token(object):
                 headers=headers,
                 auth=requests.auth.HTTPBasicAuth(self.__username, self.__password),
                 verify=self.verify_cert,
+                timeout=self.timeout,
             )
             logging.debug(
                 "Response from generatetoken() post:\n"
