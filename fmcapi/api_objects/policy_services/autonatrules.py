@@ -31,6 +31,7 @@ class AutoNatRules(APIClassTemplate):
         "translatedPort",
         "serviceProtocol",
         "patOptions",
+        "description",
     ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     PREFIX_URL = "/policy/ftdnatpolicies"
