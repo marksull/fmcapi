@@ -105,10 +105,11 @@ class ManualNatRules(APIClassTemplate):
         """
         logging.debug("In original_source() for ManualNatRules class.")
         ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
-        networkgroup_json = NetworkGroups(
-            fmc=self.fmc
-        ).get()  # FIXME, shouldn't this be a part of items?
-        items = ipaddresses_json.get("items", [])
+        networkgroup_json = NetworkGroups(fmc=self.fmc).get()
+        items = (
+            ipaddresses_json.get("items", [])
+            + networkgroup_json.get("items", [])
+        )
         new_net = None
         for item in items:
             if item["name"] == name:
@@ -131,10 +132,11 @@ class ManualNatRules(APIClassTemplate):
         """
         logging.debug("In translated_source() for ManualNatRules class.")
         ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
-        networkgroup_json = NetworkGroups(
-            fmc=self.fmc
-        ).get()  # FIXME, shouldn't this be a part of items?
-        items = ipaddresses_json.get("items", [])
+        networkgroup_json = NetworkGroups(fmc=self.fmc).get()
+        items = (
+            ipaddresses_json.get("items", [])
+            + networkgroup_json.get("items", [])
+        )
         new_net = None
         for item in items:
             if item["name"] == name:
@@ -159,10 +161,11 @@ class ManualNatRules(APIClassTemplate):
         """
         logging.debug("In original_destination() for ManualNatRules class.")
         ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
-        networkgroup_json = NetworkGroups(
-            fmc=self.fmc
-        ).get()  # FIXME, shouldn't this be a part of items?
-        items = ipaddresses_json.get("items", [])
+        networkgroup_json = NetworkGroups(fmc=self.fmc).get()
+        items = (
+            ipaddresses_json.get("items", [])
+            + networkgroup_json.get("items", [])
+        )
         new_net = None
         for item in items:
             if item["name"] == name:
@@ -187,10 +190,11 @@ class ManualNatRules(APIClassTemplate):
         """
         logging.debug("In translated_destination() for ManualNatRules class.")
         ipaddresses_json = NetworkAddresses(fmc=self.fmc).get()
-        networkgroup_json = NetworkGroups(
-            fmc=self.fmc
-        ).get()  # FIXME, shouldn't this be a part of items?
-        items = ipaddresses_json.get("items", [])
+        networkgroup_json = NetworkGroups(fmc=self.fmc).get()
+        items = (
+            ipaddresses_json.get("items", [])
+            + networkgroup_json.get("items", [])
+        )
         new_net = None
         for item in items:
             if item["name"] == name:
