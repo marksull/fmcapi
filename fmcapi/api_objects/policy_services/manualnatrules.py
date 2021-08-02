@@ -40,6 +40,7 @@ class ManualNatRules(APIClassTemplate):
         "patOptions",
         "unidirectional",
         "enabled",
+        "description",
     ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     PREFIX_URL = "/policy/ftdnatpolicies"
