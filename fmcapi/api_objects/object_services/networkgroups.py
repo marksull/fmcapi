@@ -9,7 +9,7 @@ import logging
 class NetworkGroups(APIClassTemplate):
     """The NetworkGroups Object in the FMC."""
 
-    VALID_JSON_DATA = ["id", "name", "type", "objects", "literals"]
+    VALID_JSON_DATA = ["id", "name", "type", "objects", "literals", "description"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = "/object/networkgroups"
 

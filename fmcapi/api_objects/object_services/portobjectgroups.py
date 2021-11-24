@@ -8,7 +8,7 @@ import logging
 class PortObjectGroups(APIClassTemplate):
     """The PortObjectGroups Object in the FMC."""
 
-    VALID_JSON_DATA = ["id", "name", "type", "objects", "literals"]
+    VALID_JSON_DATA = ["id", "name", "type", "objects", "literals", "description"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = "/object/portobjectgroups"
 
