@@ -205,12 +205,12 @@ class EtherchannelInterfaces(APIClassTemplate):
                 )
         self.selectedInterfaces = list1
         
-    def hardware(self, speed, duplex="FULL"):
+    def hardware(self, speed, duplex):
         """
         Define hardware characteristics.
 
         :param speed: (str) Speed of interface.
-        :param duplex: (str) FULL or HALF.
+        :param duplex: (str) AUTO, FULL or HALF.
         :return: None
         """
         # There are probably some incompatibilities that need to be accounted for
