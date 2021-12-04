@@ -4,6 +4,7 @@ from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 from fmcapi.api_objects.object_services.securityzones import SecurityZones
 from fmcapi.api_objects.device_services.physicalinterfaces import PhysicalInterfaces
+from fmcapi.api_objects.device_services.etherchannelinterfaces import EtherchannelInterfaces
 import logging
 
 
@@ -172,4 +173,24 @@ class SubInterfaces(APIClassTemplate):
         else:
             logging.warning(
                 f'PhysicalInterface, "{intf1.name}", not found.  Cannot add to SubInterfaces.'
+            )
+
+    def e_interface(self, e_interface, device_name):
+        """
+        Define which etherchannel interface on which device is a part of this subinterface.
+
+        :param e_interfaces: (str) Name of etherchannel interface.
+        :param device_name: (str) Name of device with that interface.
+        :return: None
+        """
+        logging.debug("In e_interface() for SubInterfaces class.")
+        intf1 = EtherchannelInterfaces(fmc=self.fmc)
+        intf1.get(name=e_interface, device_name=device_name)
+        if "id" in intf1.__dict__:
+            self.name = intf1.name
+            if "MTU" not in self.__dict__:
+                self.MTU = intf1.MTU
+        else:
+            logging.warning(
+                f'EtherChannelInterface, "{intf1.name}", not found.  Cannot add to SubInterfaces.'
             )
