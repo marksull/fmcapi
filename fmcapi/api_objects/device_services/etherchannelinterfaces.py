@@ -55,6 +55,17 @@ class EtherchannelInterfaces(APIClassTemplate):
         []
     )  # Not sure what to put here but it was an unresolved variable later in this code.
 
+    VALID_FOR_HARDWARE_SPEED = [
+        "AUTO",
+        "TEN",
+        "HUNDRED",
+        "THOUSAND",
+        "TEN_THOUSAND",
+        "FORTY_THOUSAND",
+        "LAKH",
+    ]
+    VALID_FOR_HARDWARE_DUPLEX = ["AUTO", "FULL", "HALF"]    
+
     def __init__(self, fmc, **kwargs):
         """
         Initialize EtherchannelInterfaces object.
