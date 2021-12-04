@@ -42,7 +42,9 @@ class ManualNatRules(APIClassTemplate):
         "enabled",
         "description",
     ]
-    VALID_FOR_KWARGS = VALID_JSON_DATA + []
+    VALID_FOR_KWARGS = VALID_JSON_DATA + [
+        "section",
+    ]
     PREFIX_URL = "/policy/ftdnatpolicies"
     REQUIRED_FOR_POST = ["nat_id"]
 
@@ -60,6 +62,27 @@ class ManualNatRules(APIClassTemplate):
         logging.debug("In __init__() for ManualNatRules class.")
         self.parse_kwargs(**kwargs)
         self.type = "FTDManualNatRule"
+        self.URL = f"{self.URL}{self.URL_SUFFIX}"
+
+    @property
+    def URL_SUFFIX(self):
+        """
+        Add the URL suffixes for section, before_auto and after_auto
+        NOTE: You must specify these at the time the object is initialized (created) for this feature
+        to work correctly. Example:
+            This works:
+                new_nat_rule = ManualNatRules(fmc=fmc, section="after_auto")
+
+            This does not:
+                new_nat_rule = ManualNatRules(fmc=fmc)
+                new_nat_rule.section = "after_auto"
+        """
+        url = "?"
+
+        if "section" in self.__dict__:
+            url = f"{url}section={self.section}&"
+
+        return url[:-1]
 
     def parse_kwargs(self, **kwargs):
         """
@@ -77,6 +100,9 @@ class ManualNatRules(APIClassTemplate):
             self.translatedSource = kwargs["translatedSource"]
         elif "interfaceInTranslatedSource" in kwargs:
             self.interfaceInTranslatedSource = kwargs["interfaceInTranslatedSource"]
+            
+        if "section" in kwargs:
+            self.section = kwargs["section"]
 
     def nat_policy(self, name):
         """
@@ -90,7 +116,7 @@ class ManualNatRules(APIClassTemplate):
         ftd_nat.get(name=name)
         if "id" in ftd_nat.__dict__:
             self.nat_id = ftd_nat.id
-            self.URL = f"{self.fmc.configuration_url}{self.PREFIX_URL}/{self.nat_id}/manualnatrules"
+            self.URL = f"{self.fmc.configuration_url}{self.PREFIX_URL}/{self.nat_id}/manualnatrules{self.URL_SUFFIX}"
             self.nat_added_to_url = True
         else:
             logging.warning(
