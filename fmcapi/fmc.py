@@ -51,7 +51,7 @@ class FMC(object):
         logging_level="INFO",
         debug=False,
         limit=1000,
-        timeout=5,
+        timeout=30,
     ):
         """
         Instantiate some variables prior to calling the __enter__() method.
@@ -331,7 +331,7 @@ class Token(object):
         password="Admin123",
         domain=None,
         verify_cert=False,
-        timeout=5,
+        timeout=30,
     ):
         """
         Initialize variables used in the Token class.
