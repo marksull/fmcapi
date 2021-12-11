@@ -281,7 +281,7 @@ class FMC(object):
             self.error_response = json_response
             if response:
                 response.close()
-            return json_response  #allows me to use the response in my script
+            return None
         if response:
             response.close()
         try:
