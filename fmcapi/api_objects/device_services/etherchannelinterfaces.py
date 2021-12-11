@@ -54,17 +54,6 @@ class EtherchannelInterfaces(APIClassTemplate):
     VALID_FOR_LOAD_BALANCING = (
         []
     )  # Not sure what to put here but it was an unresolved variable later in this code.
-    
-    VALID_FOR_HARDWARE_SPEED = [
-        "AUTO",
-        "TEN",
-        "HUNDRED",
-        "THOUSAND",
-        "TEN_THOUSAND",
-        "FORTY_THOUSAND",
-        "LAKH",
-    ]
-    VALID_FOR_HARDWARE_DUPLEX = ["AUTO", "FULL", "HALF"]
 
     def __init__(self, fmc, **kwargs):
         """
@@ -204,22 +193,3 @@ class EtherchannelInterfaces(APIClassTemplate):
                     f'PhysicalInterface, "{intf1.name}", not found.  Cannot add to EtherchannelInterfaces.'
                 )
         self.selectedInterfaces = list1
-        
-    def hardware(self, speed, duplex="FULL"):
-        """
-        Define hardware characteristics.
-
-        :param speed: (str) Speed of interface.
-        :param duplex: (str) FULL or HALF.
-        :return: None
-        """
-        # There are probably some incompatibilities that need to be accounted for
-        logging.debug("In hardware() for EtherchannelInterfaces class.")
-        if (
-            speed in self.VALID_FOR_HARDWARE_SPEED
-            and duplex in self.VALID_FOR_HARDWARE_DUPLEX
-        ):
-            self.hardware = {"duplex": duplex, "speed": speed}
-        else:
-            logging.warning(f"Speed {speed} or Duplex {duplex} is not a valid mode.")
-
