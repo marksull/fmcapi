@@ -53,8 +53,20 @@ class EtherchannelInterfaces(APIClassTemplate):
     VALID_FOR_MTU = range(64, 9085)
     VALID_FOR_LOAD_BALANCING = (
         []
-    )  # Not sure what to put here but it was an unresolved variable later in this code.
 
+    )  # Not sure what to put here but it was an unresolved variable later in this code.
+    VALID_FOR_HARDWARE_SPEED = [
+        "AUTO",
+        "TEN",
+        "HUNDRED",
+        "THOUSAND",
+        "TEN_THOUSAND",
+        "FORTY_THOUSAND",
+        "LAKH",
+    ]
+    VALID_FOR_HARDWARE_DUPLEX = ["AUTO", "FULL", "HALF"]
+
+    
     def __init__(self, fmc, **kwargs):
         """
         Initialize EtherchannelInterfaces object.
@@ -108,6 +120,14 @@ class EtherchannelInterfaces(APIClassTemplate):
                 logging.warning(
                     f"Load balancing method {kwargs['loadBalancing']} is not a valid method."
                 )
+        '''
+        if "hardware" in kwargs:
+            if kwargs["hardware"] in self.VALID_FOR_HARDWARE:
+                self.hardware = kwargs["hardware"]
+            else:
+                logging.warning(
+                    f"Hardware method {kwargs['hardware']} is not a valid method.")
+        '''            
 
     def device(self, device_name):
         """
@@ -193,3 +213,22 @@ class EtherchannelInterfaces(APIClassTemplate):
                     f'PhysicalInterface, "{intf1.name}", not found.  Cannot add to EtherchannelInterfaces.'
                 )
         self.selectedInterfaces = list1
+        
+    def hardware(self, speed, duplex):
+        """
+        Define hardware characteristics.
+
+        :param speed: (str) Speed of interface.
+        :param duplex: (str) AUTO FULL or HALF.
+        :return: None
+        """
+        # There are probably some incompatibilities that need to be accounted for
+        logging.debug("In hardware() for EtherchannelInterfaces class.")
+        if (
+            speed in self.VALID_FOR_HARDWARE_SPEED
+            and duplex in self.VALID_FOR_HARDWARE_DUPLEX
+        ):
+            self.hardware = {"duplex": duplex, "speed": speed}
+        else:
+            logging.warning(f"Speed {speed} or Duplex {duplex} is not a valid mode.")
+
