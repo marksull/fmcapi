@@ -1,4 +1,9 @@
+FMCAPI was originally developed by Dax Mickelson (dmickels@cisco.com). Dax has moved on to other projects but has kindly
+transferred the ownership of this repo so that we can keep it current!
+
+
 # fmcapi
+
 Provide an "easier to use" way of interacting with the Cisco FMC's API.
 There is a LOT that has yet to be done in order to make this project 
 have "feature parity" with all that can be done with the FMC's API.
