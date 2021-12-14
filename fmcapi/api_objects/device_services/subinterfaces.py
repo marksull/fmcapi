@@ -4,7 +4,9 @@ from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 from fmcapi.api_objects.device_services.devicerecords import DeviceRecords
 from fmcapi.api_objects.object_services.securityzones import SecurityZones
 from fmcapi.api_objects.device_services.physicalinterfaces import PhysicalInterfaces
-from fmcapi.api_objects.device_services.etherchannelinterfaces import EtherchannelInterfaces
+from fmcapi.api_objects.device_services.etherchannelinterfaces import (
+    EtherchannelInterfaces,
+)
 import logging
 
 

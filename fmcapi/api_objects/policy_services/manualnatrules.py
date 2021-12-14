@@ -100,7 +100,7 @@ class ManualNatRules(APIClassTemplate):
             self.translatedSource = kwargs["translatedSource"]
         elif "interfaceInTranslatedSource" in kwargs:
             self.interfaceInTranslatedSource = kwargs["interfaceInTranslatedSource"]
-            
+
         if "section" in kwargs:
             self.section = kwargs["section"]
 
