@@ -1182,7 +1182,7 @@ class AccessRules(APIClassTemplate):
                 user = RealmUserGroups(fmc=self.fmc)
                 logging.debug("Type Group")
             else:
-                logging.warning("not a valid action- 'user'|'group'")
+                logging.warning("not a valid realm_type - 'user'|'group'")
                 return None
             user.get(name=name)
             if "id" in user.__dict__:
