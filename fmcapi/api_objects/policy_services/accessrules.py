@@ -21,6 +21,8 @@ from fmcapi.api_objects.object_services.applications import Applications
 from fmcapi.api_objects.object_services.applicationfilters import ApplicationFilters
 from fmcapi.api_objects.object_services.urlgroups import URLGroups
 from fmcapi.api_objects.object_services.urls import URLs
+from fmcapi.api_objects.object_services.realmusergroups import RealmUserGroups
+from fmcapi.api_objects.object_services.realmusers import RealmUsers
 import logging
 import sys
 
@@ -43,6 +45,7 @@ class AccessRules(APIClassTemplate):
         "variableSet",
         "originalSourceNetworks",
         "vlanTags",
+        "users",
         "sourceNetworks",
         "destinationNetworks",
         "sourcePorts",
@@ -259,6 +262,10 @@ class AccessRules(APIClassTemplate):
             self._newComments = kwargs["newComments"]
         if "commentHistoryList" in kwargs:
             self._commentHistoryList = kwargs["commentHistoryList"]
+        if "users" in kwargs:
+            self.users = {"objects": []}
+            if kwargs["users"].get("objects"):
+                self.users["objects"] = kwargs["users"]["objects"]
 
     def acp(self, name="", id=""):
         """
@@ -1156,6 +1163,91 @@ class AccessRules(APIClassTemplate):
         :return: None
         """
         pass
+
+    def realm_user(self, action, name="", realm_type="user"):
+        """
+        Add/modify realm users field of AccessRules object.
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param name: (str) Name Realm user/usergroup in FMC.
+        :param realm_type (str) 'user' or 'group' default to user - not used in 'clear'
+        :return: None
+        NOTE Only tested on single realm deployment
+        """
+        logging.debug("In realm_user() for AccessRules class.")
+        if action == "add":
+            if realm_type == "user":
+                user = RealmUsers(fmc=self.fmc)
+                logging.debug("Type user")
+            elif realm_type == "group":
+                user = RealmUserGroups(fmc=self.fmc)
+                logging.debug("Type Group")
+            else:
+                logging.warning("not a valid action- 'user'|'group'")
+                return None
+            user.get(name=name)
+            if "id" in user.__dict__:
+                if "users" in self.__dict__:
+                    new_realm_user = {
+                        "name": user.name,
+                        "id": user.id,
+                        "type": user.type,
+                        "realm": user.realm,
+                    }
+                    duplicate = False
+                    if "objects" not in self.users:
+                        self.__dict__["users"]["objects"] = []
+
+                    for obj in self.users["objects"]:
+                        if obj["name"] == new_realm_user["name"]:
+                            duplicate = True
+                            break
+                    if not duplicate:
+                        self.users["objects"].append(new_realm_user)
+                        logging.info(f'Adding "{name}" to users for this AccessRules.')
+                else:
+                    self.users = {
+                        "objects": [
+                            {
+                                "name": user.name,
+                                "id": user.id,
+                                "type": user.type,
+                                "realm": user.realm,
+                            }
+                        ]
+                    }
+                    logging.info(f'Adding "{name}" to users for this AccessRules.')
+            else:
+                logging.warning(
+                    f'User: "{name}", ' f"not found.  Cannot add to AccessRules."
+                )
+
+        elif action == "remove":
+            if realm_type == "user":
+                user = RealmUsers(fmc=self.fmc)
+            elif realm_type == "group":
+                user = RealmUserGroups(fmc=self.fmc)
+            user.get(name=name)
+            if "id" in user.__dict__:
+                if "users" in self.__dict__:
+                    users = []
+                    for obj in self.users["objects"]:
+                        if obj["name"] != name:
+                            users.append(obj)
+                    self.users["objects"] = users
+                    logging.info(f'Removed "{name}" from users for this AccessRules.')
+                else:
+                    logging.info(
+                        "Users doesn't exist for this AccessRules.  Nothing to remove."
+                    )
+            else:
+                logging.warning(
+                    f"User, {name}, not found.  Cannot remove from AccessRules."
+                )
+
+        elif action == "clear":
+            if "users" in self.__dict__:
+                del self.users
+                logging.info("All Users removed from this AccessRules object.")
 
     def application(self, action, name=""):
         """
