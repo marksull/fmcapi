@@ -10,6 +10,7 @@ class RealmUserGroups(APIClassTemplate):
     VALID_JSON_DATA = ["id", "name", "type", "realmUuid", "realm"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = "/object/realmusergroups"
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-!]"""
 
     def __init__(self, fmc, **kwargs):
         """
