@@ -363,7 +363,7 @@ class APIClassTemplate(object):
             if not response:
                 return None
             self.parse_kwargs(**response)
-            if "name" in self.name:
+            if hasattr(self, 'name'):
                 logging.info(
                     f'DELETE success. Object with name: "{self.name}" and id: "{self.id}" deleted in FMC.'
                 )
