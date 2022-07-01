@@ -82,7 +82,7 @@ class AccessRules(APIClassTemplate):
         "BLOCK_INTERACTIVE",
         "BLOCK_RESET_INTERACTIVE",
     ]
-    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
+    VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-<>, ]"""
 
     @property
     def URL_SUFFIX(self):
