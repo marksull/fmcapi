@@ -8,6 +8,7 @@ from fmcapi.api_objects.object_services.securityzones import SecurityZones
 from fmcapi.api_objects.object_services.vlantags import VlanTags
 from fmcapi.api_objects.object_services.portobjectgroups import PortObjectGroups
 from fmcapi.api_objects.object_services.protocolportobjects import ProtocolPortObjects
+from fmcapi.api_objects.object_services.icmpv4objects import ICMPv4Objects
 from fmcapi.api_objects.object_services.fqdns import FQDNS
 from fmcapi.api_objects.object_services.networkgroups import NetworkGroups
 from fmcapi.api_objects.object_services.networkaddresses import NetworkAddresses
@@ -560,8 +561,12 @@ class AccessRules(APIClassTemplate):
         if action == "add":
             pport_json = ProtocolPortObjects(fmc=self.fmc)
             pport_json.get(name=name)
+            icmpv4_json = ICMPv4Objects(fmc=self.fmc)
+            icmpv4_json.get(name=name)
             if "id" in pport_json.__dict__:
                 item = pport_json
+            elif "id" in icmpv4_json.__dict__:
+                item = icmpv4_json
             else:
                 item = PortObjectGroups(fmc=self.fmc)
                 item.get(name=name)
@@ -629,8 +634,12 @@ class AccessRules(APIClassTemplate):
         elif action == "remove":
             pport_json = ProtocolPortObjects(fmc=self.fmc)
             pport_json.get(name=name)
+            icmpv4_json = ICMPv4Objects(fmc=self.fmc)
+            icmpv4_json.get(name=name)
             if "id" in pport_json.__dict__:
                 item = pport_json
+            elif "id" in icmpv4_json.__dict__:
+                item = icmpv4_json
             else:
                 item = PortObjectGroups(fmc=self.fmc)
                 item.get(name=name)
@@ -670,8 +679,12 @@ class AccessRules(APIClassTemplate):
         if action == "add":
             pport_json = ProtocolPortObjects(fmc=self.fmc)
             pport_json.get(name=name)
+            icmpv4_json = ICMPv4Objects(fmc=self.fmc)
+            icmpv4_json.get(name=name)
             if "id" in pport_json.__dict__:
                 item = pport_json
+            elif "id" in icmpv4_json.__dict__:
+                item = icmpv4_json
             else:
                 item = PortObjectGroups(fmc=self.fmc)
                 item.get(name=name)
@@ -739,8 +752,12 @@ class AccessRules(APIClassTemplate):
         elif action == "remove":
             pport_json = ProtocolPortObjects(fmc=self.fmc)
             pport_json.get(name=name)
+            icmpv4_json = ICMPv4Objects(fmc=self.fmc)
+            icmpv4_json.get(name=name)
             if "id" in pport_json.__dict__:
                 item = pport_json
+            elif "id" in icmpv4_json.__dict__:
+                item = icmpv4_json
             else:
                 item = PortObjectGroups(fmc=self.fmc)
                 item.get(name=name)
