@@ -27,6 +27,7 @@ class HitCounts(APIClassTemplate):
         "lastHitTimeStamp",
         "version",
         "policy",
+        "offset",
     ]
     ACP_PREFIX_URL = "/policy/accesspolicies"
     PREFILTER_PREFIX_URL = "/policy/prefilterpolicies"
@@ -56,6 +57,8 @@ class HitCounts(APIClassTemplate):
 
         if "limit" in self.__dict__:
             filter_string += f"&limit={self.limit}"
+        if "offset" in self.__dict__:
+            filter_string += f"&offset={self.offset}"
         return filter_string
 
     @property
