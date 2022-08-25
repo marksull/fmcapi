@@ -285,7 +285,7 @@ class HitCounts(APIClassTemplate):
             response = self.fmc.send_to_api(method="get", url=self.URL)
             if "items" not in response:
                 response["items"] = []
-            return response["items"]
+            return response
         else:
             logging.warning(
                 "get() method failed due to failure to pass valid_for_get() test."
