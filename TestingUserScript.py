@@ -97,6 +97,9 @@ def main():
         unit_tests.test__etherchannel_interfaces(fmc=fmc1)
         unit_tests.test__subinterfaces(fmc=fmc1)
         unit_tests.test__ftds2svpns(fms=fmc1)
+        unit_tests.test__globalsearch(fms=fmc1)
+        unit_tests.test__object(fms=fmc1)
+        unit_tests.test__policy(fms=fmc1)
         """
 
 
