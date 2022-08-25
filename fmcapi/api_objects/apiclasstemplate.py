@@ -254,7 +254,7 @@ class APIClassTemplate(object):
                     self.parse_kwargs(**response)
                     if "name" in self.__dict__ and "id" in self.__dict__:
                         logging.info(
-                            f'POST success. Object with name: "{self.name}" and id: "{id}" created in FMC.'
+                            f'POST success. Object with name: "{self.name}" and id: "{self.id}" created in FMC.'
                         )
                     else:
                         logging.debug(
