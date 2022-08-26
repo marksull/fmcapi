@@ -13,6 +13,7 @@ class GlobalSearch(APIClassTemplate):
     URL_SUFFIX = "/search/global"
     REQUIRED_FOR_GET = ["filter"]
     FILTER_BY_NAME = True
+    FIRST_SUPPORTED_FMC_VERSION = "7.0"
 
     def __init__(self, fmc, **kwargs):
         super().__init__(fmc, **kwargs)
