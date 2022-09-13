@@ -18,6 +18,7 @@ class DeviceRecords(APIClassTemplate):
         "natID",
         "regKey",
         "license_caps",
+        "performanceTier",
         "accessPolicy",
     ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + [
@@ -39,7 +40,7 @@ class DeviceRecords(APIClassTemplate):
         "keepLocalEvents",
     ]
     URL_SUFFIX = "/devices/devicerecords"
-    REQUIRED_FOR_POST = ["accessPolicy", "hostName", "regKey"]
+    REQUIRED_FOR_POST = ["accessPolicy", "hostName", "regKey", "type"]
     REQUIRED_FOR_PUT = ["id"]
     LICENSES = [
         "BASE",
@@ -50,6 +51,15 @@ class DeviceRecords(APIClassTemplate):
         "PLUS",
         "VPNOnly",
         "INSTANCE",
+    ]
+    TIERS = [
+        "FTDv5",
+        "FTDv10",
+        "FTDv20",
+        "FTDv30",
+        "FTDv50",
+        "FTDv100",
+        "Legacy"
     ]
 
     def __init__(self, fmc, **kwargs):
@@ -122,6 +132,55 @@ class DeviceRecords(APIClassTemplate):
             if "license_caps" in self.__dict__:
                 del self.license_caps
                 logging.info("All licensing removed from this DeviceRecords object.")
+
+    def tiering(self, action, name=""):
+        """
+        Associate performance tier with this device record.
+
+        :param action: (str) 'add', 'remove', 'clear'
+        :param name: (str) Value from TIERS constant.
+        :return: None
+        """
+        logging.debug("In tiering() for DeviceRecords class.")
+        if self.fmc.serverVersion < "7.0":
+            logging.warning(
+                f"FTD performance tier licenses are supported only in FMC version 7.0 and newer."
+            )
+        else:
+            if action == "add":
+                if name in self.TIERS:
+                    self.performanceTier = name
+                    logging.info(f'Performance tier "{name}" added to this DeviceRecords object.')
+                else:
+                    logging.warning(
+                        f"{name} not found in {self.TIERS}.  Cannot add performance tier to DeviceRecords."
+                    )
+            elif action == "remove":
+                if name in self.TIERS:
+                    if "performanceTier" in self.__dict__:
+                        try:
+                            self.performanceTier=""
+                        except ValueError:
+                            logging.warning(
+                                f"{name} performance tier cannot be removed."
+                            )
+                        logging.info(
+                            f'License "{name}" removed from this DeviceRecords object.'
+                        )
+                    else:
+                        logging.warning(
+                            f"{name} is not assigned to this DeviceRecords thus cannot be removed."
+                        )
+
+                else:
+                    logging.warning(
+                        f"{name} not found in {self.TIERS}.  Cannot remove performance tier from DeviceRecords."
+                    )
+            elif action == "clear":
+                if "performanceTier" in self.__dict__:
+                    del self.performanceTier
+                    logging.info("Performance tier removed from this DeviceRecords object.")
+
 
     def acp(self, name=""):
         """
