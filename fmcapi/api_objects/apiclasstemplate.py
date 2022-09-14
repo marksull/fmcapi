@@ -185,7 +185,10 @@ class APIClassTemplate(object):
                     "GET query for object with no name or id set.  "
                     "Returning full list of these object types instead."
                 )
-                url = f"{self.URL}?expanded=true&limit={self.limit}"
+                url_suffix_start = '?'
+                if url_suffix_start in self.URL:
+                    url_suffix_start = '&'
+                url = f"{self.URL}{url_suffix_start}expanded=true&limit={self.limit}"
                 if self.dry_run:
                     logging.info(
                         "Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:"
@@ -251,7 +254,7 @@ class APIClassTemplate(object):
                     self.parse_kwargs(**response)
                     if "name" in self.__dict__ and "id" in self.__dict__:
                         logging.info(
-                            f'POST success. Object with name: "{self.name}" and id: "{id}" created in FMC.'
+                            f'POST success. Object with name: "{self.name}" and id: "{self.id}" created in FMC.'
                         )
                     else:
                         logging.debug(

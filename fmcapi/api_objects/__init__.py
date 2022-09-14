@@ -98,6 +98,10 @@ from .policy_services.prefilterrules import PreFilterRules
 
 from .policy_assignment_services.policyassignments import PolicyAssignments
 
+from .search.globalsearch import GlobalSearch
+from .search.object import Object
+from .search.policy import Policy
+
 from .status_services.taskstatuses import TaskStatuses
 
 from .system_information import ServerVersion
@@ -184,6 +188,9 @@ __all__ = [
     "VlanGroupTags",
     "VlanTags",
     "PolicyAssignments",
+    "GlobalSearch",
+    "Object",
+    "Policy",
     "AccessPolicies",
     "AccessRules",
     "Bulk",

@@ -11,6 +11,7 @@ class NatRules(APIClassTemplate):
     VALID_JSON_DATA = ["id", "name", "type"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     PREFIX_URL = "/policy/ftdnatpolicies"
+    REQUIRED_FOR_GET = []
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 
     def __init__(self, fmc, **kwargs):
@@ -25,26 +26,45 @@ class NatRules(APIClassTemplate):
         logging.debug("In __init__() for NatRules class.")
         self.parse_kwargs(**kwargs)
 
-    def nat_policy(self, name):
+    def nat_policy(self, name=None, id=None):
         """
         Associate NAT Policy.
 
         :param name: (str) Name of NAT Policy.
+        :param id: (str) ID of NAT Policy.
         :return: None
         """
         logging.debug("In nat_policy() for NatRules class.")
-        ftd_nat = FTDNatPolicies(fmc=self.fmc)
-        ftd_nat.get(name=name)
-        if "id" in ftd_nat.__dict__:
-            self.nat_id = ftd_nat.id
-            self.URL = (
-                f"{self.fmc.configuration_url}{self.PREFIX_URL}/{self.nat_id}/natrules"
-            )
+        if id:
+            self.URL = f"{self.fmc.configuration_url}{self.PREFIX_URL}/{id}/natrules"
             self.nat_added_to_url = True
+        elif name:
+            ftd_nat = FTDNatPolicies(fmc=self.fmc)
+            ftd_nat.get(name=name)
+            if "id" in ftd_nat.__dict__:
+                self.URL = f"{self.fmc.configuration_url}{self.PREFIX_URL}/{ftd_nat.id}/natrules"
+                self.nat_added_to_url = True
+            else:
+                logging.warning(
+                    f"FTD NAT Policy {name} not found.  Cannot set up NatRules for NAT Policy."
+                )
         else:
-            logging.warning(
-                f"FTD NAT Policy {name} not found.  Cannot set up NatRules for NAT Policy."
-            )
+            logging.error("No NatRules name or ID was provided.")
+
+    def parse_kwargs(self, **kwargs):
+        """
+        Parse the kwargs and set self variables to match.
+
+        :return: None
+        """
+        super().parse_kwargs(**kwargs)
+        logging.debug("In parse_kwargs() for NatRules class.")
+        if "nat_id" in kwargs:
+            self.nat_policy(id=kwargs["nat_id"])
+        elif "nat_name" in kwargs:
+            self.nat_policy(name=kwargs["nat_name"])
+        elif "name" in kwargs:
+            self.nat_policy(name=kwargs["name"])
 
     def post(self):
         """POST method for API for NatRules not supported."""

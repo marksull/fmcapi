@@ -64,6 +64,9 @@ from .ipv6staticroutes import test__ipv6staticroutes
 from .prefilter import test__prefilter_policy
 from .prefilter_rule import test__prefiler_rule
 from .s2s_vpn import test__ftds2svpns
+from .search_globalsearch import test__globalsearch
+from .search_object import test__object
+from .search_policy import test__policy
 
 logging.debug("In the unit-tests __init__.py file.")
 
@@ -129,4 +132,10 @@ __all__ = [
     "test__access_control_policy",
     "test__intrusion_policy",
     "test__prefilter_policy",
+    "test__hitcounts",
+    "test__prefiler_rule",
+    "test__ftds2svpns",
+    "test__globalsearch",
+    "test__object",
+    "test__policy",
 ]
