@@ -7,7 +7,16 @@ class Object(APIClassTemplate):
     The Object Object in the FMC.
     """
 
-    VALID_JSON_DATA = ["id", "name", "type", "category", "links", "self", "metadata", "domain"]
+    VALID_JSON_DATA = [
+        "id",
+        "name",
+        "type",
+        "category",
+        "links",
+        "self",
+        "metadata",
+        "domain",
+    ]
     VALID_FOR_KWARGS = ["filter"]
     VALID_CHARACTERS_FOR_NAME = """[ .\w\d_\-]"""
     URL_SUFFIX = "/search/object"

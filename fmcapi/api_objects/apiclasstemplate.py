@@ -185,9 +185,9 @@ class APIClassTemplate(object):
                     "GET query for object with no name or id set.  "
                     "Returning full list of these object types instead."
                 )
-                url_suffix_start = '?'
+                url_suffix_start = "?"
                 if url_suffix_start in self.URL:
-                    url_suffix_start = '&'
+                    url_suffix_start = "&"
                 url = f"{self.URL}{url_suffix_start}expanded=true&limit={self.limit}"
                 if self.dry_run:
                     logging.info(

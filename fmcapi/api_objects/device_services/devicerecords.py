@@ -52,15 +52,7 @@ class DeviceRecords(APIClassTemplate):
         "VPNOnly",
         "INSTANCE",
     ]
-    TIERS = [
-        "FTDv5",
-        "FTDv10",
-        "FTDv20",
-        "FTDv30",
-        "FTDv50",
-        "FTDv100",
-        "Legacy"
-    ]
+    TIERS = ["FTDv5", "FTDv10", "FTDv20", "FTDv30", "FTDv50", "FTDv100", "Legacy"]
 
     def __init__(self, fmc, **kwargs):
         """
@@ -150,7 +142,9 @@ class DeviceRecords(APIClassTemplate):
             if action == "add":
                 if name in self.TIERS:
                     self.performanceTier = name
-                    logging.info(f'Performance tier "{name}" added to this DeviceRecords object.')
+                    logging.info(
+                        f'Performance tier "{name}" added to this DeviceRecords object.'
+                    )
                 else:
                     logging.warning(
                         f"{name} not found in {self.TIERS}.  Cannot add performance tier to DeviceRecords."
@@ -159,7 +153,7 @@ class DeviceRecords(APIClassTemplate):
                 if name in self.TIERS:
                     if "performanceTier" in self.__dict__:
                         try:
-                            self.performanceTier=""
+                            self.performanceTier = ""
                         except ValueError:
                             logging.warning(
                                 f"{name} performance tier cannot be removed."
@@ -179,8 +173,9 @@ class DeviceRecords(APIClassTemplate):
             elif action == "clear":
                 if "performanceTier" in self.__dict__:
                     del self.performanceTier
-                    logging.info("Performance tier removed from this DeviceRecords object.")
-
+                    logging.info(
+                        "Performance tier removed from this DeviceRecords object."
+                    )
 
     def acp(self, name=""):
         """
