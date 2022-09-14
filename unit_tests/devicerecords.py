@@ -17,11 +17,13 @@ def test__devicerecords(fmc):
     obj1 = fmcapi.DeviceRecords(fmc=fmc)
     obj1.name = namer
     obj1.acp(name=acp1.name)
+    obj1.type = "Device"
     obj1.licensing(action="add", name="MALWARE")
     obj1.licensing(action="add", name="VPN")
     obj1.licensing(action="remove", name="VPN")
     obj1.licensing(action="clear")
     obj1.licensing(action="add", name="BASE")
+    obj1.tiering(action="add", name="FTDv5")
     logging.info("Device -->")
     logging.info(obj1.format_data())
 
