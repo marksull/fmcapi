@@ -26,7 +26,6 @@ from fmcapi.api_objects.object_services.realmusergroups import RealmUserGroups
 from fmcapi.api_objects.object_services.realmusers import RealmUsers
 import logging
 import sys
-import json
 
 
 class AccessRules(APIClassTemplate):
@@ -1592,8 +1591,7 @@ class Bulk(object):
         # Prepare rule ids
         ids = []
         for item in self.items:
-            obj = json.loads(item)
-            ids.append(obj["id"])
+            ids.append(item.id)
 
         # Build URL
         filter = "ids:"+",".join(ids)
