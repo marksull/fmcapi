@@ -1578,5 +1578,26 @@ class Bulk(object):
                     f"This chunk of the post is too large.  Please submit less items to be bulk posted."
                 )
             response = self.fmc.send_to_api(method="post", url=self.URL, json_data=item)
-            logging.info(f"Posting to bulk items.")
+            logging.info(f"Posting bulk items.")
             return response
+
+    def delete(self):
+        """
+        Delete list of self.items in FMC as a bulk operation.
+
+        :return: (str) requests response from FMC
+        """
+
+        # Prepare rule ids
+        ids = []
+        for item in self.items:
+            ids.append(item.id)
+
+        # Build URL
+        filter = "ids:"+",".join(ids)
+        self.URL = f"{self.URL}{self.URL_SUFFIX}&bulk=true&filter={filter}"
+
+        response = self.fmc.send_to_api(method="delete", url=self.URL, json_data=self.items)
+        logging.info(f"Deleting bulk items.")
+        return response
+
