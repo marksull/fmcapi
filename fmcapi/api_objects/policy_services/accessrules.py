@@ -1627,8 +1627,20 @@ class Bulk(object):
 
         :return: (str) requests response from FMC
         """
-        ids = ",".join([item.id for item in self.items])
-        url = f"{self.build_url()}&filter=ids:{ids}"
+        base_url = f"{self.build_url()}&filter=ids:"
+        url = base_url
+
+        for item in self.items:
+
+            if len(url) + len(item.id) >= 2048:
+
+                logging.info(f"Deleting bulk items.")
+                if not self.fmc.send_to_api(method="delete", url=url[:-1]):
+                    return
+
+                url = base_url
+
+            url = f"{url}{item.id},"
 
         logging.info(f"Deleting bulk items.")
-        return self.fmc.send_to_api(method="delete", url=url)
+        return self.fmc.send_to_api(method="delete", url=url[:-1])
