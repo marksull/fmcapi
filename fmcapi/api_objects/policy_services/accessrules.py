@@ -1479,7 +1479,7 @@ class Bulk(object):
     """
 
     MAX_SIZE_QTY = 1000
-    MAX_SIZE_IN_BYTES = 2048000
+    MAX_SIZE_IN_BYTES = 1024000
     REQUIRED_FOR_POST = []
 
     @property
@@ -1502,14 +1502,17 @@ class Bulk(object):
         if "section" in self.__dict__:
             url = f"{url}section={self.section}&"
 
+        url = f"{url}bulk=true&"
+
         return url[:-1]
 
-    def __init__(self, fmc, url="", **kwargs):
+    def __init__(self, fmc, url=None, **kwargs):
         """
         Initialize Bulk object.
 
         :param fmc (object):  FMC object
-        :param url (str): Base URL used for API action.
+        :param url (str): Base URL used for API action. If none, the URL will be
+                          extracted from the first rule in the list
         :param **kwargs: Pass any/all variables for self.
         :return: None
         """
@@ -1537,7 +1540,7 @@ class Bulk(object):
 
     def add(self, item):
         """
-        :param item: (str) Add JSON string to list of items to send to FMC.
+        :param item: (AccessRules) Add AccessRule to list of items to send to FMC.
 
         :return: None
         """
@@ -1553,33 +1556,60 @@ class Bulk(object):
         logging.info(f"Clearing bulk items list.")
         self.items = []
 
+    def build_url(self):
+        """
+        Build the URL using either the URL is one was passed in or the URL
+        from the first item in the list.
+        """
+        if self.URL:
+            return f"{self.URL}{self.URL_SUFFIX}"
+
+        return f"{self.items[0].URL}{self.URL_SUFFIX}"
+
     def post(self):
         """
         Send list of self.items to FMC as a bulk import.
 
         :return: (str) requests response from FMC
         """
-        # Build URL
-        self.URL = f"{self.URL}{self.URL_SUFFIX}&bulk=true"
+        url = self.build_url()
 
-        # Break up the items into MAX_BULK_POST_SIZE chunks.
-        chunks = [
-            self.items[i * self.MAX_SIZE_QTY : (i + 1) * self.MAX_SIZE_QTY]
-            for i in range(
-                (len(self.items) + self.MAX_SIZE_QTY - 1) // self.MAX_SIZE_QTY
-            )
+        # Provide some backward compatibility support here as with the current
+        # versioning approach (non-semantic) there is no easy way signal to
+        # consumers of a breaking change
+        items = [
+            item.format_data() if isinstance(item, AccessRules) else item
+            for item in self.items
         ]
 
-        # Post the chunks
-        for item in chunks:
-            # I'm not sure what to do about the max bytes right now so I'll just throw a warning message.
-            if sys.getsizeof(item, 0) > self.MAX_SIZE_IN_BYTES:
-                logging.warning(
-                    f"This chunk of the post is too large.  Please submit less items to be bulk posted."
-                )
-            response = self.fmc.send_to_api(method="post", url=self.URL, json_data=item)
+        # The FMC has two limitations for bulk operations that can be reached
+        # independently. This first is the maximum amount of records. The second
+        # is the maximum size in bytes of a single payload. We need to ensure
+        # that if we hit either, that we post the data before continuing to the
+        # next bulk operation
+
+        data = []
+        response = None
+
+        for item in items:
+
+            if (
+                len(str(item)) + len(str(data)) >= self.MAX_SIZE_IN_BYTES
+                or len(data) == self.MAX_SIZE_QTY
+            ):
+                logging.info(f"Posting bulk items.")
+                if not self.fmc.send_to_api(method="post", url=url, json_data=data):
+                    return
+
+                data.clear()
+
+            data.append(item)
+
+        if data:
             logging.info(f"Posting bulk items.")
-            return response
+            response = self.fmc.send_to_api(method="post", url=url, json_data=data)
+
+        return response
 
     def delete(self):
         """
@@ -1587,17 +1617,8 @@ class Bulk(object):
 
         :return: (str) requests response from FMC
         """
+        ids = ",".join([item.id for item in self.items])
+        url = f"{self.build_url()}&filter=ids:{ids}"
 
-        # Prepare rule ids
-        ids = []
-        for item in self.items:
-            ids.append(item.id)
-
-        # Build URL
-        filter = "ids:"+",".join(ids)
-        self.URL = f"{self.URL}{self.URL_SUFFIX}&bulk=true&filter={filter}"
-
-        response = self.fmc.send_to_api(method="delete", url=self.URL, json_data=self.items)
         logging.info(f"Deleting bulk items.")
-        return response
-
+        return self.fmc.send_to_api(method="delete", url=url)

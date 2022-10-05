@@ -4,6 +4,8 @@ Configure FMC for hq-ftd, register hq-ftd and push changes to it.
 
 import fmcapi  # You can use 'from fmcapi import *' but it is best practices to keep the namespaces separate.
 
+from fmcapi.api_objects.policy_services.accessrules import Bulk
+
 
 def main():
     """
@@ -143,6 +145,35 @@ def main():
         assign_nat_policy = fmcapi.PolicyAssignments(fmc=fmc1)
         assign_nat_policy.ftd_natpolicy(name=nat.name, devices=devices)
         assign_nat_policy.post()
+
+        # Bulk create example
+        bulk = Bulk(fmc=fmc1)
+        for r in range(1, 10):
+            # Use acp_id instead of acp_name to avoid fmcapi looking up the acp
+            # id for each rule
+            rule = fmcapi.AccessRules(fmc=fmc1, acp_id=acp.id)
+            rule.action = "ALLOW"
+            rule.name = f"rule-{r}"
+            rule.enabled = True
+            bulk.add(rule)
+
+        bulk.post()
+
+        bulk.clear()
+
+        # Bulk delete example
+        bulk = Bulk(fmc=fmc1)
+        for r in range(1, 10):
+            # Use acp_id instead of acp_name to avoid fmcapi looking up the acp
+            # id for each rule
+            rule = fmcapi.AccessRules(fmc=fmc1, acp_id=acp.id)
+            rule.name = f"rule-{r}"
+            # You must perform a get on the rule so that fmcapi loads the ID
+            # for the rule which is required for the deletion
+            rule.get()
+            bulk.add(rule)
+
+        bulk.delete()
 
 
 if __name__ == "__main__":
