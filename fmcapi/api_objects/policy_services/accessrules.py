@@ -1520,6 +1520,10 @@ class Bulk(object):
         self.fmc = fmc
         self.items = []
         self.URL = url
+        self.category = None
+        self.insertBefore = None
+        self.insertAfter = None
+        self.section = None
         self.parse_kwargs(**kwargs)
 
     def parse_kwargs(self, **kwargs):
@@ -1531,10 +1535,13 @@ class Bulk(object):
         logging.debug("In parse_kwargs() for Bulk class.")
         if "category" in kwargs:
             self.category = kwargs["category"]
+
         if "insertBefore" in kwargs:
             self.insertBefore = kwargs["insertBefore"]
+
         if "insertAfter" in kwargs:
             self.insertAfter = kwargs["insertAfter"]
+
         if "section" in kwargs:
             self.section = kwargs["section"]
 
@@ -1562,7 +1569,10 @@ class Bulk(object):
         from the first item in the list.
         """
         if self.URL:
-            return f"{self.URL}{self.URL_SUFFIX}"
+            return self.URL
+
+        if self.items[0].URL_SUFFIX:
+            return f"{self.items[0].URL}&bulk=true"
 
         return f"{self.items[0].URL}{self.URL_SUFFIX}"
 
