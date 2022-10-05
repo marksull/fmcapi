@@ -159,7 +159,9 @@ def main():
 
         bulk.post()
 
-        # Bulk create example
+        bulk.clear()
+
+        # Bulk delete example
         bulk = Bulk(fmc=fmc1)
         for r in range(1, 10):
             # Use acp_id instead of acp_name to avoid fmcapi looking up the acp
