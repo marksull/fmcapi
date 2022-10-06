@@ -1482,30 +1482,6 @@ class Bulk(object):
     MAX_SIZE_IN_BYTES = 1024000
     REQUIRED_FOR_POST = []
 
-    @property
-    def URL_SUFFIX(self):
-        """
-        Add the URL suffixes for section, categories, insertBefore and insertAfter.
-
-        :return (str): url
-        """
-        url = "?"
-
-        if "category" in self.__dict__:
-            url = f"{url}category={self.category}&"
-        if "insertBefore" in self.__dict__:
-            url = f"{url}insertBefore={self.insertBefore}&"
-        if "insertAfter" in self.__dict__:
-            url = f"{url}insertAfter={self.insertAfter}&"
-        if "insertBefore" in self.__dict__ and "insertAfter" in self.__dict__:
-            logging.warning("ACP rule has both insertBefore and insertAfter params")
-        if "section" in self.__dict__:
-            url = f"{url}section={self.section}&"
-
-        url = f"{url}bulk=true&"
-
-        return url[:-1]
-
     def __init__(self, fmc, url=None, **kwargs):
         """
         Initialize Bulk object.
@@ -1520,7 +1496,39 @@ class Bulk(object):
         self.fmc = fmc
         self.items = []
         self.URL = url
+        self.category = None
+        self.insertBefore = None
+        self.insertAfter = None
+        self.section = None
         self.parse_kwargs(**kwargs)
+
+    @property
+    def URL_SUFFIX(self):
+        """
+        Add the URL suffixes for section, categories, insertBefore and insertAfter.
+
+        :return (str): url
+        """
+        url = "?"
+
+        if self.category:
+            url = f"{url}category={self.category}&"
+
+        if self.insertBefore:
+            url = f"{url}insertBefore={self.insertBefore}&"
+
+        if self.insertAfter:
+            url = f"{url}insertAfter={self.insertAfter}&"
+
+        if self.insertBefore and self.insertAfter:
+            logging.warning("ACP rule has both insertBefore and insertAfter params")
+
+        if self.section:
+            url = f"{url}section={self.section}&"
+
+        url = f"{url}bulk=true&"
+
+        return url[:-1]
 
     def parse_kwargs(self, **kwargs):
         """
@@ -1531,10 +1539,13 @@ class Bulk(object):
         logging.debug("In parse_kwargs() for Bulk class.")
         if "category" in kwargs:
             self.category = kwargs["category"]
+
         if "insertBefore" in kwargs:
             self.insertBefore = kwargs["insertBefore"]
+
         if "insertAfter" in kwargs:
             self.insertAfter = kwargs["insertAfter"]
+
         if "section" in kwargs:
             self.section = kwargs["section"]
 
@@ -1562,7 +1573,10 @@ class Bulk(object):
         from the first item in the list.
         """
         if self.URL:
-            return f"{self.URL}{self.URL_SUFFIX}"
+            return self.URL
+
+        if self.items[0].URL_SUFFIX:
+            return f"{self.items[0].URL}&bulk=true"
 
         return f"{self.items[0].URL}{self.URL_SUFFIX}"
 
@@ -1617,8 +1631,20 @@ class Bulk(object):
 
         :return: (str) requests response from FMC
         """
-        ids = ",".join([item.id for item in self.items])
-        url = f"{self.build_url()}&filter=ids:{ids}"
+        base_url = f"{self.build_url()}&filter=ids:"
+        url = base_url
+
+        for item in self.items:
+
+            if len(url) + len(item.id) >= 2048:
+
+                logging.info(f"Deleting bulk items.")
+                if not self.fmc.send_to_api(method="delete", url=url[:-1]):
+                    return
+
+                url = base_url
+
+            url = f"{url}{item.id},"
 
         logging.info(f"Deleting bulk items.")
-        return self.fmc.send_to_api(method="delete", url=url)
+        return self.fmc.send_to_api(method="delete", url=url[:-1])
