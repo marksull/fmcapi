@@ -1482,30 +1482,6 @@ class Bulk(object):
     MAX_SIZE_IN_BYTES = 1024000
     REQUIRED_FOR_POST = []
 
-    @property
-    def URL_SUFFIX(self):
-        """
-        Add the URL suffixes for section, categories, insertBefore and insertAfter.
-
-        :return (str): url
-        """
-        url = "?"
-
-        if "category" in self.__dict__:
-            url = f"{url}category={self.category}&"
-        if "insertBefore" in self.__dict__:
-            url = f"{url}insertBefore={self.insertBefore}&"
-        if "insertAfter" in self.__dict__:
-            url = f"{url}insertAfter={self.insertAfter}&"
-        if "insertBefore" in self.__dict__ and "insertAfter" in self.__dict__:
-            logging.warning("ACP rule has both insertBefore and insertAfter params")
-        if "section" in self.__dict__:
-            url = f"{url}section={self.section}&"
-
-        url = f"{url}bulk=true&"
-
-        return url[:-1]
-
     def __init__(self, fmc, url=None, **kwargs):
         """
         Initialize Bulk object.
@@ -1525,6 +1501,34 @@ class Bulk(object):
         self.insertAfter = None
         self.section = None
         self.parse_kwargs(**kwargs)
+
+    @property
+    def URL_SUFFIX(self):
+        """
+        Add the URL suffixes for section, categories, insertBefore and insertAfter.
+
+        :return (str): url
+        """
+        url = "?"
+
+        if self.category:
+            url = f"{url}category={self.category}&"
+
+        if self.insertBefore:
+            url = f"{url}insertBefore={self.insertBefore}&"
+
+        if self.insertAfter:
+            url = f"{url}insertAfter={self.insertAfter}&"
+
+        if self.insertBefore and self.insertAfter:
+            logging.warning("ACP rule has both insertBefore and insertAfter params")
+
+        if self.section:
+            url = f"{url}section={self.section}&"
+
+        url = f"{url}bulk=true&"
+
+        return url[:-1]
 
     def parse_kwargs(self, **kwargs):
         """
