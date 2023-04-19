@@ -23,7 +23,7 @@ class Categories(APIClassTemplate):
         "insertAfter",
         "section",
     ]
-    FIRST_SUPPORTED_FMC_VERSION = "6.3"
+    FIRST_SUPPORTED_FMC_VERSION = "6.5"
     PREFIX_URL = "/policy/accesspolicies"
     REQUIRED_FOR_POST = ["name", "acp_id"]
     REQUIRED_FOR_GET = ["acp_id"]
