@@ -61,7 +61,7 @@ class Categories(APIClassTemplate):
         """
         Initialize Categories object.
 
-        Set self.type to "Categories", parse the kwargs, and set up the self.URL.
+        Set self.type to "Category", parse the kwargs, and set up the self.URL.
 
         :param fmc: (object) FMC object
         :param kwargs: Any other values passed during instantiation.
