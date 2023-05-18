@@ -7,7 +7,15 @@ class AccessPolicies(APIClassTemplate):
     The AccessPolicies Object in the FMC.
     """
 
-    VALID_JSON_DATA = ["id", "name", "type", "description", "defaultAction"]
+    PREFILTER_POLICY_SETTING = "prefilterPolicySetting"
+    VALID_JSON_DATA = [
+        "id",
+        "name",
+        "type",
+        "description",
+        "defaultAction",
+        PREFILTER_POLICY_SETTING,
+    ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     VALID_CHARACTERS_FOR_NAME = """[ .\w\d_\-]"""
     URL_SUFFIX = "/policy/accesspolicies"
@@ -45,5 +53,12 @@ class AccessPolicies(APIClassTemplate):
     def format_data(self):
         json_data = super().format_data()
         logging.debug("In format_data() for AccessPolicies class.")
+
         json_data["defaultAction"] = self.defaultAction
+
+        if hasattr(self, self.PREFILTER_POLICY_SETTING):
+            json_data[self.PREFILTER_POLICY_SETTING] = getattr(
+                self, self.PREFILTER_POLICY_SETTING
+            )
+
         return json_data
