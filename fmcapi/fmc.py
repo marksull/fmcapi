@@ -52,7 +52,7 @@ class FMC(object):
         debug=False,
         limit=1000,
         timeout=5,
-        wait_time=120
+        wait_time=15
     ):
         """
         Instantiate some variables prior to calling the __enter__() method.
