@@ -52,6 +52,7 @@ class FMC(object):
         debug=False,
         limit=1000,
         timeout=5,
+        wait_time=120
     ):
         """
         Instantiate some variables prior to calling the __enter__() method.
@@ -116,6 +117,7 @@ class FMC(object):
         self.page_counter = None
         self.more_items = []
         self.error_response = None
+        self.wait_time = wait_time
 
     def __enter__(self):
         """
@@ -130,7 +132,7 @@ class FMC(object):
             password=self.password,
             domain=self.domain,
             verify_cert=self.VERIFY_CERT,
-            timeout=self.timeout,
+            timeout=self.timeout
         )
         self.uuid = self.mytoken.uuid
         if self.mytoken.access_token:
