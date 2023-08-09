@@ -14,7 +14,6 @@ class DeployableDevices(
     """
 
     URL_SUFFIX = "/deployment/deployabledevices?expanded=true"
-    WAIT_TIME = 15
 
     def __init__(self, fmc):
         """
@@ -25,12 +24,11 @@ class DeployableDevices(
         """
         logging.debug("In __init__ for DeployableDevices() class.")
 
-        logging.info(
-            f"Waiting {self.WAIT_TIME} seconds to allow the FMC to update the list of deployable devices."
-        )
-        time.sleep(self.WAIT_TIME)
-
         self.fmc = fmc
+        logging.info(
+            f"Waiting {self.fmc.wait_time} seconds to allow the FMC to update the list of deployable devices."
+        )
+        time.sleep(self.fmc.wait_time)
         self.URL = f"{self.fmc.configuration_url}{self.URL_SUFFIX}"
 
     def get(self):
