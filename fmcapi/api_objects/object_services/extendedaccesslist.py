@@ -9,7 +9,7 @@ class ExtendedAccessList(APIClassTemplate):
 
     VALID_JSON_DATA = ["id", "name", "type"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
-    URL_SUFFIX = "/object/extendedaccesslist"
+    URL_SUFFIX = "/object/extendedaccesslists"
 
     def __init__(self, fmc, **kwargs):
         """
