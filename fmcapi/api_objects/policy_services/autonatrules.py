@@ -245,18 +245,18 @@ class AutoNatRules(APIClassTemplate):
             self.natType = "DYNAMIC"
             self.patOptions = {"patPoolAddress": new_net}
             self.patOptions["interfacePat"] = (
-                options.interfacePat if "interfacePat" in options.keys() else False
+                options["interfacePat"] if "interfacePat" in options.keys() else False
             )
             self.patOptions["includeReserve"] = (
-                options.includeReserve if "includeReserve" in options.keys() else False
+                options["includeReserve"] if "includeReserve" in options.keys() else False
             )
             self.patOptions["roundRobin"] = (
-                options.roundRobin if "roundRobin" in options.keys() else True
+                options["roundRobin"] if "roundRobin" in options.keys() else True
             )
             self.patOptions["extendedPat"] = (
-                options.extendedPat if "extendedPat" in options.keys() else False
+                options["extendedPat"] if "extendedPat" in options.keys() else False
             )
             self.patOptions["flatPortRange"] = (
-                options.flatPortRange if "flatPortRange" in options.keys() else False
+                options["flatPortRange"] if "flatPortRange" in options.keys() else False
             )
             logging.info(f'Adding "{name}" to patPool for this AutoNatRule.')
