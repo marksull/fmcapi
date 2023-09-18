@@ -124,8 +124,13 @@ class APIClassTemplate(object):
             )
             return {"items": []}
         if self.valid_for_get():
-            if "id" in self.__dict__:
-                url = f"{self.URL}/{self.id}"
+            if "id" in self.__dict__ or "targetId" in self.__dict__:
+                if "targetId" in self.__dict__:
+                    url = f"{self.URL}/{self.targetId}"
+                    if "backupVersion" in self.__dict__:
+                        url += f"?backupVersion={self.backupVersion}"
+                else:
+                    url = f"{self.URL}/{self.id}"
                 if self.dry_run:
                     logging.info(
                         "Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:"
@@ -144,6 +149,15 @@ class APIClassTemplate(object):
                 if "name" in self.__dict__:
                     logging.info(
                         f'GET success. Object with name: "{self.name}" and id: "{self.id}" fetched from FMC.'
+                    )
+                elif "targetId" in self.__dict__:
+                    if "backupVersion" in self.__dict__:
+                        logging.info(
+                            f'GET success. Object with targetId: "{self.targetId}"\
+                                backupVersion: "{self.backupVersion}" fetched from FMC.'
+                        )
+                    logging.info(
+                        f'GET success. Object with targetId: "{self.targetId}" fetched from FMC.'
                     )
                 else:
                     logging.info(
@@ -351,7 +365,12 @@ class APIClassTemplate(object):
             )
             return False
         if self.valid_for_delete():
-            url = f"{self.URL}/{self.id}"
+            if "targetId" in self.__dict__:
+                url = f"{self.URL}/{self.targetId}"
+                if "backupVersion" in self.__dict__:
+                    url += f"?backupVersion={self.backupVersion}"
+            else:
+                url = f"{self.URL}/{self.id}"
             if self.dry_run:
                 logging.info(
                     "Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:"
@@ -370,6 +389,16 @@ class APIClassTemplate(object):
                 logging.info(
                     f'DELETE success. Object with name: "{self.name}" and id: "{self.id}" deleted in FMC.'
                 )
+            elif "targetId" in self.__dict__:
+                if "backupVersion" in self.__dict__:
+                    logging.info(
+                        f'DELETE success. Object with targetId: "{self.targetId}"\
+                            backupVersion: "{self.backupVersion}" deleted from FMC.'
+                    )
+                else:
+                    logging.info(
+                        f'DELETE success. Object with targetId: "{self.targetId}" deleted from FMC.'
+                    )
             else:
                 logging.info(f'DELETE success. Object id: "{self.id}" deleted in FMC.')
             return response
