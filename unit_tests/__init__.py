@@ -67,6 +67,7 @@ from .s2s_vpn import test__ftds2svpns
 from .search_globalsearch import test__globalsearch
 from .search_object import test__object
 from .search_policy import test__policy
+from .backup import test__backup
 
 logging.debug("In the unit-tests __init__.py file.")
 
@@ -138,4 +139,5 @@ __all__ = [
     "test__globalsearch",
     "test__object",
     "test__policy",
+    "test__backup",
 ]
