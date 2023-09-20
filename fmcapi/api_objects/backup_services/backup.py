@@ -43,7 +43,8 @@ class Backup(APIClassTemplate):
 
         :return: requests response
         """
-        super().get(**kwargs)
+        response = super().get(**kwargs)
+        return response
 
     def delete(self, **kwargs):
         """
@@ -59,7 +60,8 @@ class Backup(APIClassTemplate):
 
         :return: requests response
         """
-        super().delete(**kwargs)
+        response = super().delete(**kwargs)
+        return response
 
     def post(self):
         """POST method for API for Backup not supported."""
