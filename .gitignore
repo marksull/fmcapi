@@ -108,3 +108,6 @@ venv/*
 .mypy_cache/
 .idea/workspace.xml
 tests/
+
+# Mac's finder files
+.DS_Store

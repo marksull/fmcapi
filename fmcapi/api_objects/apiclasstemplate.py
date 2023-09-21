@@ -153,8 +153,7 @@ class APIClassTemplate(object):
                 elif "targetId" in self.__dict__:
                     if "backupVersion" in self.__dict__:
                         logging.info(
-                            f'GET success. Object with targetId: "{self.targetId}"\
-                                backupVersion: "{self.backupVersion}" fetched from FMC.'
+                            f'GET success. Object with targetId: "{self.targetId}" backupVersion: "{self.backupVersion}" fetched from FMC.'
                         )
                     logging.info(
                         f'GET success. Object with targetId: "{self.targetId}" fetched from FMC.'
@@ -392,8 +391,7 @@ class APIClassTemplate(object):
             elif "targetId" in self.__dict__:
                 if "backupVersion" in self.__dict__:
                     logging.info(
-                        f'DELETE success. Object with targetId: "{self.targetId}"\
-                            backupVersion: "{self.backupVersion}" deleted from FMC.'
+                        f'DELETE success. Object with targetId: "{self.targetId}" backupVersion: "{self.backupVersion}" deleted from FMC.'
                     )
                 else:
                     logging.info(
