@@ -31,6 +31,7 @@ from .acls_extended import test__extended_acls
 from .ip_range import test__ip_range
 from .ip_network import test__ip_network
 from .ip_host import test__ip_host
+from .objects_get_query_filters import test__objects_get_query_filters
 from .variable_set import test__variable_set
 from .server_version import test__fmc_version
 from .ip_addresses import test__ip_addresses
@@ -104,6 +105,7 @@ __all__ = [
     "test__fmc_version",
     "test__variable_set",
     "test__ip_host",
+    "test__objects_get_query_filters"
     "test__ip_network",
     "test__ip_range",
     "test__extended_acls",

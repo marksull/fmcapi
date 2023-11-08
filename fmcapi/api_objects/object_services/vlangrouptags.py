@@ -10,7 +10,8 @@ class VlanGroupTags(APIClassTemplate):
     """The VlanGroupTags Object in the FMC."""
 
     VALID_JSON_DATA = ["id", "name", "type", "description", "objects", "literals"]
-    VALID_FOR_KWARGS = VALID_JSON_DATA + []
+    VALID_GET_FILTERS = ["unusedOnly", "nameOrValue"] #unusedOnly:Bool, nameOrValue:String
+    VALID_FOR_KWARGS = VALID_JSON_DATA + VALID_GET_FILTERS + []
     URL_SUFFIX = "/object/vlangrouptags"
 
     # Technically you can have objects OR literals but I'm not set up for "OR" logic, yet.
