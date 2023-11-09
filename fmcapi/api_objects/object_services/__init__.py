@@ -14,7 +14,7 @@ from .continents import Continents
 from .countries import Countries
 from .dnsservergroups import DNSServerGroups
 from .endpointdevicetypes import EndPointDeviceTypes
-from .extendedaccesslist import ExtendedAccessList
+from .extendedaccesslist import ExtendedAccessList, ExtendedAccessListAce
 from .fqdns import FQDNS
 from .geolocation import Geolocation
 from .icmpv4objects import ICMPv4Objects
@@ -68,6 +68,7 @@ __all__ = [
     "DNSServerGroups",
     "EndPointDeviceTypes",
     "ExtendedAccessList",
+    "ExtendedAccessListAce",
     "FQDNS",
     "Geolocation",
     "Hosts",
