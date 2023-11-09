@@ -46,6 +46,7 @@ from .tunneltags import TunnelTags
 from .urls import URLs
 from .urlcategories import URLCategories
 from .urlgroups import URLGroups
+from .usage import Usage
 from .variablesets import VariableSets
 from .vlangrouptags import VlanGroupTags
 from .vlantags import VlanTags
@@ -98,6 +99,7 @@ __all__ = [
     "URLCategories",
     "URLGroups",
     "URLs",
+    "Usage",
     "VariableSets",
     "VlanGroupTags",
     "VlanTags",

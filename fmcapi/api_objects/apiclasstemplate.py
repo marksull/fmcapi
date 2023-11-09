@@ -13,6 +13,7 @@ class APIClassTemplate(object):
     REQUIRED_FOR_PUT = ["id"]
     REQUIRED_FOR_DELETE = ["id"]
     REQUIRED_FOR_GET = [""]
+    REQUIRED_GET_FILTERS = []
     FILTER_BY_NAME = False
     URL = ""
     URL_SUFFIX = ""
@@ -104,6 +105,11 @@ class APIClassTemplate(object):
         :return: (boolean)
         """
         logging.debug("In valid_for_get() for APIClassTemplate class.")
+        if len(self.REQUIRED_GET_FILTERS) > 0:
+            for item in self.REQUIRED_GET_FILTERS:
+                if item not in self.get_filters:
+                    logging.error(f'Missing REQUIRED_GET_FILTERS "{item}" for GET request.')
+                    return False
         if self.REQUIRED_FOR_GET == [""]:
             return True
         for item in self.REQUIRED_FOR_GET:
