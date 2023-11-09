@@ -10,6 +10,7 @@ class FQDNS(APIClassTemplate):
     VALID_JSON_DATA = [
         "id",
         "name",
+        'description',
         "type",
         "overridableTargetId",
         "value",

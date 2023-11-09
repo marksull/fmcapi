@@ -10,6 +10,7 @@ class ICMPv4Objects(APIClassTemplate):
     VALID_JSON_DATA = [
         "id",
         "name",
+        "description",
         "type",
         "overrideTargetId",
         "code",
