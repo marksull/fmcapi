@@ -248,7 +248,9 @@ class AutoNatRules(APIClassTemplate):
                 options["interfacePat"] if "interfacePat" in options.keys() else False
             )
             self.patOptions["includeReserve"] = (
-                options["includeReserve"] if "includeReserve" in options.keys() else False
+                options["includeReserve"]
+                if "includeReserve" in options.keys()
+                else False
             )
             self.patOptions["roundRobin"] = (
                 options["roundRobin"] if "roundRobin" in options.keys() else True

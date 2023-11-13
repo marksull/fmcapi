@@ -8,10 +8,13 @@ class ProtocolPortObjects(APIClassTemplate):
     """The ProtocolPortObjects in the FMC."""
 
     VALID_JSON_DATA = ["id", "name", "description", "port", "protocol", "type"]
-    VALID_GET_FILTERS = ["unusedOnly", "nameOrValue"] #unusedOnly:Bool, nameOrValue:String
+    VALID_GET_FILTERS = [
+        "unusedOnly",
+        "nameOrValue",
+    ]  # unusedOnly:Bool, nameOrValue:String
     VALID_FOR_KWARGS = VALID_JSON_DATA + VALID_GET_FILTERS + []
     URL_SUFFIX = "/object/protocolportobjects"
-    REQUIRED_FOR_POST = ["name",  "protocol"]
+    REQUIRED_FOR_POST = ["name", "protocol"]
 
     def __init__(self, fmc, **kwargs):
         """

@@ -1606,7 +1606,6 @@ class Bulk(object):
         response = None
 
         for item in items:
-
             if (
                 len(str(item)) + len(str(data)) >= self.MAX_SIZE_IN_BYTES
                 or len(data) == self.MAX_SIZE_QTY
@@ -1635,9 +1634,7 @@ class Bulk(object):
         url = base_url
 
         for item in self.items:
-
             if len(url) + len(item.id) >= 2048:
-
                 logging.info(f"Deleting bulk items.")
                 if not self.fmc.send_to_api(method="delete", url=url[:-1]):
                     return

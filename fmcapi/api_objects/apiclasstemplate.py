@@ -108,7 +108,9 @@ class APIClassTemplate(object):
         if len(self.REQUIRED_GET_FILTERS) > 0:
             for item in self.REQUIRED_GET_FILTERS:
                 if item not in self.get_filters:
-                    logging.error(f'Missing REQUIRED_GET_FILTERS "{item}" for GET request.')
+                    logging.error(
+                        f'Missing REQUIRED_GET_FILTERS "{item}" for GET request.'
+                    )
                     return False
         if self.REQUIRED_FOR_GET == [""]:
             return True
@@ -125,7 +127,7 @@ class APIClassTemplate(object):
         If no self.name or self.id exists then return a full listing of all
         objects of this type otherwise return requested name/id values.  Set "expanded=true" results for specific object
         to gather additional detail. Set "unusedOnly=True" to query for unused objects only for certain object types. Set
-        "nameOrValue=String" to filter for a particular name or value of an object. This includes partial matches and is 
+        "nameOrValue=String" to filter for a particular name or value of an object. This includes partial matches and is
         available for some objects.
 
         :param: expanded=Bool
@@ -211,14 +213,16 @@ class APIClassTemplate(object):
                         f"\tGET query for {self.name} is not found.\n\t\tResponse: {json.dumps(response)}"
                     )
             elif len(self.get_filters) > 0:
-                url_filter = ''
-                for key,value in self.get_filters.items():
-                    #Filter value must not be empty otherwise will result in a 400 response
-                    if value != '':
-                        url_filter += f'{key}%3A{value};'
+                url_filter = ""
+                for key, value in self.get_filters.items():
+                    # Filter value must not be empty otherwise will result in a 400 response
+                    if value != "":
+                        url_filter += f"{key}%3A{value};"
                     else:
-                        logging.warning(f'Terminating GET - {self.URL}?expanded={self.expanded}&filter={url_filter}')
-                        logging.warning(f'{key} MUST have a non empty value')
+                        logging.warning(
+                            f"Terminating GET - {self.URL}?expanded={self.expanded}&filter={url_filter}"
+                        )
+                        logging.warning(f"{key} MUST have a non empty value")
                         return False
                 url = f"{self.URL}?expanded={self.expanded}&filter={url_filter}"
                 if self.dry_run:
@@ -231,13 +235,13 @@ class APIClassTemplate(object):
                 response = self.fmc.send_to_api(method="get", url=url)
                 if "items" not in response:
                     logging.info(
-                        f'GET success. No Objects were found with query filter: {self.get_filters}'
+                        f"GET success. No Objects were found with query filter: {self.get_filters}"
                     )
                     return response
                 else:
                     response_count = response.get("paging").get("count")
                     logging.info(
-                        f'GET success. {response_count} items found that match query filter: {self.get_filters}'
+                        f"GET success. {response_count} items found that match query filter: {self.get_filters}"
                     )
                     return response
             else:
