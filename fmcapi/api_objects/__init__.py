@@ -42,7 +42,7 @@ from .object_services.continents import Continents
 from .object_services.countries import Countries
 from .object_services.dnsservergroups import DNSServerGroups
 from .object_services.endpointdevicetypes import EndPointDeviceTypes
-from .object_services.extendedaccesslist import ExtendedAccessList
+from .object_services.extendedaccesslist import ExtendedAccessList, ExtendedAccessListAce
 from .object_services.fqdns import FQDNS
 from .object_services.geolocation import Geolocation
 from .object_services.icmpv4objects import ICMPv4Objects
@@ -155,6 +155,7 @@ __all__ = [
     "DNSServerGroups",
     "EndPointDeviceTypes",
     "ExtendedAccessList",
+    "ExtendedAccessListAce",
     "FQDNS",
     "Geolocation",
     "Hosts",
