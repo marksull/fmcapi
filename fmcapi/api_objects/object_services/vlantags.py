@@ -9,7 +9,10 @@ class VlanTags(APIClassTemplate):
     """The VlanTags Object in the FMC."""
 
     VALID_JSON_DATA = ["id", "name", "type", "data", "description"]
-    VALID_GET_FILTERS = ["unusedOnly", "nameOrValue"] #unusedOnly:Bool, nameOrValue:String
+    VALID_GET_FILTERS = [
+        "unusedOnly",
+        "nameOrValue",
+    ]  # unusedOnly:Bool, nameOrValue:String
     VALID_FOR_KWARGS = VALID_JSON_DATA + VALID_GET_FILTERS + []
     URL_SUFFIX = "/object/vlantags"
     REQUIRED_FOR_POST = ["name", "data"]

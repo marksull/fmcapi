@@ -9,7 +9,10 @@ class Hosts(APIClassTemplate):
     """The Host Object in the FMC."""
 
     VALID_JSON_DATA = ["id", "name", "type", "value", "description"]
-    VALID_GET_FILTERS = ["unusedOnly", "nameOrValue"] #unusedOnly:Bool, nameOrValue:String
+    VALID_GET_FILTERS = [
+        "unusedOnly",
+        "nameOrValue",
+    ]  # unusedOnly:Bool, nameOrValue:String
     VALID_FOR_KWARGS = VALID_JSON_DATA + VALID_GET_FILTERS + []
     URL_SUFFIX = "/object/hosts"
     REQUIRED_FOR_POST = ["name", "value"]

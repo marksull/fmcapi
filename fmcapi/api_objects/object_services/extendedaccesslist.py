@@ -25,9 +25,21 @@ class ExtendedAccessList(APIClassTemplate):
         logging.debug("In __init__() for ExtendedAccessList class.")
         self.parse_kwargs(**kwargs)
 
+
 class ExtendedAccessListAce(object):
     """The ExtendedAccessListAce Object for creating ACEs or Lines in Extended ACLs"""
-    VALID_JSON_DATA = ["action", "logging", "logLevel", "logInterval","sourceNetworks", "sourcePorts", "destinationNetworks", "destinationPorts"]
+
+    VALID_JSON_DATA = [
+        "action",
+        "logging",
+        "logLevel",
+        "logInterval",
+        "sourceNetworks",
+        "sourcePorts",
+        "destinationNetworks",
+        "destinationPorts",
+    ]
+
     def __init__(self, **kwargs) -> None:
         """
         Initialize ExtendedAccessListAce Object with default values.

@@ -9,7 +9,10 @@ class Usage(APIClassTemplate):
     """The Usage Object in the FMC."""
 
     VALID_JSON_DATA = []
-    VALID_GET_FILTERS = ["uuid", "type"] #uuid:String, type:String[Network,Port,VLAN,URL]
+    VALID_GET_FILTERS = [
+        "uuid",
+        "type",
+    ]  # uuid:String, type:String[Network,Port,VLAN,URL]
     REQUIRED_GET_FILTERS = ["uuid", "type"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + VALID_GET_FILTERS + []
     URL_SUFFIX = "/object/operational/usage"

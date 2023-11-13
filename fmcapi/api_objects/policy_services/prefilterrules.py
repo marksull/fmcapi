@@ -280,7 +280,6 @@ class PreFilterRules(APIClassTemplate):
         :return: None
         """
         if target in self.__dict__:
-
             # Look through existing zones, if present, for the zone name. Skip if it's already there
             zone_name_duplicate = False
             zone_list = []

@@ -4,6 +4,7 @@ import logging
 
 class Backup(APIClassTemplate):
     """The Backup Object in the FMC."""
+
     FIRST_SUPPORTED_FMC_VERSION = "7.3"
     VALID_JSON_DATA = []
     VALID_FOR_KWARGS = VALID_JSON_DATA + [
