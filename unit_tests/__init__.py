@@ -69,6 +69,7 @@ from .search_globalsearch import test__globalsearch
 from .search_object import test__object
 from .search_policy import test__policy
 from .backup import test__backup
+from .usage import test__usage
 
 logging.debug("In the unit-tests __init__.py file.")
 
@@ -142,4 +143,5 @@ __all__ = [
     "test__object",
     "test__policy",
     "test__backup",
+    "test__usage",
 ]
