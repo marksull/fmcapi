@@ -18,7 +18,8 @@ class ICMPv4Objects(APIClassTemplate):
         "overrides",
         "overridable",
     ]
-    VALID_FOR_KWARGS = VALID_JSON_DATA + []
+    VALID_GET_FILTERS = ["unusedOnly", "nameOrValue"] #unusedOnly:Bool, nameOrValue:String
+    VALID_FOR_KWARGS = VALID_JSON_DATA + VALID_GET_FILTERS + []
     URL_SUFFIX = "/object/icmpv4objects"
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 

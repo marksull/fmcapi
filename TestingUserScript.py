@@ -78,6 +78,7 @@ def main():
         unit_tests.test__autonat(fmc=fmc1)
         unit_tests.test__manualnat(fmc=fmc1)
         unit_tests.test__backup(fmc=fmc1) # Delete needs existing backup and may need an increased fmc timeout for large backups
+        unit_tests.test__objects_get_query_filters(fmc=fmc1)
         """
 
         """

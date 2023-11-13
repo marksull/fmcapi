@@ -18,7 +18,8 @@ class FQDNS(APIClassTemplate):
         "overrides",
         "overridable",
     ]
-    VALID_FOR_KWARGS = VALID_JSON_DATA + []
+    VALID_GET_FILTERS = ["unusedOnly", "nameOrValue"] #unusedOnly:Bool, nameOrValue:String
+    VALID_FOR_KWARGS = VALID_JSON_DATA + VALID_GET_FILTERS + []
     URL_SUFFIX = "/object/fqdns"
     VALID_FOR_DNS_RESOLUTION = ["IPV4_ONLY", "IPV6_ONLY", "IPV4_AND_IPV6"]
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""

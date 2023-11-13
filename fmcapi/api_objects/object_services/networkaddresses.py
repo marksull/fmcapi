@@ -7,6 +7,9 @@ import logging
 class NetworkAddresses(APIClassTemplate):
     """The NetworkAddresses Object in the FMC."""
 
+    VALID_JSON_DATA = []
+    VALID_GET_FILTERS = ["unusedOnly", "nameOrValue", "type", "includeWildcard"] #unusedOnly:Bool, nameOrValue:String, type:String CSV [FQDN,RANGE,HOST,NETWORK], includeWildcard:Bool
+    VALID_FOR_KWARGS = VALID_JSON_DATA + VALID_GET_FILTERS + []
     URL_SUFFIX = "/object/networkaddresses"
 
     def __init__(self, fmc, **kwargs):

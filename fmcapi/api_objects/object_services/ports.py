@@ -7,6 +7,9 @@ import logging
 class Ports(APIClassTemplate):
     """The Ports Object in the FMC."""
 
+    VALID_JSON_DATA = ["id"]
+    VALID_GET_FILTERS = ["unusedOnly", "nameOrValue"] #unusedOnly:Bool, nameOrValue:String
+    VALID_FOR_KWARGS = VALID_JSON_DATA + VALID_GET_FILTERS + []
     URL_SUFFIX = "/object/ports"
 
     def __init__(self, fmc, **kwargs):

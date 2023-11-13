@@ -19,6 +19,7 @@ class APIClassTemplate(object):
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\-]"""
     FIRST_SUPPORTED_FMC_VERSION = "6.1"
     VALID_JSON_DATA = []
+    VALID_GET_FILTERS = []
     GLOBAL_VALID_FOR_KWARGS = ["dry_run"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
 
@@ -46,6 +47,8 @@ class APIClassTemplate(object):
         self.description = "Created by fmcapi."
         self.overridable = False
         self.dry_run = False
+        self.expanded = False
+        self.get_filters = {}
         self.URL = f"{self.fmc.configuration_url}{self.URL_SUFFIX}"
         if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
             logging.warning(
@@ -81,7 +84,10 @@ class APIClassTemplate(object):
         logging.debug("In parse_kwargs() for APIClassTemplate class.")
         for key_value in self.VALID_FOR_KWARGS:
             if key_value in kwargs:
-                self.__dict__[key_value] = kwargs[key_value]
+                if key_value in self.VALID_GET_FILTERS:
+                    self.get_filters[key_value] = kwargs[key_value]
+                else:
+                    self.__dict__[key_value] = kwargs[key_value]
         if "name" in kwargs:
             self.name = syntax_correcter(
                 kwargs["name"], permitted_syntax=self.VALID_CHARACTERS_FOR_NAME
@@ -112,8 +118,13 @@ class APIClassTemplate(object):
 
         If no self.name or self.id exists then return a full listing of all
         objects of this type otherwise return requested name/id values.  Set "expanded=true" results for specific object
-        to gather additional detail.
+        to gather additional detail. Set "unusedOnly=True" to query for unused objects only for certain object types. Set
+        "nameOrValue=String" to filter for a particular name or value of an object. This includes partial matches and is 
+        available for some objects.
 
+        :param: expanded=Bool
+        :param: unusedOnly=Bool
+        :param: nameOrValue=String
         :return: requests response
         """
         logging.debug("In get() for APIClassTemplate class.")
@@ -153,8 +164,7 @@ class APIClassTemplate(object):
                 elif "targetId" in self.__dict__:
                     if "backupVersion" in self.__dict__:
                         logging.info(
-                            f'GET success. Object with targetId: "{self.targetId}"\
-                                backupVersion: "{self.backupVersion}" fetched from FMC.'
+                            f'GET success. Object with targetId: "{self.targetId}" backupVersion: "{self.backupVersion}" fetched from FMC.'
                         )
                     logging.info(
                         f'GET success. Object with targetId: "{self.targetId}" fetched from FMC.'
@@ -194,6 +204,36 @@ class APIClassTemplate(object):
                     logging.debug(
                         f"\tGET query for {self.name} is not found.\n\t\tResponse: {json.dumps(response)}"
                     )
+            elif len(self.get_filters) > 0:
+                url_filter = ''
+                for key,value in self.get_filters.items():
+                    #Filter value must not be empty otherwise will result in a 400 response
+                    if value != '':
+                        url_filter += f'{key}%3A{value};'
+                    else:
+                        logging.warning(f'Terminating GET - {self.URL}?expanded={self.expanded}&filter={url_filter}')
+                        logging.warning(f'{key} MUST have a non empty value')
+                        return False
+                url = f"{self.URL}?expanded={self.expanded}&filter={url_filter}"
+                if self.dry_run:
+                    logging.info(
+                        "Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:"
+                    )
+                    logging.info("\tMethod = GET")
+                    logging.info(f"\tURL = {url}")
+                    return False
+                response = self.fmc.send_to_api(method="get", url=url)
+                if "items" not in response:
+                    logging.info(
+                        f'GET success. No Objects were found with query filter: {self.get_filters}'
+                    )
+                    return response
+                else:
+                    response_count = response.get("paging").get("count")
+                    logging.info(
+                        f'GET success. {response_count} items found that match query filter: {self.get_filters}'
+                    )
+                    return response
             else:
                 logging.debug(
                     "GET query for object with no name or id set.  "
@@ -392,8 +432,7 @@ class APIClassTemplate(object):
             elif "targetId" in self.__dict__:
                 if "backupVersion" in self.__dict__:
                     logging.info(
-                        f'DELETE success. Object with targetId: "{self.targetId}"\
-                            backupVersion: "{self.backupVersion}" deleted from FMC.'
+                        f'DELETE success. Object with targetId: "{self.targetId}" backupVersion: "{self.backupVersion}" deleted from FMC.'
                     )
                 else:
                     logging.info(
