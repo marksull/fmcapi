@@ -2,6 +2,10 @@
 
 import logging
 
+# TODO: Why is this the case?
+from .policy_services.accesspolicies import AccessPolicies  # Needs loaded before Device
+from .device_services.devicerecords import DeviceRecords  # Needs loaded early.
+
 from .audit_services.audit_records import AuditRecords
 from .backup_services.backup import Backup
 from .deployment_services import DeployableDevices
@@ -14,7 +18,6 @@ from .device_ha_pair_services.failoverinterfacemacaddressconfigs import (
 )
 from .device_ha_pair_services.monitoredinterfaces import MonitoredInterfaces
 from .device_services.bridgegroupinterfaces import BridgeGroupInterfaces
-from .device_services.devicerecords import DeviceRecords  # Needs loaded early.
 from .device_services.etherchannelinterfaces import EtherchannelInterfaces
 from .device_services.ipv4staticroutes import IPv4StaticRoutes
 from .device_services.ipv6staticroutes import IPv6StaticRoutes
@@ -73,7 +76,6 @@ from .object_services.variablesets import VariableSets
 from .object_services.vlangrouptags import VlanGroupTags
 from .object_services.vlantags import VlanTags
 from .policy_assignment_services.policyassignments import PolicyAssignments
-from .policy_services.accesspolicies import AccessPolicies  # Needs loaded before Device
 from .policy_services.accessrules import AccessRules
 from .policy_services.accessrules import Bulk
 from .policy_services.advancedsettings import AdvancedSettings

@@ -60,7 +60,7 @@ class AutoNatRules(APIClassTemplate):
         """
         super().parse_kwargs(**kwargs)
         logging.debug("In parse_kwargs() for AutoNatRules class.")
-        if ("translatedNetwork" in kwargs) and ("interfaceInTranslatedNetwork" is True):
+        if ("translatedNetwork" in kwargs) and ("interfaceInTranslatedNetwork" in kwargs):
             logging.warning(
                 "Cannot have both a translatedNetwork and interfaceInTranslatedNetwork"
             )
