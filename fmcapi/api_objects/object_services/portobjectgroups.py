@@ -32,7 +32,7 @@ class PortObjectGroups(APIClassTemplate):
         super().__init__(fmc, **kwargs)
         logging.debug("In __init__() for PortObjectGroups class.")
         self.parse_kwargs(**kwargs)
-        self.type = "NetworkGroup"
+        self.type = "PortObjectGroup"
 
     def named_ports(self, action, name=""):
         """
