@@ -8,7 +8,7 @@ if not os.path.isdir(script_dir):
         "Error: Mount a directory as /usr/src/app/scripts that contains the Python scripts to run with fmcapi."
     )
     print(
-        "Example:  docker run -v 'local directory':/usr/src/app/scripts -i -rm --name fmcapi dmickels/fmcapi"
+        "Example:  docker run -v 'local directory':/usr/src/app/scripts -it --rm --name fmcapi dmickels/fmcapi"
     )
     exit(0)
 
@@ -34,7 +34,7 @@ if list_of_scripts:
         if 0 <= choice < qty_of_scripts - 1:
             # A valid choice has been made.
             os.system(
-                f"/usr/bin/python3 {os.path.join(script_dir, list_of_scripts[choice])}"
+                f"python3 {os.path.join(script_dir, list_of_scripts[choice])}"
             )
     except ValueError:
         print("Inputted value out of range.")
