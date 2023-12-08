@@ -50,6 +50,8 @@ from .usage import Usage
 from .variablesets import VariableSets
 from .vlangrouptags import VlanGroupTags
 from .vlantags import VlanTags
+from .dynamicobjects import DynamicObject
+from .dynamicobjectmappings import DynamicObjectMappings
 
 logging.debug("In the object_services __init__.py file.")
 
@@ -104,4 +106,6 @@ __all__ = [
     "VariableSets",
     "VlanGroupTags",
     "VlanTags",
+    "DynamicObjectMappings",
+    "DynamicObject"
 ]
