@@ -70,6 +70,8 @@ from .search_object import test__object
 from .search_policy import test__policy
 from .backup import test__backup
 from .usage import test__usage
+from .dynamic_objects import test__dynamic_objects
+from .dynamic_object_mappings import test__dynamic_objects_mappings
 
 logging.debug("In the unit-tests __init__.py file.")
 
@@ -106,7 +108,7 @@ __all__ = [
     "test__fmc_version",
     "test__variable_set",
     "test__ip_host",
-    "test__objects_get_query_filters"
+    "test__objects_get_query_filters",
     "test__ip_network",
     "test__ip_range",
     "test__extended_acls",
@@ -144,4 +146,6 @@ __all__ = [
     "test__policy",
     "test__backup",
     "test__usage",
+    "test__dynamic_objects",
+    "test__dynamic_objects_mappings",
 ]

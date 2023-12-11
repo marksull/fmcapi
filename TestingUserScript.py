@@ -80,7 +80,10 @@ def main():
         unit_tests.test__backup(fmc=fmc1) # Delete needs existing backup and may need an increased fmc timeout for large backups
         unit_tests.test__objects_get_query_filters(fmc=fmc1)
         unit_tests.test__usage(fmc=fmc1)
+        unit_tests.test__dynamic_objects(fmc=fmc1)
+        unit_tests.test__dynamic_objects_mappings(fmc=fmc1)
         """
+
 
         """
         # Need FTD device to test

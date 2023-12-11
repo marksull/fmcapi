@@ -102,6 +102,8 @@ from .system_information import ServerVersion
 from .update_packages.listapplicabledevices import ListApplicableDevices
 from .update_packages.upgradepackage import Upgrades
 from .update_packages.upgradepackages import UpgradePackages
+from .object_services.dynamicobjects import DynamicObject
+from .object_services.dynamicobjectmappings import DynamicObjectMappings
 
 logging.debug("In the api_objects __init__.py file.")
 
@@ -202,4 +204,6 @@ __all__ = [
     "LoggingSettings",
     "Backup",
     "Usage",
+    "DynamicObject",
+    "DynamicObjectMappings"
 ]
