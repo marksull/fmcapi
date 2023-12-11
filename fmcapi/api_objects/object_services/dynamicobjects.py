@@ -12,8 +12,7 @@ class DynamicObject(APIClassTemplate):
 
     VALID_GET_FILTERS = [
         "unusedOnly",
-        "ids"
-        "nameStartsWith"
+        "ids" "nameStartsWith",
     ]  # unusedOnly:Bool, "ids:id1,id2,..." ,nameStartsWith:String
 
     def __init__(self, fmc, **kwargs):
@@ -30,4 +29,3 @@ class DynamicObject(APIClassTemplate):
         logging.debug("In __init__() for Dynamic Object class.")
         self.parse_kwargs(**kwargs)
         self.type = "DynamicObject"
-

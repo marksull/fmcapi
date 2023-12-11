@@ -205,5 +205,5 @@ __all__ = [
     "Backup",
     "Usage",
     "DynamicObject",
-    "DynamicObjectMappings"
+    "DynamicObjectMappings",
 ]

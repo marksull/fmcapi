@@ -107,5 +107,5 @@ __all__ = [
     "VlanGroupTags",
     "VlanTags",
     "DynamicObjectMappings",
-    "DynamicObject"
+    "DynamicObject",
 ]
