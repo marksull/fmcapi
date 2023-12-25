@@ -53,6 +53,8 @@ class FMC(object):
         limit=1000,
         timeout=5,
         wait_time=15,
+        api_key=None,
+        uuid=None,
     ):
         """
         Instantiate some variables prior to calling the __enter__() method.
@@ -118,6 +120,8 @@ class FMC(object):
         self.more_items = []
         self.error_response = None
         self.wait_time = wait_time
+        self.api_key = api_key
+        self.uuid = uuid
 
     def __enter__(self):
         """
@@ -126,27 +130,39 @@ class FMC(object):
         :return: self
         """
         logging.debug("In the FMC __enter__() class method.")
-        self.mytoken = Token(
-            host=self.host,
-            username=self.username,
-            password=self.password,
-            domain=self.domain,
-            verify_cert=self.VERIFY_CERT,
-            timeout=self.timeout,
-        )
-        self.uuid = self.mytoken.uuid
-        if self.mytoken.access_token:
-            self.build_urls()
+        if self.api_key is None:
+            self.mytoken = Token(
+                host=self.host,
+                username=self.username,
+                password=self.password,
+                domain=self.domain,
+                verify_cert=self.VERIFY_CERT,
+                timeout=self.timeout,
+            )
+            self.uuid = self.mytoken.uuid
+            if self.mytoken.access_token:
+                self.build_urls()
 
+                version = ServerVersion(fmc=self)
+                version.get()
+                self.serverVersion = version.serverVersion
+                logging.info(f"This FMC's version is {self.serverVersion}")
+
+                return self
+            else:
+                logging.info("User authentication failed.")
+                exit(1)
+        else:
+            if self.uuid is None:
+                logging.error("If using an API_KEY, you must provide a UUID")
+                exit(1)
+
+            self.build_urls()
             version = ServerVersion(fmc=self)
             version.get()
             self.serverVersion = version.serverVersion
             logging.info(f"This FMC's version is {self.serverVersion}")
-
             return self
-        else:
-            logging.info("User authentication failed.")
-            exit(1)
 
     def __exit__(self, *args):
         """
@@ -196,12 +212,19 @@ class FMC(object):
         if not more_items:
             self.more_items = []
             self.page_counter = 0
-        if headers == "":
-            # These values for headers works for most API requests.
+        if self.api_key is not None:
             headers = {
                 "Content-Type": "application/json",
-                "X-auth-access-token": self.mytoken.get_token(),
+                "Authorization": f"Bearer {self.api_key}",
             }
+        else:
+            if headers == "":
+                # These values for headers works for most API requests.
+                headers = {
+                    "Content-Type": "application/json",
+                    "X-auth-access-token": self.mytoken.get_token(),
+                }
+
         status_code = 429
         response = None
         json_response = None
@@ -260,14 +283,19 @@ class FMC(object):
                     )
                     time.sleep(self.TOO_MANY_CONNECTIONS_TIMEOUT)
                 if status_code == 401:
-                    logging.warning("Token has expired. Trying to refresh.")
-                    self.mytoken.access_token = None
-                    self.mytoken.access_token = self.mytoken.get_token()
-                    headers = {
-                        "Content-Type": "application/json",
-                        "X-auth-access-token": self.mytoken.access_token,
-                    }
-                    status_code = 429
+                    if self.api_key is not None:
+                        logging.warning("Token has expired. Trying to refresh.")
+                        self.mytoken.access_token = None
+                        self.mytoken.access_token = self.mytoken.get_token()
+                        headers = {
+                            "Content-Type": "application/json",
+                            "X-auth-access-token": self.mytoken.access_token,
+                        }
+                        status_code = 429
+                    else:
+                        logging.warning(
+                            "Received HTTP Code 401 from FMC. Please check that your API key is valid and has the correct permissions in CDO/FMC"
+                        )
                 if status_code == 422:
                     logging.warning(
                         "Either:\n\t1. Payload too large.  FMC can only handle a payload of "
