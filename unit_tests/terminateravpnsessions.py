@@ -30,11 +30,3 @@ def test__terminateravpnsessions(fmc):
     del(obj1)
 
     logging.info("Test TerminateRAVPNSessions done.\n")
-
-# {
-#   "usernames": [
-#     "testuser"
-#   ],
-#   "terminateBy": "USER",
-#   "deviceId": "$device_id_not_device_ha_id"
-# }
