@@ -12,7 +12,7 @@ class DynamicObjectMappings(APIClassTemplate):
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
 
     REQUIRED_FOR_POST = []
-    obj_id = ''
+    obj_id = ""
 
     def __init__(self, fmc, **kwargs):
         """
@@ -31,12 +31,11 @@ class DynamicObjectMappings(APIClassTemplate):
             self.obj_id = kwargs["id"]
 
     def handle_mappings(self, action, value, name):
-
         """
-            Associate mappings to dynamic object.
+        Associate mappings to dynamic object.
 
-            :param action: (str) 'add', 'remove', or 'clear'
-            :param dynamic_objects: (DynamicObject) Dynamic object to be mapped.
+        :param action: (str) 'add', 'remove', or 'clear'
+        :param dynamic_objects: (DynamicObject) Dynamic object to be mapped.
         """
         logging.debug("In mappings for dynamic object")
 
@@ -47,9 +46,9 @@ class DynamicObjectMappings(APIClassTemplate):
                 "dynamicObject": {
                     "name": response["name"],
                     "id": response["id"],
-                    "type": response["type"]
+                    "type": response["type"],
                 },
-                "mappings": value
+                "mappings": value,
             }
             if action == "add":
                 if "add" in self.__dict__:
@@ -58,7 +57,7 @@ class DynamicObjectMappings(APIClassTemplate):
                 else:
                     self.add = [new_obj]
 
-                logging.info(f'Adding mappings to Dynamic Object.')
+                logging.info(f"Adding mappings to Dynamic Object.")
 
             elif action == "remove":
                 if "remove" in self.__dict__:
@@ -67,12 +66,13 @@ class DynamicObjectMappings(APIClassTemplate):
                 else:
                     self.remove = [new_obj]
 
-                logging.info(f'Remove mappings to Dynamic Object.')
+                logging.info(f"Remove mappings to Dynamic Object.")
 
         else:
             logging.warning(
                 f'Dynamic Object "{name}" is not found in FMC.  Cannot add mappings.'
             )
+
     def get(self):
         self.URL_SUFFIX = f"/object/dynamicobjects/{str(self.obj_id)}/mappings"
         super().__init__(self.fmc)
@@ -82,10 +82,4 @@ class DynamicObjectMappings(APIClassTemplate):
         self.URL_SUFFIX = f"/object/dynamicobjects/{str(self.obj_id)}/mappings"
         super().__init__(self.fmc)
         return super().put()
-
-
-
-
-
-
 
