@@ -6,7 +6,7 @@ import logging
 class DynamicObjectMappings(APIClassTemplate):
     """The Dynamic Object in the FMC."""
 
-    VALID_JSON_DATA = []
+    VALID_JSON_DATA = ["add", "remove", "mappings", "type", "id"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = "/object/dynamicobjectmappings"
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
@@ -30,7 +30,7 @@ class DynamicObjectMappings(APIClassTemplate):
         if "id" in kwargs:
             self.obj_id = kwargs["id"]
 
-    def mappings(self, action, value, name):
+    def handle_mappings(self, action, value, name):
 
         """
             Associate mappings to dynamic object.
@@ -77,6 +77,11 @@ class DynamicObjectMappings(APIClassTemplate):
         self.URL_SUFFIX = f"/object/dynamicobjects/{str(self.obj_id)}/mappings"
         super().__init__(self.fmc)
         return super().get()
+
+    def put(self):
+        self.URL_SUFFIX = f"/object/dynamicobjects/{str(self.obj_id)}/mappings"
+        super().__init__(self.fmc)
+        return super().put()
 
 
 
