@@ -25,6 +25,7 @@ from .device_services.physicalinterfaces import PhysicalInterfaces
 from .device_services.redundantinterfaces import RedundantInterfaces
 from .device_services.staticroutes import StaticRoutes
 from .device_services.subinterfaces import SubInterfaces
+from .health.terminateravpnsessions import TerminateRAVPNSessions
 from .object_services.anyprotocolportobjects import AnyProtocolPortObjects
 from .object_services.applicationcategories import ApplicationCategories
 from .object_services.applicationfilters import ApplicationFilters
@@ -206,4 +207,5 @@ __all__ = [
     "Usage",
     "DynamicObject",
     "DynamicObjectMappings",
+    "TerminateRAVPNSessions",
 ]
