@@ -139,30 +139,22 @@ class FMC(object):
                 verify_cert=self.VERIFY_CERT,
                 timeout=self.timeout,
             )
-            self.uuid = self.mytoken.uuid
-            if self.mytoken.access_token:
-                self.build_urls()
-
-                version = ServerVersion(fmc=self)
-                version.get()
-                self.serverVersion = version.serverVersion
-                logging.info(f"This FMC's version is {self.serverVersion}")
-
-                return self
-            else:
+            if not self.mytoken.access_token:
                 logging.info("User authentication failed.")
                 exit(1)
+            self.uuid = self.mytoken.uuid
+
         else:
             if self.uuid is None:
                 logging.error("If using an API_KEY, you must provide a UUID")
                 exit(1)
 
-            self.build_urls()
-            version = ServerVersion(fmc=self)
-            version.get()
-            self.serverVersion = version.serverVersion
-            logging.info(f"This FMC's version is {self.serverVersion}")
-            return self
+        self.build_urls()
+        version = ServerVersion(fmc=self)
+        version.get()
+        self.serverVersion = version.serverVersion
+        logging.info(f"This FMC's version is {self.serverVersion}")
+        return self
 
     def __exit__(self, *args):
         """
