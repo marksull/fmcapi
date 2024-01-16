@@ -6,7 +6,7 @@ import logging
 class DynamicObjectMappings(APIClassTemplate):
     """The Dynamic Object in the FMC."""
 
-    VALID_JSON_DATA = ["add", "remove", "mappings", "type", "id","name"]
+    VALID_JSON_DATA = ["add", "remove", "mappings", "type", "id", "name"]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = "/object/dynamicobjectmappings"
     VALID_CHARACTERS_FOR_NAME = """[.\w\d_\- ]"""
@@ -88,10 +88,9 @@ class DynamicObjectMappings(APIClassTemplate):
         super().__init__(self.fmc)
         return super().delete()
 
-
     def _get(self, **kwargs):
         """
-            To get mappings url is GET /api/fmc_config/v1/domain/{domainUUID}/object/dynamicobjects/{objectId}/mappings
+        To get mappings url is GET /api/fmc_config/v1/domain/{domainUUID}/object/dynamicobjects/{objectId}/mappings
         """
         logging.debug("In get() for APIClassTemplate class.")
         self.parse_kwargs(**kwargs)
@@ -227,6 +226,3 @@ class DynamicObjectMappings(APIClassTemplate):
                 "get() method failed due to failure to pass valid_for_get() test."
             )
             return False
-
-
-
