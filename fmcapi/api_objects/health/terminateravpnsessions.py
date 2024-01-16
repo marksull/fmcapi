@@ -1,6 +1,7 @@
 from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
 
+
 class TerminateRAVPNSessions(APIClassTemplate):
     """The TerminateRAVPNSessions Object in the FMC."""
 
@@ -14,12 +15,10 @@ class TerminateRAVPNSessions(APIClassTemplate):
         "deviceId",
         "terminateBy",
         "sessionIds",
-        "version"
+        "version",
     ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
-    REQUIRED_FOR_POST = [
-        "terminateBy"
-    ]
+    REQUIRED_FOR_POST = ["terminateBy"]
 
     URL_SUFFIX = "/health/ravpnsessions/operational/terminateravpnsessions"
 
