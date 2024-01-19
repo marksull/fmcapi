@@ -105,6 +105,7 @@ from .update_packages.upgradepackage import Upgrades
 from .update_packages.upgradepackages import UpgradePackages
 from .object_services.dynamicobjects import DynamicObject
 from .object_services.dynamicobjectmappings import DynamicObjectMappings
+from .object_services.grouppolicies import GroupPolicies
 
 logging.debug("In the api_objects __init__.py file.")
 
@@ -208,4 +209,5 @@ __all__ = [
     "DynamicObject",
     "DynamicObjectMappings",
     "TerminateRAVPNSessions",
+    "GroupPolicies"
 ]
