@@ -21,7 +21,18 @@ class DeviceRecords(APIClassTemplate):
         "performanceTier",
         "accessPolicy",
     ]
-    VALID_FOR_KWARGS = VALID_JSON_DATA + [
+    VALID_GET_FILTERS = [
+        # TODO: name as a get filter will conflict with existing logic to look something up by name - use hostname instead for now
+        # "name", # String
+        "hostName", # String
+        "serialNumber", # String
+        "containerType", # DeviceCluster|DeviceHAPair|DeviceStack
+        "clusterBootstrapSupported", # Bool
+        "analyticsOnly", # Bool
+        "includeOtherAssociatedPolicies", # Bool
+        "modeType" # NGFW|Chassis
+    ]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + VALID_GET_FILTERS + [
         "acp_name",
         "acp_id",
         "model",
@@ -38,6 +49,7 @@ class DeviceRecords(APIClassTemplate):
         "keepLocalEvents",
         "ftdMode",
         "keepLocalEvents",
+        "expanded"
     ]
     URL_SUFFIX = "/devices/devicerecords"
     REQUIRED_FOR_POST = ["accessPolicy", "hostName", "regKey", "type"]
