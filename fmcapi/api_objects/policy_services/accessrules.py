@@ -62,6 +62,8 @@ class AccessRules(APIClassTemplate):
         "enableSyslog",
         "newComments",
         "commentHistoryList",
+        "sourceDynamicObjects",
+        "destinationDynamicObjects",
     ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + [
         "acp_id",
@@ -207,6 +209,7 @@ class AccessRules(APIClassTemplate):
                 {"type": v, "value": k}
                 for k, v in self.destinationNetworks["literals"].items()
             ]
+
         if "action" in self.__dict__:
             if self.action not in self.VALID_FOR_ACTION:
                 logging.warning(f"Action {self.action} is not a valid action.")
