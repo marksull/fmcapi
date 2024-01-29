@@ -72,6 +72,7 @@ from .backup import test__backup
 from .usage import test__usage
 from .dynamic_objects import test__dynamic_objects
 from .dynamic_object_mappings import test__dynamic_objects_mappings
+from .terminateravpnsessions import test__terminateravpnsessions
 
 logging.debug("In the unit-tests __init__.py file.")
 
@@ -148,4 +149,5 @@ __all__ = [
     "test__usage",
     "test__dynamic_objects",
     "test__dynamic_objects_mappings",
+    "test__terminateravpnsessions",
 ]
