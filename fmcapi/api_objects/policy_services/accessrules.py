@@ -63,7 +63,7 @@ class AccessRules(APIClassTemplate):
         "newComments",
         "commentHistoryList",
         "sourceDynamicObjects",
-        "destinationDynamicObjects"
+        "destinationDynamicObjects",
     ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + [
         "acp_id",
