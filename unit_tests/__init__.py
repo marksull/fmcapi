@@ -75,6 +75,7 @@ from .dynamic_object_mappings import test__dynamic_objects_mappings
 from .terminateravpnsessions import test__terminateravpnsessions
 from .grouppolicies import test__grouppolicies
 from .ravpn import test__ravpn
+from .connectionprofiles import test__connectionprofiles
 
 logging.debug("In the unit-tests __init__.py file.")
 
@@ -154,4 +155,5 @@ __all__ = [
     "test__terminateravpnsessions",
     "test__grouppolicies",
     "test__ravpn",
+    "test__connectionprofiles",
 ]

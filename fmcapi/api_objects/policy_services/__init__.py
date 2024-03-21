@@ -20,6 +20,7 @@ from .natrules import NatRules
 from .prefilterpolicies import PreFilterPolicies
 from .inheritancesettings import InheritanceSettings
 from .ravpns import RAVpn
+from .connectionprofiles import ConnectionProfiles
 
 logging.debug("In the object_services __init__.py file.")
 
@@ -43,4 +44,5 @@ __all__ = [
     "DefaultActions",
     "InheritanceSettings",
     "RAVpn",
+    "ConnectionProfiles",
 ]

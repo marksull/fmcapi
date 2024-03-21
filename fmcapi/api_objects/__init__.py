@@ -107,6 +107,7 @@ from .object_services.dynamicobjects import DynamicObject
 from .object_services.dynamicobjectmappings import DynamicObjectMappings
 from .object_services.grouppolicies import GroupPolicies
 from .policy_services.ravpns import RAVpn
+from .policy_services import ConnectionProfiles
 
 logging.debug("In the api_objects __init__.py file.")
 
@@ -212,4 +213,5 @@ __all__ = [
     "TerminateRAVPNSessions",
     "GroupPolicies",
     "RAVpn",
+    "ConnectionProfiles",
 ]
