@@ -47,23 +47,3 @@ class ConnectionProfiles(APIClassTemplate):
         self.parse_kwargs(**kwargs)
         URL_CONTAINER_SUFFIX = f"/{self.container_uuid}/connectionprofiles"
         self.URL = self.URL + URL_CONTAINER_SUFFIX
-
-    # POST, PUT and DELETE are valid endpoints in the api >7.4.1, however POST has a cycical dependency
-    # with serveral other api endpoints - connectionprofiles, addressassignments, etc.
-    # This is due to needing a container uuid of the ConnectionProfiles policy but also needing those objects to
-    # create the ConnectionProfiles policy in the first place.
-
-    def post(self):
-        """POST method for API for ConnectionProfiles not supported."""
-        logging.info("POST method for API for ConnectionProfiles not supported.")
-        pass
-
-    # def put(self):
-    #     """PUT method for API for ConnectionProfiles not supported."""
-    #     logging.info("PUT method for API for ConnectionProfiles not supported.")
-    #     pass
-
-    def delete(self):
-        """DELETE method for API for ConnectionProfiles not supported."""
-        logging.info("DELETE method for API for ConnectionProfiles not supported.")
-        pass

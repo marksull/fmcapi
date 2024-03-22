@@ -9,6 +9,7 @@ def test__ravpn(fmc):
     namer = f"_fmcapi_test_{starttime}"
 
     ravpn_policies = fmcapi.RAVpn(fmc=fmc)
+
     logging.info(f'Looking for all RAVPN Policies')
     all_ravpn_policies = ravpn_policies.get()
     logging.info(f'Found {len(all_ravpn_policies.get("items"))} RAVPN Policies')

@@ -6,7 +6,6 @@ import logging
 
 class RAVpn(APIClassTemplate):
     """The RAVpn Object in the FMC."""
-
     VALID_JSON_DATA = [
         "id",
         "name",
@@ -45,7 +44,7 @@ class RAVpn(APIClassTemplate):
         self.type = "RAVpn"
         self.parse_kwargs(**kwargs)
 
-    # POST, PUT and DELETE are valid endpoints in the api >7.4.1, however POST has a cycical dependency
+    # POST, PUT and DELETE are valid endpoints in the api >7.2, however ravpn POST has a cycical dependency
     # with serveral other api endpoints - connectionprofiles, addressassignments, etc.
     # This is due to needing a container uuid of the RAVPN policy but also needing those objects to
     # create the RAVPN policy in the first place.
@@ -53,14 +52,4 @@ class RAVpn(APIClassTemplate):
     def post(self):
         """POST method for API for RAVPN not supported."""
         logging.info("POST method for API for RAVPN not supported.")
-        pass
-
-    def put(self):
-        """PUT method for API for RAVPN not supported."""
-        logging.info("PUT method for API for RAVPN not supported.")
-        pass
-
-    def delete(self):
-        """DELETE method for API for RAVPN not supported."""
-        logging.info("DELETE method for API for RAVPN not supported.")
         pass

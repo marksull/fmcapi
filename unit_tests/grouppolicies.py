@@ -16,13 +16,16 @@ def test__grouppolicies(fmc):
     group_policy.get()
 
     # Change number of simultaneous ravpn sessions per user as PUT example
+    # Note: simultaneousLoginPerUser = 0 via the api fails to deploy
+    # because of this active bug - CSCwi89739 - even though 0 is a valid value
+    # and can be successfully deployed in the GUI
     sessionSettings = group_policy.advancedSettings.get('sessionSettings')
-    sessionSettings['simultaneousLoginPerUser'] = 0
+    sessionSettings['simultaneousLoginPerUser'] = 1
     group_policy.advancedSettings['sessionSettings'] = sessionSettings
     group_policy.put()
 
     group_policy.get()
-    if group_policy.advancedSettings.get('sessionSettings').get('simultaneousLoginPerUser') == 0:
+    if group_policy.advancedSettings.get('sessionSettings').get('simultaneousLoginPerUser') == 1:
         group_policy.delete()
 
     logging.info("Testing GroupPolicies class done.\n")
