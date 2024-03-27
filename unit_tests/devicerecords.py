@@ -1,6 +1,7 @@
 import logging
 import fmcapi
 import time
+import json
 
 
 def test__devicerecords(fmc):
@@ -11,6 +12,13 @@ def test__devicerecords(fmc):
 
     starttime = str(int(time.time()))
     namer = f"_fmcapi_test_{starttime}"
+
+    all_device_records = fmcapi.DeviceRecords(fmc=fmc)
+    all_device_records.get(expanded=True, includeOtherAssociatedPolicies=True)
+    # Note: attached RAVPN policies output from 'includeOtherAssociatedPolicies=True'
+    # have the INCORRECT UUID. Bug ID: CSCwj27112. This can be worked around for now
+    # by subtracting 1 from the UUID in the response. This has ONLY been observed with
+    # devicerecords api + 'includeOtherAssociatedPolicies=True' + ravpn policies.
 
     acp1 = fmcapi.AccessPolicies(fmc=fmc, name=namer)
     acp1.post()

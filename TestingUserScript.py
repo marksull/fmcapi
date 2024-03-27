@@ -82,7 +82,10 @@ def main():
         # unit_tests.test__usage(fmc=fmc1)
         # unit_tests.test__dynamic_objects(fmc=fmc1)
         # unit_tests.test__dynamic_objects_mappings(fmc=fmc1)
-
+        # unit_tests.test__grouppolicies(fmc=fmc1)
+        # unit_tests.test__ravpn(fmc=fmc1)
+        # unit_tests.test__connectionprofiles(fmc=fmc1) # Requires existing RAVPN Policy ID
+        # unit_tests.test__dynamicaccesspolicies(fmc=fmc1)
 
 
         """

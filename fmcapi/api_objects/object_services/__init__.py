@@ -52,6 +52,7 @@ from .vlangrouptags import VlanGroupTags
 from .vlantags import VlanTags
 from .dynamicobjects import DynamicObject
 from .dynamicobjectmappings import DynamicObjectMappings
+from .grouppolicies import GroupPolicies
 
 logging.debug("In the object_services __init__.py file.")
 
@@ -73,6 +74,7 @@ __all__ = [
     "ExtendedAccessListAce",
     "FQDNS",
     "Geolocation",
+    "GroupPolicies",
     "Hosts",
     "ICMPv4Objects",
     "ICMPv6Objects",
