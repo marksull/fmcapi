@@ -8,7 +8,7 @@ class ConnectionProfiles(APIClassTemplate):
     """The ConnectionProfiles Object in the FMC."""
 
     REQUIRED_FOR_GET = ["container_uuid"]
-    REQUIRED_FOR_POST = ["container_uuid","name"]
+    REQUIRED_FOR_POST = ["container_uuid", "name"]
     REQUIRED_FOR_PUT = ["container_uuid", "id"]
     REQUIRED_FOR_DELETE = ["container_uuid", "id"]
     VALID_JSON_DATA = [
@@ -27,9 +27,9 @@ class ConnectionProfiles(APIClassTemplate):
         "allowConnectionOnlyIfAuthorized",
         "enablePasswordManagement",
         "stripGroupFromUsername",
-        "stripRealmFromUsername"
+        "stripRealmFromUsername",
     ]
-    VALID_FOR_KWARGS = VALID_JSON_DATA  + ["container_uuid"]
+    VALID_FOR_KWARGS = VALID_JSON_DATA + ["container_uuid"]
     URL_SUFFIX = "/policy/ravpns"
     FIRST_SUPPORTED_FMC_VERSION = "7.2"
 
