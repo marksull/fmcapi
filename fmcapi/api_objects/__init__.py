@@ -108,6 +108,7 @@ from .object_services.dynamicobjectmappings import DynamicObjectMappings
 from .object_services.grouppolicies import GroupPolicies
 from .policy_services.ravpns import RAVpn
 from .policy_services import ConnectionProfiles
+from .policy_services import DynamicAccessPolicies
 
 logging.debug("In the api_objects __init__.py file.")
 
@@ -214,4 +215,5 @@ __all__ = [
     "GroupPolicies",
     "RAVpn",
     "ConnectionProfiles",
+    "DynamicAccessPolicies",
 ]

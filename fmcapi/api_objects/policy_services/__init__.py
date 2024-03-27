@@ -21,6 +21,7 @@ from .prefilterpolicies import PreFilterPolicies
 from .inheritancesettings import InheritanceSettings
 from .ravpns import RAVpn
 from .connectionprofiles import ConnectionProfiles
+from .dynamicaccesspolicies import DynamicAccessPolicies
 
 logging.debug("In the object_services __init__.py file.")
 
@@ -45,4 +46,5 @@ __all__ = [
     "InheritanceSettings",
     "RAVpn",
     "ConnectionProfiles",
+    "DynamicAccessPolicies",
 ]
