@@ -6,6 +6,7 @@ import logging
 
 class RAVpn(APIClassTemplate):
     """The RAVpn Object in the FMC."""
+
     VALID_JSON_DATA = [
         "id",
         "name",
@@ -25,7 +26,7 @@ class RAVpn(APIClassTemplate):
         "ldapAttributeMaps",
         "loadBalanceSettings",
         "configureSSL",
-        "configureIpsec"
+        "configureIpsec",
     ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = "/policy/ravpns"
