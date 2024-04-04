@@ -8,6 +8,7 @@ import base64
 
 class DynamicAccessPolicies(APIClassTemplate):
     """The DynamicAccessPolicies Object in the FMC."""
+
     REQUIRED_FOR_PUT = [
         "id",
         "authorizationAttributes",
@@ -40,7 +41,6 @@ class DynamicAccessPolicies(APIClassTemplate):
         self.parse_kwargs(**kwargs)
 
     def unpack_xml_config(self, encoded_xml):
-
         """
         Unpack and reformat base64 encoded xml from DAP api responses
 
@@ -57,7 +57,6 @@ class DynamicAccessPolicies(APIClassTemplate):
         return xml_dict
 
     def repack_xml_config(self, xml_dict):
-
         """Repack dict into xml and encoded for use with DAP api calls
 
         Args:
@@ -74,7 +73,6 @@ class DynamicAccessPolicies(APIClassTemplate):
         return encoded_xml_string
 
     def get(self, **kwargs):
-
         """
         Modified get() for DynamicAccessPolicies class to make working with
         dapXmlConfig and hostscanXmlConfig a bit easier. This will create self.dapXmlConfig_dict
@@ -83,41 +81,39 @@ class DynamicAccessPolicies(APIClassTemplate):
 
         super().get(**kwargs)
         logging.debug("In get() for DynamicAccessPolicies class.")
-        if hasattr(self, 'dapXmlConfig'):
+        if hasattr(self, "dapXmlConfig"):
             self.dapXmlConfig_dict = self.unpack_xml_config(self.dapXmlConfig)
 
-        if hasattr(self, 'hostscanXmlConfig'):
+        if hasattr(self, "hostscanXmlConfig"):
             self.hostscanXmlConfig_dict = self.unpack_xml_config(self.hostscanXmlConfig)
 
     def post(self, **kwargs):
-
         """
         Modified post() for DynamicAccessPolicies class to make working with
         dapXmlConfig and hostscanXmlConfig a bit easier. This will take self.dapXmlConfig_dict
         and self.hostscanXmlConfig_dict and convert to xml before base64 encoding for use with api endpoint.
         """
 
-        if hasattr(self, 'dapXmlConfig_dict'):
+        if hasattr(self, "dapXmlConfig_dict"):
             self.dapXmlConfig = self.repack_xml_config(self.dapXmlConfig_dict)
 
-        if hasattr(self, 'hostscanXmlConfig_dict'):
+        if hasattr(self, "hostscanXmlConfig_dict"):
             self.hostscanXmlConfig = self.repack_xml_config(self.hostscanXmlConfig_dict)
 
         super().post(**kwargs)
         logging.debug("In post() for DynamicAccessPolicies class.")
 
     def put(self, **kwargs):
-
         """
         Modified put() for DynamicAccessPolicies class to make working with
         dapXmlConfig and hostscanXmlConfig a bit easier. This will take self.dapXmlConfig_dict
         and self.hostscanXmlConfig_dict and convert to xml before base64 encoding for use with api endpoint.
         """
 
-        if hasattr(self, 'dapXmlConfig_dict'):
+        if hasattr(self, "dapXmlConfig_dict"):
             self.dapXmlConfig = self.repack_xml_config(self.dapXmlConfig_dict)
 
-        if hasattr(self, 'hostscanXmlConfig_dict'):
+        if hasattr(self, "hostscanXmlConfig_dict"):
             self.hostscanXmlConfig = self.repack_xml_config(self.hostscanXmlConfig_dict)
 
         super().put(**kwargs)

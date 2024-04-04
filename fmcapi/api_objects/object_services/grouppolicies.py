@@ -11,26 +11,26 @@ class GroupPolicies(APIClassTemplate):
         "id",
         "name",
         "type",
-        "generalSettings", # Dict
-        "anyConnectSettings", # Dict
-        "advancedSettings", # Dict
-        "enableSSLProtocol", # Bool
-        "enableIPsecIKEv2Protocol", # Bool
+        "generalSettings",  # Dict
+        "anyConnectSettings",  # Dict
+        "advancedSettings",  # Dict
+        "enableSSLProtocol",  # Bool
+        "enableIPsecIKEv2Protocol",  # Bool
     ]
     VALID_GET_FILTERS = [
-        "unusedOnly", # Bool
-        "nameOrValue", # String
+        "unusedOnly",  # Bool
+        "nameOrValue",  # String
     ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + VALID_GET_FILTERS + []
     URL_SUFFIX = "/object/grouppolicies"
     REQUIRED_FOR_PUT = [
         "id",
         "name",
-        "generalSettings", # Dict
-        "anyConnectSettings", # Dict
-        "advancedSettings", # Dict
-        "enableSSLProtocol", # Bool
-        "enableIPsecIKEv2Protocol", # Bool
+        "generalSettings",  # Dict
+        "anyConnectSettings",  # Dict
+        "advancedSettings",  # Dict
+        "enableSSLProtocol",  # Bool
+        "enableIPsecIKEv2Protocol",  # Bool
     ]
 
     def __init__(self, fmc, **kwargs):
