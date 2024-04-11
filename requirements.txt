@@ -1,4 +1,4 @@
-idna==2.10
+idna==3.7
 requests
 ipaddress
 xmltodict
