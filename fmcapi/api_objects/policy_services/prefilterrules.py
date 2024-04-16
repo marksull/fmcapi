@@ -101,8 +101,9 @@ class PreFilterRules(APIClassTemplate):
             url = f"{url}insertBefore={self.insertBefore}"
         elif "insertAfter" in self.__dict__:
             url = f"{url}insertAfter={self.insertAfter}"
-
-        return url[:-1]
+        else:
+            return ""
+        return url
 
     def parse_kwargs(self, **kwargs):
         """
