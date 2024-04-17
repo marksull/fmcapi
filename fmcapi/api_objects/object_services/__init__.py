@@ -53,6 +53,7 @@ from .vlantags import VlanTags
 from .dynamicobjects import DynamicObject
 from .dynamicobjectmappings import DynamicObjectMappings
 from .grouppolicies import GroupPolicies
+from .timeranges import TimeRanges
 
 logging.debug("In the object_services __init__.py file.")
 
@@ -110,4 +111,5 @@ __all__ = [
     "VlanTags",
     "DynamicObjectMappings",
     "DynamicObject",
+    "TimeRanges",
 ]

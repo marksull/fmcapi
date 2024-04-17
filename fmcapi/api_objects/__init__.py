@@ -109,6 +109,7 @@ from .object_services.grouppolicies import GroupPolicies
 from .policy_services.ravpns import RAVpn
 from .policy_services import ConnectionProfiles
 from .policy_services import DynamicAccessPolicies
+from .object_services import TimeRanges
 
 logging.debug("In the api_objects __init__.py file.")
 
@@ -216,4 +217,5 @@ __all__ = [
     "RAVpn",
     "ConnectionProfiles",
     "DynamicAccessPolicies",
+    "TimeRanges",
 ]

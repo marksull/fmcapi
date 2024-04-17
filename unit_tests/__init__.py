@@ -77,6 +77,7 @@ from .grouppolicies import test__grouppolicies
 from .ravpn import test__ravpn
 from .connectionprofiles import test__connectionprofiles
 from .dynamicaccesspolicies import test__dynamicaccesspolicies
+from .timeranges import test__timeranges
 
 logging.debug("In the unit-tests __init__.py file.")
 
@@ -158,4 +159,5 @@ __all__ = [
     "test__ravpn",
     "test__connectionprofiles",
     "test__dynamicaccesspolicies",
+    "test__timeranges",
 ]
