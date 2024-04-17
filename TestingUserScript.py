@@ -86,6 +86,7 @@ def main():
         # unit_tests.test__ravpn(fmc=fmc1)
         # unit_tests.test__connectionprofiles(fmc=fmc1) # Requires existing RAVPN Policy ID
         # unit_tests.test__dynamicaccesspolicies(fmc=fmc1)
+        # unit_tests.test__timeranges(fmc=fmc1)
 
 
         """
