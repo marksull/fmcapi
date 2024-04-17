@@ -13,14 +13,10 @@ class TimeRanges(APIClassTemplate):
         "description",
         "effectiveStartDateTime",
         "effectiveEndDateTime",
-        "recurrenceList"
+        "recurrenceList",
     ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
-    REQUIRED_FOR_POST = [
-        "name",
-        "effectiveStartDateTime",
-        "effectiveEndDateTime"
-    ]
+    REQUIRED_FOR_POST = ["name", "effectiveStartDateTime", "effectiveEndDateTime"]
     URL_SUFFIX = "/object/timeranges"
 
     def __init__(self, fmc, **kwargs):
