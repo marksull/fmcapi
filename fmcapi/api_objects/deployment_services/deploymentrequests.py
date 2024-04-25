@@ -63,7 +63,7 @@ class DeploymentRequests(
         response = self.fmc.send_to_api(
             method="post", url=self.URL, json_data=json_data
         )
-        return response["deviceList"]
+        return response
 
     def put(self):
         """PUT method for API for DeploymentRequests not supported."""

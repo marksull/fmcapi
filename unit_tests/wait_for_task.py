@@ -4,7 +4,7 @@ import logging
 
 
 def wait_for_task(fmc, task, wait_time=10):
-    task_completed_states = ["Success", "SUCCESS", "COMPLETED"]
+    task_completed_states = ["Success", "SUCCESS", "COMPLETED", "Deployed"]
     try:
         status = fmcapi.TaskStatuses(fmc=fmc, id=task["id"])
         current_status = status.get()

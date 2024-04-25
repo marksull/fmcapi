@@ -71,7 +71,8 @@ def test__upgrades(fmc):
 
     # logging.info(f"Upgrade completed. Triggering deployment to devices")
     # deployment = fmcapi.DeploymentRequests(fmc=fmc)
-    # logging.info(deployment)
-    # wait_for_task(fmc=fmc, task=deployment["metadata"]["task"], wait_time=60)
+    # response = deployment.post()
+    # logging.info(response)
+    # wait_for_task(fmc=fmc, task=response["metadata"]["task"], wait_time=60)
 
     logging.info("Test UpgradePackages/ApplicableDevices/Upgrades Complete")
