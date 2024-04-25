@@ -21,6 +21,13 @@ class Upgrades(APIClassTemplate):
         "upgradePackage",
         "targets",
         "pushUpgradeFileOnly",
+        "readinessCheckOnly",
+        "enableUpgradeRevert",
+        "autoUpgradeCancel",
+    ]
+    REQUIRED_FOR_POST = [
+        "upgradePackage",
+        "targets"
     ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + []
     URL_SUFFIX = "/updates/upgrades"
