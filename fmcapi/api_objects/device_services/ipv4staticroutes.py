@@ -196,3 +196,16 @@ class IPv4StaticRoutes(APIClassTemplate):
             logging.warning(
                 f"Object {name} not found.  Cannot set up device for IPv4StaticRoute."
             )
+
+    def post(self, **kwargs):
+        """
+        Modified post method for ipv4staticroutes
+        """
+        logging.debug("In post() for IPv4StaticRoute class.")
+        # Handle Null0 routes not needing a gateway
+        if self.interfaceName:
+            if self.interfaceName == "Null0" or self.interfaceName == "null0":
+                # Remove gateway from REQUIRED_FOR_POST global const
+                self.REQUIRED_FOR_POST = ["interfaceName", "selectedNetworks"]
+        response = super().post(**kwargs)
+        return response
