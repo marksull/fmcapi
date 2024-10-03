@@ -26,6 +26,20 @@ def test__ip_host(fmc):
 
     obj = fmcapi.Hosts(fmc=fmc)
     obj.bulk = []
+    for i in range(5):
+        obj.bulk.append(
+            {
+                "name" : f"_fmcapi_test_{id_generator()}",
+                "value" : "9.9.9.9"
+            }
+        )
+    obj.bulk_post()
+    obj.bulk = obj.bulk_ids
+    obj.bulk_delete()
+    del obj
+
+    obj = fmcapi.Hosts(fmc=fmc)
+    obj.bulk = []
     for i in range(50):
         obj.bulk.append(
             {
@@ -34,21 +48,8 @@ def test__ip_host(fmc):
             }
         )
     obj.bulk_post()
-
-    # sleep a bit otherwise the api just doesn't know that these objects are unused immediately after post
-    time.sleep(10)
-
-    ids = []
-    host_obs = fmcapi.Hosts(fmc=fmc)
-    unused_hosts = host_obs.get(unusedOnly=True)
-    if 'items' in unused_hosts:
-        for host in unused_hosts['items']:
-            ids.append(host['id'])
-
-        bulk_delete = fmcapi.Hosts(fmc=fmc)
-        bulk_delete.bulk = ids
-        bulk_delete.bulk_delete()
-    else:
-        logging.info(f'No unused objects to bulk delete')
+    obj.bulk = obj.bulk_ids
+    obj.bulk_delete()
+    del obj
 
     logging.info("Test IPHost done.\n")

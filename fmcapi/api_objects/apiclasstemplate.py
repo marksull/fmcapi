@@ -564,12 +564,17 @@ class APIClassTemplate(object):
             )
             return False
         if self.valid_for_bulk_post():
+            self.bulk_ids = []
             if len(self.bulk) > 0:
                 if len(self.bulk) > 49:
                     self.chunks = bulk_list_splitter(self.bulk)
                     for chunk in self.chunks:
                         self.bulk_post_data = chunk
-                        APIClassTemplate.post(self)
+                        response = APIClassTemplate.post(self)
+                        for i in response['items']:
+                            self.bulk_ids.append(i['id'])
                 else:
-                    self.bulk_post_data = self.bulk_post
-                    APIClassTemplate.post(self)
+                    self.bulk_post_data = self.bulk
+                    response = APIClassTemplate.post(self)
+                    for i in response['items']:
+                            self.bulk_ids.append(i['id'])
