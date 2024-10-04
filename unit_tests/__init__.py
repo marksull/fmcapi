@@ -78,6 +78,7 @@ from .ravpn import test__ravpn
 from .connectionprofiles import test__connectionprofiles
 from .dynamicaccesspolicies import test__dynamicaccesspolicies
 from .timeranges import test__timeranges
+from .fqdns import test__fqdns
 
 logging.debug("In the unit-tests __init__.py file.")
 
@@ -160,4 +161,5 @@ __all__ = [
     "test__connectionprofiles",
     "test__dynamicaccesspolicies",
     "test__timeranges",
+    "test__fqdns"
 ]

@@ -1,5 +1,7 @@
 import logging
 import fmcapi
+import time
+from .helper_functions import id_generator
 
 
 def test__fqdns(fmc):
@@ -19,5 +21,35 @@ def test__fqdns(fmc):
     obj1.put()
 
     obj1.delete()
+
+    obj = fmcapi.FQDNS(fmc=fmc)
+    obj.bulk = []
+    for i in range(10):
+        obj.bulk.append(
+            {
+                "name" : f"_fmcapi_test_{id_generator()}",
+                "value" : "www.cisco.com",
+                "dnsResolution" : "IPV4_ONLY"
+            }
+        )
+    obj.bulk_post()
+    obj.bulk = obj.bulk_ids
+    obj.bulk_delete()
+    del obj
+
+    obj = fmcapi.FQDNS(fmc=fmc)
+    obj.bulk = []
+    for i in range(50):
+        obj.bulk.append(
+            {
+                "name" : f"_fmcapi_test_{id_generator()}",
+                "value" : "www.cisco.com",
+                "dnsResolution" : "IPV4_ONLY"
+            }
+        )
+    obj.bulk_post()
+    obj.bulk = obj.bulk_ids
+    obj.bulk_delete()
+    del obj
 
     logging.info("FQDNS DNSServerGroups class done.\n")

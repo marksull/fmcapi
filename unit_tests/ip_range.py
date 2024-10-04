@@ -1,6 +1,7 @@
 import logging
 import fmcapi
 import time
+from .helper_functions import id_generator
 
 
 def test__ip_range(fmc):
@@ -22,5 +23,33 @@ def test__ip_range(fmc):
     obj1.put()
     time.sleep(1)
     obj1.delete()
+
+    obj = fmcapi.Ranges(fmc=fmc)
+    obj.bulk = []
+    for i in range(13):
+        obj.bulk.append(
+            {
+                "name" : f"_fmcapi_test_{id_generator()}",
+                "value" : "3.3.3.3-4.4.4.4"
+            }
+        )
+    obj.bulk_post()
+    obj.bulk = obj.bulk_ids
+    obj.bulk_delete()
+    del obj
+
+    obj = fmcapi.Ranges(fmc=fmc)
+    obj.bulk = []
+    for i in range(50):
+        obj.bulk.append(
+            {
+                "name" : f"_fmcapi_test_{id_generator()}",
+                "value" : "3.3.3.3-4.4.4.4"
+            }
+        )
+    obj.bulk_post()
+    obj.bulk = obj.bulk_ids
+    obj.bulk_delete()
+    del obj
 
     logging.info("Test IPRange done.\n")

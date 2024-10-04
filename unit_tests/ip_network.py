@@ -1,7 +1,7 @@
 import logging
 import fmcapi
 import time
-
+from .helper_functions import id_generator
 
 def test__ip_network(fmc):
     logging.info("Test IPNetwork.  Post, get, put, delete Network Objects.")
@@ -22,5 +22,33 @@ def test__ip_network(fmc):
     obj1.put()
     time.sleep(1)
     obj1.delete()
+
+    obj = fmcapi.Networks(fmc=fmc)
+    obj.bulk = []
+    for i in range(15):
+        obj.bulk.append(
+            {
+                "name" : f"_fmcapi_test_{id_generator()}",
+                "value" : "9.9.9.0/24"
+            }
+        )
+    obj.bulk_post()
+    obj.bulk = obj.bulk_ids
+    obj.bulk_delete()
+    del obj
+
+    obj = fmcapi.Networks(fmc=fmc)
+    obj.bulk = []
+    for i in range(50):
+        obj.bulk.append(
+            {
+                "name" : f"_fmcapi_test_{id_generator()}",
+                "value" : "9.9.9.0/24"
+            }
+        )
+    obj.bulk_post()
+    obj.bulk = obj.bulk_ids
+    obj.bulk_delete()
+    del obj
 
     logging.info("Test IPNetwork done.\n")
