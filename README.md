@@ -52,6 +52,13 @@ Then to use the code best start a "with" statement that creates an instance of t
 Then either code away referencing the fmc variable to get to the internal methods of the FMC class **or** utilize 
 the various class objects to ease your coding needs.
 
+If you are using cdFMC, your api requests will need to proxied to that cdFMC via CDO. The authentication mechanisms used here are different than on-prem FMC as it looks like CDO's webserver is proxying these api requests to "cloud" FMC. Thankfully, it seems like aside from authentication, cdFMC has all the same api endpoints available. Follow the instructions [here](https://www.cisco.com/c/en/us/td/docs/security/firepower/730/Rapid-Release/API/CDO/cloud_delivered_firewall_management_center_rest_api_quick_start_guide/Connecting_With_A_Client.html) to create a CDO user capable of using the CDO api. This process will give you a JWT token which is what will be used for authenticating to CDO api, even when sending api requests to the cdFMC api.
+
+`with fmcapi.FMC(host='examplecompany.app.us.cdo.cisco.com', cdfmc=True, api_key=$JWT-TOKEN-FROM-CDO-API-USER autodeploy=False) as fmc:`
+
+NOTE: This JWT token is NOT the token used when utilizing the cdFMC api-explorer. It looks like the authentication for the cdFMC api-explorer is handled under the hood by CDO authenticating the CDO user and then just using a embedded "api-explorer" user that is cisco managed. This probably also means that cdFMC api-explorer can only have one session since any CDO user that goes to the cdFMC api-explorer will just get a new session of the cdFMC user 'api-explorer' thus logging any other existing 'api-explorer' user out.
+``
+
 Building out an example network is in the "example" directory.  This isn't fully completed but it should help you get
 an idea of what is possible.
 
