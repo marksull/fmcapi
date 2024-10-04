@@ -571,10 +571,12 @@ class APIClassTemplate(object):
                     for chunk in self.chunks:
                         self.bulk_post_data = chunk
                         response = APIClassTemplate.post(self)
-                        for i in response['items']:
-                            self.bulk_ids.append(i['id'])
+                        if response is not None:
+                            for i in response['items']:
+                                self.bulk_ids.append(i['id'])
                 else:
                     self.bulk_post_data = self.bulk
                     response = APIClassTemplate.post(self)
-                    for i in response['items']:
-                            self.bulk_ids.append(i['id'])
+                    if response is not None:
+                        for i in response['items']:
+                                self.bulk_ids.append(i['id'])
