@@ -151,14 +151,17 @@ class FMC(object):
                 logging.debug("cdFMC is True.")
                 # cdFMC doesn't use the normal user/pass auth that responds with the token and global uuid
                 # initial lookup of the global domain uuid done here using the JWT token from cdo api user
-                logging.debug(f'Fetching cdFMC global domain uuid.')
-                domain_info = self.send_to_api(method="get",url=f"https://{self.host}/api/fmc_platform/v1/info/domain")
+                logging.debug(f"Fetching cdFMC global domain uuid.")
+                domain_info = self.send_to_api(
+                    method="get",
+                    url=f"https://{self.host}/api/fmc_platform/v1/info/domain",
+                )
                 logging.debug(domain_info)
                 if domain_info is not None:
-                    for i in domain_info['items']:
-                        if i['name'] == 'Global':
-                            self.uuid = i['uuid']
-                            logging.debug(f'cdFMC global uuid found! {self.uuid}')
+                    for i in domain_info["items"]:
+                        if i["name"] == "Global":
+                            self.uuid = i["uuid"]
+                            logging.debug(f"cdFMC global uuid found! {self.uuid}")
                 else:
                     logging.error(f"Unable to retrieve global domain UUID from cdFMC")
                     logging.error(domain_info)

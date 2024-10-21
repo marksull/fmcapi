@@ -279,13 +279,15 @@ class APIClassTemplate(object):
         :return: (boolean)
         """
         logging.debug("In valid_for_post() for APIClassTemplate class.")
-        if "bulk_post_data" in  self.__dict__:
+        if "bulk_post_data" in self.__dict__:
             missing_required_item = False
             # Check within each payload to ensure required for post is handled
             for i in self.bulk_post_data:
                 for item in self.REQUIRED_FOR_POST:
                     if item not in i:
-                        logging.error(f'BULK POST FAILED: Missing value "{item}" in {i}')
+                        logging.error(
+                            f'BULK POST FAILED: Missing value "{item}" in {i}'
+                        )
                         missing_required_item = True
             if missing_required_item:
                 return False
@@ -343,7 +345,9 @@ class APIClassTemplate(object):
                             f'POST success. Object with name: "{self.name}" and id: "{self.id}" created in FMC.'
                         )
                     elif "bulk_post_data" in self.__dict__:
-                        logging.info(f'BULK POST success. Items bulk posted: {len(response["items"])}')
+                        logging.info(
+                            f'BULK POST success. Items bulk posted: {len(response["items"])}'
+                        )
                         logging.debug(f'BULK POST: {response["items"]}')
                     else:
                         logging.debug(
@@ -455,7 +459,7 @@ class APIClassTemplate(object):
                     url += f"?backupVersion={self.backupVersion}"
             elif "bulk_delete_data" in self.__dict__:
                 # Convert bulk delete data to csv string to insert into url
-                self.bulk_delete_str = ','.join(map(str,self.bulk_delete_data))
+                self.bulk_delete_str = ",".join(map(str, self.bulk_delete_data))
                 url = f"{self.URL}?filter=ids:{self.bulk_delete_str}&bulk=true"
             else:
                 url = f"{self.URL}/{self.id}"
@@ -487,8 +491,10 @@ class APIClassTemplate(object):
                         f'DELETE success. Object with targetId: "{self.targetId}" deleted from FMC.'
                     )
             elif "bulk_delete_data" in self.__dict__:
-                logging.info(f'Bulk DELETE success. Objects deleted in FMC: {len(self.bulk_delete_data)}')
-                logging.debug(f'Bulk DELETE: {self.bulk_delete_data}')
+                logging.info(
+                    f"Bulk DELETE success. Objects deleted in FMC: {len(self.bulk_delete_data)}"
+                )
+                logging.debug(f"Bulk DELETE: {self.bulk_delete_data}")
             else:
                 logging.info(f'DELETE success. Object id: "{self.id}" deleted in FMC.')
             return response
@@ -572,11 +578,11 @@ class APIClassTemplate(object):
                         self.bulk_post_data = chunk
                         response = APIClassTemplate.post(self)
                         if response is not None:
-                            for i in response['items']:
-                                self.bulk_ids.append(i['id'])
+                            for i in response["items"]:
+                                self.bulk_ids.append(i["id"])
                 else:
                     self.bulk_post_data = self.bulk
                     response = APIClassTemplate.post(self)
                     if response is not None:
-                        for i in response['items']:
-                                self.bulk_ids.append(i['id'])
+                        for i in response["items"]:
+                            self.bulk_ids.append(i["id"])
