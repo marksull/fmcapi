@@ -4,6 +4,8 @@ import re
 import ipaddress
 import json
 import logging
+import uuid
+
 
 logging.debug(f"In the {__name__} module.")
 
@@ -166,3 +168,27 @@ def validate_vlans(start_vlan, end_vlan=""):
         return start_vlan, end_vlan
     else:
         return 1, 4094
+
+
+def bulk_list_splitter(ids, chunk_size=49):
+    """_summary_
+
+    Args:
+        ids (list): list of ids used in bulk post/delete operations
+        chunk_size (int, optional): bulk operations seem to be limited to 49 max ids in one url. Defaults to 49.
+
+    Returns:
+        list: list of lists where each inner list is 49 items
+    """
+    chunks = []
+    for id in range(0, len(ids), chunk_size):
+        chunks.append(ids[id:id + chunk_size])
+    return chunks
+
+def check_uuid(uuid_input):
+    try:
+        uuid.UUID(str(uuid_input))
+        return True
+    except ValueError:
+        return False
+

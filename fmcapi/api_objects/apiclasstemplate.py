@@ -1,5 +1,5 @@
 """Super class(es) that is inherited by all API objects."""
-from .helper_functions import syntax_correcter
+from .helper_functions import syntax_correcter, bulk_list_splitter, check_uuid
 import logging
 import json
 
@@ -14,6 +14,8 @@ class APIClassTemplate(object):
     REQUIRED_FOR_DELETE = ["id"]
     REQUIRED_FOR_GET = [""]
     REQUIRED_GET_FILTERS = []
+    REQUIRED_FOR_BULK_POST = ["bulk"]
+    REQUIRED_FOR_BULK_DELETE = ["bulk"]
     FILTER_BY_NAME = False
     URL = ""
     URL_SUFFIX = ""
@@ -277,6 +279,17 @@ class APIClassTemplate(object):
         :return: (boolean)
         """
         logging.debug("In valid_for_post() for APIClassTemplate class.")
+        if "bulk_post_data" in  self.__dict__:
+            missing_required_item = False
+            # Check within each payload to ensure required for post is handled
+            for i in self.bulk_post_data:
+                for item in self.REQUIRED_FOR_POST:
+                    if item not in i:
+                        logging.error(f'BULK POST FAILED: Missing value "{item}" in {i}')
+                        missing_required_item = True
+            if missing_required_item:
+                return False
+            return True
         for item in self.REQUIRED_FOR_POST:
             if item not in self.__dict__:
                 logging.error(f'Missing value "{item}" for POST request.')
@@ -303,23 +316,35 @@ class APIClassTemplate(object):
             self.put()
         else:
             if self.valid_for_post():
+                if "bulk_post_data" in self.__dict__:
+                    url = f"{self.URL}?bulk=true"
+                else:
+                    url = f"{self.URL}"
                 if self.dry_run:
                     logging.info(
                         "Dry Run enabled.  Not actually sending to FMC.  Here is what would have been sent:"
                     )
                     logging.info("\tMethod = POST")
-                    logging.info(f"\tURL = {self.URL}")
+                    logging.info(f"\tURL = {url}")
                     logging.info(f"\tJSON = {self.show_json}")
                     return False
-                response = self.fmc.send_to_api(
-                    method="post", url=self.URL, json_data=self.format_data()
-                )
+                if "bulk_post_data" in self.__dict__:
+                    response = self.fmc.send_to_api(
+                        method="post", url=url, json_data=self.bulk_post_data
+                    )
+                else:
+                    response = self.fmc.send_to_api(
+                        method="post", url=url, json_data=self.format_data()
+                    )
                 if response:
                     self.parse_kwargs(**response)
                     if "name" in self.__dict__ and "id" in self.__dict__:
                         logging.info(
                             f'POST success. Object with name: "{self.name}" and id: "{self.id}" created in FMC.'
                         )
+                    elif "bulk_post_data" in self.__dict__:
+                        logging.info(f'BULK POST success. Items bulk posted: {len(response["items"])}')
+                        logging.debug(f'BULK POST: {response["items"]}')
                     else:
                         logging.debug(
                             'POST success but no "id" or "name" values in API response.'
@@ -395,6 +420,15 @@ class APIClassTemplate(object):
         :return: (boolean)
         """
         logging.debug("In valid_for_delete() for APIClassTemplate class.")
+        if "bulk_delete_data" in self.__dict__:
+            # Validate bulk delete data is a list of valid ids
+            valid = True
+            for i in self.bulk_delete_data:
+                if not check_uuid(i):
+                    valid = False
+            if not valid:
+                return False
+            return True
         for item in self.REQUIRED_FOR_DELETE:
             if item not in self.__dict__:
                 logging.error(f'Missing value "{item}" for DELETE request.')
@@ -419,6 +453,10 @@ class APIClassTemplate(object):
                 url = f"{self.URL}/{self.targetId}"
                 if "backupVersion" in self.__dict__:
                     url += f"?backupVersion={self.backupVersion}"
+            elif "bulk_delete_data" in self.__dict__:
+                # Convert bulk delete data to csv string to insert into url
+                self.bulk_delete_str = ','.join(map(str,self.bulk_delete_data))
+                url = f"{self.URL}?filter=ids:{self.bulk_delete_str}&bulk=true"
             else:
                 url = f"{self.URL}/{self.id}"
             if self.dry_run:
@@ -448,6 +486,9 @@ class APIClassTemplate(object):
                     logging.info(
                         f'DELETE success. Object with targetId: "{self.targetId}" deleted from FMC.'
                     )
+            elif "bulk_delete_data" in self.__dict__:
+                logging.info(f'Bulk DELETE success. Objects deleted in FMC: {len(self.bulk_delete_data)}')
+                logging.debug(f'Bulk DELETE: {self.bulk_delete_data}')
             else:
                 logging.info(f'DELETE success. Object id: "{self.id}" deleted in FMC.')
             return response
@@ -456,3 +497,86 @@ class APIClassTemplate(object):
                 "delete() method failed due to failure to pass valid_for_delete() test."
             )
             return False
+
+    def valid_for_bulk_delete(self):
+        """
+        Use REQUIRED_FOR_BULK_DELETE to ensure all necessary variables exist prior to submitting to API.
+
+        :return: (boolean)
+        """
+        logging.debug("In valid_for_bulk_delete() for APIClassTemplate class.")
+
+        for item in self.REQUIRED_FOR_BULK_DELETE:
+            if item not in self.__dict__:
+                logging.error(f'Missing value "{item}" for bulk DELETE request.')
+                return False
+        return True
+
+    def bulk_delete(self, **kwargs):
+        """
+        This is a shim in front of the normal delete() to handle bulk deletes.
+
+        """
+        logging.debug("In bulk_delete() for APIClassTemplate class.")
+        self.parse_kwargs(**kwargs)
+        if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
+            logging.error(
+                f"Your FMC version, {self.fmc.serverVersion} does not support bulk DELETE of this feature."
+            )
+            return False
+        if self.valid_for_bulk_delete():
+            if len(self.bulk) > 0:
+                if len(self.bulk) > 49:
+                    self.chunks = bulk_list_splitter(self.bulk)
+                    for chunk in self.chunks:
+                        self.bulk_delete_data = chunk
+                        # self.ids_str = ','.join(map(str,self.ids))
+                        APIClassTemplate.delete(self)
+                else:
+                    self.bulk_delete_data = self.bulk
+                    # self.ids_str = ','.join(map(str,self.ids))
+                    APIClassTemplate.delete(self)
+
+    def valid_for_bulk_post(self):
+        """
+        Use REQUIRED_FOR_BULK_POST to ensure all necessary variables exist prior to submitting to API.
+
+        :return: (boolean)
+        """
+        logging.debug("In valid_for_bulk_post() for APIClassTemplate class.")
+
+        for item in self.REQUIRED_FOR_BULK_POST:
+            if item not in self.__dict__:
+                logging.error(f'Missing value "{item}" for bulk POST request.')
+                return False
+        return True
+
+    def bulk_post(self, **kwargs):
+        """
+        This is a shim in front of the normal post() to handle bulk posts.
+
+        """
+        logging.debug("In bulk_post() for APIClassTemplate class.")
+        self.parse_kwargs(**kwargs)
+        if self.fmc.serverVersion < self.FIRST_SUPPORTED_FMC_VERSION:
+            logging.error(
+                f"Your FMC version, {self.fmc.serverVersion} does not support bulk POST of this feature."
+            )
+            return False
+        if self.valid_for_bulk_post():
+            self.bulk_ids = []
+            if len(self.bulk) > 0:
+                if len(self.bulk) > 49:
+                    self.chunks = bulk_list_splitter(self.bulk)
+                    for chunk in self.chunks:
+                        self.bulk_post_data = chunk
+                        response = APIClassTemplate.post(self)
+                        if response is not None:
+                            for i in response['items']:
+                                self.bulk_ids.append(i['id'])
+                else:
+                    self.bulk_post_data = self.bulk
+                    response = APIClassTemplate.post(self)
+                    if response is not None:
+                        for i in response['items']:
+                                self.bulk_ids.append(i['id'])
