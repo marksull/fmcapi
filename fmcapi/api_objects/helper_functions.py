@@ -182,8 +182,9 @@ def bulk_list_splitter(ids, chunk_size=49):
     """
     chunks = []
     for id in range(0, len(ids), chunk_size):
-        chunks.append(ids[id:id + chunk_size])
+        chunks.append(ids[id : id + chunk_size])
     return chunks
+
 
 def check_uuid(uuid_input):
     try:
@@ -191,4 +192,3 @@ def check_uuid(uuid_input):
         return True
     except ValueError:
         return False
-
