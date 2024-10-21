@@ -54,6 +54,7 @@ class FMC(object):
         timeout=5,
         wait_time=15,
         api_key=None,
+        cdfmc=False,
         uuid=None,
     ):
         """
@@ -121,6 +122,7 @@ class FMC(object):
         self.error_response = None
         self.wait_time = wait_time
         self.api_key = api_key
+        self.cdfmc = cdfmc
         self.uuid = uuid
 
     def __enter__(self):
@@ -145,7 +147,22 @@ class FMC(object):
             self.uuid = self.mytoken.uuid
 
         else:
-            if self.uuid is None:
+            if self.cdfmc:
+                logging.debug("cdFMC is True.")
+                # cdFMC doesn't use the normal user/pass auth that responds with the token and global uuid
+                # initial lookup of the global domain uuid done here using the JWT token from cdo api user
+                logging.debug(f'Fetching cdFMC global domain uuid.')
+                domain_info = self.send_to_api(method="get",url=f"https://{self.host}/api/fmc_platform/v1/info/domain")
+                logging.debug(domain_info)
+                if domain_info is not None:
+                    for i in domain_info['items']:
+                        if i['name'] == 'Global':
+                            self.uuid = i['uuid']
+                            logging.debug(f'cdFMC global uuid found! {self.uuid}')
+                else:
+                    logging.error(f"Unable to retrieve global domain UUID from cdFMC")
+                    logging.error(domain_info)
+            elif self.uuid is None:
                 logging.error("If using an API_KEY, you must provide a UUID")
                 exit(1)
 
@@ -205,10 +222,16 @@ class FMC(object):
             self.more_items = []
             self.page_counter = 0
         if self.api_key is not None:
-            headers = {
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {self.api_key}",
-            }
+            if self.cdfmc:
+                headers = {
+                    "accept": "application/json",
+                    "Authorization": f"Bearer {self.api_key}",
+                }
+            else:
+                headers = {
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {self.api_key}",
+                }
         else:
             if headers == "":
                 # These values for headers works for most API requests.
