@@ -51,8 +51,15 @@ class DeviceRecords(APIClassTemplate):
             "prohibitPacketTransfer",
             "keepLocalEvents",
             "ftdMode",
-            "keepLocalEvents",
             "expanded",
+            "deploymentStatus",
+            "healthMessage",
+            "advanced",
+            "analyticsOnly",
+            "metadata",
+            "snortEngine",
+            "isFWaaS",
+            "managementState",
         ]
     )
     URL_SUFFIX = "/devices/devicerecords"
