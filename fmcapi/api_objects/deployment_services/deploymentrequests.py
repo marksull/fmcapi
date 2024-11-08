@@ -28,6 +28,10 @@ class DeploymentRequests(
         self.fmc = fmc
         self.URL = f"{self.fmc.configuration_url}{self.URL_SUFFIX}"
         self.uuids = None
+        self.deploy_device_names = []
+        self.deploy_all = True
+        self.forceDeploy = True
+        self.ignoreWarning = True
 
     def get(self):
         """GET method for API for DeploymentRequests not supported."""
@@ -40,18 +44,41 @@ class DeploymentRequests(
         :return: (list) List of devices.
         """
         logging.debug("In post() method for DeploymentRequests() class.")
+
+        json_data = {
+            "type": "DeploymentRequest",
+            "forceDeploy": self.forceDeploy,
+            "ignoreWarning": self.ignoreWarning,
+            "version": str(int(1000000 * datetime.datetime.utcnow().timestamp())),
+            "deviceList": [],
+        }
+
         devices = DeployableDevices(fmc=self.fmc)
         self.uuids = devices.get()
         if not self.uuids:
             logging.info("No devices need deployed.")
             return
-        json_data = {
-            "type": "DeploymentRequest",
-            "forceDeploy": True,
-            "ignoreWarning": True,
-            "version": str(int(1000000 * datetime.datetime.utcnow().timestamp())),
-            "deviceList": [],
-        }
+
+        if not self.deploy_all:
+            device_selection = []
+            if len(self.deploy_device_names) == 0:
+                logging.error(
+                    f"Deploy all devices is false, but list of devices to deploy is empty."
+                )
+                logging.error(
+                    f"Populate list 'deploy_device_names' with device names for selective deployment"
+                )
+                return
+            for device in self.uuids:
+                if device["name"] in self.deploy_device_names:
+                    # find devices choosen for selective deployment
+                    # uses new list as removing item while looping will cause index to change
+                    device_selection.append(device)
+            if len(device_selection) < 1:
+                logging.info("No selected devices need deployed.")
+                return
+            self.uuids = device_selection
+
         for device in self.uuids:
             logging.info(f"Adding device {device} to deployment queue.")
             json_data["deviceList"].append(device["device"]["id"])
