@@ -469,6 +469,11 @@ class Token(object):
                     if "global/" + self.__domain.lower() == domain["name"].lower():
                         logging.info(f"Domain set to {domain['name']}")
                         self.uuid = domain["uuid"]
+                        break
+                    elif self.__domain.lower() == domain["name"].lower():
+                        logging.info(f"Domain set to {domain['name']}")
+                        self.uuid = domain["uuid"]
+                        break
                     else:
                         logging.info(
                             "Domain name entered not found in FMC, falling back to Global"
