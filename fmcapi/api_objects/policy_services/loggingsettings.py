@@ -77,7 +77,7 @@ class LoggingSettings(APIClassTemplate):
                     f"Access Control Policy {kwargs['name']} not found.  Cannot set up logging for ACP."
                 )
         else:
-            logging.error("No accessPolicy name or ID was provided.")
+            logging.warning("No accessPolicy name or ID was provided.")
 
     def set_url(self):
         if hasattr(self, "id"):
