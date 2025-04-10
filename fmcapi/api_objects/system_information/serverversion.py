@@ -45,7 +45,7 @@ class ServerVersion(object):  # Can't import APIClassTemplate due to dependency 
             self.vdbVersion = response["items"][0]["vdbVersion"]
             self.sruVersion = response["items"][0]["sruVersion"]
             self.serverVersion = response["items"][0]["serverVersion"]
-            self.geoVersion = response["items"][0]["geoVersion"]
+            self.geoVersion = response["items"][0].get("geoVersion")
         return response
 
     def post(self):
