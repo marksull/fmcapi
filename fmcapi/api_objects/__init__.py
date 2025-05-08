@@ -111,6 +111,7 @@ from .policy_services import ConnectionProfiles
 from .policy_services import DynamicAccessPolicies
 from .object_services import TimeRanges
 from .health import TunnelStatuses
+from .health import TunnelDetails
 
 logging.debug("In the api_objects __init__.py file.")
 
@@ -220,4 +221,5 @@ __all__ = [
     "DynamicAccessPolicies",
     "TimeRanges",
     "TunnelStatuses",
+    "TunnelDetails",
 ]
