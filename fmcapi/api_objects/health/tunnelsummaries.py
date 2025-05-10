@@ -14,9 +14,9 @@ class TunnelSummaries(APIClassTemplate):
         "type",
     ]
     VALID_GET_FILTERS = [
-        "vpnTopologyId", # vpnTopologyId: uuid of vpn topo
-        "deviceId", # deviceId: uuid of device
-        "groupBy", # Topology|Device
+        "vpnTopologyId",  # vpnTopologyId: uuid of vpn topo
+        "deviceId",  # deviceId: uuid of device
+        "groupBy",  # Topology|Device
     ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + VALID_GET_FILTERS + []
 
