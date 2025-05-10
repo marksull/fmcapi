@@ -16,11 +16,11 @@ class TunnelStatuses(APIClassTemplate):
         "peerB",
     ]
     VALID_GET_FILTERS = [
-        "vpnTopologyId", # vpnTopologyId: uuid of vpn topo
-        "deviceId", # deviceId: uuid of device
-        "status", # status: TUNNEL_UP|TUNNEL_DOWN|UNKNOWN
-        "deployedStatus", # deployedStatus: Deployed|Configured|Both
-        "sortBy", # sortBy: :|<|> Topology|Device|Status|LastChange (sortBy<Device == sort by device in ascending order)
+        "vpnTopologyId",  # vpnTopologyId: uuid of vpn topo
+        "deviceId",  # deviceId: uuid of device
+        "status",  # status: TUNNEL_UP|TUNNEL_DOWN|UNKNOWN
+        "deployedStatus",  # deployedStatus: Deployed|Configured|Both
+        "sortBy",  # sortBy: :|<|> Topology|Device|Status|LastChange (sortBy<Device == sort by device in ascending order)
     ]
     VALID_FOR_KWARGS = VALID_JSON_DATA + VALID_GET_FILTERS + []
 
