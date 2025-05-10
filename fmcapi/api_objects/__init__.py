@@ -110,6 +110,9 @@ from .policy_services.ravpns import RAVpn
 from .policy_services import ConnectionProfiles
 from .policy_services import DynamicAccessPolicies
 from .object_services import TimeRanges
+from .health import TunnelStatuses
+from .health import TunnelDetails
+from .health import TunnelSummaries
 
 logging.debug("In the api_objects __init__.py file.")
 
@@ -218,4 +221,7 @@ __all__ = [
     "ConnectionProfiles",
     "DynamicAccessPolicies",
     "TimeRanges",
+    "TunnelStatuses",
+    "TunnelDetails",
+    "TunnelSummaries",
 ]
