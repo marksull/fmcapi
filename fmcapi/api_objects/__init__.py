@@ -114,6 +114,7 @@ from .health import TunnelStatuses
 from .health import TunnelDetails
 from .health import TunnelSummaries
 from .health import Metrics
+from .health import Alerts
 
 logging.debug("In the api_objects __init__.py file.")
 
@@ -226,4 +227,5 @@ __all__ = [
     "TunnelDetails",
     "TunnelSummaries",
     "Metrics",
+    "Alerts",
 ]
