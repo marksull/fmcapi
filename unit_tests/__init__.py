@@ -84,6 +84,7 @@ from .tunneldetails import test__tunneldetails
 from .tunnelsummaries import test__tunnelsummaries
 from .metrics import test__metrics
 from .alerts import test__alerts
+from .events import test__events
 
 logging.debug("In the unit-tests __init__.py file.")
 
@@ -172,4 +173,5 @@ __all__ = [
     "test__tunnelsummaries",
     "test__metrics",
     "test__alerts",
+    "test__events",
 ]
