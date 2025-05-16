@@ -113,6 +113,9 @@ from .object_services import TimeRanges
 from .health import TunnelStatuses
 from .health import TunnelDetails
 from .health import TunnelSummaries
+from .health import Metrics
+from .health import Alerts
+from .health import Events
 
 logging.debug("In the api_objects __init__.py file.")
 
@@ -224,4 +227,7 @@ __all__ = [
     "TunnelStatuses",
     "TunnelDetails",
     "TunnelSummaries",
+    "Metrics",
+    "Alerts",
+    "Events",
 ]
