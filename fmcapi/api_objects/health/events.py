@@ -6,8 +6,7 @@ class Events(APIClassTemplate):
     """The Events Object in the FMC."""
 
     FIRST_SUPPORTED_FMC_VERSION = "7.3"
-    VALID_JSON_DATA = [
-    ]
+    VALID_JSON_DATA = []
     VALID_GET_FILTERS = [
         "deviceUUIDs",
         "startTime",
