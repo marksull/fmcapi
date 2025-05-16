@@ -22,12 +22,7 @@ class Metrics(APIClassTemplate):
         "rateFunctionInterval",
     ]
 
-    REQUIRED_GET_FILTERS = [
-        "metric",
-        "startTime",
-        "endTime",
-        "step"
-    ]
+    REQUIRED_GET_FILTERS = ["metric", "startTime", "endTime", "step"]
 
     VALID_FOR_KWARGS = VALID_JSON_DATA + VALID_GET_FILTERS + []
 
