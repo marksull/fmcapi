@@ -166,10 +166,10 @@ class AutoNatRules(APIClassTemplate):
                         f"sourceInterface."
                     )
                     return
- 
+
             self.sourceInterface = {"id": item["id"], "type": item["type"]}
             logging.info(f'Interface Object "{name}" added to NAT Policy.')
- 
+
     def destination_intf(self, name):
         """
         Associate interface to this rule.
@@ -197,7 +197,7 @@ class AutoNatRules(APIClassTemplate):
                         f"destinationInterface."
                     )
                     return
- 
+
             self.destinationInterface = {"id": item["id"], "type": item["type"]}
             logging.info(f'Interface Object "{name}" added to NAT Policy.')
 
