@@ -152,22 +152,24 @@ class AutoNatRules(APIClassTemplate):
         new_intf = None
         for item in items:
             if item["name"] == name:
-                new_intf = {"id": item["id"], "type": item["type"]}
+                new_intf = item
                 break
         if new_intf is None:
             logging.warning(
                 f'Interface Object "{name}" is not found in FMC.  Cannot add to sourceInterface.'
             )
         else:
-            if new_intf["type"] == "InterfaceGroup" and len(new_intf.interfaces) > 1:
-                logging.warning(
-                    f'Interface Object "{name}" contains more than one physical interface. Cannot add to '
-                    f"sourceInterface."
-                )
-            else:
-                self.sourceInterface = new_intf
-                logging.info(f'Interface Object "{name}" added to NAT Policy.')
-
+            if new_intf["type"] == "InterfaceGroup":
+                if len(new_intf["interfaces"]) > 1:
+                    logging.warning(
+                        f'Interface Object "{name}" contains more than one physical interface. Cannot add to '
+                        f"sourceInterface."
+                    )
+                    return
+ 
+            self.sourceInterface = {"id": item["id"], "type": item["type"]}
+            logging.info(f'Interface Object "{name}" added to NAT Policy.')
+ 
     def destination_intf(self, name):
         """
         Associate interface to this rule.
@@ -181,21 +183,23 @@ class AutoNatRules(APIClassTemplate):
         new_intf = None
         for item in items:
             if item["name"] == name:
-                new_intf = {"id": item["id"], "type": item["type"]}
+                new_intf = item
                 break
         if new_intf is None:
             logging.warning(
                 f'Interface Object "{name}" is not found in FMC.  Cannot add to destinationInterface.'
             )
         else:
-            if new_intf["type"] == "InterfaceGroup" and len(new_intf.interfaces) > 1:
-                logging.warning(
-                    f'Interface Object "{name}" contains more than one physical interface. Cannot add to '
-                    f"destinationInterface."
-                )
-            else:
-                self.destinationInterface = new_intf
-                logging.info(f'Interface Object "{name}" added to NAT Policy.')
+            if new_intf["type"] == "InterfaceGroup":
+                if len(new_intf["interfaces"]) > 1:
+                    logging.warning(
+                        f'Interface Object "{name}" contains more than one physical interface. Cannot add to '
+                        f"destinationInterface."
+                    )
+                    return
+ 
+            self.destinationInterface = {"id": item["id"], "type": item["type"]}
+            logging.info(f'Interface Object "{name}" added to NAT Policy.')
 
     def identity_nat(self, name):
         """
