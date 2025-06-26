@@ -29,7 +29,7 @@ def main():
         debug=debug,
     ) as fmc1:
         logging.info("# ### Mega Test Start!!! ### #\n\n")
-        unit_tests.test__fmc_version(fmc=fmc1)
+        # unit_tests.test__fmc_version(fmc=fmc1)
 
 
         # # Working Tests
@@ -72,6 +72,7 @@ def main():
         # unit_tests.test__intrusion_policy(fmc=fmc1)
         # unit_tests.test__access_control_policy(fmc=fmc1)
         # unit_tests.test__acp_rule(fmc=fmc1)
+        # unit_tests.test__acp_clone(fmc=fmc1)
         # unit_tests.test__port_object_group(fmc=fmc1)
         # unit_tests.test__url_category(fmc=fmc1)
         # unit_tests.test__ports(fmc=fmc1)

@@ -22,6 +22,7 @@ from .inheritancesettings import InheritanceSettings
 from .ravpns import RAVpn
 from .connectionprofiles import ConnectionProfiles
 from .dynamicaccesspolicies import DynamicAccessPolicies
+from .operational import AccessControlPolicyClone
 
 logging.debug("In the object_services __init__.py file.")
 
@@ -47,4 +48,5 @@ __all__ = [
     "RAVpn",
     "ConnectionProfiles",
     "DynamicAccessPolicies",
+    "AccessControlPolicyClone",
 ]
