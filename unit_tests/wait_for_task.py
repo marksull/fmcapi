@@ -4,7 +4,7 @@ import logging
 
 
 def wait_for_task(fmc, task, wait_time=10):
-    task_completed_states = ["Success", "SUCCESS", "COMPLETED", "Deployed"]
+    task_completed_states = ["Success", "SUCCESS", "COMPLETED", "Deployed", "FAILED", "Failed"]
     try:
         status = fmcapi.TaskStatuses(fmc=fmc, id=task["id"])
         current_status = status.get()
@@ -41,5 +41,6 @@ def wait_for_task(fmc, task, wait_time=10):
                 time.sleep(wait_time)
                 current_status = status.get()
         logging.info("Task: %s %s" % (current_status["status"], current_status["id"]))
+        return current_status["status"]
     except Exception as e:
         logging.info(type(e), e)
