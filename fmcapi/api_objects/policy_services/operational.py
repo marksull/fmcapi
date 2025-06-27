@@ -2,8 +2,6 @@ from fmcapi.api_objects.apiclasstemplate import APIClassTemplate
 import logging
 
 
-
-
 class AccessControlPolicyClone(APIClassTemplate):
     """The Dynamic Object in the FMC."""
 
