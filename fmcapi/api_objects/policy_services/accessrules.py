@@ -582,7 +582,7 @@ class AccessRules(APIClassTemplate):
         :return: None
         """
         logging.debug("In source_port() for AccessRules class.")
-        if literal and name != "":
+        if literal is not None and name != "":
             raise ValueError(
                 "Only one of literal or name (object name) should be set while creating a source port"
             )
@@ -591,7 +591,7 @@ class AccessRules(APIClassTemplate):
             self.sourcePorts = {"objects": [], "literals": []}
 
         if action == "add":
-            if literal:
+            if literal is not None:
                 port_literal = validate_port_literal(literal, protocol)
                 if port_literal not in self.sourcePorts["literals"]:
                     self.sourcePorts["literals"].append(port_literal)
@@ -668,7 +668,7 @@ class AccessRules(APIClassTemplate):
                 )
         elif action == "remove":
             if "sourcePorts" in self.__dict__:
-                if literal:
+                if literal is not None:
                     try:
                         port_literal = validate_port_literal(literal, protocol)
                         if port_literal in self.sourcePorts["literals"]:
@@ -728,7 +728,7 @@ class AccessRules(APIClassTemplate):
         :return: None
         """
         logging.debug("In destination_port() for AccessRules class.")
-        if literal and name != "":
+        if literal is not None and name != "":
             raise ValueError(
                 "Only one of literal or name (object name) should be set while creating a destination port"
             )
@@ -737,7 +737,7 @@ class AccessRules(APIClassTemplate):
             self.destinationPorts = {"objects": [], "literals": []}
 
         if action == "add":
-            if literal:
+            if literal is not None:
                 port_literal = validate_port_literal(literal, protocol)
                 if port_literal not in self.destinationPorts["literals"]:
                     self.destinationPorts["literals"].append(port_literal)
@@ -814,7 +814,7 @@ class AccessRules(APIClassTemplate):
                 )
         elif action == "remove":
             if "destinationPorts" in self.__dict__:
-                if literal:
+                if literal is not None:
                     try:
                         port_literal = validate_port_literal(literal, protocol)
                         if port_literal in self.destinationPorts["literals"]:
@@ -876,7 +876,7 @@ class AccessRules(APIClassTemplate):
         """
         # using dict() as default value is dangerous here, any thoughts/workarounds on this?
         logging.debug("In source_network() for AccessRules class.")
-        if literal and name != "":
+        if literal is not None and name != "":
             raise ValueError(
                 "Only one of literals or name (object name) should be set while creating a source network"
             )
@@ -885,7 +885,7 @@ class AccessRules(APIClassTemplate):
             self.sourceNetworks = {"objects": [], "literals": {}}
 
         if action == "add":
-            if literal:
+            if literal is not None:
                 type_ = get_networkaddress_type(literal)
                 self.sourceNetworks["literals"][literal] = type_
                 logging.info(
@@ -1005,7 +1005,7 @@ class AccessRules(APIClassTemplate):
         # using dict() as default value is dangerous here, any thoughts/workarounds on this?
 
         logging.debug("In destination_network() for ACPRule class.")
-        if literal and name != "":
+        if literal is not None and name != "":
             raise ValueError(
                 "Only one of literals or name (object name) should be set while creating a source network"
             )
@@ -1014,7 +1014,7 @@ class AccessRules(APIClassTemplate):
             self.destinationNetworks = {"objects": [], "literals": {}}
 
         if action == "add":
-            if literal:
+            if literal is not None:
                 type_ = get_networkaddress_type(literal)
                 self.destinationNetworks["literals"][literal] = type_
                 logging.info(
@@ -1137,7 +1137,7 @@ class AccessRules(APIClassTemplate):
         # using dict() as default value is dangerous here, any thoughts/workarounds on this?
 
         logging.debug("In source_sgt() for ACPRule class.")
-        if literal and name != "":
+        if literal is not None and name != "":
             raise ValueError(
                 "Only one of literals or name (object name) should be set while creating a source sgt"
             )
@@ -1146,7 +1146,7 @@ class AccessRules(APIClassTemplate):
             self.sourceSecurityGroupTags = {"objects": [], "literals": {}}
 
         if action == "add":
-            if literal:
+            if literal is not None:
                 type_ = "ISESecurityGroupTag"
                 self.sourceSecurityGroupTags["literals"][literal] = type_
                 logging.info(
