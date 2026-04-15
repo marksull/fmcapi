@@ -432,7 +432,7 @@ class Token(object):
             logging.debug(
                 "Response from refreshtoken() post:\n"
                 f"\turl: {url}\n"
-                f"\theaders: {headers}\n"
+                f"\theaders: {dict(response.headers)}\n"
                 f"\tresponse: {response}"
             )
             self.token_refreshes += 1
@@ -456,7 +456,7 @@ class Token(object):
             logging.debug(
                 "Response from generatetoken() post:\n"
                 f"\turl: {url}\n"
-                f"\theaders: {headers}\n"
+                f"\theaders: {dict(response.headers)}\n"
                 f"\tresponse: {response}"
             )
         self.access_token = response.headers.get("X-auth-access-token")
