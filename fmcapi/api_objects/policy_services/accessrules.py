@@ -17,6 +17,7 @@ from fmcapi.api_objects.object_services.isesecuritygrouptags import ISESecurityG
 from fmcapi.api_objects.helper_functions import (
     get_networkaddress_type,
     true_false_checker,
+    validate_port_literal,
 )
 from fmcapi.api_objects.object_services.applications import Applications
 from fmcapi.api_objects.object_services.applicationfilters import ApplicationFilters
@@ -209,6 +210,12 @@ class AccessRules(APIClassTemplate):
                 {"type": v, "value": k}
                 for k, v in self.destinationNetworks["literals"].items()
             ]
+        if "sourcePorts" in self.__dict__:
+            json_data["sourcePorts"] = {"objects": self.sourcePorts["objects"]}
+            json_data["sourcePorts"]["literals"] = self.sourcePorts["literals"]
+        if "destinationPorts" in self.__dict__:
+            json_data["destinationPorts"] = {"objects": self.destinationPorts["objects"]}
+            json_data["destinationPorts"]["literals"] = self.destinationPorts["literals"]
 
         if "action" in self.__dict__:
             if self.action not in self.VALID_FOR_ACTION:
@@ -270,6 +277,18 @@ class AccessRules(APIClassTemplate):
             self.users = {"objects": []}
             if kwargs["users"].get("objects"):
                 self.users["objects"] = kwargs["users"]["objects"]
+        if "sourcePorts" in kwargs:
+            self.sourcePorts = {"objects": [], "literals": []}
+            if kwargs["sourcePorts"].get("objects"):
+                self.sourcePorts["objects"] = kwargs["sourcePorts"]["objects"]
+            if kwargs["sourcePorts"].get("literals"):
+                self.sourcePorts["literals"] = kwargs["sourcePorts"]["literals"]
+        if "destinationPorts" in kwargs:
+            self.destinationPorts = {"objects": [], "literals": []}
+            if kwargs["destinationPorts"].get("objects"):
+                self.destinationPorts["objects"] = kwargs["destinationPorts"]["objects"]
+            if kwargs["destinationPorts"].get("literals"):
+                self.destinationPorts["literals"] = kwargs["destinationPorts"]["literals"]
 
     def acp(self, name="", id=""):
         """
@@ -552,29 +571,50 @@ class AccessRules(APIClassTemplate):
                     "All Destination Zones removed from this AccessRules object."
                 )
 
-    def source_port(self, action, name=""):
+    def source_port(self, action, name="", literal=None, protocol="TCP"):
         """
-        Add/modify name to sourcePorts field of AccessRules object.
+        Add/modify name/literal to sourcePorts field of AccessRules object.
 
         :param action: (str) 'add', 'addgroup', 'remove', or 'clear'
         :param name: (str) Name of Port in FMC.
+        :param literal: (str) Port literal (e.g., '80', '443', '80-443')
+        :param protocol: (str) Protocol for literal port ('TCP', 'UDP', etc.)
         :return: None
         """
         logging.debug("In source_port() for AccessRules class.")
+        if literal is not None and name != "":
+            raise ValueError(
+                "Only one of literal or name (object name) should be set while creating a source port"
+            )
+
+        if not hasattr(self, "sourcePorts"):
+            self.sourcePorts = {"objects": [], "literals": []}
+
         if action == "add":
-            pport_json = ProtocolPortObjects(fmc=self.fmc)
-            pport_json.get(name=name)
-            icmpv4_json = ICMPv4Objects(fmc=self.fmc)
-            icmpv4_json.get(name=name)
-            if "id" in pport_json.__dict__:
-                item = pport_json
-            elif "id" in icmpv4_json.__dict__:
-                item = icmpv4_json
+            if literal is not None:
+                port_literal = validate_port_literal(literal, protocol)
+                if port_literal not in self.sourcePorts["literals"]:
+                    self.sourcePorts["literals"].append(port_literal)
+                    logging.info(
+                        f'Adding literal "{literal}" ({protocol}) to sourcePorts for this AccessRules.'
+                    )
+                else:
+                    logging.warning(
+                        f'Port literal "{literal}" ({protocol}) already exists in sourcePorts.'
+                    )
             else:
-                item = PortObjectGroups(fmc=self.fmc)
-                item.get(name=name)
-            if "id" in item.__dict__:
-                if "sourcePorts" in self.__dict__:
+                pport_json = ProtocolPortObjects(fmc=self.fmc)
+                pport_json.get(name=name)
+                icmpv4_json = ICMPv4Objects(fmc=self.fmc)
+                icmpv4_json.get(name=name)
+                if "id" in pport_json.__dict__:
+                    item = pport_json
+                elif "id" in icmpv4_json.__dict__:
+                    item = icmpv4_json
+                else:
+                    item = PortObjectGroups(fmc=self.fmc)
+                    item.get(name=name)
+                if "id" in item.__dict__:
                     new_port = {"name": item.name, "id": item.id, "type": item.type}
                     duplicate = False
                     if "objects" not in self.sourcePorts:
@@ -589,19 +629,10 @@ class AccessRules(APIClassTemplate):
                             f'Adding "{name}" to sourcePorts for this AccessRules.'
                         )
                 else:
-                    self.sourcePorts = {
-                        "objects": [
-                            {"name": item.name, "id": item.id, "type": item.type}
-                        ]
-                    }
-                    logging.info(
-                        f'Adding "{name}" to sourcePorts for this AccessRules.'
+                    logging.warning(
+                        f'Protocol Port or Protocol Port Group: "{name}", '
+                        f"not found.  Cannot add to AccessRules."
                     )
-            else:
-                logging.warning(
-                    f'Protocol Port or Protocol Port Group: "{name}", '
-                    f"not found.  Cannot add to AccessRules."
-                )
         elif action == "addgroup":
             item = PortObjectGroups(fmc=self.fmc)
             item.get(name=name)
@@ -624,7 +655,8 @@ class AccessRules(APIClassTemplate):
                     self.sourcePorts = {
                         "objects": [
                             {"name": item.name, "id": item.id, "type": item.type}
-                        ]
+                        ],
+                        "literals": [],
                     }
                     logging.info(
                         f'Adding "{name}" to sourcePorts for this AccessRules.'
@@ -635,64 +667,100 @@ class AccessRules(APIClassTemplate):
                     f"not found.  Cannot add to AccessRules."
                 )
         elif action == "remove":
-            pport_json = ProtocolPortObjects(fmc=self.fmc)
-            pport_json.get(name=name)
-            icmpv4_json = ICMPv4Objects(fmc=self.fmc)
-            icmpv4_json.get(name=name)
-            if "id" in pport_json.__dict__:
-                item = pport_json
-            elif "id" in icmpv4_json.__dict__:
-                item = icmpv4_json
-            else:
-                item = PortObjectGroups(fmc=self.fmc)
-                item.get(name=name)
-            if "id" in item.__dict__:
-                if "sourcePorts" in self.__dict__:
-                    objects = []
-                    for obj in self.sourcePorts["objects"]:
-                        if obj["name"] != name:
-                            objects.append(obj)
-                    self.sourcePorts["objects"] = objects
-                    logging.info(
-                        f'Removed "{name}" from sourcePorts for this AccessRules.'
-                    )
+            if "sourcePorts" in self.__dict__:
+                if literal is not None:
+                    try:
+                        port_literal = validate_port_literal(literal, protocol)
+                        if port_literal in self.sourcePorts["literals"]:
+                            self.sourcePorts["literals"].remove(port_literal)
+                            logging.info(
+                                f'Removed literal "{literal}" ({protocol}) from sourcePorts for this AccessRules.'
+                            )
+                        else:
+                            logging.warning(
+                                f'Port literal "{literal}" ({protocol}) not found in sourcePorts.'
+                            )
+                    except ValueError as e:
+                        logging.warning(f"Error validating port literal: {e}")
                 else:
-                    logging.info(
-                        "sourcePorts doesn't exist for this AccessRules.  Nothing to remove."
-                    )
+                    pport_json = ProtocolPortObjects(fmc=self.fmc)
+                    pport_json.get(name=name)
+                    icmpv4_json = ICMPv4Objects(fmc=self.fmc)
+                    icmpv4_json.get(name=name)
+                    if "id" in pport_json.__dict__:
+                        item = pport_json
+                    elif "id" in icmpv4_json.__dict__:
+                        item = icmpv4_json
+                    else:
+                        item = PortObjectGroups(fmc=self.fmc)
+                        item.get(name=name)
+                    if "id" in item.__dict__:
+                        objects = []
+                        for obj in self.sourcePorts["objects"]:
+                            if obj["name"] != name:
+                                objects.append(obj)
+                        self.sourcePorts["objects"] = objects
+                        logging.info(
+                            f'Removed "{name}" from sourcePorts for this AccessRules.'
+                        )
+                    else:
+                        logging.warning(
+                            f'Protocol Port or Protocol Port Group: "{name}", '
+                            f"not found.  Cannot remove from AccessRules."
+                        )
             else:
-                logging.warning(
-                    f'Protocol Port or Protocol Port Group: "{name}", '
-                    f"not found.  Cannot add to AccessRules."
+                logging.info(
+                    "sourcePorts doesn't exist for this AccessRules.  Nothing to remove."
                 )
         elif action == "clear":
             if "sourcePorts" in self.__dict__:
                 del self.sourcePorts
                 logging.info("All Source Ports removed from this AccessRules object.")
 
-    def destination_port(self, action, name=""):
+    def destination_port(self, action, name="", literal=None, protocol="TCP"):
         """
-        Add/modify name to destinationPorts field of AccessRules object.
+        Add/modify name/literal to destinationPorts field of AccessRules object.
 
         :param action: (str) 'add', 'addgroup', 'remove', or 'clear'
         :param name: (str) Name of Port in FMC.
+        :param literal: (str) Port literal (e.g., '80', '443', '80-443')
+        :param protocol: (str) Protocol for literal port ('TCP', 'UDP', etc.)
         :return: None
         """
         logging.debug("In destination_port() for AccessRules class.")
+        if literal is not None and name != "":
+            raise ValueError(
+                "Only one of literal or name (object name) should be set while creating a destination port"
+            )
+
+        if not hasattr(self, "destinationPorts"):
+            self.destinationPorts = {"objects": [], "literals": []}
+
         if action == "add":
-            pport_json = ProtocolPortObjects(fmc=self.fmc)
-            pport_json.get(name=name)
-            icmpv4_json = ICMPv4Objects(fmc=self.fmc)
-            icmpv4_json.get(name=name)
-            if "id" in pport_json.__dict__:
-                item = pport_json
-            elif "id" in icmpv4_json.__dict__:
-                item = icmpv4_json
+            if literal is not None:
+                port_literal = validate_port_literal(literal, protocol)
+                if port_literal not in self.destinationPorts["literals"]:
+                    self.destinationPorts["literals"].append(port_literal)
+                    logging.info(
+                        f'Adding literal "{literal}" ({protocol}) to destinationPorts for this AccessRules.'
+                    )
+                else:
+                    logging.warning(
+                        f'Port literal "{literal}" ({protocol}) already exists in destinationPorts.'
+                    )
             else:
-                item = PortObjectGroups(fmc=self.fmc)
-                item.get(name=name)
-            if "id" in item.__dict__:
-                if "destinationPorts" in self.__dict__:
+                pport_json = ProtocolPortObjects(fmc=self.fmc)
+                pport_json.get(name=name)
+                icmpv4_json = ICMPv4Objects(fmc=self.fmc)
+                icmpv4_json.get(name=name)
+                if "id" in pport_json.__dict__:
+                    item = pport_json
+                elif "id" in icmpv4_json.__dict__:
+                    item = icmpv4_json
+                else:
+                    item = PortObjectGroups(fmc=self.fmc)
+                    item.get(name=name)
+                if "id" in item.__dict__:
                     new_port = {"name": item.name, "id": item.id, "type": item.type}
                     duplicate = False
                     if "objects" not in self.destinationPorts:
@@ -707,20 +775,11 @@ class AccessRules(APIClassTemplate):
                             f'Adding "{name}" to destinationPorts for this AccessRules.'
                         )
                 else:
-                    self.destinationPorts = {
-                        "objects": [
-                            {"name": item.name, "id": item.id, "type": item.type}
-                        ]
-                    }
-                    logging.info(
-                        f'Adding "{name}" to destinationPorts for this AccessRules.'
+                    logging.warning(
+                        f'Protocol Port or Protocol Port Group: "{name}", '
+                        f"not found.  Cannot add to AccessRules."
                     )
-            else:
-                logging.warning(
-                    f'Protocol Port or Protocol Port Group: "{name}", '
-                    f"not found.  Cannot add to AccessRules."
-                )
-        if action == "addgroup":
+        elif action == "addgroup":
             item = PortObjectGroups(fmc=self.fmc)
             item.get(name=name)
             if "id" in item.__dict__:
@@ -742,7 +801,8 @@ class AccessRules(APIClassTemplate):
                     self.destinationPorts = {
                         "objects": [
                             {"name": item.name, "id": item.id, "type": item.type}
-                        ]
+                        ],
+                        "literals": [],
                     }
                     logging.info(
                         f'Adding "{name}" to destinationPorts for this AccessRules.'
@@ -753,35 +813,50 @@ class AccessRules(APIClassTemplate):
                     f"not found.  Cannot add to AccessRules."
                 )
         elif action == "remove":
-            pport_json = ProtocolPortObjects(fmc=self.fmc)
-            pport_json.get(name=name)
-            icmpv4_json = ICMPv4Objects(fmc=self.fmc)
-            icmpv4_json.get(name=name)
-            if "id" in pport_json.__dict__:
-                item = pport_json
-            elif "id" in icmpv4_json.__dict__:
-                item = icmpv4_json
-            else:
-                item = PortObjectGroups(fmc=self.fmc)
-                item.get(name=name)
-            if "id" in item.__dict__:
-                if "destinationPorts" in self.__dict__:
-                    objects = []
-                    for obj in self.destinationPorts["objects"]:
-                        if obj["name"] != name:
-                            objects.append(obj)
-                    self.destinationPorts["objects"] = objects
-                    logging.info(
-                        f'Removed "{name}" from destinationPorts for this AccessRules.'
-                    )
+            if "destinationPorts" in self.__dict__:
+                if literal is not None:
+                    try:
+                        port_literal = validate_port_literal(literal, protocol)
+                        if port_literal in self.destinationPorts["literals"]:
+                            self.destinationPorts["literals"].remove(port_literal)
+                            logging.info(
+                                f'Removed literal "{literal}" ({protocol}) from destinationPorts for this AccessRules.'
+                            )
+                        else:
+                            logging.warning(
+                                f'Port literal "{literal}" ({protocol}) not found in destinationPorts.'
+                            )
+                    except ValueError as e:
+                        logging.warning(f"Error validating port literal: {e}")
                 else:
-                    logging.info(
-                        "destinationPorts doesn't exist for this AccessRules.  Nothing to remove."
-                    )
+                    pport_json = ProtocolPortObjects(fmc=self.fmc)
+                    pport_json.get(name=name)
+                    icmpv4_json = ICMPv4Objects(fmc=self.fmc)
+                    icmpv4_json.get(name=name)
+                    if "id" in pport_json.__dict__:
+                        item = pport_json
+                    elif "id" in icmpv4_json.__dict__:
+                        item = icmpv4_json
+                    else:
+                        item = PortObjectGroups(fmc=self.fmc)
+                        item.get(name=name)
+                    if "id" in item.__dict__:
+                        objects = []
+                        for obj in self.destinationPorts["objects"]:
+                            if obj["name"] != name:
+                                objects.append(obj)
+                        self.destinationPorts["objects"] = objects
+                        logging.info(
+                            f'Removed "{name}" from destinationPorts for this AccessRules.'
+                        )
+                    else:
+                        logging.warning(
+                            f'Protocol Port or Protocol Port Group: "{name}", '
+                            f"not found.  Cannot remove from AccessRules."
+                        )
             else:
-                logging.warning(
-                    f'Protocol Port or Protocol Port Group: "{name}", '
-                    f"not found.  Cannot add to AccessRules."
+                logging.info(
+                    "destinationPorts doesn't exist for this AccessRules.  Nothing to remove."
                 )
         elif action == "clear":
             if "destinationPorts" in self.__dict__:
@@ -801,7 +876,7 @@ class AccessRules(APIClassTemplate):
         """
         # using dict() as default value is dangerous here, any thoughts/workarounds on this?
         logging.debug("In source_network() for AccessRules class.")
-        if literal and name != "":
+        if literal is not None and name != "":
             raise ValueError(
                 "Only one of literals or name (object name) should be set while creating a source network"
             )
@@ -810,7 +885,7 @@ class AccessRules(APIClassTemplate):
             self.sourceNetworks = {"objects": [], "literals": {}}
 
         if action == "add":
-            if literal:
+            if literal is not None:
                 type_ = get_networkaddress_type(literal)
                 self.sourceNetworks["literals"][literal] = type_
                 logging.info(
@@ -930,7 +1005,7 @@ class AccessRules(APIClassTemplate):
         # using dict() as default value is dangerous here, any thoughts/workarounds on this?
 
         logging.debug("In destination_network() for ACPRule class.")
-        if literal and name != "":
+        if literal is not None and name != "":
             raise ValueError(
                 "Only one of literals or name (object name) should be set while creating a source network"
             )
@@ -939,7 +1014,7 @@ class AccessRules(APIClassTemplate):
             self.destinationNetworks = {"objects": [], "literals": {}}
 
         if action == "add":
-            if literal:
+            if literal is not None:
                 type_ = get_networkaddress_type(literal)
                 self.destinationNetworks["literals"][literal] = type_
                 logging.info(
@@ -1062,7 +1137,7 @@ class AccessRules(APIClassTemplate):
         # using dict() as default value is dangerous here, any thoughts/workarounds on this?
 
         logging.debug("In source_sgt() for ACPRule class.")
-        if literal and name != "":
+        if literal is not None and name != "":
             raise ValueError(
                 "Only one of literals or name (object name) should be set while creating a source sgt"
             )
@@ -1071,7 +1146,7 @@ class AccessRules(APIClassTemplate):
             self.sourceSecurityGroupTags = {"objects": [], "literals": {}}
 
         if action == "add":
-            if literal:
+            if literal is not None:
                 type_ = "ISESecurityGroupTag"
                 self.sourceSecurityGroupTags["literals"][literal] = type_
                 logging.info(
