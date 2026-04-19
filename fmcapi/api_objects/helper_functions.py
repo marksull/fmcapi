@@ -379,7 +379,9 @@ def validate_port_literal(port, protocol="TCP"):
         if not (0 <= start_port <= 65535) or not (0 <= end_port <= 65535):
             raise ValueError(f"Port number out of valid range (0-65535): {port}")
         if start_port > end_port:
-            raise ValueError(f"Invalid port range: start port ({start_port}) > end port ({end_port})")
+            raise ValueError(
+                f"Invalid port range: start port ({start_port}) > end port ({end_port})"
+            )
     else:
         try:
             port_num = int(port)
