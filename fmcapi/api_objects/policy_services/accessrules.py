@@ -214,8 +214,12 @@ class AccessRules(APIClassTemplate):
             json_data["sourcePorts"] = {"objects": self.sourcePorts["objects"]}
             json_data["sourcePorts"]["literals"] = self.sourcePorts["literals"]
         if "destinationPorts" in self.__dict__:
-            json_data["destinationPorts"] = {"objects": self.destinationPorts["objects"]}
-            json_data["destinationPorts"]["literals"] = self.destinationPorts["literals"]
+            json_data["destinationPorts"] = {
+                "objects": self.destinationPorts["objects"]
+            }
+            json_data["destinationPorts"]["literals"] = self.destinationPorts[
+                "literals"
+            ]
 
         if "action" in self.__dict__:
             if self.action not in self.VALID_FOR_ACTION:
@@ -288,7 +292,9 @@ class AccessRules(APIClassTemplate):
             if kwargs["destinationPorts"].get("objects"):
                 self.destinationPorts["objects"] = kwargs["destinationPorts"]["objects"]
             if kwargs["destinationPorts"].get("literals"):
-                self.destinationPorts["literals"] = kwargs["destinationPorts"]["literals"]
+                self.destinationPorts["literals"] = kwargs["destinationPorts"][
+                    "literals"
+                ]
 
     def acp(self, name="", id=""):
         """
