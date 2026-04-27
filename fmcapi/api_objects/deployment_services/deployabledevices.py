@@ -13,7 +13,8 @@ class DeployableDevices(
     :return: List of devices needing updates.
     """
 
-    URL_SUFFIX = "/deployment/deployabledevices?expanded=true"
+    URL_SUFFIX = "/deployment/deployabledevices"
+    PENDING_CHANGES_SUFFIX = "/deployment/deployabledevices/{containerUUID}/pendingchanges"
 
     def __init__(self, fmc):
         """
@@ -29,27 +30,36 @@ class DeployableDevices(
             f"Waiting {self.fmc.wait_time} seconds to allow the FMC to update the list of deployable devices."
         )
         time.sleep(self.fmc.wait_time)
-        self.URL = f"{self.fmc.configuration_url}{self.URL_SUFFIX}"
+        self.URL = f"{self.fmc.configuration_url}{self.URL_SUFFIX}?expanded=true"
 
-    def get(self):
+    def get(self, containerUUID=None):
         """
-        Use GET API call to query FMC for a list of devices that need configuration updates pushed to them.
+        Use GET API call to query FMC for a list of devices that need configuration updates pushed to them,
+        or for pending changes for a specific device/container.
 
-        :return: (list) uuids
+        :param containerUUID (str, optional): UUID of the device/container for pending changes endpoint.
+        :return: (list or dict) uuids or pending changes
         """
-        logging.debug("GET method for API for DeployableDevices.")
-        logging.info("Getting a list of deployable devices.")
-        response = self.fmc.send_to_api(method="get", url=self.URL)
-        # Now to parse the response list to get the UUIDs of each device.
-        if "items" not in response:
-            return
-        uuids = []
-        for item in response["items"]:
-            if not item["canBeDeployed"]:
-                pass
-            else:
-                uuids.append(item)
-        return uuids
+        if containerUUID:
+            url = f"{self.fmc.configuration_url}{self.PENDING_CHANGES_SUFFIX.format(containerUUID=containerUUID)}?expanded=true"
+            logging.debug(f"GET method for API for DeployableDevices pending changes: {url}")
+            logging.info(f"Getting pending changes for deployable device {containerUUID}.")
+            response = self.fmc.send_to_api(method="get", url=url)
+            return response
+        else:
+            logging.debug("GET method for API for DeployableDevices.")
+            logging.info("Getting a list of deployable devices.")
+            response = self.fmc.send_to_api(method="get", url=self.URL)
+            # Now to parse the response list to get the UUIDs of each device.
+            if "items" not in response:
+                return
+            uuids = []
+            for item in response["items"]:
+                if not item["canBeDeployed"]:
+                    pass
+                else:
+                    uuids.append(item)
+            return uuids
 
     def post(self):
         """POST method for API for DeployableDevices not supported."""
