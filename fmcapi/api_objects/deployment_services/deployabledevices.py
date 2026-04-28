@@ -14,7 +14,9 @@ class DeployableDevices(
     """
 
     URL_SUFFIX = "/deployment/deployabledevices"
-    PENDING_CHANGES_SUFFIX = "/deployment/deployabledevices/{containerUUID}/pendingchanges"
+    PENDING_CHANGES_SUFFIX = (
+        "/deployment/deployabledevices/{containerUUID}/pendingchanges"
+    )
 
     def __init__(self, fmc):
         """
@@ -42,8 +44,12 @@ class DeployableDevices(
         """
         if containerUUID:
             url = f"{self.fmc.configuration_url}{self.PENDING_CHANGES_SUFFIX.format(containerUUID=containerUUID)}?expanded=true"
-            logging.debug(f"GET method for API for DeployableDevices pending changes: {url}")
-            logging.info(f"Getting pending changes for deployable device {containerUUID}.")
+            logging.debug(
+                f"GET method for API for DeployableDevices pending changes: {url}"
+            )
+            logging.info(
+                f"Getting pending changes for deployable device {containerUUID}."
+            )
             response = self.fmc.send_to_api(method="get", url=url)
             return response
         else:
