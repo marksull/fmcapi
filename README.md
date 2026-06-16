@@ -80,3 +80,34 @@ to access any of the API features of the FMC.
 ## ToDos
 * Write better how-to instructions.  (Anyone willing to help?) 
 * Finish adding all the FMC API calls as fmcapi Classes.
+
+## Dynamic Object Sync
+
+While the FMC has the ability to populate Dynamic Objects using the Dynamic Attributes Connector, the main limitation is that each connector
+can only manage a single Dynamic Object and the number of connectors is limited (based on the platform deployed).
+
+FMCAPI now supports synchronisation of many Dynamic Objects to the connected FMC. Any changes to the monitored files will generate an immediate sync to the FMC.
+
+Ensure you install the extra requirements for this feature:
+```shell
+pip install ".[watchdog]"
+```
+
+Start the watch and sync service (this is a blocking call):
+
+```python
+import fmcapi
+from fmcapi.api_objects import DynamicObject
+
+with fmcapi.FMC(
+    host="host",
+    username="username",
+    password="password",
+) as fmc:
+    DynamicObject(fmc=fmc).watch_and_sync(path="./do", create=True, initial_sync=True)
+```
+
+In this example:
+- Any files in the path "./do" will be treated as a Dynamic Object
+- If a file is present and a dynamic object of the same name is not present on the FMC, it will be created
+- During the startup, an initial sync will be performed for all the files/dynamic objects
