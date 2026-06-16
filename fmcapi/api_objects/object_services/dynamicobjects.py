@@ -94,7 +94,7 @@ class DynamicObject(APIClassTemplate):
         dyn_obj = DynamicObject(fmc=self.fmc, name=name)
         response = dyn_obj.get()
 
-        if not response or 'id' not in response:
+        if not response or "id" not in response:
             if not create:
                 logging.warning(
                     f"Dynamic Object '{name}' not found on FMC and create=False. Skipping."
@@ -103,7 +103,7 @@ class DynamicObject(APIClassTemplate):
             dyn_obj.objectType = "IP"
             dyn_obj.post()
             response = dyn_obj.get()
-            if not response or 'id' not in response:
+            if not response or "id" not in response:
                 logging.error(f"Failed to create Dynamic Object '{name}'. Skipping.")
                 return
             logging.info(f"Created Dynamic Object '{name}'.")
@@ -115,7 +115,11 @@ class DynamicObject(APIClassTemplate):
         current_response = dom.get()
         current_ips = set()
         if current_response and "items" in current_response:
-            current_ips = {item["mapping"] for item in current_response["items"] if "mapping" in item}
+            current_ips = {
+                item["mapping"]
+                for item in current_response["items"]
+                if "mapping" in item
+            }
 
         to_add = list(new_ips - current_ips)
         to_remove = list(current_ips - new_ips)
